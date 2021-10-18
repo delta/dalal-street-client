@@ -21,7 +21,7 @@ class DalalApp extends StatelessWidget {
           backgroundColor: UiColors.primary,
           body: Center(
             child: Text(
-              "Dalal to the moon 🥳",
+              'Dalal to the moon 🥳',
               style: TextStyle(color: Colors.white, fontSize: 24),
             ),
           ),
