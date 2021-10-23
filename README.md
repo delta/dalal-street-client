@@ -9,9 +9,9 @@
 
 - Run if you have installed all the required flutter dependencies with
 
-```bash
-flutter doctor -v
-```
+  ```bash
+  flutter doctor -v
+  ```
 
 - Ensure protoc compiler version is 3+
 
@@ -20,17 +20,20 @@ flutter doctor -v
   ```
 
 - Dart plugin for the protocol compiler
+
   - Install the protocol compiler plugin for Dart (`protoc-gen-dart`)
+
   ```bash
   flutter pub global activate protoc_plugin
   ```
+
   - Update PATH so that the protoc compiler can find the plugin
 
 ## Setup
 
 - Clone the repository
   ```bash
-  git clone https://github.com/delta/students.nitt.edu.git
+  git clone https://github.com/delta/dalal-street-client.git
   ```
 - Install dependencies
 
@@ -46,7 +49,9 @@ flutter doctor -v
   ```
 
 - Running the server
+
   - Connect your device and run
+
   ```bash
   flutter run
   ```
