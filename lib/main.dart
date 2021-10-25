@@ -1,18 +1,14 @@
 import 'package:dalal_street_client/utils/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-void main() {
-  runApp(const DalalApp());
-}
+void main() => runApp(const DalalApp());
 
 class DalalApp extends StatelessWidget {
   const DalalApp({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
+  Widget build(BuildContext context) => MaterialApp(
         title: 'Dalal Street 2021',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
@@ -25,6 +21,6 @@ class DalalApp extends StatelessWidget {
               style: TextStyle(color: Colors.white, fontSize: 24),
             ),
           ),
-        ));
-  }
+        ),
+      );
 }
