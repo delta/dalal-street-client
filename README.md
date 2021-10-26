@@ -48,6 +48,12 @@
   git submodule update
   ```
 
+- Generate proto files
+
+  ```bash
+  ./build_proto.sh
+  ```
+
 - Running the server
 
   - Connect your device and run
