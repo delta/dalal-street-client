@@ -1,8 +1,14 @@
+import 'package:dalal_street_client/grpc/client.dart';
 import 'package:dalal_street_client/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-void main() => runApp(const DalalApp());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await initClients();
+  runApp(const DalalApp());
+  testGrpc();
+}
 
 class DalalApp extends StatelessWidget {
   const DalalApp({Key? key}) : super(key: key);

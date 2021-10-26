@@ -32,4 +32,7 @@ dev_dependencies:
 #   image_path: "assets/icon/dalal_street_icon.png"
 
 flutter:
+  assets:
+    - assets/tls_keys/dev/server.crt
+
   uses-material-design: true

@@ -2,5 +2,5 @@
 
 import 'package:grpc/grpc_connection_interface.dart';
 
-ClientChannelBase getChannel() =>
+Future<ClientChannelBase> getChannel() async =>
     throw UnsupportedError('Cannot create a ClientChannelBase');
