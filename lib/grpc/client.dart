@@ -1,9 +1,9 @@
 import 'package:dalal_street_client/proto_build/DalalMessage.pbgrpc.dart';
 import 'stub.dart'
-    if (dart.library.io) 'channel.dart'
-    if (dart.library.js) 'web_channel.dart';
+    if (dart.library.io) 'channel/channel.dart'
+    if (dart.library.js) 'channel/web_channel.dart';
 
-var channel = getChannel();
+final _channel = getChannel();
 
-final actionClient = DalalActionServiceClient(channel);
-final streamClient = DalalStreamServiceClient(channel);
+final actionClient = DalalActionServiceClient(_channel);
+final streamClient = DalalStreamServiceClient(_channel);
