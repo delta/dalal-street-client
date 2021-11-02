@@ -16,6 +16,8 @@ jobs:
     # This job will run on ubuntu virtual machine
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v1
+
       # Install Protoc
       - name: Install Protoc
         uses: arduino/setup-protoc@v1
