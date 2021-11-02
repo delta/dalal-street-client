@@ -16,7 +16,10 @@ jobs:
     # This job will run on ubuntu virtual machine
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
+      - name: Checkout repository and submodules
+        uses: actions/checkout@v2
+        with:
+          submodules: recursive
 
       # Install Protoc
       - name: Install Protoc
@@ -36,11 +39,6 @@ jobs:
 
       # Check for any formatting issues in the code.
       - run: flutter format --set-exit-if-changed .
-
-      # Update submodules
-      - run: |
-          git submodule init
-          git submodule update
       
       # Generate proto stub files
       - run: ./build_proto.sh
