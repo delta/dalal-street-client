@@ -56,6 +56,10 @@
 
 - Running the server
 
+  - Run `cp config.example.json config.json`
+
+  - Fill in the server configuration(host, port etc) in **config.json**.
+
   - Connect your device and run
 
   ```bash
