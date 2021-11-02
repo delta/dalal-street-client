@@ -18,5 +18,5 @@ Future<void> initClients() async {
 
 Future<void> testGrpc() async {
   final resp = await actionClient.login(LoginRequest(email: '', password: ''));
-  print(resp.statusCode);
+  print('testGrpc: Resp = ${resp.statusCode}');
 }

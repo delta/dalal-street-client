@@ -1,3 +1,4 @@
+import 'package:dalal_street_client/config.dart';
 import 'package:dalal_street_client/grpc/client.dart';
 import 'package:dalal_street_client/utils/colors.dart';
 import 'package:flutter/material.dart';
@@ -5,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await readConfig();
   await initClients();
   runApp(const DalalApp());
   testGrpc();

@@ -34,5 +34,6 @@ dev_dependencies:
 flutter:
   assets:
     - assets/tls_keys/dev/server.crt
+    - config.json
 
   uses-material-design: true
