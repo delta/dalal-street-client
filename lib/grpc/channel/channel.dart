@@ -9,6 +9,7 @@ Future<ClientChannel> _makeChannel() async => ClientChannel(
       options: ChannelOptions(
         credentials: ChannelCredentials.secure(
           certificates: await readServerCert(),
+          onBadCertificate: (cert, str) => true,
         ),
       ),
     );
