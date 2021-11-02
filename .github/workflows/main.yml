@@ -28,25 +28,25 @@ jobs:
           channel: "stable" # 'dev', 'alpha', default to: 'stable'
           # flutter-version: '1.12.x' # you can also specify exact version of flutter
 
-      # Update submodules
-      - run: |
-          git submodule init
-          git submodule update
-
       # Install protoc-gen-dart
       - run: flutter pub global activate protoc_plugin
-      
-      # Generate proto stub files
-      - run: ./build_proto.sh
-
-      # Copy the config file
-      - run: cp config.example.json config.json
 
       # Get flutter dependencies.
       - run: flutter pub get
 
       # Check for any formatting issues in the code.
       - run: flutter format --set-exit-if-changed .
+
+      # Update submodules
+      - run: |
+          git submodule init
+          git submodule update
+      
+      # Generate proto stub files
+      - run: ./build_proto.sh
+
+      # Copy the config file
+      - run: cp config.example.json config.json
 
       # Statically analyze the Dart code for any errors.
       - run: flutter analyze .
