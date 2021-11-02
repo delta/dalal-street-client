@@ -9,7 +9,6 @@ Future<void> main() async {
   await readConfig();
   await initClients();
   runApp(const DalalApp());
-  testGrpc();
 }
 
 class DalalApp extends StatelessWidget {
