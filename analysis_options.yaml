@@ -13,6 +13,10 @@ analyzer:
   errors:
     avoid_empty_else: error
     prefer_single_quotes: error
+  exclude:
+    - "*.pb.dart"
+    - "*.pbenum.dart"
+    - "*.pbjson.dart"
 
 linter:
   # The lint rules applied to this project can be customized in the
