@@ -1,7 +1,17 @@
+import 'package:dalal_street_client/blocs/user/user_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
+
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
 
   @override
   Widget build(context) => Scaffold(
@@ -12,8 +22,9 @@ class LoginPage extends StatelessWidget {
           padding: const EdgeInsets.all(30.0),
           child: Column(
             children: [
-              const TextField(
-                decoration: InputDecoration(
+              TextField(
+                controller: _emailController,
+                decoration: const InputDecoration(
                   labelText: 'Email',
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(12))),
@@ -21,8 +32,10 @@ class LoginPage extends StatelessWidget {
                 keyboardType: TextInputType.emailAddress,
               ),
               const SizedBox(height: 20),
-              const TextField(
-                decoration: InputDecoration(
+              TextField(
+                controller: _passwordController,
+                obscureText: true,
+                decoration: const InputDecoration(
                   labelText: 'Password',
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(12))),
@@ -30,9 +43,25 @@ class LoginPage extends StatelessWidget {
                 keyboardType: TextInputType.visiblePassword,
               ),
               const SizedBox(height: 20),
-              ElevatedButton(onPressed: () {}, child: const Text('Log In')),
+              ElevatedButton(
+                onPressed: onLoginClicked,
+                child: const Text('Log In'),
+              ),
             ],
           ),
         ),
       );
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  void onLoginClicked() {
+    // TODO: Implement Form Validation
+    BlocProvider.of<UserBloc>(context)
+        .add(UserLogIn(_emailController.text, _passwordController.text));
+  }
 }

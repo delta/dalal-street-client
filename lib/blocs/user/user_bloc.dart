@@ -7,7 +7,9 @@ part 'user_state.dart';
 
 class UserBloc extends Bloc<UserEvent, UserState> {
   UserBloc() : super(const UserLoggedOut()) {
-    on<UserLogIn>((event, emit) {});
+    on<UserLogIn>((event, emit) {
+      print('email: ${event.email}, password: ${event.password}');
+    });
     on<UserLogOut>((event, emit) {});
   }
 }
