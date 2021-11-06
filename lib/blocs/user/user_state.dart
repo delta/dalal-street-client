@@ -11,12 +11,8 @@ class UserLoggedOut extends UserState {
   const UserLoggedOut();
 }
 
-class UserLoading extends UserState {
-  const UserLoading();
-}
-
 class UserLoggedIn extends UserState {
-  final User user;
+  final User? user;
 
   const UserLoggedIn(this.user);
 }
