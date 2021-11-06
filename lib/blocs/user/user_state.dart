@@ -12,7 +12,10 @@ class UserLoggedOut extends UserState {
 }
 
 class UserLoggedIn extends UserState {
-  final User? user;
+  final User user;
 
   const UserLoggedIn(this.user);
+
+  @override
+  List<Object> get props => [user];
 }

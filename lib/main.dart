@@ -37,7 +37,7 @@ class DalalApp extends StatelessWidget {
             listener: (context, state) {
               if (state is UserLoggedIn) {
                 _navigator.pushAndRemoveUntil(
-                    route(HomePage(userName: state.user!.name)),
+                    route(HomePage(userName: state.user.name)),
                     (route) => false);
               } else {
                 _navigator.pushAndRemoveUntil(
