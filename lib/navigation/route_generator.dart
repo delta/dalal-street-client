@@ -1,6 +1,7 @@
 import 'package:dalal_street_client/blocs/user/user_bloc.dart';
 import 'package:dalal_street_client/pages/auth/login_page.dart';
 import 'package:dalal_street_client/pages/home_page.dart';
+import 'package:dalal_street_client/proto_build/models/User.pb.dart';
 import 'package:flutter/material.dart';
 
 class RouteGenerator {
@@ -11,8 +12,8 @@ class RouteGenerator {
       case '/login':
         return MaterialPageRoute(builder: (_) => const LoginPage());
       case '/home':
-        if (args is String) {
-          return MaterialPageRoute(builder: (_) => HomePage(userName: args));
+        if (args is User) {
+          return MaterialPageRoute(builder: (_) => HomePage(user: args));
         }
         return _errorRoute(msg: 'Invalid user args');
       default:
@@ -25,8 +26,7 @@ class RouteGenerator {
     var routesList = [generateRoute(const RouteSettings(name: '/login'))];
     if (userState is UserLoggedIn) {
       routesList = [
-        generateRoute(
-            RouteSettings(name: '/home', arguments: userState.user.name))
+        generateRoute(RouteSettings(name: '/home', arguments: userState.user))
       ];
     }
     return routesList;
