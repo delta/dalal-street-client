@@ -17,7 +17,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           .login(LoginRequest(email: event.email, password: event.password));
       if (resp.statusCode == LoginResponse_StatusCode.OK) {
         emit(LoginSuccess(resp));
-        await Future.delayed(const Duration(milliseconds: 500));
         userBloc.add(UserLogIn(resp));
       } else {
         emit(LoginFailure(resp.statusMessage));

@@ -10,42 +10,41 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  // TODO: Maybe shift the form logic to bloc as well? Need to discuss
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
   @override
-  Widget build(context) => BlocProvider(
-        create: (context) => LoginBloc(context.read()),
-        child: BlocConsumer<LoginBloc, LoginState>(
-          listener: (context, state) {
-            if (state is LoginFailure) {
-              ScaffoldMessenger.of(context)
-                ..hideCurrentSnackBar()
-                ..showSnackBar(SnackBar(content: Text(state.msg)));
-            } else if(state is LoginSuccess) {
-              ScaffoldMessenger.of(context)
-                ..hideCurrentSnackBar()
-                ..showSnackBar(SnackBar(content: Text('Welcome ${state.loginResponse.user.name}')));
-            }
-          },
-          builder: (context, state) => Scaffold(
-            appBar: AppBar(
-              title: const Text('Log In'),
-            ),
-            body: Padding(
-              padding: const EdgeInsets.all(30.0),
-              child: (() {
-                if (state is LoginLoading) {
-                  return const Center(child: CircularProgressIndicator());
-                }
-                return _buildForm(context);
-              })(),
-            ),
+  Widget build(context) => BlocConsumer<LoginBloc, LoginState>(
+        listener: (context, state) {
+          if (state is LoginFailure) {
+            ScaffoldMessenger.of(context)
+              ..hideCurrentSnackBar()
+              ..showSnackBar(SnackBar(content: Text(state.msg)));
+          } else if (state is LoginSuccess) {
+            ScaffoldMessenger.of(context)
+              ..hideCurrentSnackBar()
+              ..showSnackBar(SnackBar(
+                  content: Text('Welcome ${state.loginResponse.user.name}')));
+          }
+        },
+        builder: (context, state) => Scaffold(
+          appBar: AppBar(
+            title: const Text('Log In'),
+          ),
+          body: Padding(
+            padding: const EdgeInsets.all(30.0),
+            child: (() {
+              if (state is LoginLoading) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              return _buildForm();
+            })(),
           ),
         ),
       );
 
-  Widget _buildForm(BuildContext context) => Column(
+  Widget _buildForm() => Column(
         children: [
           TextField(
             controller: _emailController,
@@ -69,13 +68,13 @@ class _LoginPageState extends State<LoginPage> {
           ),
           const SizedBox(height: 20),
           ElevatedButton(
-            onPressed: () => _onLoginClicked(context),
+            onPressed: _onLoginClicked,
             child: const Text('Log In'),
           ),
         ],
       );
 
-  void _onLoginClicked(BuildContext context) {
+  void _onLoginClicked() {
     // TODO: Implement Form Validation
     context.read<LoginBloc>().add(LoginRequested(
           _emailController.text,
