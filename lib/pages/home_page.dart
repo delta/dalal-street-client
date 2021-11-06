@@ -25,9 +25,9 @@ class HomePage extends StatelessWidget {
             child: Center(
               child: Column(
                 children: [
-                  const Text(
-                    'Current User: ',
-                    style: TextStyle(fontSize: 24),
+                  Text(
+                    'Current User: $userName',
+                    style: const TextStyle(fontSize: 24),
                   ),
                   ElevatedButton(
                     onPressed: () => _onLogoutClick(context),
