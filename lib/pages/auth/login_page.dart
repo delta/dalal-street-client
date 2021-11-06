@@ -15,13 +15,17 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(context) => BlocProvider(
-        create: (context) => LoginBloc(),
+        create: (context) => LoginBloc(context.read()),
         child: BlocConsumer<LoginBloc, LoginState>(
           listener: (context, state) {
             if (state is LoginFailure) {
               ScaffoldMessenger.of(context)
                 ..hideCurrentSnackBar()
                 ..showSnackBar(SnackBar(content: Text(state.msg)));
+            } else if(state is LoginSuccess) {
+              ScaffoldMessenger.of(context)
+                ..hideCurrentSnackBar()
+                ..showSnackBar(SnackBar(content: Text('Welcome ${state.loginResponse.user.name}')));
             }
           },
           builder: (context, state) => Scaffold(

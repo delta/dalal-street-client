@@ -7,6 +7,12 @@ abstract class UserEvent extends Equatable {
   List<Object> get props => [];
 }
 
+class UserLogIn extends UserEvent {
+  final LoginResponse loginResponse;
+
+  const UserLogIn(this.loginResponse);
+}
+
 class UserLogOut extends UserEvent {
   const UserLogOut();
 }

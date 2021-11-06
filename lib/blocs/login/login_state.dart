@@ -23,10 +23,10 @@ class LoginFailure extends LoginState {
 }
 
 class LoginSuccess extends LoginState {
-  final User user;
+  final LoginResponse loginResponse;
 
-  const LoginSuccess(this.user);
+  const LoginSuccess(this.loginResponse);
 
   @override
-  List<Object> get props => [user];
+  List<Object> get props => [loginResponse];
 }
