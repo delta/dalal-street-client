@@ -54,6 +54,8 @@ class DalalApp extends StatelessWidget {
               child: child,
             ),
             initialRoute: (state is UserLoggedIn) ? '/home' : '/login',
+            onGenerateInitialRoutes: (initialRoute) =>
+                RouteGenerator.generateInitialRoute(initialRoute, state),
             onGenerateRoute: RouteGenerator.generateRoute,
           ),
         ),

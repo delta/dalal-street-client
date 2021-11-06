@@ -23,7 +23,9 @@ dependencies:
   bloc: ^7.2.1
   bloc_concurrency: ^0.1.0
   flutter_bloc: ^7.3.0
+  # Hydrated Bloc
   hydrated_bloc: ^7.1.0
+  path_provider: ^2.0.6
   # Needed for better state classes in Bloc
   equatable: ^2.0.3
 
