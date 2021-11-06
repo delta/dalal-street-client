@@ -43,10 +43,18 @@ class DalalApp extends StatelessWidget {
               listener: (context, state) {
                 if (state is UserLoggedIn) {
                   print('user logged in');
+                  ScaffoldMessenger.of(context)
+                    ..hideCurrentSnackBar()
+                    ..showSnackBar(
+                        SnackBar(content: Text('Welcome ${state.user.name}')));
                   _navigator.pushNamedAndRemoveUntil('/home', (route) => false,
                       arguments: state.user);
                 } else {
                   print('user logged out');
+                  ScaffoldMessenger.of(context)
+                    ..hideCurrentSnackBar()
+                    ..showSnackBar(
+                        const SnackBar(content: Text('User Logged Out')));
                   _navigator.pushNamedAndRemoveUntil(
                       '/login', (route) => false);
                 }

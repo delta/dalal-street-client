@@ -9,33 +9,24 @@ class HomePage extends StatelessWidget {
   final User user;
 
   @override
-  Widget build(context) => BlocListener<UserBloc, UserState>(
-        listener: (context, state) {
-          if (state is UserLoggedOut) {
-            ScaffoldMessenger.of(context)
-              ..hideCurrentSnackBar()
-              ..showSnackBar(const SnackBar(content: Text('User Logged Out')));
-          }
-        },
-        child: Scaffold(
-          appBar: AppBar(
-            title: const Text('Home'),
-          ),
-          body: Padding(
-            padding: const EdgeInsets.all(20),
-            child: Center(
-              child: Column(
-                children: [
-                  Text(
-                    'Current User: ${user.name}',
-                    style: const TextStyle(fontSize: 24),
-                  ),
-                  ElevatedButton(
-                    onPressed: () => _onLogoutClick(context),
-                    child: const Text('Logout'),
-                  ),
-                ],
-              ),
+  Widget build(context) => Scaffold(
+        appBar: AppBar(
+          title: const Text('Home'),
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Center(
+            child: Column(
+              children: [
+                Text(
+                  'Current User: ${user.name}',
+                  style: const TextStyle(fontSize: 24),
+                ),
+                ElevatedButton(
+                  onPressed: () => _onLogoutClick(context),
+                  child: const Text('Logout'),
+                ),
+              ],
             ),
           ),
         ),
