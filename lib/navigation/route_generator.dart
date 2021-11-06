@@ -22,18 +22,11 @@ class RouteGenerator {
 
   static List<Route<dynamic>> generateInitialRoute(
       String initialRoutes, UserState userState) {
-    var routesList = [
-      MaterialPageRoute(
-        builder: (_) => const LoginPage(),
-        settings: const RouteSettings(name: '/login'),
-      ),
-    ];
+    var routesList = [generateRoute(const RouteSettings(name: '/login'))];
     if (userState is UserLoggedIn) {
       routesList = [
-        MaterialPageRoute(
-          builder: (_) => HomePage(userName: userState.user.name),
-          settings: const RouteSettings(name: '/home'),
-        )
+        generateRoute(
+            RouteSettings(name: '/home', arguments: userState.user.name))
       ];
     }
     return routesList;
