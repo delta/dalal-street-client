@@ -21,8 +21,9 @@ dependencies:
 
   # BLoC - Stage Management Library
   bloc: ^7.2.1
-  flutter_bloc: ^7.3.0
   bloc_concurrency: ^0.1.0
+  flutter_bloc: ^7.3.0
+  hydrated_bloc: ^7.1.0
   # Needed for better state classes in Bloc
   equatable: ^2.0.3
 
