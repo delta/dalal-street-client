@@ -1,12 +1,14 @@
 import 'package:bloc/bloc.dart';
 import 'package:dalal_street_client/blocs/user/user_bloc.dart';
 import 'package:dalal_street_client/grpc/client.dart';
+import 'package:dalal_street_client/pages/auth/login_page.dart';
 import 'package:dalal_street_client/proto_build/actions/Login.pb.dart';
 import 'package:equatable/equatable.dart';
 
 part 'login_event.dart';
 part 'login_state.dart';
 
+/// Handles the state for [LoginPage]
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final UserBloc userBloc;
 

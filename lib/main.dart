@@ -9,15 +9,22 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 
-Future<void> main() async {
+void main() async {
+  // Something doesnt work without this line. Dont remember what
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Provide storage directory for persisting/restoring the HydratedBloc state
   HydratedBloc.storage = await HydratedStorage.build(
     storageDirectory: kIsWeb
         ? HydratedStorage.webStorageDirectory
         : await getTemporaryDirectory(),
   );
+
+  // Read GrpcConfig from config.json and initialise ActionClient, StreamClient
   await readConfig();
   await initClients();
+
+  // Start the app
   runApp(DalalApp());
 }
 

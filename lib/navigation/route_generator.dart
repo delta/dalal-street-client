@@ -1,3 +1,5 @@
+// TODO: Need a better and simpler routing strategy
+
 import 'package:dalal_street_client/blocs/login/login_bloc.dart';
 import 'package:dalal_street_client/blocs/user/user_bloc.dart';
 import 'package:dalal_street_client/pages/auth/login_page.dart';

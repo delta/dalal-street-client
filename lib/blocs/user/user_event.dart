@@ -11,6 +11,9 @@ class UserLogIn extends UserEvent {
   final LoginResponse loginResponse;
 
   const UserLogIn(this.loginResponse);
+
+  @override
+  List<Object> get props => [loginResponse];
 }
 
 class UserLogOut extends UserEvent {
