@@ -13,13 +13,18 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   LoginBloc(this.userBloc) : super(LoginInitial()) {
     on<LoginRequested>((event, emit) async {
       emit(const LoginLoading());
-      final resp = await actionClient
-          .login(LoginRequest(email: event.email, password: event.password));
-      if (resp.statusCode == LoginResponse_StatusCode.OK) {
-        emit(LoginSuccess(resp));
-        userBloc.add(UserLogIn(resp));
-      } else {
-        emit(LoginFailure(resp.statusMessage));
+      try {
+        final resp = await actionClient
+            .login(LoginRequest(email: event.email, password: event.password));
+        if (resp.statusCode == LoginResponse_StatusCode.OK) {
+          emit(LoginSuccess(resp));
+          userBloc.add(UserLogIn(resp));
+        } else {
+          emit(LoginFailure(resp.statusMessage));
+        }
+      } catch (e) {
+        print(e);
+        emit(const LoginFailure('Failed to reach server. Try again later'));
       }
     });
   }
