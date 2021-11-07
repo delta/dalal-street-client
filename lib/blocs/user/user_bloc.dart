@@ -18,8 +18,8 @@ part 'user_state.dart';
 /// ```
 class UserBloc extends HydratedBloc<UserEvent, UserState> {
   UserBloc() : super(const UserLoggedOut()) {
-    on<UserLogIn>(
-        (event, emit) => emit(UserLoggedIn(event.loginResponse.user)));
+    on<UserLogIn>((event, emit) => emit(
+        UserLoggedIn(event.loginResponse.user, event.loginResponse.sessionId)));
     on<UserLogOut>((event, emit) => emit(const UserLoggedOut()));
   }
 
@@ -28,7 +28,8 @@ class UserBloc extends HydratedBloc<UserEvent, UserState> {
   UserState? fromJson(Map<String, dynamic> json) {
     try {
       final user = User.fromJson(json['user']);
-      return UserLoggedIn(user);
+      final sessionId = json['sessionId'];
+      return UserLoggedIn(user, sessionId);
     } catch (_) {
       return const UserLoggedOut();
     }
@@ -37,7 +38,11 @@ class UserBloc extends HydratedBloc<UserEvent, UserState> {
   @override
   Map<String, dynamic>? toJson(UserState state) {
     if (state is UserLoggedIn) {
-      return {'user': state.user.writeToJson()};
+      return {
+        'user': state.user.writeToJson(),
+        // TODO: Encrypt sessionId
+        'sessionId': state.sessionId,
+      };
     }
     return {};
   }

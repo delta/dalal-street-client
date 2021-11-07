@@ -13,9 +13,10 @@ class UserLoggedOut extends UserState {
 
 class UserLoggedIn extends UserState {
   final User user;
+  final String sessionId;
 
-  const UserLoggedIn(this.user);
+  const UserLoggedIn(this.user, this.sessionId);
 
   @override
-  List<Object> get props => [user];
+  List<Object> get props => [user, sessionId];
 }

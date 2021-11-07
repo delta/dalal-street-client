@@ -18,3 +18,15 @@ Future<void> initClients() async {
   actionClient = DalalActionServiceClient(_channel);
   streamClient = DalalStreamServiceClient(_channel);
 }
+
+/// Creates [CallOptions] with sessionId in metadata
+///
+/// Should be included in all user authenticated grpc requests like this:
+/// ```dart
+/// actionClient.getMarketEvents(request, options: sessionOptions(sessionId));
+/// ```
+/// 
+/// Not including this in user authenticated grpc requests
+/// will cause "Inavlid session id" error
+CallOptions sessionOptions(String sessionId) =>
+    CallOptions(metadata: {'sessionId': sessionId});
