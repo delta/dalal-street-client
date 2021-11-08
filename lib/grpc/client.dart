@@ -25,7 +25,7 @@ Future<void> initClients() async {
 /// ```dart
 /// actionClient.getMarketEvents(request, options: sessionOptions(sessionId));
 /// ```
-/// 
+///
 /// Not including this in user authenticated grpc requests
 /// will cause "Inavlid session id" error
 CallOptions sessionOptions(String sessionId) =>
