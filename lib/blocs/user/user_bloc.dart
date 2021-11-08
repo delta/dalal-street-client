@@ -1,4 +1,6 @@
+import 'package:dalal_street_client/grpc/client.dart';
 import 'package:dalal_street_client/proto_build/actions/Login.pb.dart';
+import 'package:dalal_street_client/proto_build/actions/Logout.pb.dart';
 import 'package:dalal_street_client/proto_build/models/User.pb.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
@@ -17,10 +19,25 @@ part 'user_state.dart';
 /// userBloc.add(const UserLogOut());
 /// ```
 class UserBloc extends HydratedBloc<UserEvent, UserState> {
+  // TODO: Use proper dependency injection to access sessionId
+  late String sessionId;
+
   UserBloc() : super(const UserLoggedOut()) {
-    on<UserLogIn>((event, emit) => emit(
-        UserLoggedIn(event.loginResponse.user, event.loginResponse.sessionId)));
-    on<UserLogOut>((event, emit) => emit(const UserLoggedOut()));
+    on<UserLogIn>((event, emit) {
+      sessionId = event.loginResponse.sessionId;
+      emit(UserLoggedIn(
+          event.loginResponse.user, event.loginResponse.sessionId));
+    });
+    on<UserLogOut>((event, emit) {
+      try {
+        actionClient.logout(LogoutRequest(),
+            options: sessionOptions(sessionId));
+      } catch (e) {
+        // Cant do anything
+        print(e);
+      }
+      emit(const UserLoggedOut());
+    });
   }
 
   // Methods required by HydratedBloc to persist state
