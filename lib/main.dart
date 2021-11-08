@@ -26,6 +26,7 @@ void main() async {
 
   // Start the app
   runApp(
+    // Provide UserBloc at the root of the APp
     BlocProvider(
       create: (_) => UserBloc(),
       child: DalalApp(),
@@ -49,6 +50,7 @@ class DalalApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
           textTheme: GoogleFonts.rubikTextTheme(Theme.of(context).textTheme)),
+      // Show snackbar and navigate to Home or Login page whenever UserState changes
       builder: (context, child) => BlocListener<UserBloc, UserState>(
         listener: (context, state) {
           if (state is UserLoggedIn) {
@@ -69,6 +71,7 @@ class DalalApp extends StatelessWidget {
         },
         child: child,
       ),
+      // Routing
       initialRoute: (userBloc.state is UserLoggedIn) ? '/home' : '/login',
       onGenerateInitialRoutes: (initialRoute) =>
           RouteGenerator.generateInitialRoute(initialRoute, userBloc.state),
