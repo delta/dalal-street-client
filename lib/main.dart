@@ -25,7 +25,12 @@ void main() async {
   await initClients();
 
   // Start the app
-  runApp(DalalApp());
+  runApp(
+    BlocProvider(
+      create: (_) => UserBloc(),
+      child: DalalApp(),
+    ),
+  );
 }
 
 class DalalApp extends StatelessWidget {
@@ -36,43 +41,38 @@ class DalalApp extends StatelessWidget {
   NavigatorState get _navigator => _navigatorKey.currentState!;
 
   @override
-  Widget build(BuildContext context) => BlocProvider(
-        create: (context) => UserBloc(),
-        child: BlocBuilder<UserBloc, UserState>(
-          builder: (context, state) => MaterialApp(
-            title: 'Dalal Street 2021',
-            navigatorKey: _navigatorKey,
-            debugShowCheckedModeBanner: false,
-            theme: ThemeData(
-                textTheme:
-                    GoogleFonts.rubikTextTheme(Theme.of(context).textTheme)),
-            builder: (context, child) => BlocListener<UserBloc, UserState>(
-              listener: (context, state) {
-                if (state is UserLoggedIn) {
-                  print('user logged in');
-                  ScaffoldMessenger.of(context)
-                    ..hideCurrentSnackBar()
-                    ..showSnackBar(
-                        SnackBar(content: Text('Welcome ${state.user.name}')));
-                  _navigator.pushNamedAndRemoveUntil('/home', (route) => false,
-                      arguments: state.user);
-                } else {
-                  print('user logged out');
-                  ScaffoldMessenger.of(context)
-                    ..hideCurrentSnackBar()
-                    ..showSnackBar(
-                        const SnackBar(content: Text('User Logged Out')));
-                  _navigator.pushNamedAndRemoveUntil(
-                      '/login', (route) => false);
-                }
-              },
-              child: child,
-            ),
-            initialRoute: (state is UserLoggedIn) ? '/home' : '/login',
-            onGenerateInitialRoutes: (initialRoute) =>
-                RouteGenerator.generateInitialRoute(initialRoute, state),
-            onGenerateRoute: RouteGenerator.generateRoute,
-          ),
-        ),
-      );
+  Widget build(context) {
+    final userBloc = context.read<UserBloc>();
+    return MaterialApp(
+      title: 'Dalal Street 2021',
+      navigatorKey: _navigatorKey,
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+          textTheme: GoogleFonts.rubikTextTheme(Theme.of(context).textTheme)),
+      builder: (context, child) => BlocListener<UserBloc, UserState>(
+        listener: (context, state) {
+          if (state is UserLoggedIn) {
+            print('user logged in');
+            ScaffoldMessenger.of(context)
+              ..hideCurrentSnackBar()
+              ..showSnackBar(
+                  SnackBar(content: Text('Welcome ${state.user.name}')));
+            _navigator.pushNamedAndRemoveUntil('/home', (route) => false,
+                arguments: state.user);
+          } else {
+            print('user logged out');
+            ScaffoldMessenger.of(context)
+              ..hideCurrentSnackBar()
+              ..showSnackBar(const SnackBar(content: Text('User Logged Out')));
+            _navigator.pushNamedAndRemoveUntil('/login', (route) => false);
+          }
+        },
+        child: child,
+      ),
+      initialRoute: (userBloc.state is UserLoggedIn) ? '/home' : '/login',
+      onGenerateInitialRoutes: (initialRoute) =>
+          RouteGenerator.generateInitialRoute(initialRoute, userBloc.state),
+      onGenerateRoute: RouteGenerator.generateRoute,
+    );
+  }
 }
