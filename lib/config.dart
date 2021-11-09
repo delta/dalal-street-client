@@ -9,17 +9,20 @@ class GrpcConfig {
 
   const GrpcConfig({required this.host, required this.port});
 
+  GrpcConfig.fromJson(Map json)
+      : host = json['host'],
+        port = json['port'];
+
   String get url => 'http://$host:$port/';
 }
 
-late GrpcConfig grpcConfig;
+late GrpcConfig mobileConfig;
+late GrpcConfig webConfig;
 
 Future<void> readConfig() async {
   final jsonString = await rootBundle.loadString('config.json');
   final jsonMap = jsonDecode(jsonString);
 
-  grpcConfig = GrpcConfig(
-    host: jsonMap['host'],
-    port: jsonMap['port'],
-  );
+  mobileConfig = GrpcConfig.fromJson(jsonMap['mobile']);
+  webConfig = GrpcConfig.fromJson(jsonMap['web']);
 }

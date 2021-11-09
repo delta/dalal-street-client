@@ -5,8 +5,8 @@ import 'package:grpc/grpc_connection_interface.dart';
 
 /// [ClientChannel] for non-web platforms
 Future<ClientChannel> _makeChannel() async => ClientChannel(
-      grpcConfig.host,
-      port: grpcConfig.port,
+      mobileConfig.host,
+      port: mobileConfig.port,
       options: ChannelOptions(
         credentials: ChannelCredentials.secure(
           certificates: await readServerCert(),
