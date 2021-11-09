@@ -3,7 +3,7 @@ import 'package:dalal_street_client/grpc/read_cert.dart';
 import 'package:grpc/grpc.dart';
 import 'package:grpc/grpc_connection_interface.dart';
 
-/// Client channel for non-web platforms
+/// [ClientChannel] for non-web platforms
 Future<ClientChannel> _makeChannel() async => ClientChannel(
       grpcConfig.host,
       port: grpcConfig.port,

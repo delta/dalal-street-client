@@ -16,12 +16,19 @@ packages:
     source: hosted
     version: "2.8.1"
   bloc:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: bloc
       url: "https://pub.dartlang.org"
     source: hosted
     version: "7.2.1"
+  bloc_concurrency:
+    dependency: "direct main"
+    description:
+      name: bloc_concurrency
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.0"
   boolean_selector:
     dependency: transitive
     description:
@@ -71,6 +78,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.3"
+  equatable:
+    dependency: "direct main"
+    description:
+      name: equatable
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.3"
   fake_async:
     dependency: transitive
     description:
@@ -144,6 +158,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.0.2"
+  hive:
+    dependency: transitive
+    description:
+      name: hive
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.4"
   http:
     dependency: transitive
     description:
@@ -165,6 +186,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.0.0"
+  hydrated_bloc:
+    dependency: "direct main"
+    description:
+      name: hydrated_bloc
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "7.1.0"
   lints:
     dependency: transitive
     description:
@@ -201,12 +229,12 @@ packages:
     source: hosted
     version: "1.8.0"
   path_provider:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: path_provider
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.5"
+    version: "2.0.6"
   path_provider_linux:
     dependency: transitive
     description:
@@ -296,6 +324,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.0"
+  stream_transform:
+    dependency: transitive
+    description:
+      name: stream_transform
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.0"
   string_scanner:
     dependency: transitive
     description:
@@ -303,6 +338,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.0"
+  synchronized:
+    dependency: transitive
+    description:
+      name: synchronized
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.0.0"
   term_glyph:
     dependency: transitive
     description:
