@@ -23,11 +23,28 @@ class UserBloc extends HydratedBloc<UserEvent, UserState> {
   late String sessionId;
 
   UserBloc() : super(const UserLoggedOut()) {
+    on<CheckUser>((event, emit) async {
+      await Future.delayed(const Duration(milliseconds: 800));
+      if (state is UserLoggedIn) {
+        add(GetUserData(sessionId));
+      } else {
+        // go to login page
+        emit(const UserLoggedOut(showMsg: false));
+      }
+    });
+
+    on<GetUserData>((event, emit) async {
+      final loginResponse = await actionClient.login(LoginRequest(),
+          options: sessionOptions(event.sessionId));
+      emit(UserDataLoaded(loginResponse.user, loginResponse.sessionId));
+    });
+
     on<UserLogIn>((event, emit) {
       sessionId = event.loginResponse.sessionId;
-      emit(UserLoggedIn(
+      emit(UserDataLoaded(
           event.loginResponse.user, event.loginResponse.sessionId));
     });
+
     on<UserLogOut>((event, emit) {
       try {
         actionClient.logout(LogoutRequest(),
@@ -44,9 +61,8 @@ class UserBloc extends HydratedBloc<UserEvent, UserState> {
   @override
   UserState? fromJson(Map<String, dynamic> json) {
     try {
-      final user = User.fromJson(json['user']);
-      final sessionId = json['sessionId'];
-      return UserLoggedIn(user, sessionId);
+      sessionId = json['sessionId'];
+      return UserLoggedIn(sessionId);
     } catch (_) {
       return const UserLoggedOut();
     }
@@ -54,12 +70,10 @@ class UserBloc extends HydratedBloc<UserEvent, UserState> {
 
   @override
   Map<String, dynamic>? toJson(UserState state) {
-    if (state is UserLoggedIn) {
-      return {
-        'user': state.user.writeToJson(),
-        // TODO: Encrypt sessionId
-        'sessionId': state.sessionId,
-      };
+    if (state is UserDataLoaded) {
+      return {'sessionId': state.sessionId};
+    } else if (state is UserLoggedIn) {
+      return {'sessionId': state.sessionId};
     }
     return {};
   }

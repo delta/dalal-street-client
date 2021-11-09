@@ -26,7 +26,7 @@ void main() async {
 
   // Start the app
   runApp(
-    // Provide UserBloc at the root of the APp
+    // Provide UserBloc at the root of the App
     BlocProvider(
       create: (_) => UserBloc(),
       child: DalalApp(),
@@ -53,7 +53,7 @@ class DalalApp extends StatelessWidget {
       // Show snackbar and navigate to Home or Login page whenever UserState changes
       builder: (context, child) => BlocListener<UserBloc, UserState>(
         listener: (context, state) {
-          if (state is UserLoggedIn) {
+          if (state is UserDataLoaded) {
             print('user logged in');
             ScaffoldMessenger.of(context)
               ..hideCurrentSnackBar()
@@ -61,20 +61,21 @@ class DalalApp extends StatelessWidget {
                   SnackBar(content: Text('Welcome ${state.user.name}')));
             _navigator.pushNamedAndRemoveUntil('/home', (route) => false,
                 arguments: state.user);
-          } else {
-            print('user logged out');
-            ScaffoldMessenger.of(context)
-              ..hideCurrentSnackBar()
-              ..showSnackBar(const SnackBar(content: Text('User Logged Out')));
+          } else if (state is UserLoggedOut) {
+            if (state.showMsg) {
+              print('user logged out');
+              ScaffoldMessenger.of(context)
+                ..hideCurrentSnackBar()
+                ..showSnackBar(
+                    const SnackBar(content: Text('User Logged Out')));
+            }
             _navigator.pushNamedAndRemoveUntil('/login', (route) => false);
           }
         },
         child: child,
       ),
       // Routing
-      initialRoute: (userBloc.state is UserLoggedIn) ? '/home' : '/login',
-      onGenerateInitialRoutes: (initialRoute) =>
-          RouteGenerator.generateInitialRoute(initialRoute, userBloc.state),
+      initialRoute: '/splash',
       onGenerateRoute: RouteGenerator.generateRoute,
     );
   }
