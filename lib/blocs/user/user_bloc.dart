@@ -24,19 +24,26 @@ class UserBloc extends HydratedBloc<UserEvent, UserState> {
 
   UserBloc() : super(const UserLoggedOut()) {
     on<CheckUser>((event, emit) async {
-      await Future.delayed(const Duration(milliseconds: 800));
       if (state is UserLoggedIn) {
         add(GetUserData(sessionId));
       } else {
+        // really quick transition to login page looks wierd
+        await Future.delayed(const Duration(milliseconds: 400));
         // go to login page
-        emit(const UserLoggedOut(showMsg: false));
+        emit(const UserLoggedOut(fromSplash: true));
       }
     });
 
     on<GetUserData>((event, emit) async {
-      final loginResponse = await actionClient.login(LoginRequest(),
-          options: sessionOptions(event.sessionId));
-      emit(UserDataLoaded(loginResponse.user, loginResponse.sessionId));
+      try {
+        final loginResponse = await actionClient.login(LoginRequest(),
+            options: sessionOptions(event.sessionId));
+        emit(UserDataLoaded(loginResponse.user, loginResponse.sessionId));
+      } catch (e) {
+        // Session invalid or expired
+        print(e);
+        emit(const UserLoggedOut(fromSplash: true));
+      }
     });
 
     on<UserLogIn>((event, emit) {

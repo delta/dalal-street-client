@@ -60,7 +60,8 @@ class DalalApp extends StatelessWidget {
               _navigator.pushNamedAndRemoveUntil('/home', (route) => false,
                   arguments: state.user);
             } else if (state is UserLoggedOut) {
-              if (state.showMsg) {
+              // Show msg only when comming from a page other than splash
+              if (!state.fromSplash) {
                 print('user logged out');
                 ScaffoldMessenger.of(context)
                   ..hideCurrentSnackBar()

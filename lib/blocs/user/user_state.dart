@@ -11,13 +11,12 @@ abstract class UserState extends Equatable {
 ///
 /// Show Login Page
 class UserLoggedOut extends UserState {
-  // Dont show msg only when comming from splash
-  final bool showMsg;
+  final bool fromSplash;
 
-  const UserLoggedOut({this.showMsg = true});
+  const UserLoggedOut({this.fromSplash = false});
 
   @override
-  List<Object> get props => [showMsg];
+  List<Object> get props => [fromSplash];
 }
 
 /// User is logged in but User data needs to fetched(already authenticated, just opened the app)
