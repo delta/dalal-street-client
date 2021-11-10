@@ -42,41 +42,38 @@ class DalalApp extends StatelessWidget {
   NavigatorState get _navigator => _navigatorKey.currentState!;
 
   @override
-  Widget build(context) {
-    final userBloc = context.read<UserBloc>();
-    return MaterialApp(
-      title: 'Dalal Street 2021',
-      navigatorKey: _navigatorKey,
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-          textTheme: GoogleFonts.rubikTextTheme(Theme.of(context).textTheme)),
-      // Show snackbar and navigate to Home or Login page whenever UserState changes
-      builder: (context, child) => BlocListener<UserBloc, UserState>(
-        listener: (context, state) {
-          if (state is UserDataLoaded) {
-            print('user logged in');
-            ScaffoldMessenger.of(context)
-              ..hideCurrentSnackBar()
-              ..showSnackBar(
-                  SnackBar(content: Text('Welcome ${state.user.name}')));
-            _navigator.pushNamedAndRemoveUntil('/home', (route) => false,
-                arguments: state.user);
-          } else if (state is UserLoggedOut) {
-            if (state.showMsg) {
-              print('user logged out');
+  Widget build(context) => MaterialApp(
+        title: 'Dalal Street 2021',
+        navigatorKey: _navigatorKey,
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+            textTheme: GoogleFonts.rubikTextTheme(Theme.of(context).textTheme)),
+        // Show snackbar and navigate to Home or Login page whenever UserState changes
+        builder: (context, child) => BlocListener<UserBloc, UserState>(
+          listener: (context, state) {
+            if (state is UserDataLoaded) {
+              print('user logged in');
               ScaffoldMessenger.of(context)
                 ..hideCurrentSnackBar()
                 ..showSnackBar(
-                    const SnackBar(content: Text('User Logged Out')));
+                    SnackBar(content: Text('Welcome ${state.user.name}')));
+              _navigator.pushNamedAndRemoveUntil('/home', (route) => false,
+                  arguments: state.user);
+            } else if (state is UserLoggedOut) {
+              if (state.showMsg) {
+                print('user logged out');
+                ScaffoldMessenger.of(context)
+                  ..hideCurrentSnackBar()
+                  ..showSnackBar(
+                      const SnackBar(content: Text('User Logged Out')));
+              }
+              _navigator.pushNamedAndRemoveUntil('/login', (route) => false);
             }
-            _navigator.pushNamedAndRemoveUntil('/login', (route) => false);
-          }
-        },
-        child: child,
-      ),
-      // Routing
-      initialRoute: '/splash',
-      onGenerateRoute: RouteGenerator.generateRoute,
-    );
-  }
+          },
+          child: child,
+        ),
+        // Routing
+        initialRoute: '/splash',
+        onGenerateRoute: RouteGenerator.generateRoute,
+      );
 }
