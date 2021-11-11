@@ -15,6 +15,9 @@ dependencies:
   # Fonts
   google_fonts: ^2.1.0
 
+  # Logging
+  logger: ^1.1.0
+
   # gRPC
   grpc: ^3.0.2
   protobuf: ^2.0.0
@@ -26,6 +29,7 @@ dependencies:
   # Hydrated Bloc
   hydrated_bloc: ^7.1.0
   path_provider: ^2.0.6
+
   # Needed for better state classes in Bloc
   equatable: ^2.0.3
 
