@@ -29,6 +29,9 @@ dependencies:
   # Needed for better state classes in Bloc
   equatable: ^2.0.3
 
+  # Dependency Injection
+  get_it: ^7.2.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
