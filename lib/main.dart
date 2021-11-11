@@ -43,7 +43,7 @@ import 'package:path_provider/path_provider.dart';
 /// // Can unregister with names
 /// getIt.unregister(instanceName: 'String 2');
 /// ```
-/// 
+///
 /// For more complex usecases checkout [get_it](https://pub.dev/packages/get_it)
 final GetIt getIt = GetIt.I;
 
