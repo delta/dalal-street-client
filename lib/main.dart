@@ -26,7 +26,7 @@ void main() async {
 
   // Start the app
   runApp(
-    // Provide UserBloc at the root of the APp
+    // Provide UserBloc at the root of the App
     BlocProvider(
       create: (_) => UserBloc(),
       child: DalalApp(),
@@ -42,40 +42,39 @@ class DalalApp extends StatelessWidget {
   NavigatorState get _navigator => _navigatorKey.currentState!;
 
   @override
-  Widget build(context) {
-    final userBloc = context.read<UserBloc>();
-    return MaterialApp(
-      title: 'Dalal Street 2021',
-      navigatorKey: _navigatorKey,
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-          textTheme: GoogleFonts.rubikTextTheme(Theme.of(context).textTheme)),
-      // Show snackbar and navigate to Home or Login page whenever UserState changes
-      builder: (context, child) => BlocListener<UserBloc, UserState>(
-        listener: (context, state) {
-          if (state is UserLoggedIn) {
-            print('user logged in');
-            ScaffoldMessenger.of(context)
-              ..hideCurrentSnackBar()
-              ..showSnackBar(
-                  SnackBar(content: Text('Welcome ${state.user.name}')));
-            _navigator.pushNamedAndRemoveUntil('/home', (route) => false,
-                arguments: state.user);
-          } else {
-            print('user logged out');
-            ScaffoldMessenger.of(context)
-              ..hideCurrentSnackBar()
-              ..showSnackBar(const SnackBar(content: Text('User Logged Out')));
-            _navigator.pushNamedAndRemoveUntil('/login', (route) => false);
-          }
-        },
-        child: child,
-      ),
-      // Routing
-      initialRoute: (userBloc.state is UserLoggedIn) ? '/home' : '/login',
-      onGenerateInitialRoutes: (initialRoute) =>
-          RouteGenerator.generateInitialRoute(initialRoute, userBloc.state),
-      onGenerateRoute: RouteGenerator.generateRoute,
-    );
-  }
+  Widget build(context) => MaterialApp(
+        title: 'Dalal Street 2021',
+        navigatorKey: _navigatorKey,
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+            textTheme: GoogleFonts.rubikTextTheme(Theme.of(context).textTheme)),
+        // Show snackbar and navigate to Home or Login page whenever UserState changes
+        builder: (context, child) => BlocListener<UserBloc, UserState>(
+          listener: (context, state) {
+            if (state is UserDataLoaded) {
+              print('user logged in');
+              ScaffoldMessenger.of(context)
+                ..hideCurrentSnackBar()
+                ..showSnackBar(
+                    SnackBar(content: Text('Welcome ${state.user.name}')));
+              _navigator.pushNamedAndRemoveUntil('/home', (route) => false,
+                  arguments: state.user);
+            } else if (state is UserLoggedOut) {
+              // Show msg only when comming from a page other than splash
+              if (!state.fromSplash) {
+                print('user logged out');
+                ScaffoldMessenger.of(context)
+                  ..hideCurrentSnackBar()
+                  ..showSnackBar(
+                      const SnackBar(content: Text('User Logged Out')));
+              }
+              _navigator.pushNamedAndRemoveUntil('/login', (route) => false);
+            }
+          },
+          child: child,
+        ),
+        // Routing
+        initialRoute: '/splash',
+        onGenerateRoute: RouteGenerator.generateRoute,
+      );
 }
