@@ -1,4 +1,5 @@
 import 'package:dalal_street_client/grpc/client.dart';
+import 'package:dalal_street_client/main.dart';
 import 'package:dalal_street_client/proto_build/actions/Login.pb.dart';
 import 'package:dalal_street_client/proto_build/actions/Logout.pb.dart';
 import 'package:dalal_street_client/proto_build/models/User.pb.dart';
@@ -19,13 +20,10 @@ part 'user_state.dart';
 /// userBloc.add(const UserLogOut());
 /// ```
 class UserBloc extends HydratedBloc<UserEvent, UserState> {
-  // TODO: Use proper dependency injection to access sessionId
-  late String sessionId;
-
   UserBloc() : super(const UserLoggedOut()) {
     on<CheckUser>((event, emit) async {
       if (state is UserLoggedIn) {
-        add(GetUserData(sessionId));
+        add(GetUserData((state as UserLoggedIn).sessionId));
       } else {
         // really quick transition to login page looks wierd
         await Future.delayed(const Duration(milliseconds: 400));
@@ -46,16 +44,13 @@ class UserBloc extends HydratedBloc<UserEvent, UserState> {
       }
     });
 
-    on<UserLogIn>((event, emit) {
-      sessionId = event.loginResponse.sessionId;
-      emit(UserDataLoaded(
-          event.loginResponse.user, event.loginResponse.sessionId));
-    });
+    on<UserLogIn>((event, emit) => emit(UserDataLoaded(
+        event.loginResponse.user, event.loginResponse.sessionId)));
 
     on<UserLogOut>((event, emit) {
       try {
         actionClient.logout(LogoutRequest(),
-            options: sessionOptions(sessionId));
+            options: sessionOptions(getIt<String>()));
       } catch (e) {
         // Cant do anything
         print(e);
@@ -68,8 +63,7 @@ class UserBloc extends HydratedBloc<UserEvent, UserState> {
   @override
   UserState? fromJson(Map<String, dynamic> json) {
     try {
-      sessionId = json['sessionId'];
-      return UserLoggedIn(sessionId);
+      return UserLoggedIn(json['sessionId']);
     } catch (_) {
       return const UserLoggedOut();
     }
