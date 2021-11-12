@@ -39,7 +39,7 @@ class UserBloc extends HydratedBloc<UserEvent, UserState> {
         emit(UserDataLoaded(loginResponse.user, loginResponse.sessionId));
       } catch (e) {
         // Session invalid or expired
-        print(e);
+        logger.e(e);
         emit(const UserLoggedOut(fromSplash: true));
       }
     });
@@ -53,7 +53,7 @@ class UserBloc extends HydratedBloc<UserEvent, UserState> {
             options: sessionOptions(getIt<String>()));
       } catch (e) {
         // Cant do anything
-        print(e);
+        logger.e(e);
       }
       emit(const UserLoggedOut());
     });

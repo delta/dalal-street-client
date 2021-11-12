@@ -8,7 +8,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:logger/logger.dart';
 import 'package:path_provider/path_provider.dart';
+
+// Logging
+final Logger logger = Logger();
 
 /// ## Dependency Injection
 ///
@@ -93,7 +97,7 @@ class DalalApp extends StatelessWidget {
               // Register sessionId
               getIt.registerSingleton(state.sessionId);
 
-              print('user logged in');
+              logger.i('user logged in');
               ScaffoldMessenger.of(context)
                 ..hideCurrentSnackBar()
                 ..showSnackBar(
@@ -106,7 +110,7 @@ class DalalApp extends StatelessWidget {
                 getIt.unregister<String>();
 
                 // Show msg only when comming from a page other than splash
-                print('user logged out');
+                logger.i('user logged out');
                 ScaffoldMessenger.of(context)
                   ..hideCurrentSnackBar()
                   ..showSnackBar(
