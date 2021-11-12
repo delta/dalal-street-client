@@ -35,6 +35,6 @@ linter:
     avoid_print: true
     avoid_empty_else: true
     prefer_single_quotes: true
-    constant_identifier_names: true
+    constant_identifier_names: false # dart proto_build doesn't follow this rule
 # Additional information about this file can be found at
 # https://dart.dev/guides/language/analysis-options
