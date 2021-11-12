@@ -11,6 +11,7 @@ include: package:flutter_lints/flutter.yaml
 
 analyzer:
   errors:
+    avoid_print: error
     avoid_empty_else: error
     prefer_single_quotes: error
   exclude:
@@ -31,9 +32,9 @@ linter:
   # `// ignore_for_file: name_of_lint` syntax on the line or in the file
   # producing the lint.
   rules:
-    avoid_print: false
-    prefer_single_quotes: true
+    avoid_print: true
     avoid_empty_else: true
-    constant_identifier_names: false # dart proto_build doesn't follow this rule
+    prefer_single_quotes: true
+    constant_identifier_names: true
 # Additional information about this file can be found at
 # https://dart.dev/guides/language/analysis-options
