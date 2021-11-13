@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:dalal_street_client/blocs/user/user_bloc.dart';
 import 'package:dalal_street_client/grpc/client.dart';
+import 'package:dalal_street_client/main.dart';
 import 'package:dalal_street_client/pages/auth/login_page.dart';
 import 'package:dalal_street_client/proto_build/actions/Login.pb.dart';
 import 'package:equatable/equatable.dart';
@@ -25,7 +26,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           emit(LoginFailure(resp.statusMessage));
         }
       } catch (e) {
-        print(e);
+        logger.e(e);
         emit(const LoginFailure('Failed to reach server. Try again later'));
       }
     });
