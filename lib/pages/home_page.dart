@@ -1,4 +1,5 @@
 import 'package:dalal_street_client/blocs/user/user_bloc.dart';
+import 'package:dalal_street_client/main.dart';
 import 'package:dalal_street_client/proto_build/models/User.pb.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,8 +20,9 @@ class HomePage extends StatelessWidget {
             child: Column(
               children: [
                 Text(
-                  'Current User: ${user.name}',
-                  style: const TextStyle(fontSize: 24),
+                  'Current User: ${user.name}\n Session Id: ${getIt<String>()}',
+                  style: const TextStyle(fontSize: 18),
+                  textAlign: TextAlign.center,
                 ),
                 ElevatedButton(
                   onPressed: () => _onLogoutClick(context),
