@@ -1,0 +1,9 @@
+#!/bin/bash
+
+echo "running flutter format..."
+
+mv ./lib/proto_build .
+
+flutter format lib/
+
+mv proto_build ./lib
