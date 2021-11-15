@@ -48,17 +48,23 @@
   git submodule update
   ```
 
+- configure git-hooks path
+
+  ```bash
+  git config core.hooksPath .githooks
+  ```
+
 - Generate proto files
 
   ```bash
   ./build_proto.sh
   ```
 
-- Running the server
+- Run App
 
   - Run `cp config.example.json config.json`
 
-  - Fill in the server configuration(host, port etc) in **config.json**.
+  - Fill in the app configuration(host, port etc) in **config.json**.
 
   - Connect your device and run
 
