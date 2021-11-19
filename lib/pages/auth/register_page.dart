@@ -49,7 +49,6 @@ class _RegisterPageState extends State<RegisterPage> {
           TextField(
             controller: _referralCont,
             decoration: const InputDecoration(labelText: 'Referral Code'),
-            keyboardType: TextInputType.number,
           ),
           const SizedBox(height: 20),
           SizedBox(
@@ -62,7 +61,9 @@ class _RegisterPageState extends State<RegisterPage> {
         ],
       );
 
-  void _onRegisterClick() {}
+  void _onRegisterClick() {
+    // TODO: form validation
+  }
 
   @override
   void dispose() {

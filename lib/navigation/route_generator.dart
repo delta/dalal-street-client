@@ -1,6 +1,6 @@
 // TODO: Need a better and simpler routing strategy
 
-import 'package:dalal_street_client/blocs/login/login_cubit.dart';
+import 'package:dalal_street_client/blocs/auth/login/login_cubit.dart';
 import 'package:dalal_street_client/pages/auth/login_page.dart';
 import 'package:dalal_street_client/pages/auth/register_page.dart';
 import 'package:dalal_street_client/pages/home_page.dart';

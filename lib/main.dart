@@ -122,7 +122,7 @@ class DalalApp extends StatelessWidget {
           child: child,
         ),
         // Routing
-        initialRoute: '/register',
+        initialRoute: '/splash',
         onGenerateRoute: RouteGenerator.generateRoute,
       );
 }

@@ -1,4 +1,4 @@
-import 'package:dalal_street_client/blocs/login/login_cubit.dart';
+import 'package:dalal_street_client/blocs/auth/login/login_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -66,6 +66,11 @@ class _LoginPageState extends State<LoginPage> {
             onPressed: _onLoginClicked,
             child: const Text('Log In'),
           ),
+          const SizedBox(height: 20),
+          TextButton(
+            onPressed: _onSignUpClicked,
+            child: const Text('Dont have an account? Sign Up.'),
+          ),
         ],
       );
 
@@ -76,6 +81,8 @@ class _LoginPageState extends State<LoginPage> {
           _passwordController.text,
         );
   }
+
+  void _onSignUpClicked() => Navigator.of(context).pushNamed('/register');
 
   @override
   void dispose() {
