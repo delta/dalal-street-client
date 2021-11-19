@@ -85,7 +85,7 @@ class DalalApp extends StatelessWidget {
 
   @override
   Widget build(context) => MaterialApp(
-        title: 'Dalal Street 2021',
+        tile: 'Dalal Street 2021',
         navigatorKey: _navigatorKey,
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
@@ -122,7 +122,7 @@ class DalalApp extends StatelessWidget {
           child: child,
         ),
         // Routing
-        initialRoute: '/splash',
+        initialRoute: '/register',
         onGenerateRoute: RouteGenerator.generateRoute,
       );
 }
