@@ -1,4 +1,4 @@
-import 'package:dalal_street_client/blocs/login/login_bloc.dart';
+import 'package:dalal_street_client/blocs/login/login_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -15,7 +15,7 @@ class _LoginPageState extends State<LoginPage> {
   final _passwordController = TextEditingController();
 
   @override
-  Widget build(context) => BlocConsumer<LoginBloc, LoginState>(
+  Widget build(context) => BlocConsumer<LoginCubit, LoginState>(
         listener: (context, state) {
           if (state is LoginFailure) {
             ScaffoldMessenger.of(context)
@@ -71,10 +71,10 @@ class _LoginPageState extends State<LoginPage> {
 
   void _onLoginClicked() {
     // TODO: Implement Form Validation
-    context.read<LoginBloc>().add(LoginRequested(
+    context.read<LoginCubit>().login(
           _emailController.text,
           _passwordController.text,
-        ));
+        );
   }
 
   @override

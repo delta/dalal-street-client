@@ -1,6 +1,6 @@
 // TODO: Need a better and simpler routing strategy
 
-import 'package:dalal_street_client/blocs/login/login_bloc.dart';
+import 'package:dalal_street_client/blocs/login/login_cubit.dart';
 import 'package:dalal_street_client/pages/auth/login_page.dart';
 import 'package:dalal_street_client/pages/home_page.dart';
 import 'package:dalal_street_client/pages/splash_page.dart';
@@ -18,7 +18,7 @@ class RouteGenerator {
       case '/login':
         return MaterialPageRoute(
             builder: (_) => BlocProvider(
-                  create: (context) => LoginBloc(context.read()),
+                  create: (context) => LoginCubit(context.read()),
                   child: const LoginPage(),
                 ));
       case '/home':
