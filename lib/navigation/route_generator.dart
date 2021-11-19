@@ -2,6 +2,7 @@
 
 import 'package:dalal_street_client/blocs/login/login_cubit.dart';
 import 'package:dalal_street_client/pages/auth/login_page.dart';
+import 'package:dalal_street_client/pages/auth/register_page.dart';
 import 'package:dalal_street_client/pages/home_page.dart';
 import 'package:dalal_street_client/pages/splash_page.dart';
 import 'package:dalal_street_client/proto_build/models/User.pb.dart';
@@ -21,6 +22,8 @@ class RouteGenerator {
                   create: (context) => LoginCubit(context.read()),
                   child: const LoginPage(),
                 ));
+      case '/register':
+        return MaterialPageRoute(builder: (_) => const RegisterPage());
       case '/home':
         if (args is User) {
           return MaterialPageRoute(builder: (_) => HomePage(user: args));
