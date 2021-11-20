@@ -4,6 +4,7 @@ import 'package:dalal_street_client/blocs/auth/login/login_cubit.dart';
 import 'package:dalal_street_client/blocs/auth/register/register_cubit.dart';
 import 'package:dalal_street_client/pages/auth/login_page.dart';
 import 'package:dalal_street_client/pages/auth/register_page.dart';
+import 'package:dalal_street_client/pages/auth/verify_phone.dart';
 import 'package:dalal_street_client/pages/home_page.dart';
 import 'package:dalal_street_client/pages/splash_page.dart';
 import 'package:dalal_street_client/proto_build/models/User.pb.dart';
@@ -33,6 +34,8 @@ class RouteGenerator {
             child: const RegisterPage(),
           ),
         );
+      case '/verifyPhone':
+        return MaterialPageRoute(builder: (_) => const VerifyPhonePage());
 
       // Home Pages
       case '/home':

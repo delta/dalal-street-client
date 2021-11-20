@@ -15,8 +15,8 @@ class RegisterCubit extends Cubit<RegisterState> {
     String name, {
     String? referralCode,
   }) async {
+    emit(const RegisterLoading());
     try {
-      emit(const RegisterLoading());
       final resp = await actionClient.register(RegisterRequest(
         email: email,
         password: password,

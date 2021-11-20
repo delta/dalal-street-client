@@ -36,6 +36,9 @@ dependencies:
   # Dependency Injection
   get_it: ^7.2.0
 
+  # Other
+  pin_code_fields: ^7.3.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
