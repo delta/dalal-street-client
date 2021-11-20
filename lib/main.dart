@@ -110,6 +110,10 @@ class DalalApp extends StatelessWidget {
                   arguments: state.user,
                 );
               } else {
+                ScaffoldMessenger.of(context)
+                  ..hideCurrentSnackBar()
+                  ..showSnackBar(
+                      const SnackBar(content: Text('Verify your phone to continue')));
                 _navigator.pushNamedAndRemoveUntil(
                     '/verifyPhone', (route) => false);
               }

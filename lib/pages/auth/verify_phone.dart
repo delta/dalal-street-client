@@ -22,11 +22,16 @@ class _VerifyPhonePageState extends State<VerifyPhonePage> {
     _codeCont.text = '91';
   }
 
-  // TODO: Add logout button
   @override
   Widget build(context) => Scaffold(
         appBar: AppBar(
           title: const Text('Verify Phone'),
+          actions: [
+            IconButton(
+              onPressed: _onLogoutClicked,
+              icon: const Icon(Icons.logout),
+            ),
+          ],
         ),
         body: Center(
           child: BlocConsumer<VerifyPhoneCubit, VerifyPhoneState>(
@@ -68,6 +73,8 @@ class _VerifyPhonePageState extends State<VerifyPhonePage> {
           ),
         ),
       );
+
+  void _onLogoutClicked() => context.read<VerifyPhoneCubit>().logout();
 
   // Enter Number part
   // ignore: unused_element

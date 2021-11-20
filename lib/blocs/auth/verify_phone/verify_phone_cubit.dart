@@ -13,6 +13,8 @@ class VerifyPhoneCubit extends Cubit<VerifyPhoneState> {
 
   VerifyPhoneCubit(this.userBloc) : super(const EnteringPhone());
 
+  void logout() => userBloc.add(const UserLogOut());
+
   Future<void> sendOTP(String phone) async {
     emit(const VerifyPhoneLoading());
     try {
