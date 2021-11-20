@@ -23,7 +23,13 @@ class _RegisterPageState extends State<RegisterPage> {
         body: BlocConsumer<RegisterCubit, RegisterState>(
           listener: (context, state) {
             if (state is RegisterSuccess) {
-              logger.i('Registraion succesful');
+              ScaffoldMessenger.of(context)
+                ..hideCurrentSnackBar()
+                ..showSnackBar(const SnackBar(
+                    content: Text(
+                        'Registraion successful. Please check your mail to verify email')));
+              Navigator.of(context)
+                  .pushNamedAndRemoveUntil('/login', (route) => false);
             } else if (state is RegisterFailure) {
               ScaffoldMessenger.of(context)
                 ..hideCurrentSnackBar()
