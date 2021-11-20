@@ -98,6 +98,7 @@ class DalalApp extends StatelessWidget {
               getIt.registerSingleton(state.sessionId);
 
               logger.i('user logged in');
+              // TODO: create a utility function for snackbars
               ScaffoldMessenger.of(context)
                 ..hideCurrentSnackBar()
                 ..showSnackBar(

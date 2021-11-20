@@ -16,15 +16,12 @@ class RegisterCubit extends Cubit<RegisterState> {
     String? referralCode,
   }) async {
     try {
-      final resp = await actionClient.register(
-        RegisterRequest(
-          email: email,
-          password: password,
-          fullName: name,
-          referralCode: referralCode,
-        ),
-        options: sessionOptions(getIt()),
-      );
+      final resp = await actionClient.register(RegisterRequest(
+        email: email,
+        password: password,
+        fullName: name,
+        referralCode: referralCode,
+      ));
       if (resp.statusCode == RegisterResponse_StatusCode.OK) {
         emit(const RegisterSuccess());
       } else {

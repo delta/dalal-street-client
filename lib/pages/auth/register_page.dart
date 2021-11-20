@@ -1,4 +1,7 @@
+import 'package:dalal_street_client/blocs/auth/register/register_cubit.dart';
+import 'package:dalal_street_client/main.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({Key? key}) : super(key: key);
@@ -17,10 +20,25 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(context) => Scaffold(
         appBar: AppBar(title: const Text('Register')),
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(30.0),
-            child: _buildForm(),
+        body: BlocListener<RegisterCubit, RegisterState>(
+          listener: (context, state) {
+            logger.d('new state: $state');
+            if (state is RegisterSuccess) {
+              logger.i('Registraion succesful');
+            } else if (state is RegisterFailure) {
+              logger.d('failure read');
+              ScaffoldMessenger.of(context)
+                ..hideCurrentSnackBar()
+                ..showSnackBar(SnackBar(content: Text(state.msg)));
+            } else if (state is RegisterLoading) {
+              // Show progress dialog
+            }
+          },
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(30.0),
+              child: _buildForm(),
+            ),
           ),
         ),
       );
@@ -63,6 +81,9 @@ class _RegisterPageState extends State<RegisterPage> {
 
   void _onRegisterClick() {
     // TODO: form validation
+    context
+        .read<RegisterCubit>()
+        .register(_emailCont.text, _passCont.text, _nameCont.text);
   }
 
   @override
