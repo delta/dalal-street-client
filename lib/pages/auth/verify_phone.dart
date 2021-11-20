@@ -38,6 +38,7 @@ class _VerifyPhonePageState extends State<VerifyPhonePage> {
       );
 
   // Enter Number part
+  // ignore: unused_element
   Widget _buildNumberForm() => Card(
         shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
