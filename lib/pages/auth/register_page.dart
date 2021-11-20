@@ -1,4 +1,5 @@
 import 'package:dalal_street_client/blocs/auth/register/register_cubit.dart';
+import 'package:dalal_street_client/utils/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -22,17 +23,12 @@ class _RegisterPageState extends State<RegisterPage> {
         body: BlocConsumer<RegisterCubit, RegisterState>(
           listener: (context, state) {
             if (state is RegisterSuccess) {
-              ScaffoldMessenger.of(context)
-                ..hideCurrentSnackBar()
-                ..showSnackBar(const SnackBar(
-                    content: Text(
-                        'Registraion successful. Please check your inbox to verify email')));
+              showSnackBar(context,
+                  'Registraion successful. Please check your inbox to verify email');
               Navigator.of(context)
                   .pushNamedAndRemoveUntil('/login', (route) => false);
             } else if (state is RegisterFailure) {
-              ScaffoldMessenger.of(context)
-                ..hideCurrentSnackBar()
-                ..showSnackBar(SnackBar(content: Text(state.msg)));
+              showSnackBar(context, state.msg);
             }
           },
           builder: (context, state) {

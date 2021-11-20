@@ -2,6 +2,7 @@ import 'package:dalal_street_client/blocs/user/user_bloc.dart';
 import 'package:dalal_street_client/config.dart';
 import 'package:dalal_street_client/grpc/client.dart';
 import 'package:dalal_street_client/navigation/route_generator.dart';
+import 'package:dalal_street_client/utils/snackbar.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -99,21 +100,14 @@ class DalalApp extends StatelessWidget {
 
               logger.i('user logged in');
               if (state.user.isPhoneVerified) {
-                // TODO: create a utility function for snackbars
-                ScaffoldMessenger.of(context)
-                  ..hideCurrentSnackBar()
-                  ..showSnackBar(
-                      SnackBar(content: Text('Welcome ${state.user.name}')));
+                showSnackBar(context, 'Welcome ${state.user.name}');
                 _navigator.pushNamedAndRemoveUntil(
                   '/home',
                   (route) => false,
                   arguments: state.user,
                 );
               } else {
-                ScaffoldMessenger.of(context)
-                  ..hideCurrentSnackBar()
-                  ..showSnackBar(
-                      const SnackBar(content: Text('Verify your phone to continue')));
+                showSnackBar(context, 'Verify your phone to continue');
                 _navigator.pushNamedAndRemoveUntil(
                     '/verifyPhone', (route) => false);
               }
@@ -124,10 +118,7 @@ class DalalApp extends StatelessWidget {
 
                 // Show msg only when comming from a page other than splash
                 logger.i('user logged out');
-                ScaffoldMessenger.of(context)
-                  ..hideCurrentSnackBar()
-                  ..showSnackBar(
-                      const SnackBar(content: Text('User Logged Out')));
+                showSnackBar(context, 'User Logged Out');
               }
               _navigator.pushNamedAndRemoveUntil('/login', (route) => false);
             }
@@ -139,3 +130,4 @@ class DalalApp extends StatelessWidget {
         onGenerateRoute: RouteGenerator.generateRoute,
       );
 }
+ 

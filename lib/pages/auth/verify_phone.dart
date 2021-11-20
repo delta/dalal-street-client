@@ -1,4 +1,5 @@
 import 'package:dalal_street_client/blocs/auth/verify_phone/verify_phone_cubit.dart';
+import 'package:dalal_street_client/utils/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
@@ -37,14 +38,9 @@ class _VerifyPhonePageState extends State<VerifyPhonePage> {
           child: BlocConsumer<VerifyPhoneCubit, VerifyPhoneState>(
             listener: (context, state) {
               if (state is VerifyPhoneFailure) {
-                ScaffoldMessenger.of(context)
-                  ..hideCurrentSnackBar()
-                  ..showSnackBar(SnackBar(content: Text(state.msg)));
+                showSnackBar(context, state.msg);
               } else if (state is VerifyPhoneSuccess) {
-                ScaffoldMessenger.of(context)
-                  ..hideCurrentSnackBar()
-                  ..showSnackBar(
-                      const SnackBar(content: Text('Phone Verified')));
+                showSnackBar(context, 'Phone Verified');
               }
             },
             builder: (context, state) {

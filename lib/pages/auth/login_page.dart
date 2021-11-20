@@ -1,4 +1,5 @@
 import 'package:dalal_street_client/blocs/auth/login/login_cubit.dart';
+import 'package:dalal_street_client/utils/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -18,9 +19,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(context) => BlocConsumer<LoginCubit, LoginState>(
         listener: (context, state) {
           if (state is LoginFailure) {
-            ScaffoldMessenger.of(context)
-              ..hideCurrentSnackBar()
-              ..showSnackBar(SnackBar(content: Text(state.msg)));
+            showSnackBar(context, state.msg);
           }
         },
         builder: (context, state) => Scaffold(
