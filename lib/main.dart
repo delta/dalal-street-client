@@ -98,13 +98,21 @@ class DalalApp extends StatelessWidget {
               getIt.registerSingleton(state.sessionId);
 
               logger.i('user logged in');
-              // TODO: create a utility function for snackbars
-              ScaffoldMessenger.of(context)
-                ..hideCurrentSnackBar()
-                ..showSnackBar(
-                    SnackBar(content: Text('Welcome ${state.user.name}')));
-              _navigator.pushNamedAndRemoveUntil('/home', (route) => false,
-                  arguments: state.user);
+              if (state.user.isPhoneVerified) {
+                // TODO: create a utility function for snackbars
+                ScaffoldMessenger.of(context)
+                  ..hideCurrentSnackBar()
+                  ..showSnackBar(
+                      SnackBar(content: Text('Welcome ${state.user.name}')));
+                _navigator.pushNamedAndRemoveUntil(
+                  '/home',
+                  (route) => false,
+                  arguments: state.user,
+                );
+              } else {
+                _navigator.pushNamedAndRemoveUntil(
+                    '/verifyPhone', (route) => false);
+              }
             } else if (state is UserLoggedOut) {
               if (!state.fromSplash) {
                 // Unregister sessionId

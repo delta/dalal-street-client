@@ -1,4 +1,7 @@
+import 'package:dalal_street_client/blocs/auth/verify_phone/verify_phone_cubit.dart';
+import 'package:dalal_street_client/main.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
 class VerifyPhonePage extends StatefulWidget {
@@ -20,19 +23,49 @@ class _VerifyPhonePageState extends State<VerifyPhonePage> {
     _codeCont.text = '91';
   }
 
+  // Add logout button
   @override
   Widget build(context) => Scaffold(
         appBar: AppBar(
           title: const Text('Verify Phone'),
         ),
         body: Center(
-          child: Wrap(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: _buildOTPForm(),
-              )
-            ],
+          child: BlocConsumer<VerifyPhoneCubit, VerifyPhoneState>(
+            listener: (context, state) {
+              if (state is VerifyPhoneFailure) {
+                ScaffoldMessenger.of(context)
+                  ..hideCurrentSnackBar()
+                  ..showSnackBar(SnackBar(content: Text(state.msg)));
+              } else if (state is VerifyPhoneSuccess) {
+                ScaffoldMessenger.of(context)
+                  ..hideCurrentSnackBar()
+                  ..showSnackBar(
+                      const SnackBar(content: Text('Phone Verified')));
+              }
+            },
+            builder: (context, state) {
+              if (state is EnteringPhone) {
+                return Wrap(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: _buildNumberForm(),
+                    )
+                  ],
+                );
+              } else if (state is EnteringOTP) {
+                return Wrap(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: _buildOTPForm(state.phone),
+                    )
+                  ],
+                );
+              } else {
+                return const CircularProgressIndicator();
+              }
+            },
           ),
         ),
       );
@@ -92,10 +125,13 @@ class _VerifyPhonePageState extends State<VerifyPhonePage> {
 
   void _onSendOTPClick() {
     // TODO: form validation
+    context
+        .read<VerifyPhoneCubit>()
+        .sendOTP('+${_codeCont.text}${_numCont.text}');
   }
 
   // Enter OTP part
-  Widget _buildOTPForm() => Card(
+  Widget _buildOTPForm(String phone) => Card(
         shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
         child: Padding(
@@ -108,7 +144,7 @@ class _VerifyPhonePageState extends State<VerifyPhonePage> {
                 style: Theme.of(context).textTheme.headline6,
               ),
               const SizedBox(height: 20),
-              const Text('913333333333'),
+              Text(phone),
               const SizedBox(height: 10),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10.0),
@@ -130,7 +166,7 @@ class _VerifyPhonePageState extends State<VerifyPhonePage> {
                       children: [
                         ElevatedButton(
                           onPressed: _onResendOTPClick,
-                          child: const Text('Resend in 00:59'),
+                          child: const Text('Resend in 00:29'),
                         ),
                       ],
                     ),
@@ -138,7 +174,7 @@ class _VerifyPhonePageState extends State<VerifyPhonePage> {
                     Wrap(
                       children: [
                         ElevatedButton(
-                          onPressed: _onVerifyOTPClick,
+                          onPressed: () => _onVerifyOTPClick(phone),
                           child: const Text('Verify'),
                         ),
                       ],
@@ -155,8 +191,12 @@ class _VerifyPhonePageState extends State<VerifyPhonePage> {
     // TODO: form validation
   }
 
-  void _onVerifyOTPClick() {
+  void _onVerifyOTPClick(String phone) {
     // TODO: form validation
+    context.read<VerifyPhoneCubit>().verifyOTP(
+          int.parse(_otpCont.text),
+          phone,
+        );
   }
 
   @override
@@ -167,5 +207,6 @@ class _VerifyPhonePageState extends State<VerifyPhonePage> {
     _otpCont.dispose();
 
     super.dispose();
+    logger.d('disposed');
   }
 }

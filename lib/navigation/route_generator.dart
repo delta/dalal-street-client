@@ -2,6 +2,7 @@
 
 import 'package:dalal_street_client/blocs/auth/login/login_cubit.dart';
 import 'package:dalal_street_client/blocs/auth/register/register_cubit.dart';
+import 'package:dalal_street_client/blocs/auth/verify_phone/verify_phone_cubit.dart';
 import 'package:dalal_street_client/pages/auth/login_page.dart';
 import 'package:dalal_street_client/pages/auth/register_page.dart';
 import 'package:dalal_street_client/pages/auth/verify_phone.dart';
@@ -35,7 +36,12 @@ class RouteGenerator {
           ),
         );
       case '/verifyPhone':
-        return MaterialPageRoute(builder: (_) => const VerifyPhonePage());
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (context) => VerifyPhoneCubit(context.read()),
+            child: const VerifyPhonePage(),
+          ),
+        );
 
       // Home Pages
       case '/home':
