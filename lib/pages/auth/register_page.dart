@@ -20,26 +20,28 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(context) => Scaffold(
         appBar: AppBar(title: const Text('Register')),
-        body: BlocListener<RegisterCubit, RegisterState>(
+        body: BlocConsumer<RegisterCubit, RegisterState>(
           listener: (context, state) {
-            logger.d('new state: $state');
             if (state is RegisterSuccess) {
               logger.i('Registraion succesful');
             } else if (state is RegisterFailure) {
-              logger.d('failure read');
               ScaffoldMessenger.of(context)
                 ..hideCurrentSnackBar()
                 ..showSnackBar(SnackBar(content: Text(state.msg)));
-            } else if (state is RegisterLoading) {
-              // Show progress dialog
             }
           },
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(30.0),
-              child: _buildForm(),
-            ),
-          ),
+          builder: (context, state) {
+            if (state is RegisterLoading) {
+              return const Center(child: CircularProgressIndicator());
+            } else {
+              return SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(30.0),
+                  child: _buildForm(),
+                ),
+              );
+            }
+          },
         ),
       );
 
