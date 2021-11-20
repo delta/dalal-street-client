@@ -45,6 +45,7 @@ class VerifyPhoneCubit extends Cubit<VerifyPhoneState> {
       );
       if (resp.statusCode == VerifyOTPResponse_StatusCode.OK) {
         emit(const VerifyPhoneSuccess());
+        // sessionId will be registered again in the root BlocListener
         getIt.unregister<String>();
         userBloc.add(GetUserData(sessionId));
       } else {

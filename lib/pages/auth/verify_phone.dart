@@ -1,5 +1,4 @@
 import 'package:dalal_street_client/blocs/auth/verify_phone/verify_phone_cubit.dart';
-import 'package:dalal_street_client/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
@@ -15,7 +14,7 @@ class _VerifyPhonePageState extends State<VerifyPhonePage> {
   final _codeCont = TextEditingController();
   final _numCont = TextEditingController();
 
-  final _otpCont = TextEditingController();
+  late String _otp;
 
   @override
   void initState() {
@@ -23,7 +22,7 @@ class _VerifyPhonePageState extends State<VerifyPhonePage> {
     _codeCont.text = '91';
   }
 
-  // Add logout button
+  // TODO: Add logout button
   @override
   Widget build(context) => Scaffold(
         appBar: AppBar(
@@ -149,11 +148,10 @@ class _VerifyPhonePageState extends State<VerifyPhonePage> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10.0),
                 child: PinCodeTextField(
-                  controller: _otpCont,
                   keyboardType: TextInputType.number,
                   appContext: context,
                   length: 4,
-                  onChanged: (s) {},
+                  onChanged: (s) => _otp = s,
                 ),
               ),
               const SizedBox(height: 10),
@@ -193,20 +191,13 @@ class _VerifyPhonePageState extends State<VerifyPhonePage> {
 
   void _onVerifyOTPClick(String phone) {
     // TODO: form validation
-    context.read<VerifyPhoneCubit>().verifyOTP(
-          int.parse(_otpCont.text),
-          phone,
-        );
+    context.read<VerifyPhoneCubit>().verifyOTP(int.parse(_otp), phone);
   }
 
   @override
   void dispose() {
     _codeCont.dispose();
     _numCont.dispose();
-
-    _otpCont.dispose();
-
     super.dispose();
-    logger.d('disposed');
   }
 }

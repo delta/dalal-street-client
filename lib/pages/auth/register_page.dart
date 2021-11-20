@@ -26,7 +26,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 ..hideCurrentSnackBar()
                 ..showSnackBar(const SnackBar(
                     content: Text(
-                        'Registraion successful. Please check your mail to verify email')));
+                        'Registraion successful. Please check your inbox to verify email')));
               Navigator.of(context)
                   .pushNamedAndRemoveUntil('/login', (route) => false);
             } else if (state is RegisterFailure) {
