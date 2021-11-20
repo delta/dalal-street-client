@@ -130,4 +130,3 @@ class DalalApp extends StatelessWidget {
         onGenerateRoute: RouteGenerator.generateRoute,
       );
 }
- 
