@@ -36,6 +36,9 @@ dependencies:
   # Dependency Injection
   get_it: ^7.2.0
 
+  # Form Validation
+  reactive_forms: ^10.6.5
+
   # Other
   pin_code_fields: ^7.3.0
 

@@ -2,18 +2,15 @@ import 'package:dalal_street_client/blocs/auth/login/login_cubit.dart';
 import 'package:dalal_street_client/utils/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:reactive_forms/reactive_forms.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+class LoginPage extends StatelessWidget {
+  LoginPage({Key? key}) : super(key: key);
 
-  @override
-  State<LoginPage> createState() => _LoginPageState();
-}
-
-class _LoginPageState extends State<LoginPage> {
-  // TODO: Maybe shift the form logic to bloc as well? Need to discuss
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
+  final form = FormGroup({
+    'email': FormControl(validators: [Validators.required, Validators.email]),
+    'password': FormControl(validators: [Validators.required]),
+  });
 
   @override
   Widget build(context) => BlocConsumer<LoginCubit, LoginState>(
@@ -32,61 +29,61 @@ class _LoginPageState extends State<LoginPage> {
               if (state is LoginLoading) {
                 return const Center(child: CircularProgressIndicator());
               }
-              return _buildForm();
+              return _buildForm(context);
             })(),
           ),
         ),
       );
 
-  Widget _buildForm() => Column(
-        children: [
-          TextField(
-            controller: _emailController,
-            decoration: const InputDecoration(
-              labelText: 'Email',
-              border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(12))),
+  Widget _buildForm(BuildContext context) => ReactiveForm(
+        formGroup: form,
+        child: Column(
+          children: [
+            ReactiveTextField(
+              formControlName: 'email',
+              decoration: const InputDecoration(
+                labelText: 'Email',
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(12))),
+              ),
+              keyboardType: TextInputType.emailAddress,
             ),
-            keyboardType: TextInputType.emailAddress,
-          ),
-          const SizedBox(height: 20),
-          TextField(
-            controller: _passwordController,
-            obscureText: true,
-            decoration: const InputDecoration(
-              labelText: 'Password',
-              border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(12))),
+            const SizedBox(height: 20),
+            ReactiveTextField(
+              formControlName: 'password',
+              obscureText: true,
+              decoration: const InputDecoration(
+                labelText: 'Password',
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(12))),
+              ),
+              keyboardType: TextInputType.visiblePassword,
             ),
-            keyboardType: TextInputType.visiblePassword,
-          ),
-          const SizedBox(height: 20),
-          ElevatedButton(
-            onPressed: _onLoginClicked,
-            child: const Text('Log In'),
-          ),
-          const SizedBox(height: 20),
-          TextButton(
-            onPressed: _onSignUpClicked,
-            child: const Text('Dont have an account? Sign Up.'),
-          ),
-        ],
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () => _onLoginClicked(context),
+              child: const Text('Log In'),
+            ),
+            const SizedBox(height: 20),
+            TextButton(
+              onPressed: () => _onSignUpClicked(context),
+              child: const Text('Dont have an account? Sign Up.'),
+            ),
+          ],
+        ),
       );
 
-  void _onLoginClicked() {
-    // TODO: Implement Form Validation
-    context.read<LoginCubit>().login(
-          _emailController.text,
-          _passwordController.text,
-        );
+  void _onLoginClicked(BuildContext context) {
+    if (form.valid) {
+      context.read<LoginCubit>().login(
+            form.control('email').value,
+            form.control('password').value,
+          );
+    } else {
+      form.markAllAsTouched();
+    }
   }
 
-  void _onSignUpClicked() => Navigator.of(context).pushNamed('/register');
-
-  @override
-  void dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
-    super.dispose();
-  }
+  void _onSignUpClicked(BuildContext context) =>
+      Navigator.of(context).pushNamed('/register');
 }

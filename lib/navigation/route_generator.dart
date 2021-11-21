@@ -25,7 +25,7 @@ class RouteGenerator {
         return MaterialPageRoute(
           builder: (_) => BlocProvider(
             create: (context) => LoginCubit(context.read()),
-            child: const LoginPage(),
+            child: LoginPage(),
           ),
         );
       case '/register':
