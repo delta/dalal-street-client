@@ -32,7 +32,7 @@ class RouteGenerator {
         return MaterialPageRoute(
           builder: (_) => BlocProvider(
             create: (context) => RegisterCubit(),
-            child: const RegisterPage(),
+            child: RegisterPage(),
           ),
         );
       case '/verifyPhone':

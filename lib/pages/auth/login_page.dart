@@ -12,6 +12,7 @@ class LoginPage extends StatelessWidget {
     'password': FormControl(validators: [Validators.required]),
   });
 
+  // TODO: add proper validationMessages in all ReactiveForms
   @override
   Widget build(context) => BlocConsumer<LoginCubit, LoginState>(
         listener: (context, state) {

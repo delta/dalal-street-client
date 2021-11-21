@@ -2,20 +2,24 @@ import 'package:dalal_street_client/blocs/auth/register/register_cubit.dart';
 import 'package:dalal_street_client/utils/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:reactive_forms/reactive_forms.dart';
 
-class RegisterPage extends StatefulWidget {
-  const RegisterPage({Key? key}) : super(key: key);
+class RegisterPage extends StatelessWidget {
+  RegisterPage({Key? key}) : super(key: key);
 
-  @override
-  State<RegisterPage> createState() => _RegisterPageState();
-}
-
-class _RegisterPageState extends State<RegisterPage> {
-  final _nameCont = TextEditingController();
-  final _emailCont = TextEditingController();
-  final _passCont = TextEditingController();
-  final _conPassCont = TextEditingController();
-  final _referralCont = TextEditingController();
+  final form = FormGroup(
+    {
+      'name': FormControl(validators: [Validators.required]),
+      'email': FormControl(validators: [Validators.required, Validators.email]),
+      'password': FormControl(validators: [
+        Validators.required,
+        Validators.minLength(6),
+      ]),
+      'confirmPassword': FormControl(),
+      'referralCode': FormControl(),
+    },
+    validators: [Validators.mustMatch('password', 'confirmPassword')],
+  );
 
   @override
   Widget build(context) => Scaffold(
@@ -38,7 +42,7 @@ class _RegisterPageState extends State<RegisterPage> {
               return SingleChildScrollView(
                 child: Padding(
                   padding: const EdgeInsets.all(30.0),
-                  child: _buildForm(),
+                  child: _buildForm(context),
                 ),
               );
             }
@@ -46,56 +50,55 @@ class _RegisterPageState extends State<RegisterPage> {
         ),
       );
 
-  Widget _buildForm() => Column(
-        children: [
-          TextField(
-            controller: _nameCont,
-            decoration: const InputDecoration(labelText: 'Name'),
-          ),
-          TextField(
-            controller: _emailCont,
-            decoration: const InputDecoration(labelText: 'Email Address'),
-            keyboardType: TextInputType.emailAddress,
-          ),
-          TextField(
-            controller: _passCont,
-            decoration: const InputDecoration(labelText: 'Password'),
-            keyboardType: TextInputType.visiblePassword,
-          ),
-          TextField(
-            controller: _conPassCont,
-            decoration: const InputDecoration(labelText: 'Confirm Password'),
-            keyboardType: TextInputType.visiblePassword,
-          ),
-          TextField(
-            controller: _referralCont,
-            decoration: const InputDecoration(labelText: 'Referral Code'),
-          ),
-          const SizedBox(height: 20),
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed: _onRegisterClick,
-              child: const Text('Register'),
+  Widget _buildForm(BuildContext context) => ReactiveForm(
+        formGroup: form,
+        child: Column(
+          children: [
+            ReactiveTextField(
+              formControlName: 'name',
+              decoration: const InputDecoration(labelText: 'Name'),
             ),
-          ),
-        ],
+            ReactiveTextField(
+              formControlName: 'email',
+              decoration: const InputDecoration(labelText: 'Email Address'),
+              keyboardType: TextInputType.emailAddress,
+            ),
+            ReactiveTextField(
+              formControlName: 'password',
+              decoration: const InputDecoration(labelText: 'Password'),
+              keyboardType: TextInputType.visiblePassword,
+            ),
+            ReactiveTextField(
+              formControlName: 'confirmPassword',
+              decoration: const InputDecoration(labelText: 'Confirm Password'),
+              keyboardType: TextInputType.visiblePassword,
+            ),
+            ReactiveTextField(
+              formControlName: 'referralCode',
+              decoration: const InputDecoration(labelText: 'Referral Code'),
+            ),
+            const SizedBox(height: 20),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () => _onRegisterClick(context),
+                child: const Text('Register'),
+              ),
+            ),
+          ],
+        ),
       );
 
-  void _onRegisterClick() {
-    // TODO: form validation
-    context
-        .read<RegisterCubit>()
-        .register(_emailCont.text, _passCont.text, _nameCont.text);
-  }
-
-  @override
-  void dispose() {
-    _nameCont.dispose();
-    _emailCont.dispose();
-    _passCont.dispose();
-    _conPassCont.dispose();
-    _referralCont.dispose();
-    super.dispose();
+  void _onRegisterClick(BuildContext context) {
+    if (form.valid) {
+      context.read<RegisterCubit>().register(
+            form.control('email').value,
+            form.control('password').value,
+            form.control('name').value,
+            referralCode: form.control('referralCode').value,
+          );
+    } else {
+      form.markAllAsTouched();
+    }
   }
 }
