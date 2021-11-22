@@ -93,6 +93,7 @@ class _EnterOtpPageState extends State<EnterOtpPage> {
         ),
       );
 
+  // ignore: unused_element
   void _onResendOTPClick() {
     // TODO: form validation
   }
