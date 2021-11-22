@@ -2,23 +2,27 @@ import 'package:dalal_street_client/blocs/auth/verify_phone/enter_phone/enter_ph
 import 'package:dalal_street_client/utils/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:reactive_forms/reactive_forms.dart';
 
-class EnterPhonePage extends StatefulWidget {
-  const EnterPhonePage({Key? key}) : super(key: key);
+class EnterPhonePage extends StatelessWidget {
+  EnterPhonePage({Key? key}) : super(key: key);
 
-  @override
-  _EnterPhonePageState createState() => _EnterPhonePageState();
-}
+  final form = FormGroup({
+    'code': FormControl(
+        value: '91', validators: [Validators.required, Validators.number]),
+    'number': FormControl(validators: [
+      Validators.required,
+      Validators.number,
 
-class _EnterPhonePageState extends State<EnterPhonePage> {
-  final _codeCont = TextEditingController();
-  final _numCont = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-    _codeCont.text = '91';
-  }
+      /// Source: https://www.oreilly.com/library/view/regular-expressions-cookbook/9781449327453/ch04s03.html
+      /// ```
+      /// Thanks to the international phone numbering plan (ITU-T E.164), phone numbers cannot contain more than 15 digits. The shortest international phone numbers in use contain seven digits.
+      /// ```
+      /// 🙃
+      Validators.minLength(7),
+      Validators.maxLength(15)
+    ]),
+  });
 
   @override
   Widget build(context) => Scaffold(
@@ -26,7 +30,7 @@ class _EnterPhonePageState extends State<EnterPhonePage> {
           title: const Text('Verify Phone'),
           actions: [
             IconButton(
-              onPressed: _onLogoutClicked,
+              onPressed: () => _onLogoutClicked(context),
               icon: const Icon(Icons.logout),
             ),
           ],
@@ -50,7 +54,7 @@ class _EnterPhonePageState extends State<EnterPhonePage> {
                   children: [
                     Padding(
                       padding: const EdgeInsets.all(20.0),
-                      child: _buildForm(),
+                      child: _buildForm(context),
                     )
                   ],
                 );
@@ -62,70 +66,69 @@ class _EnterPhonePageState extends State<EnterPhonePage> {
         ),
       );
 
-  void _onLogoutClicked() => context.read<EnterPhoneCubit>().logout();
+  void _onLogoutClicked(BuildContext context) =>
+      context.read<EnterPhoneCubit>().logout();
 
-  Widget _buildForm() => Card(
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                'Phone Number',
-                style: Theme.of(context).textTheme.headline6,
-              ),
-              const SizedBox(height: 20),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                child: SizedBox(
-                  width: double.infinity,
-                  child: Row(
-                    children: [
-                      Expanded(
-                        flex: 2,
-                        child: TextField(
-                          controller: _codeCont,
-                          keyboardType: TextInputType.number,
-                          textAlign: TextAlign.center,
+  Widget _buildForm(BuildContext context) => ReactiveForm(
+        formGroup: form,
+        child: Card(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'Phone Number',
+                  style: Theme.of(context).textTheme.headline6,
+                ),
+                const SizedBox(height: 20),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: Row(
+                      children: [
+                        Expanded(
+                          flex: 2,
+                          child: ReactiveTextField(
+                            formControlName: 'code',
+                            keyboardType: TextInputType.number,
+                            textAlign: TextAlign.center,
+                          ),
                         ),
-                      ),
-                      const SizedBox(width: 20),
-                      Expanded(
-                        flex: 8,
-                        child: TextField(
-                          controller: _numCont,
-                          decoration:
-                              const InputDecoration(labelText: 'Mobile Number'),
-                          keyboardType: TextInputType.phone,
+                        const SizedBox(width: 20),
+                        Expanded(
+                          flex: 8,
+                          child: ReactiveTextField(
+                            formControlName: 'number',
+                            decoration: const InputDecoration(
+                                labelText: 'Mobile Number'),
+                            keyboardType: TextInputType.phone,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: _onSendOTPClick,
-                child: const Text('Send OTP'),
-              ),
-            ],
+                const SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: () => _onSendOTPClick(context),
+                  child: const Text('Send OTP'),
+                ),
+              ],
+            ),
           ),
         ),
       );
 
-  void _onSendOTPClick() {
-    // TODO: form validation
-    context
-        .read<EnterPhoneCubit>()
-        .sendOTP('+${_codeCont.text}${_numCont.text}');
-  }
-
-  @override
-  void dispose() {
-    _codeCont.dispose();
-    _numCont.dispose();
-    super.dispose();
+  void _onSendOTPClick(BuildContext context) {
+    if (form.valid) {
+      context.read<EnterPhoneCubit>().sendOTP(
+          '+${form.control('code').value}${form.control('number').value}');
+    } else {
+      form.markAllAsTouched();
+    }
   }
 }

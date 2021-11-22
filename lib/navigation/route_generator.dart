@@ -42,7 +42,7 @@ class RouteGenerator {
         return MaterialPageRoute(
           builder: (_) => BlocProvider(
             create: (context) => EnterPhoneCubit(context.read()),
-            child: const EnterPhonePage(),
+            child: EnterPhonePage(),
           ),
         );
       case '/enterOtp':
