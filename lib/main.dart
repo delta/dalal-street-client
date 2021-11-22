@@ -109,7 +109,7 @@ class DalalApp extends StatelessWidget {
               } else {
                 showSnackBar(context, 'Verify your phone to continue');
                 _navigator.pushNamedAndRemoveUntil(
-                    '/verifyPhone', (route) => false);
+                    '/enterPhone', (route) => false);
               }
             } else if (state is UserLoggedOut) {
               if (!state.fromSplash) {

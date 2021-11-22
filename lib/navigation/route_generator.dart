@@ -2,10 +2,12 @@
 
 import 'package:dalal_street_client/blocs/auth/login/login_cubit.dart';
 import 'package:dalal_street_client/blocs/auth/register/register_cubit.dart';
-import 'package:dalal_street_client/blocs/auth/verify_phone/verify_phone_cubit.dart';
+import 'package:dalal_street_client/blocs/auth/verify_phone/enter_otp/enter_otp_cubit.dart';
+import 'package:dalal_street_client/blocs/auth/verify_phone/enter_phone/enter_phone_cubit.dart';
 import 'package:dalal_street_client/pages/auth/login_page.dart';
 import 'package:dalal_street_client/pages/auth/register_page.dart';
-import 'package:dalal_street_client/pages/auth/verify_phone.dart';
+import 'package:dalal_street_client/pages/auth/verify_phone/enter_otp_page.dart';
+import 'package:dalal_street_client/pages/auth/verify_phone/enter_phone_page.dart';
 import 'package:dalal_street_client/pages/home_page.dart';
 import 'package:dalal_street_client/pages/splash_page.dart';
 import 'package:dalal_street_client/proto_build/models/User.pb.dart';
@@ -35,13 +37,24 @@ class RouteGenerator {
             child: RegisterPage(),
           ),
         );
-      case '/verifyPhone':
+      // Verify Phone Pages
+      case '/enterPhone':
         return MaterialPageRoute(
           builder: (_) => BlocProvider(
-            create: (context) => VerifyPhoneCubit(context.read()),
-            child: const VerifyPhonePage(),
+            create: (context) => EnterPhoneCubit(context.read()),
+            child: const EnterPhonePage(),
           ),
         );
+      case '/enterOtp':
+        if (args is String) {
+          return MaterialPageRoute(
+            builder: (_) => BlocProvider(
+              create: (context) => EnterOtpCubit(context.read(), args),
+              child: const EnterOtpPage(),
+            ),
+          );
+        }
+        return _errorRoute(msg: 'Invalid phone args');
 
       // Home Pages
       case '/home':

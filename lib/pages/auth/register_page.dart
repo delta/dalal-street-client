@@ -15,7 +15,7 @@ class RegisterPage extends StatelessWidget {
         Validators.required,
         Validators.minLength(6),
       ]),
-      'confirmPassword': FormControl(),
+      'confirmPassword': FormControl(validators: [Validators.required]),
       'referralCode': FormControl(),
     },
     validators: [Validators.mustMatch('password', 'confirmPassword')],
