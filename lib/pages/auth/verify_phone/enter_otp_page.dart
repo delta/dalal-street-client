@@ -79,30 +79,14 @@ class _EnterOtpPageState extends State<EnterOtpPage> {
                 ),
               ),
               const SizedBox(height: 10),
-              SizedBox(
-                width: double.infinity,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Wrap(
-                      children: [
-                        ElevatedButton(
-                          onPressed: _onResendOTPClick,
-                          child: const Text('Resend in 00:29'),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(width: 20),
-                    Wrap(
-                      children: [
-                        ElevatedButton(
-                          onPressed: () => _onVerifyOTPClick(phone),
-                          child: const Text('Verify'),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
+              ElevatedButton(
+                onPressed: () => _onVerifyOTPClick(phone),
+                child: const Text('Verify'),
+              ),
+              OutlinedButton(
+                onPressed: () => Navigator.of(context)
+                    .pushNamedAndRemoveUntil('/enterPhone', (route) => false),
+                child: const Text('Change Phone Number'),
               ),
             ],
           ),
