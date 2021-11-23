@@ -120,7 +120,7 @@ class DalalApp extends StatelessWidget {
                 logger.i('user logged out');
                 showSnackBar(context, 'User Logged Out');
               }
-              _navigator.pushNamedAndRemoveUntil('/login', (route) => false);
+              _navigator.pushNamedAndRemoveUntil('/landing', (route) => false);
             }
           },
           child: child,

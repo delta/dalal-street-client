@@ -9,6 +9,7 @@ import 'package:dalal_street_client/pages/auth/register_page.dart';
 import 'package:dalal_street_client/pages/auth/verify_phone/enter_otp_page.dart';
 import 'package:dalal_street_client/pages/auth/verify_phone/enter_phone_page.dart';
 import 'package:dalal_street_client/pages/home_page.dart';
+import 'package:dalal_street_client/pages/landing_page.dart';
 import 'package:dalal_street_client/pages/splash_page.dart';
 import 'package:dalal_street_client/proto_build/models/User.pb.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +22,9 @@ class RouteGenerator {
     switch (settings.name) {
       case '/splash':
         return MaterialPageRoute(builder: (_) => const SplashPage());
+
+      case '/landing':
+        return MaterialPageRoute(builder: (_) => const LandingPage());
 
       // Auth Pages
       case '/login':

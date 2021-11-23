@@ -41,6 +41,7 @@ dependencies:
 
   # Other
   pin_code_fields: ^7.3.0
+  url_launcher: ^6.0.15
 
 dev_dependencies:
   flutter_test:
@@ -56,6 +57,7 @@ dev_dependencies:
 
 flutter:
   assets:
+    - assets/images/
     - assets/tls_keys/dev/server.crt
     - config.json
 
