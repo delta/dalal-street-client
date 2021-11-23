@@ -1,34 +1,38 @@
 part of 'enter_otp_cubit.dart';
 
-abstract class EnterOtpState extends Equatable {
-  const EnterOtpState();
+abstract class OtpState extends Equatable {
+  const OtpState();
 
   @override
   List<Object> get props => [];
 }
 
-class EnterOtpInitial extends EnterOtpState {
+class OtpInitial extends OtpState {
   final String phone;
 
-  const EnterOtpInitial(this.phone);
+  const OtpInitial(this.phone);
 
   @override
   List<Object> get props => [phone];
 }
 
-class EnterOtpLoading extends EnterOtpState {
-  const EnterOtpLoading();
+class OtpLoading extends OtpState {
+  const OtpLoading();
 }
 
-class EnterOtpFailure extends EnterOtpState {
+class OtpFailure extends OtpState {
   final String msg;
 
-  const EnterOtpFailure(this.msg);
+  const OtpFailure(this.msg);
 
   @override
   List<Object> get props => [msg];
 }
 
-class EnterOtpSuccess extends EnterOtpState {
-  const EnterOtpSuccess();
+class OtpResent extends OtpState {
+  const OtpResent();
+}
+
+class OtpSuccess extends OtpState {
+  const OtpSuccess();
 }

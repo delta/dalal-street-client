@@ -28,7 +28,7 @@ class RegisterPage extends StatelessWidget {
           listener: (context, state) {
             if (state is RegisterSuccess) {
               showSnackBar(context,
-                  'Registraion successful. Please check your inbox to verify email');
+                  'Registration successful. Please check your inbox to verify email');
               Navigator.of(context)
                   .pushNamedAndRemoveUntil('/login', (route) => false);
             } else if (state is RegisterFailure) {

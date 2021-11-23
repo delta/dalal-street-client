@@ -12,7 +12,7 @@ import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:logger/logger.dart';
 import 'package:path_provider/path_provider.dart';
 
-// Logging
+/// Logging
 final Logger logger = Logger();
 
 /// ## Dependency Injection
