@@ -22,11 +22,11 @@ class LandingPage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        APP_TITLE,
+                        appTitle,
                         style: Theme.of(context).textTheme.headline4,
                       ),
                       Text(
-                        APP_DESC,
+                        appDesc,
                         style: Theme.of(context).textTheme.headline6,
                       ),
                     ],
@@ -86,5 +86,5 @@ class LandingPage extends StatelessWidget {
   void onLoginClick(BuildContext context) =>
       Navigator.of(context).pushNamed('/login');
 
-  void onDeltaClick() => launch(DELTA_URL);
+  void onDeltaClick() => launch(deltaUrl);
 }
