@@ -26,42 +26,35 @@ class EnterPhonePage extends StatelessWidget {
 
   @override
   Widget build(context) => Scaffold(
-        appBar: AppBar(
-          title: const Text('Verify Phone'),
-          actions: [
-            IconButton(
-              onPressed: () => _onLogoutClicked(context),
-              icon: const Icon(Icons.logout),
+        body: SafeArea(
+          child: Center(
+            child: BlocConsumer<EnterPhoneCubit, EnterPhoneState>(
+              listener: (context, state) {
+                if (state is EnterPhoneSuccess) {
+                  Navigator.of(context).pushNamed(
+                    '/enterOtp',
+                    arguments: state.phone,
+                  );
+                }
+                if (state is EnterPhoneFailure) {
+                  showSnackBar(context, state.msg);
+                }
+              },
+              builder: (context, state) {
+                if (state is EnterPhoneInitial) {
+                  return Wrap(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(20.0),
+                        child: _buildForm(context),
+                      )
+                    ],
+                  );
+                } else {
+                  return const CircularProgressIndicator();
+                }
+              },
             ),
-          ],
-        ),
-        body: Center(
-          child: BlocConsumer<EnterPhoneCubit, EnterPhoneState>(
-            listener: (context, state) {
-              if (state is EnterPhoneSuccess) {
-                Navigator.of(context).pushNamed(
-                  '/enterOtp',
-                  arguments: state.phone,
-                );
-              }
-              if (state is EnterPhoneFailure) {
-                showSnackBar(context, state.msg);
-              }
-            },
-            builder: (context, state) {
-              if (state is EnterPhoneInitial) {
-                return Wrap(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: _buildForm(context),
-                    )
-                  ],
-                );
-              } else {
-                return const CircularProgressIndicator();
-              }
-            },
           ),
         ),
       );
@@ -71,54 +64,65 @@ class EnterPhonePage extends StatelessWidget {
 
   Widget _buildForm(BuildContext context) => ReactiveForm(
         formGroup: form,
-        child: Card(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  'Phone Number',
-                  style: Theme.of(context).textTheme.headline6,
-                ),
-                const SizedBox(height: 20),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                  child: SizedBox(
-                    width: double.infinity,
-                    child: Row(
-                      children: [
-                        Expanded(
-                          flex: 2,
-                          child: ReactiveTextField(
-                            formControlName: 'code',
-                            keyboardType: TextInputType.number,
-                            textAlign: TextAlign.center,
-                          ),
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                'Verify Phone Number',
+                style: Theme.of(context).textTheme.headline6,
+              ),
+              const SizedBox(height: 20),
+              const Text(
+                'You will recieve a 4 digit verification code to this number',
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 20),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: Row(
+                    children: [
+                      Expanded(
+                        flex: 2,
+                        child: ReactiveTextField(
+                          formControlName: 'code',
+                          keyboardType: TextInputType.number,
+                          textAlign: TextAlign.center,
                         ),
-                        const SizedBox(width: 20),
-                        Expanded(
-                          flex: 8,
-                          child: ReactiveTextField(
-                            formControlName: 'number',
-                            decoration: const InputDecoration(
-                                labelText: 'Mobile Number'),
-                            keyboardType: TextInputType.phone,
-                          ),
+                      ),
+                      const SizedBox(width: 20),
+                      Expanded(
+                        flex: 8,
+                        child: ReactiveTextField(
+                          formControlName: 'number',
+                          decoration:
+                              const InputDecoration(labelText: 'Mobile Number'),
+                          keyboardType: TextInputType.phone,
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
-                const SizedBox(height: 20),
-                ElevatedButton(
+              ),
+              const SizedBox(height: 20),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
                   onPressed: () => _onSendOTPClick(context),
                   child: const Text('Send OTP'),
                 ),
-              ],
-            ),
+              ),
+              SizedBox(
+                width: double.infinity,
+                child: TextButton(
+                  onPressed: () => _onLogoutClicked(context),
+                  child: const Text('Logout'),
+                ),
+              ),
+            ],
           ),
         ),
       );

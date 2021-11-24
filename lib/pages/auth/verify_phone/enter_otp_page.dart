@@ -16,40 +16,33 @@ class _EnterOtpPageState extends State<EnterOtpPage> {
 
   @override
   Widget build(context) => Scaffold(
-        appBar: AppBar(
-          title: const Text('Verify Phone'),
-          actions: [
-            IconButton(
-              onPressed: _onLogoutClicked,
-              icon: const Icon(Icons.logout),
+        body: SafeArea(
+          child: Center(
+            child: BlocConsumer<EnterOtpCubit, OtpState>(
+              listener: (context, state) {
+                if (state is OtpFailure) {
+                  showSnackBar(context, state.msg);
+                } else if (state is OtpResent) {
+                  showSnackBar(context, 'Otp resent succesfully');
+                } else if (state is OtpSuccess) {
+                  showSnackBar(context, 'Phone Verified');
+                }
+              },
+              builder: (context, state) {
+                if (state is OtpInitial) {
+                  return Wrap(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(20.0),
+                        child: _buildOTPForm(state.phone),
+                      )
+                    ],
+                  );
+                } else {
+                  return const CircularProgressIndicator();
+                }
+              },
             ),
-          ],
-        ),
-        body: Center(
-          child: BlocConsumer<EnterOtpCubit, OtpState>(
-            listener: (context, state) {
-              if (state is OtpFailure) {
-                showSnackBar(context, state.msg);
-              } else if (state is OtpResent) {
-                showSnackBar(context, 'Otp resent succesfully');
-              } else if (state is OtpSuccess) {
-                showSnackBar(context, 'Phone Verified');
-              }
-            },
-            builder: (context, state) {
-              if (state is OtpInitial) {
-                return Wrap(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: _buildOTPForm(state.phone),
-                    )
-                  ],
-                );
-              } else {
-                return const CircularProgressIndicator();
-              }
-            },
           ),
         ),
       );
@@ -62,19 +55,23 @@ class _EnterOtpPageState extends State<EnterOtpPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              'Enter OTP',
+              'Verify Phone Number',
               style: Theme.of(context).textTheme.headline6,
             ),
-            const SizedBox(height: 20),
-            Text(phone),
             const SizedBox(height: 10),
+            Text('We have sent a verification code to $phone'),
+            const SizedBox(height: 30),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10.0),
               child: PinCodeTextField(
-                keyboardType: TextInputType.number,
                 appContext: context,
                 length: 4,
+                keyboardType: TextInputType.number,
                 onChanged: (s) => _otp = s,
+                pinTheme: PinTheme(
+                  shape: PinCodeFieldShape.box,
+                  borderRadius: BorderRadius.circular(5),
+                ),
               ),
             ),
             GestureDetector(
@@ -89,7 +86,7 @@ class _EnterOtpPageState extends State<EnterOtpPage> {
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () => _onVerifyOTPClick(phone),
-                child: const Text('Verify'),
+                child: const Text('Verify OTP'),
               ),
             ),
             SizedBox(
@@ -98,6 +95,13 @@ class _EnterOtpPageState extends State<EnterOtpPage> {
                 onPressed: () => Navigator.of(context)
                     .pushNamedAndRemoveUntil('/enterPhone', (route) => false),
                 child: const Text('Change Phone Number'),
+              ),
+            ),
+            SizedBox(
+              width: double.infinity,
+              child: TextButton(
+                onPressed: _onLogoutClicked,
+                child: const Text('Logout'),
               ),
             ),
           ],
