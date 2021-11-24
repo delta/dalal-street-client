@@ -24,7 +24,10 @@ class _SplashPageState extends State<SplashPage> {
             children: [
               Text(
                 'Dalal Street',
-                style: Theme.of(context).textTheme.headline3,
+                style: Theme.of(context)
+                    .textTheme
+                    .headline3
+                    ?.copyWith(color: Theme.of(context).colorScheme.primary),
               ),
               const SizedBox(height: 80),
               const CircularProgressIndicator(),

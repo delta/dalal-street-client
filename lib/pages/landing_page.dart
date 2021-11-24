@@ -69,7 +69,7 @@ class LandingPage extends StatelessWidget {
               TextSpan(
                 text: 'Delta',
                 style: Theme.of(context).textTheme.caption?.copyWith(
-                      color: Colors.green,
+                      color: Theme.of(context).colorScheme.primary,
                       fontSize: 15,
                       fontWeight: FontWeight.bold,
                     ),
