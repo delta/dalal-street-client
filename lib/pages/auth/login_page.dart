@@ -1,86 +1,127 @@
-import 'package:dalal_street_client/blocs/login/login_bloc.dart';
+import 'package:dalal_street_client/blocs/auth/login/login_cubit.dart';
+import 'package:dalal_street_client/utils/snackbar.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:reactive_forms/reactive_forms.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+class LoginPage extends StatelessWidget {
+  LoginPage({Key? key}) : super(key: key);
 
+  final form = FormGroup({
+    'email': FormControl(validators: [Validators.required, Validators.email]),
+    'password': FormControl(validators: [Validators.required]),
+  });
+
+  // TODO: add proper validationMessages in all ReactiveForms
   @override
-  State<LoginPage> createState() => _LoginPageState();
-}
-
-class _LoginPageState extends State<LoginPage> {
-  // TODO: Maybe shift the form logic to bloc as well? Need to discuss
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
-
-  @override
-  Widget build(context) => BlocConsumer<LoginBloc, LoginState>(
+  Widget build(context) => BlocConsumer<LoginCubit, LoginState>(
         listener: (context, state) {
           if (state is LoginFailure) {
-            ScaffoldMessenger.of(context)
-              ..hideCurrentSnackBar()
-              ..showSnackBar(SnackBar(content: Text(state.msg)));
+            showSnackBar(context, state.msg);
           }
         },
         builder: (context, state) => Scaffold(
           appBar: AppBar(
             title: const Text('Log In'),
           ),
-          body: Padding(
-            padding: const EdgeInsets.all(30.0),
-            child: (() {
-              if (state is LoginLoading) {
-                return const Center(child: CircularProgressIndicator());
-              }
-              return _buildForm();
-            })(),
+          body: (() {
+            if (state is LoginLoading) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            return _buildForm(context);
+          })(),
+        ),
+      );
+
+  Widget _buildForm(BuildContext context) => SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(30),
+          child: ReactiveForm(
+            formGroup: form,
+            child: Column(
+              children: [
+                ReactiveTextField(
+                  formControlName: 'email',
+                  decoration: const InputDecoration(
+                    labelText: 'Email',
+                    prefixIcon: Icon(Icons.email),
+                  ),
+                  keyboardType: TextInputType.emailAddress,
+                ),
+                const SizedBox(height: 20),
+                ReactiveTextField(
+                  formControlName: 'password',
+                  obscureText: true,
+                  decoration: const InputDecoration(
+                    labelText: 'Password',
+                    prefixIcon: Icon(Icons.password),
+                  ),
+                  keyboardType: TextInputType.visiblePassword,
+                ),
+                const SizedBox(height: 20),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: GestureDetector(
+                    onTap: _onForgotPasswordClick,
+                    child: Text(
+                      'Forgot password?',
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.primary),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 50),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () => _onLoginClicked(context),
+                    child: const Text('Log In'),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                buildFooter(context),
+              ],
+            ),
           ),
         ),
       );
 
-  Widget _buildForm() => Column(
-        children: [
-          TextField(
-            controller: _emailController,
-            decoration: const InputDecoration(
-              labelText: 'Email',
-              border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(12))),
-            ),
-            keyboardType: TextInputType.emailAddress,
+  Widget buildFooter(BuildContext context) => Padding(
+        padding: const EdgeInsets.all(24),
+        child: RichText(
+          textAlign: TextAlign.center,
+          text: TextSpan(
+            style: Theme.of(context).textTheme.caption?.copyWith(fontSize: 15),
+            children: [
+              const TextSpan(text: "Dont't have an account? "),
+              TextSpan(
+                text: 'Sign Up',
+                style: Theme.of(context).textTheme.caption?.copyWith(
+                      color: Theme.of(context).colorScheme.primary,
+                      fontSize: 15,
+                    ),
+                recognizer: TapGestureRecognizer()
+                  ..onTap = () => _onSignUpClicked(context),
+              ),
+            ],
           ),
-          const SizedBox(height: 20),
-          TextField(
-            controller: _passwordController,
-            obscureText: true,
-            decoration: const InputDecoration(
-              labelText: 'Password',
-              border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(12))),
-            ),
-            keyboardType: TextInputType.visiblePassword,
-          ),
-          const SizedBox(height: 20),
-          ElevatedButton(
-            onPressed: _onLoginClicked,
-            child: const Text('Log In'),
-          ),
-        ],
+        ),
       );
 
-  void _onLoginClicked() {
-    // TODO: Implement Form Validation
-    context.read<LoginBloc>().add(LoginRequested(
-          _emailController.text,
-          _passwordController.text,
-        ));
+  void _onForgotPasswordClick() {}
+
+  void _onLoginClicked(BuildContext context) {
+    if (form.valid) {
+      context.read<LoginCubit>().login(
+            form.control('email').value,
+            form.control('password').value,
+          );
+    } else {
+      form.markAllAsTouched();
+    }
   }
 
-  @override
-  void dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
-    super.dispose();
-  }
+  void _onSignUpClicked(BuildContext context) =>
+      Navigator.of(context).pushNamed('/register');
 }

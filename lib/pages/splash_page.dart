@@ -27,7 +27,7 @@ class _SplashPageState extends State<SplashPage> {
                 style: Theme.of(context)
                     .textTheme
                     .headline3
-                    ?.copyWith(color: Colors.blue),
+                    ?.copyWith(color: Theme.of(context).colorScheme.primary),
               ),
               const SizedBox(height: 80),
               const CircularProgressIndicator(),

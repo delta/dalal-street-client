@@ -2,16 +2,17 @@ import 'package:dalal_street_client/blocs/user/user_bloc.dart';
 import 'package:dalal_street_client/config.dart';
 import 'package:dalal_street_client/grpc/client.dart';
 import 'package:dalal_street_client/navigation/route_generator.dart';
+import 'package:dalal_street_client/theme/theme.dart';
+import 'package:dalal_street_client/utils/snackbar.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:logger/logger.dart';
 import 'package:path_provider/path_provider.dart';
 
-// Logging
+/// Logging
 final Logger logger = Logger();
 
 /// ## Dependency Injection
@@ -88,8 +89,8 @@ class DalalApp extends StatelessWidget {
         title: 'Dalal Street 2021',
         navigatorKey: _navigatorKey,
         debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-            textTheme: GoogleFonts.rubikTextTheme(Theme.of(context).textTheme)),
+        theme: appTheme,
+        themeMode: ThemeMode.dark,
         // Show snackbar and navigate to Home or Login page whenever UserState changes
         builder: (context, child) => BlocListener<UserBloc, UserState>(
           listener: (context, state) {
@@ -98,12 +99,18 @@ class DalalApp extends StatelessWidget {
               getIt.registerSingleton(state.sessionId);
 
               logger.i('user logged in');
-              ScaffoldMessenger.of(context)
-                ..hideCurrentSnackBar()
-                ..showSnackBar(
-                    SnackBar(content: Text('Welcome ${state.user.name}')));
-              _navigator.pushNamedAndRemoveUntil('/home', (route) => false,
-                  arguments: state.user);
+              if (state.user.isPhoneVerified) {
+                showSnackBar(context, 'Welcome ${state.user.name}');
+                _navigator.pushNamedAndRemoveUntil(
+                  '/home',
+                  (route) => false,
+                  arguments: state.user,
+                );
+              } else {
+                showSnackBar(context, 'Verify your phone to continue');
+                _navigator.pushNamedAndRemoveUntil(
+                    '/enterPhone', (route) => false);
+              }
             } else if (state is UserLoggedOut) {
               if (!state.fromSplash) {
                 // Unregister sessionId
@@ -111,12 +118,9 @@ class DalalApp extends StatelessWidget {
 
                 // Show msg only when comming from a page other than splash
                 logger.i('user logged out');
-                ScaffoldMessenger.of(context)
-                  ..hideCurrentSnackBar()
-                  ..showSnackBar(
-                      const SnackBar(content: Text('User Logged Out')));
+                showSnackBar(context, 'User Logged Out');
               }
-              _navigator.pushNamedAndRemoveUntil('/login', (route) => false);
+              _navigator.pushNamedAndRemoveUntil('/landing', (route) => false);
             }
           },
           child: child,
