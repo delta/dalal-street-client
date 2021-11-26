@@ -7,7 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 final appTheme = ThemeData(
   colorScheme: colorScheme,
   scaffoldBackgroundColor: backgroundColor,
-  textTheme: GoogleFonts.rubikTextTheme(ThemeData.dark().textTheme),
+  textTheme: GoogleFonts.interTextTheme(ThemeData.dark().textTheme),
   elevatedButtonTheme: ElevatedButtonThemeData(style: primaryButtonStyle),
   textButtonTheme: TextButtonThemeData(style: textButtonStyle),
 );
