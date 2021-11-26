@@ -1,4 +1,5 @@
 import 'package:dalal_street_client/blocs/auth/login/login_cubit.dart';
+import 'package:dalal_street_client/components/dalal_back_button.dart';
 import 'package:dalal_street_client/utils/snackbar.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -22,68 +23,106 @@ class LoginPage extends StatelessWidget {
           }
         },
         builder: (context, state) => Scaffold(
-          appBar: AppBar(
-            title: const Text('Log In'),
-          ),
-          body: (() {
-            if (state is LoginLoading) {
-              return const Center(child: CircularProgressIndicator());
-            }
-            return _buildForm(context);
-          })(),
-        ),
-      );
+          body: SafeArea(
+            child: (() {
+              if (state is LoginLoading) {
+                return const Center(child: CircularProgressIndicator());
+              }
 
-  Widget _buildForm(BuildContext context) => SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(30),
-          child: ReactiveForm(
-            formGroup: form,
-            child: Column(
-              children: [
-                ReactiveTextField(
-                  formControlName: 'email',
-                  decoration: const InputDecoration(
-                    labelText: 'Email',
-                    prefixIcon: Icon(Icons.email),
-                  ),
-                  keyboardType: TextInputType.emailAddress,
-                ),
-                const SizedBox(height: 20),
-                ReactiveTextField(
-                  formControlName: 'password',
-                  obscureText: true,
-                  decoration: const InputDecoration(
-                    labelText: 'Password',
-                    prefixIcon: Icon(Icons.password),
-                  ),
-                  keyboardType: TextInputType.visiblePassword,
-                ),
-                const SizedBox(height: 20),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: GestureDetector(
-                    onTap: _onForgotPasswordClick,
-                    child: Text(
-                      'Forgot password?',
-                      style: TextStyle(
-                          color: Theme.of(context).colorScheme.primary),
+              /// Why this big?
+              /// See `Expanding content to fit the viewport` section in https://api.flutter.dev/flutter/widgets/SingleChildScrollView-class.html
+              return LayoutBuilder(
+                builder: (BuildContext context,
+                        BoxConstraints viewportConstraints) =>
+                    SingleChildScrollView(
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(
+                        minHeight: viewportConstraints.maxHeight),
+                    child: Padding(
+                      padding: const EdgeInsets.all(30),
+                      child: IntrinsicHeight(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            buildHeader(context),
+                            buildForm(context),
+                            buildFooter(context),
+                          ],
+                        ),
+                      ),
                     ),
                   ),
                 ),
-                const SizedBox(height: 50),
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () => _onLoginClicked(context),
-                    child: const Text('Log In'),
-                  ),
-                ),
-                const SizedBox(height: 20),
-                buildFooter(context),
-              ],
-            ),
+              );
+            })(),
           ),
+        ),
+      );
+
+  Widget buildHeader(BuildContext context) => Align(
+        alignment: Alignment.topLeft,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const DalalBackButton(),
+            const SizedBox(height: 20),
+            Text(
+              'Login',
+              style: Theme.of(context).textTheme.headline2,
+            ),
+            const SizedBox(height: 14),
+            Text(
+              'Please sign in to continue',
+              style: Theme.of(context).textTheme.headline6,
+            ),
+          ],
+        ),
+      );
+
+  Widget buildForm(BuildContext context) => ReactiveForm(
+        formGroup: form,
+        child: Column(
+          children: [
+            ReactiveTextField(
+              formControlName: 'email',
+              decoration: const InputDecoration(
+                labelText: 'Email',
+                prefixIcon: Icon(Icons.email),
+              ),
+              keyboardType: TextInputType.emailAddress,
+            ),
+            const SizedBox(height: 20),
+            ReactiveTextField(
+              formControlName: 'password',
+              obscureText: true,
+              decoration: const InputDecoration(
+                labelText: 'Password',
+                prefixIcon: Icon(Icons.password),
+              ),
+              keyboardType: TextInputType.visiblePassword,
+            ),
+            const SizedBox(height: 20),
+            Align(
+              alignment: Alignment.centerRight,
+              child: GestureDetector(
+                onTap: _onForgotPasswordClick,
+                child: Text(
+                  'Forgot password?',
+                  style:
+                      TextStyle(color: Theme.of(context).colorScheme.primary),
+                ),
+              ),
+            ),
+            const SizedBox(height: 50),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () => _onLoginClicked(context),
+                child: const Text('Log In'),
+              ),
+            ),
+            const SizedBox(height: 20),
+          ],
         ),
       );
 
