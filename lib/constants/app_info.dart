@@ -8,3 +8,8 @@ your profit
 ''';
 
 const deltaUrl = 'https://delta.nitt.edu/';
+
+const otpDesc = '''
+You will recieve a 4 digit verification 
+code to this number
+''';
