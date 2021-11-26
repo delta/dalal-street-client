@@ -94,7 +94,7 @@ class LoginPage extends StatelessWidget {
           text: TextSpan(
             style: Theme.of(context).textTheme.caption?.copyWith(fontSize: 15),
             children: [
-              const TextSpan(text: "Dont't have an account? "),
+              const TextSpan(text: "Don't have an account? "),
               TextSpan(
                 text: 'Sign Up',
                 style: Theme.of(context).textTheme.caption?.copyWith(

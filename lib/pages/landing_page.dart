@@ -1,4 +1,5 @@
 import 'package:dalal_street_client/constants/string_constants.dart';
+import 'package:dalal_street_client/theme/buttons.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -25,6 +26,7 @@ class LandingPage extends StatelessWidget {
                         appTitle,
                         style: Theme.of(context).textTheme.headline4,
                       ),
+                      const SizedBox(height: 10),
                       Text(
                         appDesc,
                         style: Theme.of(context).textTheme.headline6,
@@ -45,6 +47,7 @@ class LandingPage extends StatelessWidget {
                       Expanded(
                         flex: 1,
                         child: ElevatedButton(
+                          style: secondaryButtonStyle,
                           onPressed: () => onLoginClick(context),
                           child: const Text('Login'),
                         ),
