@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:dalal_street_client/blocs/user/user_bloc.dart';
+import 'package:dalal_street_client/constants/error_messages.dart';
 import 'package:dalal_street_client/grpc/client.dart';
 import 'package:dalal_street_client/main.dart';
 import 'package:dalal_street_client/proto_build/actions/AddPhone.pb.dart';
@@ -29,7 +30,7 @@ class EnterPhoneCubit extends Cubit<EnterPhoneState> {
       }
     } catch (e) {
       logger.e(e);
-      emit(const EnterPhoneFailure('Failed to reach server. Try again later'));
+      emit(const EnterPhoneFailure(failedToReachServer));
       emit(const EnterPhoneInitial());
     }
   }

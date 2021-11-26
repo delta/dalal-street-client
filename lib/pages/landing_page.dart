@@ -1,4 +1,4 @@
-import 'package:dalal_street_client/constants/string_constants.dart';
+import 'package:dalal_street_client/constants/app_info.dart';
 import 'package:dalal_street_client/theme/buttons.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
