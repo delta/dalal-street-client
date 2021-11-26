@@ -15,7 +15,6 @@ class LoginPage extends StatelessWidget {
     'password': FormControl(validators: [Validators.required]),
   });
 
-  // TODO: add proper validationMessages in all ReactiveForms
   @override
   Widget build(context) => BlocConsumer<LoginCubit, LoginState>(
         listener: (context, state) {
@@ -67,7 +66,7 @@ class LoginPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const DalalBackButton(),
-            const SizedBox(height: 20),
+            const SizedBox(height: 18),
             Text(
               'Login',
               style: Theme.of(context).textTheme.headline2,
