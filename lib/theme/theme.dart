@@ -9,4 +9,5 @@ final appTheme = ThemeData(
   scaffoldBackgroundColor: backgroundColor,
   textTheme: GoogleFonts.rubikTextTheme(ThemeData.dark().textTheme),
   elevatedButtonTheme: ElevatedButtonThemeData(style: primaryButtonStyle),
+  textButtonTheme: TextButtonThemeData(style: textButtonStyle),
 );
