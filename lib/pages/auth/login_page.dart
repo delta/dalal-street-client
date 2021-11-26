@@ -1,5 +1,6 @@
 import 'package:dalal_street_client/blocs/auth/login/login_cubit.dart';
 import 'package:dalal_street_client/components/dalal_back_button.dart';
+import 'package:dalal_street_client/components/reactive_password_field.dart';
 import 'package:dalal_street_client/utils/snackbar.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -29,32 +30,33 @@ class LoginPage extends StatelessWidget {
                 return const Center(child: CircularProgressIndicator());
               }
 
-              /// Why this big?
-              /// See `Expanding content to fit the viewport` section in https://api.flutter.dev/flutter/widgets/SingleChildScrollView-class.html
-              return LayoutBuilder(
-                builder: (BuildContext context,
-                        BoxConstraints viewportConstraints) =>
-                    SingleChildScrollView(
-                  child: ConstrainedBox(
-                    constraints: BoxConstraints(
-                        minHeight: viewportConstraints.maxHeight),
-                    child: Padding(
-                      padding: const EdgeInsets.all(30),
-                      child: IntrinsicHeight(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            buildHeader(context),
-                            buildForm(context),
-                            buildFooter(context),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              );
+              return buildBody();
             })(),
+          ),
+        ),
+      );
+
+  /// Why this big?
+  /// See `Expanding content to fit the viewport` section in https://api.flutter.dev/flutter/widgets/SingleChildScrollView-class.html
+  Widget buildBody() => LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints viewportConstraints) =>
+            SingleChildScrollView(
+          child: ConstrainedBox(
+            constraints:
+                BoxConstraints(minHeight: viewportConstraints.maxHeight),
+            child: Padding(
+              padding: const EdgeInsets.all(30),
+              child: IntrinsicHeight(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    buildHeader(context),
+                    buildForm(context),
+                    buildFooter(context),
+                  ],
+                ),
+              ),
+            ),
           ),
         ),
       );
@@ -92,15 +94,7 @@ class LoginPage extends StatelessWidget {
               keyboardType: TextInputType.emailAddress,
             ),
             const SizedBox(height: 20),
-            ReactiveTextField(
-              formControlName: 'password',
-              obscureText: true,
-              decoration: const InputDecoration(
-                labelText: 'Password',
-                prefixIcon: Icon(Icons.password),
-              ),
-              keyboardType: TextInputType.visiblePassword,
-            ),
+            const ReactivePasswordField(formControlName: 'password'),
             const SizedBox(height: 20),
             Align(
               alignment: Alignment.centerRight,
