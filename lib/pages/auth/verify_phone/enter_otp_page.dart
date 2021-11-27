@@ -62,9 +62,20 @@ class _EnterOtpPageState extends State<EnterOtpPage> {
           const SizedBox(height: 10),
           Align(
             alignment: Alignment.topLeft,
-            child: Text(
-              'We have sent a verification code to\n$phone',
+            child: RichText(
               textAlign: TextAlign.start,
+              text: TextSpan(
+                children: [
+                  const TextSpan(text: 'We have sent a verification code to\n'),
+                  TextSpan(
+                    text: phone,
+                    style: Theme.of(context).textTheme.caption?.copyWith(
+                          color: Theme.of(context).colorScheme.primary,
+                          fontSize: 15,
+                        ),
+                  ),
+                ],
+              ),
             ),
           ),
         ],
