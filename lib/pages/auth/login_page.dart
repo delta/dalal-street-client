@@ -1,5 +1,6 @@
 import 'package:dalal_street_client/blocs/auth/login/login_cubit.dart';
 import 'package:dalal_street_client/components/dalal_back_button.dart';
+import 'package:dalal_street_client/components/fill_max_height_scroll_view.dart';
 import 'package:dalal_street_client/components/reactive_password_field.dart';
 import 'package:dalal_street_client/utils/snackbar.dart';
 import 'package:flutter/gestures.dart';
@@ -35,27 +36,16 @@ class LoginPage extends StatelessWidget {
         ),
       );
 
-  /// Why this big?
-  /// See `Expanding content to fit the viewport` section in https://api.flutter.dev/flutter/widgets/SingleChildScrollView-class.html
-  Widget buildBody() => LayoutBuilder(
-        builder: (BuildContext context, BoxConstraints viewportConstraints) =>
-            SingleChildScrollView(
-          child: ConstrainedBox(
-            constraints:
-                BoxConstraints(minHeight: viewportConstraints.maxHeight),
-            child: Padding(
-              padding: const EdgeInsets.all(30),
-              child: IntrinsicHeight(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    buildHeader(context),
-                    buildForm(context),
-                    buildFooter(context),
-                  ],
-                ),
-              ),
-            ),
+  Widget buildBody() => FillMaxHeightScrollView(
+        builder: (context) => Padding(
+          padding: const EdgeInsets.all(30),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              buildHeader(context),
+              buildForm(context),
+              buildFooter(context),
+            ],
           ),
         ),
       );

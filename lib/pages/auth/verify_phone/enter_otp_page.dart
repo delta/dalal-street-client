@@ -1,4 +1,5 @@
 import 'package:dalal_street_client/blocs/auth/verify_phone/enter_otp/enter_otp_cubit.dart';
+import 'package:dalal_street_client/components/fill_max_height_scroll_view.dart';
 import 'package:dalal_street_client/theme/theme.dart';
 import 'package:dalal_street_client/utils/snackbar.dart';
 import 'package:flutter/material.dart';
@@ -39,24 +40,15 @@ class _EnterOtpPageState extends State<EnterOtpPage> {
         ),
       );
 
-  Widget buildContent(String phone) => LayoutBuilder(
-        builder: (BuildContext context, BoxConstraints viewportConstraints) =>
-            SingleChildScrollView(
-          child: ConstrainedBox(
-            constraints:
-                BoxConstraints(minHeight: viewportConstraints.maxHeight),
-            child: Padding(
-              padding: const EdgeInsets.all(40),
-              child: IntrinsicHeight(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    buildHeader(phone),
-                    buildForm(phone),
-                  ],
-                ),
-              ),
-            ),
+  Widget buildContent(String phone) => FillMaxHeightScrollView(
+        builder: (context) => Padding(
+          padding: const EdgeInsets.all(40),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              buildHeader(phone),
+              buildForm(phone),
+            ],
           ),
         ),
       );
