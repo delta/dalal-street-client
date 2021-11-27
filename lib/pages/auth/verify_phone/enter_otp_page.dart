@@ -1,4 +1,5 @@
 import 'package:dalal_street_client/blocs/auth/verify_phone/enter_otp/enter_otp_cubit.dart';
+import 'package:dalal_street_client/theme/theme.dart';
 import 'package:dalal_street_client/utils/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,99 +18,116 @@ class _EnterOtpPageState extends State<EnterOtpPage> {
   @override
   Widget build(context) => Scaffold(
         body: SafeArea(
-          child: Center(
-            child: BlocConsumer<EnterOtpCubit, OtpState>(
-              listener: (context, state) {
-                if (state is OtpFailure) {
-                  showSnackBar(context, state.msg);
-                } else if (state is OtpResent) {
-                  showSnackBar(context, 'Otp resent succesfully');
-                } else if (state is OtpSuccess) {
-                  showSnackBar(context, 'Phone Verified');
-                }
-              },
-              builder: (context, state) {
-                if (state is OtpInitial) {
-                  return Wrap(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(20.0),
-                        child: _buildOTPForm(state.phone),
-                      )
-                    ],
-                  );
-                } else {
-                  return const CircularProgressIndicator();
-                }
-              },
+          child: BlocConsumer<EnterOtpCubit, OtpState>(
+            listener: (context, state) {
+              if (state is OtpFailure) {
+                showSnackBar(context, state.msg);
+              } else if (state is OtpResent) {
+                showSnackBar(context, 'Otp resent succesfully');
+              } else if (state is OtpSuccess) {
+                showSnackBar(context, 'Phone Verified');
+              }
+            },
+            builder: (context, state) {
+              if (state is OtpInitial) {
+                return buildContent(state.phone);
+              } else {
+                return const Center(child: CircularProgressIndicator());
+              }
+            },
+          ),
+        ),
+      );
+
+  Widget buildContent(String phone) => LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints viewportConstraints) =>
+            SingleChildScrollView(
+          child: ConstrainedBox(
+            constraints:
+                BoxConstraints(minHeight: viewportConstraints.maxHeight),
+            child: Padding(
+              padding: const EdgeInsets.all(40),
+              child: IntrinsicHeight(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    buildHeader(phone),
+                    buildForm(phone),
+                  ],
+                ),
+              ),
             ),
           ),
         ),
       );
 
-  void _onLogoutClicked() => context.read<EnterOtpCubit>().logout();
+  Widget buildHeader(String phone) => Column(
+        children: [
+          Text(
+            'Verify Phone Number',
+            style: Theme.of(context).textTheme.headline3,
+          ),
+          const SizedBox(height: 10),
+          Align(
+            alignment: Alignment.topLeft,
+            child: Text(
+              'We have sent a verification code to\n$phone',
+              textAlign: TextAlign.start,
+            ),
+          ),
+        ],
+      );
 
-  Widget _buildOTPForm(String phone) => Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              'Verify Phone Number',
-              style: Theme.of(context).textTheme.headline6,
+  Widget buildForm(String phone) => Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10.0),
+            child: PinCodeTextField(
+              appContext: context,
+              length: 4,
+              keyboardType: TextInputType.number,
+              onChanged: (s) => _otp = s,
+              pinTheme: pinTextFieldTheme,
             ),
-            const SizedBox(height: 10),
-            Text('We have sent a verification code to $phone'),
-            const SizedBox(height: 30),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10.0),
-              child: PinCodeTextField(
-                appContext: context,
-                length: 4,
-                keyboardType: TextInputType.number,
-                onChanged: (s) => _otp = s,
-                pinTheme: PinTheme(
-                  shape: PinCodeFieldShape.box,
-                  borderRadius: BorderRadius.circular(5),
-                ),
+          ),
+          GestureDetector(
+            onTap: () => _onResendOTPClick(phone),
+            child: Align(
+              child: Text(
+                "Didn't recieve OTP?",
+                style: TextStyle(color: Theme.of(context).colorScheme.primary),
               ),
+              alignment: Alignment.centerRight,
             ),
-            GestureDetector(
-              onTap: () => _onResendOTPClick(phone),
-              child: const Align(
-                child: Text("Didn't recieve OTP?"),
-                alignment: Alignment.centerRight,
-              ),
+          ),
+          const SizedBox(height: 50),
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: () => _onVerifyOTPClick(phone),
+              child: const Text('Verify OTP'),
             ),
-            const SizedBox(height: 50),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () => _onVerifyOTPClick(phone),
-                child: const Text('Verify OTP'),
-              ),
+          ),
+          const SizedBox(height: 20),
+          SizedBox(
+            width: double.infinity,
+            child: OutlinedButton(
+              onPressed: _onChangeNumberClick,
+              child: const Text('Change Phone Number'),
             ),
-            SizedBox(
-              width: double.infinity,
-              child: OutlinedButton(
-                onPressed: () => Navigator.of(context)
-                    .pushNamedAndRemoveUntil('/enterPhone', (route) => false),
-                child: const Text('Change Phone Number'),
-              ),
+          ),
+          const SizedBox(height: 20),
+          SizedBox(
+            width: double.infinity,
+            child: TextButton(
+              onPressed: _onLogoutClick,
+              child: const Text('Logout'),
             ),
-            SizedBox(
-              width: double.infinity,
-              child: TextButton(
-                onPressed: _onLogoutClicked,
-                child: const Text('Logout'),
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       );
 
   void _onResendOTPClick(String phone) {
-    // TODO: form validation
     context.read<EnterOtpCubit>().resendOTP();
   }
 
@@ -117,4 +135,9 @@ class _EnterOtpPageState extends State<EnterOtpPage> {
     // TODO: form validation
     context.read<EnterOtpCubit>().verifyOTP(int.parse(_otp), phone);
   }
+
+  void _onChangeNumberClick() => Navigator.of(context)
+      .pushNamedAndRemoveUntil('/enterPhone', (route) => false);
+
+  void _onLogoutClick() => context.read<EnterOtpCubit>().logout();
 }

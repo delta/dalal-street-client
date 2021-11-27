@@ -9,6 +9,11 @@ const buttonTextStyle = TextStyle(
 final buttonShape =
     RoundedRectangleBorder(borderRadius: BorderRadius.circular(10));
 
+final outlinedButtonShape = RoundedRectangleBorder(
+  side: const BorderSide(color: primaryColor, width: 20),
+  borderRadius: BorderRadius.circular(10),
+);
+
 final primaryButtonStyle = ElevatedButton.styleFrom(
   onPrimary: baseColor,
   textStyle: buttonTextStyle,
@@ -26,9 +31,16 @@ final secondaryButtonStyle = ElevatedButton.styleFrom(
   shape: buttonShape,
 );
 
-final textButtonStyle = ElevatedButton.styleFrom(
-  onPrimary: primaryColor,
+final textButtonStyle = TextButton.styleFrom(
   textStyle: buttonTextStyle,
   minimumSize: buttonMinSize,
   shape: buttonShape,
+);
+
+// TODO: border color is not showing 😢
+final outlinedButtonStyle = OutlinedButton.styleFrom(
+  textStyle: buttonTextStyle,
+  minimumSize: buttonMinSize,
+  elevation: 0,
+  shape: outlinedButtonShape,
 );
