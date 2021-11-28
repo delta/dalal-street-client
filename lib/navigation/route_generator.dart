@@ -4,6 +4,7 @@ import 'package:dalal_street_client/blocs/auth/login/login_cubit.dart';
 import 'package:dalal_street_client/blocs/auth/register/register_cubit.dart';
 import 'package:dalal_street_client/blocs/auth/verify_phone/enter_otp/enter_otp_cubit.dart';
 import 'package:dalal_street_client/blocs/auth/verify_phone/enter_phone/enter_phone_cubit.dart';
+import 'package:dalal_street_client/pages/auth/check_mail_page.dart';
 import 'package:dalal_street_client/pages/auth/login_page.dart';
 import 'package:dalal_street_client/pages/auth/register_page.dart';
 import 'package:dalal_street_client/pages/auth/verify_phone/enter_otp_page.dart';
@@ -41,6 +42,8 @@ class RouteGenerator {
             child: RegisterPage(),
           ),
         );
+      case '/checkMail':
+        return MaterialPageRoute(builder: (_) => const CheckMailPage());
       // Verify Phone Pages
       case '/enterPhone':
         return MaterialPageRoute(

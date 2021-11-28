@@ -90,6 +90,10 @@ class _EnterOtpPageState extends State<EnterOtpPage> {
               length: 4,
               keyboardType: TextInputType.number,
               onChanged: (s) => _otp = s,
+              textStyle: const TextStyle(
+                fontSize: 36,
+                fontWeight: FontWeight.bold,
+              ),
               pinTheme: pinTextFieldTheme,
             ),
           ),
