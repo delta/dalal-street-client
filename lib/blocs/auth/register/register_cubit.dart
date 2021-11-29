@@ -25,7 +25,7 @@ class RegisterCubit extends Cubit<RegisterState> {
         referralCode: referralCode,
       ));
       if (resp.statusCode == RegisterResponse_StatusCode.OK) {
-        emit(const RegisterSuccess());
+        emit(RegisterSuccess(email));
       } else {
         emit(RegisterFailure(resp.statusMessage));
         emit(RegisterInitial());

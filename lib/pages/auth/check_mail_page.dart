@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 
-// TODO: Integrate in Auth flow
 class CheckMailPage extends StatelessWidget {
   final String mail;
 
-  const CheckMailPage({Key? key, this.mail = 'johndoe@gmail.com'})
+  const CheckMailPage({Key? key, required this.mail})
       : super(key: key);
 
   @override

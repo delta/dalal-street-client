@@ -43,7 +43,10 @@ class RouteGenerator {
           ),
         );
       case '/checkMail':
-        return MaterialPageRoute(builder: (_) => const CheckMailPage());
+        if (args is String) {
+          return MaterialPageRoute(builder: (_) => CheckMailPage(mail: args));
+        }
+        return _errorRoute(msg: 'Invalid args in check mail page');
       // Verify Phone Pages
       case '/enterPhone':
         return MaterialPageRoute(
