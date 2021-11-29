@@ -7,6 +7,9 @@ const baseColor = Color(0xff2C3434);
 
 const lightGrey = Color(0xff959595);
 
+// Misc
+const heartRed = Color(0xffE22B2B);
+
 const colorScheme = ColorScheme.dark(
   primary: primaryColor,
   background: backgroundColor,

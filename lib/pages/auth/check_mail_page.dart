@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 class CheckMailPage extends StatelessWidget {
   final String mail;
 
-  const CheckMailPage({Key? key, required this.mail})
-      : super(key: key);
+  const CheckMailPage({Key? key, required this.mail}) : super(key: key);
 
   @override
   Widget build(context) => Scaffold(

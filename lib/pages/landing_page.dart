@@ -1,5 +1,7 @@
 import 'package:dalal_street_client/constants/app_info.dart';
+import 'package:dalal_street_client/constants/urls.dart';
 import 'package:dalal_street_client/theme/buttons.dart';
+import 'package:dalal_street_client/theme/colors.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -68,7 +70,15 @@ class LandingPage extends StatelessWidget {
           text: TextSpan(
             style: Theme.of(context).textTheme.caption?.copyWith(fontSize: 15),
             children: [
-              const TextSpan(text: 'Made with ♥ by '),
+              const TextSpan(text: 'Made with '),
+              TextSpan(
+                text: '♥',
+                style: Theme.of(context).textTheme.caption?.copyWith(
+                      fontSize: 15,
+                      color: heartRed,
+                    ),
+              ),
+              const TextSpan(text: ' by '),
               TextSpan(
                 text: 'Delta',
                 style: Theme.of(context).textTheme.caption?.copyWith(
