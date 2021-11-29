@@ -77,6 +77,7 @@ class LandingPage extends StatelessWidget {
                       fontSize: 15,
                       color: heartRed,
                     ),
+                recognizer: TapGestureRecognizer()..onTap = onHeartClick,
               ),
               const TextSpan(text: ' by '),
               TextSpan(
@@ -98,6 +99,8 @@ class LandingPage extends StatelessWidget {
 
   void onLoginClick(BuildContext context) =>
       Navigator.of(context).pushNamed('/login');
+
+  void onHeartClick() => launch(helikopterHelikopter);
 
   void onDeltaClick() => launch(deltaUrl);
 }
