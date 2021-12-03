@@ -2,6 +2,7 @@ import 'package:dalal_street_client/grpc/client.dart';
 import 'package:dalal_street_client/main.dart';
 import 'package:dalal_street_client/proto_build/actions/Login.pb.dart';
 import 'package:dalal_street_client/proto_build/actions/Logout.pb.dart';
+import 'package:dalal_street_client/proto_build/datastreams/Subscribe.pb.dart';
 import 'package:dalal_street_client/proto_build/models/User.pb.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
@@ -56,6 +57,28 @@ class UserBloc extends HydratedBloc<UserEvent, UserState> {
         logger.e(e);
       }
       emit(const UserLoggedOut());
+    });
+    // Bloc which will subscribe to given DataStream and return subscription ID
+    on<Subscribe>((event, emit) async {
+      try {
+        final subscribeResponse = await streamClient.subscribe(
+            SubscribeRequest(dataStreamType: event.dataStreamType),
+            options: sessionOptions(getIt<String>()));
+
+        if (subscribeResponse.statusCode == SubscribeResponse_StatusCode.OK) {
+          emit(SubscriptionDataLoaded(subscribeResponse.subscriptionId));
+        } else if (subscribeResponse.statusCode ==
+            SubscribeResponse_StatusCode.InvalidDataStreamId) {
+          emit(SubscriptonDataFailed(subscribeResponse.statusMessage));
+        } else if (subscribeResponse.statusCode ==
+            SubscribeResponse_StatusCode.InternalServerError) {
+          emit(SubscriptonDataFailed(subscribeResponse.statusMessage));
+        }
+      } catch (e) {
+        logger.e(e);
+        emit(const SubscriptonDataFailed(
+            'Failed to reach server. Try again later'));
+      }
     });
   }
 

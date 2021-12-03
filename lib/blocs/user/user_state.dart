@@ -43,3 +43,19 @@ class UserDataLoaded extends UserState {
   @override
   List<Object> get props => [sessionId, user];
 }
+
+class SubscriptionDataLoaded extends UserState {
+  final SubscriptionId subscriptionId;
+  const SubscriptionDataLoaded(this.subscriptionId);
+
+  @override
+  List<Object> get props => [subscriptionId];
+}
+
+class SubscriptonDataFailed extends UserState {
+  final String message;
+  const SubscriptonDataFailed(this.message);
+
+  @override
+  List<Object> get props => [message];
+}
