@@ -11,7 +11,7 @@ abstract class CompaniesState extends Equatable {
 class CompaniesInitial extends CompaniesState {}
 
 class SubscriptionToStockPricesSuccess extends CompaniesState {
-  final stockPrices;
+  final StockPricesUpdate stockPrices;
   const SubscriptionToStockPricesSuccess(this.stockPrices);
 
   @override
