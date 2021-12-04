@@ -3,6 +3,7 @@ import 'package:dalal_street_client/components/dalal_back_button.dart';
 import 'package:dalal_street_client/components/fill_max_height_scroll_view.dart';
 import 'package:dalal_street_client/components/reactive_password_field.dart';
 import 'package:dalal_street_client/utils/snackbar.dart';
+import 'package:dalal_street_client/utils/tooltip.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -110,7 +111,17 @@ class RegisterPage extends StatelessWidget {
             const SizedBox(height: 20),
             ReactiveTextField(
               formControlName: 'referralCode',
-              decoration: const InputDecoration(labelText: 'Referral Code'),
+              // TODO: prefixIcon
+              decoration: InputDecoration(
+                labelText: 'Referral Code',
+                suffixIcon: Builder(
+                  builder: (context) => IconButton(
+                    onPressed: () => showTooltip(
+                        context, 'Enter referral code to get cash reward'),
+                    icon: const Icon(Icons.info_outline),
+                  ),
+                ),
+              ),
             ),
             const SizedBox(height: 50),
             SizedBox(
