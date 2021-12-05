@@ -1,4 +1,7 @@
 import 'package:dalal_street_client/blocs/auth/login/login_cubit.dart';
+import 'package:dalal_street_client/components/dalal_back_button.dart';
+import 'package:dalal_street_client/components/fill_max_height_scroll_view.dart';
+import 'package:dalal_street_client/components/reactive_password_field.dart';
 import 'package:dalal_street_client/utils/snackbar.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +16,6 @@ class LoginPage extends StatelessWidget {
     'password': FormControl(validators: [Validators.required]),
   });
 
-  // TODO: add proper validationMessages in all ReactiveForms
   @override
   Widget build(context) => BlocConsumer<LoginCubit, LoginState>(
         listener: (context, state) {
@@ -22,68 +24,88 @@ class LoginPage extends StatelessWidget {
           }
         },
         builder: (context, state) => Scaffold(
-          appBar: AppBar(
-            title: const Text('Log In'),
+          body: SafeArea(
+            child: (() {
+              if (state is LoginLoading) {
+                return const Center(child: CircularProgressIndicator());
+              }
+
+              return buildBody();
+            })(),
           ),
-          body: (() {
-            if (state is LoginLoading) {
-              return const Center(child: CircularProgressIndicator());
-            }
-            return _buildForm(context);
-          })(),
         ),
       );
 
-  Widget _buildForm(BuildContext context) => SingleChildScrollView(
-        child: Padding(
+  Widget buildBody() => FillMaxHeightScrollView(
+        builder: (context) => Padding(
           padding: const EdgeInsets.all(30),
-          child: ReactiveForm(
-            formGroup: form,
-            child: Column(
-              children: [
-                ReactiveTextField(
-                  formControlName: 'email',
-                  decoration: const InputDecoration(
-                    labelText: 'Email',
-                    prefixIcon: Icon(Icons.email),
-                  ),
-                  keyboardType: TextInputType.emailAddress,
-                ),
-                const SizedBox(height: 20),
-                ReactiveTextField(
-                  formControlName: 'password',
-                  obscureText: true,
-                  decoration: const InputDecoration(
-                    labelText: 'Password',
-                    prefixIcon: Icon(Icons.password),
-                  ),
-                  keyboardType: TextInputType.visiblePassword,
-                ),
-                const SizedBox(height: 20),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: GestureDetector(
-                    onTap: _onForgotPasswordClick,
-                    child: Text(
-                      'Forgot password?',
-                      style: TextStyle(
-                          color: Theme.of(context).colorScheme.primary),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 50),
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () => _onLoginClicked(context),
-                    child: const Text('Log In'),
-                  ),
-                ),
-                const SizedBox(height: 20),
-                buildFooter(context),
-              ],
-            ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              buildHeader(context),
+              buildForm(context),
+              buildFooter(context),
+            ],
           ),
+        ),
+      );
+
+  Widget buildHeader(BuildContext context) => Align(
+        alignment: Alignment.topLeft,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const DalalBackButton(),
+            const SizedBox(height: 18),
+            Text(
+              'Login',
+              style: Theme.of(context).textTheme.headline1,
+            ),
+            const SizedBox(height: 14),
+            Text(
+              'Please sign in to continue',
+              style: Theme.of(context).textTheme.headline6,
+            ),
+          ],
+        ),
+      );
+
+  Widget buildForm(BuildContext context) => ReactiveForm(
+        formGroup: form,
+        child: Column(
+          children: [
+            ReactiveTextField(
+              formControlName: 'email',
+              decoration: const InputDecoration(
+                labelText: 'Email',
+                prefixIcon: Icon(Icons.email),
+              ),
+              keyboardType: TextInputType.emailAddress,
+            ),
+            const SizedBox(height: 20),
+            const ReactivePasswordField(formControlName: 'password'),
+            const SizedBox(height: 20),
+            Align(
+              alignment: Alignment.centerRight,
+              child: GestureDetector(
+                onTap: _onForgotPasswordClick,
+                child: Text(
+                  'Forgot password?',
+                  style:
+                      TextStyle(color: Theme.of(context).colorScheme.primary),
+                ),
+              ),
+            ),
+            const SizedBox(height: 50),
+            SizedBox(
+              width: 300,
+              child: ElevatedButton(
+                onPressed: () => _onLoginClicked(context),
+                child: const Text('Log In'),
+              ),
+            ),
+            const SizedBox(height: 20),
+          ],
         ),
       );
 
@@ -92,15 +114,15 @@ class LoginPage extends StatelessWidget {
         child: RichText(
           textAlign: TextAlign.center,
           text: TextSpan(
-            style: Theme.of(context).textTheme.caption?.copyWith(fontSize: 15),
+            style: Theme.of(context).textTheme.caption,
             children: [
-              const TextSpan(text: "Dont't have an account? "),
+              const TextSpan(text: "Don't have an account? "),
               TextSpan(
                 text: 'Sign Up',
-                style: Theme.of(context).textTheme.caption?.copyWith(
-                      color: Theme.of(context).colorScheme.primary,
-                      fontSize: 15,
-                    ),
+                style: Theme.of(context)
+                    .textTheme
+                    .caption
+                    ?.copyWith(color: Theme.of(context).colorScheme.primary),
                 recognizer: TapGestureRecognizer()
                   ..onTap = () => _onSignUpClicked(context),
               ),

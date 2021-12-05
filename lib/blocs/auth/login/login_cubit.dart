@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:dalal_street_client/blocs/user/user_bloc.dart';
+import 'package:dalal_street_client/constants/error_messages.dart';
 import 'package:dalal_street_client/grpc/client.dart';
 import 'package:dalal_street_client/main.dart';
 import 'package:dalal_street_client/pages/auth/login_page.dart';
@@ -27,7 +28,7 @@ class LoginCubit extends Cubit<LoginState> {
       }
     } catch (e) {
       logger.e(e);
-      emit(const LoginFailure('Failed to reach server. Try again later'));
+      emit(const LoginFailure(failedToReachServer));
     }
   }
 }

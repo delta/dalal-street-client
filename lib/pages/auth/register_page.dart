@@ -1,5 +1,10 @@
 import 'package:dalal_street_client/blocs/auth/register/register_cubit.dart';
+import 'package:dalal_street_client/components/dalal_back_button.dart';
+import 'package:dalal_street_client/components/fill_max_height_scroll_view.dart';
+import 'package:dalal_street_client/components/reactive_password_field.dart';
 import 'package:dalal_street_client/utils/snackbar.dart';
+import 'package:dalal_street_client/utils/tooltip.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:reactive_forms/reactive_forms.dart';
@@ -23,69 +28,132 @@ class RegisterPage extends StatelessWidget {
 
   @override
   Widget build(context) => Scaffold(
-        appBar: AppBar(title: const Text('Register')),
-        body: BlocConsumer<RegisterCubit, RegisterState>(
-          listener: (context, state) {
-            if (state is RegisterSuccess) {
-              showSnackBar(context,
-                  'Registration successful. Please check your inbox to verify email');
-              Navigator.of(context)
-                  .pushNamedAndRemoveUntil('/login', (route) => false);
-            } else if (state is RegisterFailure) {
-              showSnackBar(context, state.msg);
-            }
-          },
-          builder: (context, state) {
-            if (state is RegisterLoading) {
-              return const Center(child: CircularProgressIndicator());
-            } else {
-              return SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.all(30.0),
-                  child: _buildForm(context),
-                ),
-              );
-            }
-          },
+        body: SafeArea(
+          child: BlocConsumer<RegisterCubit, RegisterState>(
+            listener: (context, state) {
+              if (state is RegisterSuccess) {
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                  '/checkMail',
+                  (route) => false,
+                  arguments: state.mail,
+                );
+              } else if (state is RegisterFailure) {
+                showSnackBar(context, state.msg);
+              }
+            },
+            builder: (context, state) {
+              if (state is RegisterLoading) {
+                return const Center(child: CircularProgressIndicator());
+              } else {
+                return buildBody();
+              }
+            },
+          ),
         ),
       );
 
-  Widget _buildForm(BuildContext context) => ReactiveForm(
+  Widget buildBody() => FillMaxHeightScrollView(
+        builder: (context) => Padding(
+          padding: const EdgeInsets.all(30),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              buildHeader(context),
+              buildForm(context),
+              buildFooter(context),
+            ],
+          ),
+        ),
+      );
+
+  Widget buildHeader(BuildContext context) => Align(
+        alignment: Alignment.topLeft,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const DalalBackButton(),
+            const SizedBox(height: 18),
+            Text(
+              'Create An Account',
+              style: Theme.of(context).textTheme.headline1,
+            ),
+          ],
+        ),
+      );
+
+  Widget buildForm(BuildContext context) => ReactiveForm(
         formGroup: form,
         child: Column(
           children: [
             ReactiveTextField(
               formControlName: 'name',
-              decoration: const InputDecoration(labelText: 'Name'),
-            ),
-            ReactiveTextField(
-              formControlName: 'email',
-              decoration: const InputDecoration(labelText: 'Email Address'),
-              keyboardType: TextInputType.emailAddress,
-            ),
-            ReactiveTextField(
-              formControlName: 'password',
-              decoration: const InputDecoration(labelText: 'Password'),
-              keyboardType: TextInputType.visiblePassword,
-            ),
-            ReactiveTextField(
-              formControlName: 'confirmPassword',
-              decoration: const InputDecoration(labelText: 'Confirm Password'),
-              keyboardType: TextInputType.visiblePassword,
-            ),
-            ReactiveTextField(
-              formControlName: 'referralCode',
-              decoration: const InputDecoration(labelText: 'Referral Code'),
+              decoration: const InputDecoration(
+                labelText: 'Name',
+                prefixIcon: Icon(Icons.person_outlined),
+              ),
             ),
             const SizedBox(height: 20),
+            ReactiveTextField(
+              formControlName: 'email',
+              decoration: const InputDecoration(
+                labelText: 'Email',
+                prefixIcon: Icon(Icons.mail_outline),
+              ),
+              keyboardType: TextInputType.emailAddress,
+            ),
+            const SizedBox(height: 20),
+            const ReactivePasswordField(formControlName: 'password'),
+            const SizedBox(height: 20),
+            const ReactivePasswordField(
+              formControlName: 'confirmPassword',
+              label: 'Confirm Password',
+            ),
+            const SizedBox(height: 20),
+            ReactiveTextField(
+              formControlName: 'referralCode',
+              // TODO: prefixIcon
+              decoration: InputDecoration(
+                labelText: 'Referral Code',
+                suffixIcon: Builder(
+                  builder: (context) => IconButton(
+                    onPressed: () => showTooltip(
+                        context, 'Enter referral code to get cash reward'),
+                    icon: const Icon(Icons.info_outline),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 50),
             SizedBox(
-              width: double.infinity,
+              width: 300,
               child: ElevatedButton(
                 onPressed: () => _onRegisterClick(context),
-                child: const Text('Register'),
+                child: const Text('Sign Up'),
               ),
             ),
           ],
+        ),
+      );
+
+  Widget buildFooter(BuildContext context) => Padding(
+        padding: const EdgeInsets.all(24),
+        child: RichText(
+          textAlign: TextAlign.center,
+          text: TextSpan(
+            style: Theme.of(context).textTheme.caption?.copyWith(fontSize: 15),
+            children: [
+              const TextSpan(text: 'Already have an account? '),
+              TextSpan(
+                text: 'Sign In',
+                style: Theme.of(context).textTheme.caption?.copyWith(
+                      color: Theme.of(context).colorScheme.primary,
+                      fontSize: 15,
+                    ),
+                recognizer: TapGestureRecognizer()
+                  ..onTap = () => _onSigninClicked(context),
+              ),
+            ],
+          ),
         ),
       );
 
@@ -101,4 +169,7 @@ class RegisterPage extends StatelessWidget {
       form.markAllAsTouched();
     }
   }
+
+  _onSigninClicked(BuildContext context) =>
+      Navigator.of(context).pushNamed('/login');
 }

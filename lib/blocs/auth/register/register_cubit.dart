@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:dalal_street_client/constants/error_messages.dart';
 import 'package:dalal_street_client/grpc/client.dart';
 import 'package:dalal_street_client/main.dart';
 import 'package:dalal_street_client/proto_build/actions/Register.pb.dart';
@@ -24,14 +25,14 @@ class RegisterCubit extends Cubit<RegisterState> {
         referralCode: referralCode,
       ));
       if (resp.statusCode == RegisterResponse_StatusCode.OK) {
-        emit(const RegisterSuccess());
+        emit(RegisterSuccess(email));
       } else {
         emit(RegisterFailure(resp.statusMessage));
         emit(RegisterInitial());
       }
     } catch (e) {
       logger.e(e);
-      emit(const RegisterFailure('Failed to reach server. Try again later'));
+      emit(const RegisterFailure(failedToReachServer));
     }
   }
 }

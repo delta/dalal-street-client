@@ -1,4 +1,5 @@
 import 'package:dalal_street_client/blocs/auth/verify_phone/enter_phone/enter_phone_cubit.dart';
+import 'package:dalal_street_client/constants/app_info.dart';
 import 'package:dalal_street_client/utils/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -42,14 +43,7 @@ class EnterPhonePage extends StatelessWidget {
               },
               builder: (context, state) {
                 if (state is EnterPhoneInitial) {
-                  return Wrap(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(20.0),
-                        child: _buildForm(context),
-                      )
-                    ],
-                  );
+                  return buildContent(context);
                 } else {
                   return const CircularProgressIndicator();
                 }
@@ -59,71 +53,86 @@ class EnterPhonePage extends StatelessWidget {
         ),
       );
 
-  void _onLogoutClicked(BuildContext context) =>
-      context.read<EnterPhoneCubit>().logout();
+  Widget buildContent(BuildContext context) => SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            buildHeader(context),
+            const SizedBox(height: 50),
+            buildForm(context),
+          ],
+        ),
+      );
 
-  Widget _buildForm(BuildContext context) => ReactiveForm(
-        formGroup: form,
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                'Verify Phone Number',
-                style: Theme.of(context).textTheme.headline6,
-              ),
-              const SizedBox(height: 20),
-              const Text(
-                'You will recieve a 4 digit verification code to this number',
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 20),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                child: SizedBox(
-                  width: double.infinity,
-                  child: Row(
-                    children: [
-                      Expanded(
-                        flex: 2,
-                        child: ReactiveTextField(
-                          formControlName: 'code',
-                          keyboardType: TextInputType.number,
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                      const SizedBox(width: 20),
-                      Expanded(
-                        flex: 8,
-                        child: ReactiveTextField(
-                          formControlName: 'number',
-                          decoration:
-                              const InputDecoration(labelText: 'Mobile Number'),
-                          keyboardType: TextInputType.phone,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () => _onSendOTPClick(context),
-                  child: const Text('Send OTP'),
-                ),
-              ),
-              SizedBox(
-                width: double.infinity,
-                child: TextButton(
-                  onPressed: () => _onLogoutClicked(context),
-                  child: const Text('Logout'),
-                ),
-              ),
-            ],
+  Widget buildHeader(BuildContext context) => Column(
+        children: [
+          SizedBox(
+            width: double.infinity,
+            child: Image.asset(
+              'assets/images/OTP.png',
+              fit: BoxFit.fill,
+            ),
           ),
+          const SizedBox(height: 40),
+          Text(
+            'Verify Phone Number',
+            style: Theme.of(context).textTheme.headline5,
+          ),
+          const SizedBox(height: 20),
+          Text(
+            otpDesc,
+            textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.bodyText1,
+          ),
+        ],
+      );
+
+  Widget buildForm(BuildContext context) => Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 30),
+        child: Column(
+          children: [
+            ReactiveForm(
+              formGroup: form,
+              child: Row(
+                children: [
+                  Expanded(
+                    flex: 2,
+                    child: ReactiveTextField(
+                      formControlName: 'code',
+                      keyboardType: TextInputType.number,
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  const SizedBox(width: 20),
+                  Expanded(
+                    flex: 8,
+                    child: ReactiveTextField(
+                      formControlName: 'number',
+                      decoration:
+                          const InputDecoration(labelText: 'Phone Number'),
+                      keyboardType: TextInputType.phone,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 60),
+            SizedBox(
+              width: 300,
+              child: ElevatedButton(
+                onPressed: () => _onSendOTPClick(context),
+                child: const Text('Send OTP'),
+              ),
+            ),
+            const SizedBox(height: 15),
+            SizedBox(
+              width: 300,
+              child: TextButton(
+                onPressed: () => _onLogoutClicked(context),
+                child: const Text('Log Out'),
+              ),
+            ),
+          ],
         ),
       );
 
@@ -135,4 +144,7 @@ class EnterPhonePage extends StatelessWidget {
       form.markAllAsTouched();
     }
   }
+
+  void _onLogoutClicked(BuildContext context) =>
+      context.read<EnterPhoneCubit>().logout();
 }

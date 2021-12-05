@@ -4,6 +4,7 @@ import 'package:dalal_street_client/blocs/auth/login/login_cubit.dart';
 import 'package:dalal_street_client/blocs/auth/register/register_cubit.dart';
 import 'package:dalal_street_client/blocs/auth/verify_phone/enter_otp/enter_otp_cubit.dart';
 import 'package:dalal_street_client/blocs/auth/verify_phone/enter_phone/enter_phone_cubit.dart';
+import 'package:dalal_street_client/pages/auth/check_mail_page.dart';
 import 'package:dalal_street_client/pages/auth/login_page.dart';
 import 'package:dalal_street_client/pages/auth/register_page.dart';
 import 'package:dalal_street_client/pages/auth/verify_phone/enter_otp_page.dart';
@@ -17,62 +18,63 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
-    final args = settings.arguments;
+    try {
+      final page = _getPage(settings);
+      return MaterialPageRoute(builder: (_) => page, settings: settings);
+    } catch (e) {
+      return _errorRoute(e.toString());
+    }
+  }
 
+  static Widget _getPage(RouteSettings settings) {
+    final args = settings.arguments;
     switch (settings.name) {
       case '/splash':
-        return MaterialPageRoute(builder: (_) => const SplashPage());
-
+        return const SplashPage();
       case '/landing':
-        return MaterialPageRoute(builder: (_) => const LandingPage());
+        return const LandingPage();
 
       // Auth Pages
       case '/login':
-        return MaterialPageRoute(
-          builder: (_) => BlocProvider(
-            create: (context) => LoginCubit(context.read()),
-            child: LoginPage(),
-          ),
+        return BlocProvider(
+          create: (context) => LoginCubit(context.read()),
+          child: LoginPage(),
         );
       case '/register':
-        return MaterialPageRoute(
-          builder: (_) => BlocProvider(
-            create: (context) => RegisterCubit(),
-            child: RegisterPage(),
-          ),
-        );
+        return BlocProvider(
+            create: (context) => RegisterCubit(), child: RegisterPage());
+      case '/checkMail':
+        if (args is String) {
+          return CheckMailPage(mail: args);
+        }
+        throw Exception('Invalid args in check mail page');
       // Verify Phone Pages
       case '/enterPhone':
-        return MaterialPageRoute(
-          builder: (_) => BlocProvider(
-            create: (context) => EnterPhoneCubit(context.read()),
-            child: EnterPhonePage(),
-          ),
+        return BlocProvider(
+          create: (context) => EnterPhoneCubit(context.read()),
+          child: EnterPhonePage(),
         );
       case '/enterOtp':
         if (args is String) {
-          return MaterialPageRoute(
-            builder: (_) => BlocProvider(
-              create: (context) => EnterOtpCubit(context.read(), args),
-              child: const EnterOtpPage(),
-            ),
+          return BlocProvider(
+            create: (context) => EnterOtpCubit(context.read(), args),
+            child: const EnterOtpPage(),
           );
         }
-        return _errorRoute(msg: 'Invalid phone args');
+        throw Exception('Invalid phone args');
 
       // Home Pages
       case '/home':
         if (args is User) {
-          return MaterialPageRoute(builder: (_) => HomePage(user: args));
+          return HomePage(user: args);
         }
-        return _errorRoute(msg: 'Invalid user args');
+        throw Exception('Invalid user args');
       default:
-        return _errorRoute();
+        throw Exception('Invalid Route');
     }
   }
 
-  static Route<dynamic> _errorRoute({String msg = 'Invalid Route'}) =>
-      MaterialPageRoute(
+  static Route<dynamic> _errorRoute(String msg) => MaterialPageRoute(
         builder: (_) => Scaffold(
           appBar: AppBar(title: const Text('Error Page')),
           body: Center(
