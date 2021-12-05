@@ -15,6 +15,7 @@ final appTheme = ThemeData(
   outlinedButtonTheme: OutlinedButtonThemeData(style: outlinedButtonStyle),
 );
 
+// TODO: Fill colors are not showing properly
 final pinTextFieldTheme = PinTheme(
   fieldHeight: 70,
   fieldWidth: 60,
