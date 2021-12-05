@@ -59,7 +59,7 @@ class LoginPage extends StatelessWidget {
             const SizedBox(height: 18),
             Text(
               'Login',
-              style: Theme.of(context).textTheme.headline2,
+              style: Theme.of(context).textTheme.headline1,
             ),
             const SizedBox(height: 14),
             Text(
@@ -98,7 +98,7 @@ class LoginPage extends StatelessWidget {
             ),
             const SizedBox(height: 50),
             SizedBox(
-              width: double.infinity,
+              width: 300,
               child: ElevatedButton(
                 onPressed: () => _onLoginClicked(context),
                 child: const Text('Log In'),
@@ -114,15 +114,15 @@ class LoginPage extends StatelessWidget {
         child: RichText(
           textAlign: TextAlign.center,
           text: TextSpan(
-            style: Theme.of(context).textTheme.caption?.copyWith(fontSize: 15),
+            style: Theme.of(context).textTheme.caption,
             children: [
               const TextSpan(text: "Don't have an account? "),
               TextSpan(
                 text: 'Sign Up',
-                style: Theme.of(context).textTheme.caption?.copyWith(
-                      color: Theme.of(context).colorScheme.primary,
-                      fontSize: 15,
-                    ),
+                style: Theme.of(context)
+                    .textTheme
+                    .caption
+                    ?.copyWith(color: Theme.of(context).colorScheme.primary),
                 recognizer: TapGestureRecognizer()
                   ..onTap = () => _onSignUpClicked(context),
               ),

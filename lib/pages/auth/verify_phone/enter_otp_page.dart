@@ -57,7 +57,7 @@ class _EnterOtpPageState extends State<EnterOtpPage> {
         children: [
           Text(
             'Verify Phone Number',
-            style: Theme.of(context).textTheme.headline3,
+            style: Theme.of(context).textTheme.headline1,
           ),
           const SizedBox(height: 10),
           Align(
@@ -65,13 +65,13 @@ class _EnterOtpPageState extends State<EnterOtpPage> {
             child: RichText(
               textAlign: TextAlign.start,
               text: TextSpan(
+                style: Theme.of(context).textTheme.bodyText1,
                 children: [
                   const TextSpan(text: 'We have sent a verification code to\n'),
                   TextSpan(
                     text: phone,
-                    style: Theme.of(context).textTheme.caption?.copyWith(
+                    style: Theme.of(context).textTheme.bodyText1?.copyWith(
                           color: Theme.of(context).colorScheme.primary,
-                          fontSize: 15,
                         ),
                   ),
                 ],
@@ -128,7 +128,7 @@ class _EnterOtpPageState extends State<EnterOtpPage> {
             width: double.infinity,
             child: TextButton(
               onPressed: _onLogoutClick,
-              child: const Text('Logout'),
+              child: const Text('Log Out'),
             ),
           ),
         ],

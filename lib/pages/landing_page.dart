@@ -31,7 +31,7 @@ class LandingPage extends StatelessWidget {
                       const SizedBox(height: 10),
                       Text(
                         appDesc,
-                        style: Theme.of(context).textTheme.headline6,
+                        style: Theme.of(context).textTheme.subtitle1,
                       ),
                     ],
                   ),
@@ -51,7 +51,7 @@ class LandingPage extends StatelessWidget {
                         child: ElevatedButton(
                           style: secondaryButtonStyle,
                           onPressed: () => onLoginClick(context),
-                          child: const Text('Login'),
+                          child: const Text('Log In'),
                         ),
                       ),
                     ],

@@ -76,12 +76,13 @@ class EnterPhonePage extends StatelessWidget {
           const SizedBox(height: 40),
           Text(
             'Verify Phone Number',
-            style: Theme.of(context).textTheme.headline4,
+            style: Theme.of(context).textTheme.headline5,
           ),
           const SizedBox(height: 20),
-          const Text(
+          Text(
             otpDesc,
             textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.bodyText1,
           ),
         ],
       );
@@ -128,7 +129,7 @@ class EnterPhonePage extends StatelessWidget {
               width: 300,
               child: TextButton(
                 onPressed: () => _onLogoutClicked(context),
-                child: const Text('Logout'),
+                child: const Text('Log Out'),
               ),
             ),
           ],

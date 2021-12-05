@@ -75,7 +75,7 @@ class RegisterPage extends StatelessWidget {
             const SizedBox(height: 18),
             Text(
               'Create An Account',
-              style: Theme.of(context).textTheme.headline2,
+              style: Theme.of(context).textTheme.headline1,
             ),
           ],
         ),
@@ -125,7 +125,7 @@ class RegisterPage extends StatelessWidget {
             ),
             const SizedBox(height: 50),
             SizedBox(
-              width: double.infinity,
+              width: 300,
               child: ElevatedButton(
                 onPressed: () => _onRegisterClick(context),
                 child: const Text('Sign Up'),
@@ -144,7 +144,7 @@ class RegisterPage extends StatelessWidget {
             children: [
               const TextSpan(text: 'Already have an account? '),
               TextSpan(
-                text: 'Sign in',
+                text: 'Sign In',
                 style: Theme.of(context).textTheme.caption?.copyWith(
                       color: Theme.of(context).colorScheme.primary,
                       fontSize: 15,

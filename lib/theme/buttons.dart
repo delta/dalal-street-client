@@ -6,8 +6,9 @@ const buttonTextStyle = TextStyle(
   fontSize: 18,
   fontWeight: FontWeight.bold,
 );
-final buttonShape =
-    RoundedRectangleBorder(borderRadius: BorderRadius.circular(10));
+final buttonShape = RoundedRectangleBorder(
+  borderRadius: BorderRadius.circular(10),
+);
 
 final outlinedButtonShape = RoundedRectangleBorder(
   side: const BorderSide(color: primaryColor, width: 20),

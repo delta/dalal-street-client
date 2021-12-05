@@ -32,24 +32,26 @@ class CheckMailPage extends StatelessWidget {
             alignment: Alignment.topLeft,
             child: Text(
               'Check Your\nEmail',
-              style: Theme.of(context).textTheme.headline3,
+              style: Theme.of(context).textTheme.headline1,
               textAlign: TextAlign.start,
             ),
           ),
           const SizedBox(height: 24),
-          RichText(
-            text: TextSpan(
-              style: Theme.of(context).textTheme.headline6,
-              children: [
-                const TextSpan(text: 'We have sent a verification email to \n'),
-                TextSpan(
-                  text: mail,
-                  style: Theme.of(context)
-                      .textTheme
-                      .headline6
-                      ?.copyWith(color: Theme.of(context).colorScheme.primary),
-                ),
-              ],
+          Align(
+            alignment: Alignment.topLeft,
+            child: RichText(
+              text: TextSpan(
+                style: Theme.of(context).textTheme.headline6,
+                children: [
+                  const TextSpan(
+                      text: 'We have sent a verification email to \n'),
+                  TextSpan(
+                    text: mail,
+                    style: Theme.of(context).textTheme.headline6?.copyWith(
+                        color: Theme.of(context).colorScheme.primary),
+                  ),
+                ],
+              ),
             ),
           ),
         ],

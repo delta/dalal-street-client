@@ -5,7 +5,7 @@ void showTooltip(BuildContext context, String text) => SuperTooltip(
       popupDirection: TooltipDirection.down,
       content: Text(
         text,
-        style: Theme.of(context).textTheme.caption,
+        style: Theme.of(context).textTheme.subtitle2,
       ),
       backgroundColor: const Color(0xff373D3F),
       outsideBackgroundColor: Colors.transparent,
