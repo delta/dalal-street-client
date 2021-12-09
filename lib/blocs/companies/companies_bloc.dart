@@ -3,7 +3,6 @@ import 'package:dalal_street_client/grpc/client.dart';
 import 'package:dalal_street_client/proto_build/actions/GetStockList.pb.dart';
 import 'package:dalal_street_client/proto_build/datastreams/StockPrices.pb.dart';
 import 'package:dalal_street_client/proto_build/datastreams/Subscribe.pb.dart';
-import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
 import 'package:equatable/equatable.dart';
 
 import '../../main.dart';
