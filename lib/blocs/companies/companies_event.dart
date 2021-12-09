@@ -15,3 +15,7 @@ class SubscribeToStockPrices extends CompaniesEvent {
   @override
   List<Object> get props => [subscriptionId];
 }
+
+class GetStockList extends CompaniesEvent {
+  const GetStockList();
+}

@@ -4,6 +4,7 @@ import 'package:dalal_street_client/blocs/auth/login/login_cubit.dart';
 import 'package:dalal_street_client/blocs/auth/register/register_cubit.dart';
 import 'package:dalal_street_client/blocs/auth/verify_phone/enter_otp/enter_otp_cubit.dart';
 import 'package:dalal_street_client/blocs/auth/verify_phone/enter_phone/enter_phone_cubit.dart';
+import 'package:dalal_street_client/blocs/companies/companies_bloc.dart';
 import 'package:dalal_street_client/pages/auth/check_mail_page.dart';
 import 'package:dalal_street_client/pages/auth/login_page.dart';
 import 'package:dalal_street_client/pages/auth/register_page.dart';
@@ -66,7 +67,10 @@ class RouteGenerator {
       // Home Pages
       case '/home':
         if (args is User) {
-          return HomePage(user: args);
+          return BlocProvider(
+            create: (context) => CompaniesBloc(),
+            child: HomePage(user: args),
+          );
         }
         throw Exception('Invalid user args');
       default:
