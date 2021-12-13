@@ -11,6 +11,7 @@ import 'package:dalal_street_client/pages/auth/login_page.dart';
 import 'package:dalal_street_client/pages/auth/register_page.dart';
 import 'package:dalal_street_client/pages/auth/verify_phone/enter_otp_page.dart';
 import 'package:dalal_street_client/pages/auth/verify_phone/enter_phone_page.dart';
+import 'package:dalal_street_client/pages/daily_challanges_page.dart';
 import 'package:dalal_street_client/pages/home_page.dart';
 import 'package:dalal_street_client/pages/landing_page.dart';
 import 'package:dalal_street_client/pages/splash_page.dart';
@@ -81,6 +82,8 @@ class RouteGenerator {
           );
         }
         throw Exception('Invalid user args');
+      case '/dailyChallenges':
+        return const DailyChallengesPage();
       default:
         throw Exception('Invalid Route');
     }
