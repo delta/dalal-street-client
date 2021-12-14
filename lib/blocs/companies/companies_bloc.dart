@@ -16,12 +16,12 @@ class CompaniesBloc extends Bloc<CompaniesEvent, CompaniesState> {
     /// Subscribe to Stock Prices Data Stream
     on<SubscribeToStockPrices>((event, emit) async {
       try {
-        final stockpricesStream =
-            streamClient.getStockPricesUpdates(event.subscriptionId);
-        stockpricesStream
-            // ignore: avoid_print
-            .listen((stockPrices) =>
-                emit(SubscriptionToStockPricesSuccess(stockPrices)));
+        final stockpricesStream = streamClient.getStockPricesUpdates(
+          event.subscriptionId,
+          options: sessionOptions(getIt()),
+        );
+        stockpricesStream.listen((stockPrices) =>
+            emit(SubscriptionToStockPricesSuccess(stockPrices)));
       } catch (e) {
         logger.e(e);
         emit(SubscriptionToStockPricesFailed(e.toString()));
@@ -30,8 +30,10 @@ class CompaniesBloc extends Bloc<CompaniesEvent, CompaniesState> {
 
     on<GetStockList>((event, emit) async {
       try {
-        final stockList =
-            await actionClient.getStockList(GetStockListRequest());
+        final stockList = await actionClient.getStockList(
+          GetStockListRequest(),
+          options: sessionOptions(getIt()),
+        );
         // ignore: avoid_print
         print(stockList.stockList);
         emit(GetCompaniesSuccess(stockList));
