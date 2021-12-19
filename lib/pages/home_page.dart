@@ -9,6 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dalal_street_client/theme/colors.dart';
 import 'package:intl/intl.dart';
 
+// ignore: unnecessary_new
 final oCcy = new NumberFormat('#,##0.00', 'en_US');
 
 class HomePage extends StatefulWidget {
