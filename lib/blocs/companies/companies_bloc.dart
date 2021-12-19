@@ -20,8 +20,13 @@ class CompaniesBloc extends Bloc<CompaniesEvent, CompaniesState> {
           event.subscriptionId,
           options: sessionOptions(getIt()),
         );
-        stockpricesStream.listen((stockPrices) =>
-            emit(SubscriptionToStockPricesSuccess(stockPrices)));
+        // ignore: avoid_print
+        print(event.subscriptionId);
+        await for (final stockPrices in stockpricesStream) {
+          // ignore: avoid_print
+          print(stockPrices);
+          emit(SubscriptionToStockPricesSuccess(stockPrices));
+        }
       } catch (e) {
         logger.e(e);
         emit(SubscriptionToStockPricesFailed(e.toString()));
@@ -34,8 +39,6 @@ class CompaniesBloc extends Bloc<CompaniesEvent, CompaniesState> {
           GetStockListRequest(),
           options: sessionOptions(getIt()),
         );
-        // ignore: avoid_print
-        print(stockList.stockList);
         emit(GetCompaniesSuccess(stockList));
       } catch (e) {
         logger.e(e);
