@@ -31,4 +31,18 @@ class SubscribeCubit extends Cubit<SubscribeState> {
           'Failed to reach server. Try again later'));
     }
   }
+
+// Bloc which will unsubscribe to given SubscriptionID
+  Future<void> unsubscribe(SubscriptionId subscriptionId) async {
+    try {
+      final unSubscribeResponse = await streamClient.unsubscribe(
+          UnsubscribeRequest(subscriptionId: subscriptionId),
+          options: sessionOptions(getIt<String>()));
+      if (unSubscribeResponse.statusCode != UnsubscribeResponse_StatusCode.OK) {
+        logger.e('Failed to unsubscribe');
+      }
+    } catch (e) {
+      logger.e(e);
+    }
+  }
 }

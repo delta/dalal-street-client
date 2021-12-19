@@ -22,6 +22,13 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  SubscriptionId? _stockPricesSubscriptionId;
+  @override
+  void dispose() {
+    context.read<SubscribeCubit>().unsubscribe(_stockPricesSubscriptionId!);
+    super.dispose();
+  }
+
   @override
   initState() {
     super.initState();
@@ -85,11 +92,13 @@ class _HomePageState extends State<HomePage> {
                               return BlocBuilder<SubscribeCubit,
                                   SubscribeState>(builder: (context, state) {
                                 if (state is SubscriptionDataLoaded) {
-                                  SubscriptionId subscriptionId =
+                                  _stockPricesSubscriptionId =
                                       state.subscriptionId;
+
                                   // Start the stream of Stock Prices
                                   context.read<CompaniesBloc>().add(
-                                      SubscribeToStockPrices(subscriptionId));
+                                      SubscribeToStockPrices(
+                                          _stockPricesSubscriptionId!));
                                 } else if (state is SubscriptonDataFailed) {
                                   // ignore: avoid_print
                                   print('Stock Prices Stream Failed $state');
