@@ -1,6 +1,5 @@
 import 'package:dalal_street_client/blocs/companies/companies_bloc.dart';
 import 'package:dalal_street_client/blocs/subscribe/subscribe_cubit.dart';
-import 'package:dalal_street_client/blocs/user/user_bloc.dart';
 import 'package:dalal_street_client/proto_build/datastreams/Subscribe.pb.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
 import 'package:dalal_street_client/proto_build/models/User.pb.dart';
@@ -95,219 +94,162 @@ class _HomePageState extends State<HomePage> {
                                   // ignore: avoid_print
                                   print('Stock Prices Stream Failed $state');
                                 }
-                                return BlocBuilder<CompaniesBloc,
-                                    CompaniesState>(
-                                  builder: (context, state) {
-                                    if (state
-                                        is SubscriptionToStockPricesSuccess) {
-                                      // ignore: avoid_print
-                                      print(state.stockPrices);
-                                      return Expanded(
-                                        child: ListView.builder(
-                                          itemCount: mapOfStocks.length,
-                                          itemBuilder: (context, index) {
-                                            Stock? company = mapOfStocks[index];
-                                            int currentPrice = state
-                                                .stockPrices.prices[index]!
-                                                .toInt();
-                                            int previousDayPrice = company
-                                                    ?.previousDayClose
-                                                    .toInt() ??
-                                                0;
-                                            var priceChange = (currentPrice -
-                                                previousDayPrice);
-                                            return Container(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                  vertical: 10,
-                                                ),
-                                                child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.start,
-                                                    children: [
-                                                      Expanded(
-                                                        child: Column(
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .start,
-                                                            children: [
-                                                              Text(
-                                                                company?.shortName ??
-                                                                    'Airtel',
-                                                                style:
-                                                                    const TextStyle(
-                                                                  fontSize: 18,
-                                                                ),
-                                                              ),
-                                                              Text(
-                                                                company?.fullName ??
-                                                                    'Airtel Pvt Ltd',
-                                                                style:
-                                                                    const TextStyle(
-                                                                  fontSize: 14,
-                                                                  color:
-                                                                      whiteWithOpacity50,
-                                                                ),
-                                                              ),
-                                                            ]),
-                                                      ),
-                                                      Expanded(
-                                                        child: Image.network(
-                                                            'https://i.imgur.com/zrmdl8j.png'),
-                                                      ),
-                                                      Expanded(
-                                                        child: Column(
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .end,
-                                                            children: [
-                                                              Text(
-                                                                oCcy
-                                                                    .format(
-                                                                        currentPrice)
-                                                                    .toString(),
-                                                                style:
-                                                                    const TextStyle(
-                                                                  fontSize: 18,
-                                                                ),
-                                                              ),
-                                                              Text(
-                                                                priceChange >= 0
-                                                                    ? '+' +
-                                                                        oCcy
-                                                                            .format(
-                                                                                priceChange)
-                                                                            .toString()
-                                                                    : oCcy
-                                                                        .format(
-                                                                            priceChange)
-                                                                        .toString(),
-                                                                style:
-                                                                    TextStyle(
-                                                                  fontSize: 14,
-                                                                  color: priceChange >
-                                                                          0
-                                                                      ? secondaryColor
-                                                                      : heartRed,
-                                                                ),
-                                                              ),
-                                                            ]),
-                                                      )
-                                                    ]));
-                                          },
-                                        ),
-                                      );
-                                    } else if (state
-                                        is SubscriptionToStockPricesFailed) {
-                                      return const Center(
-                                        child: Text(
-                                          'Failed to load data \nReason : //',
-                                          style: TextStyle(
-                                            fontSize: 14,
-                                            color: secondaryColor,
+
+                                return Expanded(
+                                  child: ListView.builder(
+                                    itemCount: mapOfStocks.length,
+                                    itemBuilder: (context, index) {
+                                      Stock? company = mapOfStocks[index];
+                                      int currentPrice =
+                                          company?.currentPrice.toInt() ?? 0;
+                                      int previousDayPrice =
+                                          company?.previousDayClose.toInt() ??
+                                              0;
+                                      var priceChange =
+                                          (currentPrice - previousDayPrice);
+                                      return Container(
+                                          padding: const EdgeInsets.symmetric(
+                                            vertical: 10,
                                           ),
-                                        ),
-                                      );
-                                    } else {
-                                      // We will show all companies with there prices which we get from [GetStockList] action instead of [StockPricesUpdate] stream
-                                      // We can also show shimmer here
-                                      return Flexible(
-                                        child: ListView.builder(
-                                          itemCount: mapOfStocks.length,
-                                          itemBuilder: (context, index) {
-                                            Stock? company = mapOfStocks[index];
-                                            int currentPrice =
-                                                company?.currentPrice.toInt() ??
-                                                    0;
-                                            int previousDayPrice = company
-                                                    ?.previousDayClose
-                                                    .toInt() ??
-                                                0;
-                                            var priceChange = (currentPrice -
-                                                previousDayPrice);
-                                            return Container(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                  vertical: 10,
+                                          child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              children: [
+                                                Expanded(
+                                                  child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Text(
+                                                          company?.shortName ??
+                                                              'Airtel',
+                                                          style:
+                                                              const TextStyle(
+                                                            fontSize: 18,
+                                                          ),
+                                                        ),
+                                                        Text(
+                                                          company?.fullName ??
+                                                              'Airtel Pvt Ltd',
+                                                          style:
+                                                              const TextStyle(
+                                                            fontSize: 14,
+                                                            color:
+                                                                whiteWithOpacity50,
+                                                          ),
+                                                        ),
+                                                      ]),
                                                 ),
-                                                child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.start,
-                                                    children: [
-                                                      Expanded(
-                                                        child: Column(
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .start,
-                                                            children: [
-                                                              Text(
-                                                                company?.shortName ??
-                                                                    'Airtel',
-                                                                style:
-                                                                    const TextStyle(
-                                                                  fontSize: 18,
-                                                                ),
+                                                Expanded(
+                                                  child: Image.network(
+                                                      'https://i.imgur.com/zrmdl8j.png'),
+                                                ),
+                                                Expanded(
+                                                  child: BlocBuilder<
+                                                      CompaniesBloc,
+                                                      CompaniesState>(
+                                                    builder: (context, state) {
+                                                      if (state
+                                                          is SubscriptionToStockPricesSuccess) {
+                                                        var currentStockPrice =
+                                                            state.stockPrices
+                                                                .prices[index];
+                                                        // ignore: avoid_print
+                                                        print(
+                                                            state.stockPrices);
+                                                        return Column(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .end,
+                                                          children: [
+                                                            Text(
+                                                              oCcy
+                                                                  .format(
+                                                                      currentStockPrice)
+                                                                  .toString(),
+                                                              style:
+                                                                  const TextStyle(
+                                                                fontSize: 18,
                                                               ),
-                                                              Text(
-                                                                company?.fullName ??
-                                                                    'Airtel Pvt Ltd',
-                                                                style:
-                                                                    const TextStyle(
-                                                                  fontSize: 14,
-                                                                  color:
-                                                                      whiteWithOpacity50,
-                                                                ),
+                                                            ),
+                                                            Text(
+                                                              priceChange >= 0
+                                                                  ? '+' +
+                                                                      oCcy
+                                                                          .format(
+                                                                              priceChange)
+                                                                          .toString()
+                                                                  : oCcy
+                                                                      .format(
+                                                                          priceChange)
+                                                                      .toString(),
+                                                              style: TextStyle(
+                                                                fontSize: 14,
+                                                                color: priceChange >
+                                                                        0
+                                                                    ? secondaryColor
+                                                                    : heartRed,
                                                               ),
-                                                            ]),
-                                                      ),
-                                                      Expanded(
-                                                        child: Image.network(
-                                                            'https://i.imgur.com/zrmdl8j.png'),
-                                                      ),
-                                                      Expanded(
-                                                        child: Column(
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .end,
-                                                            children: [
-                                                              Text(
-                                                                oCcy
-                                                                    .format(
-                                                                        currentPrice)
-                                                                    .toString(),
-                                                                style:
-                                                                    const TextStyle(
-                                                                  fontSize: 18,
-                                                                ),
+                                                            ),
+                                                          ],
+                                                        );
+                                                      } else if (state
+                                                          is SubscriptionToStockPricesFailed) {
+                                                        return const Center(
+                                                          child: Text(
+                                                            'Failed to load data \nReason : //',
+                                                            style: TextStyle(
+                                                              fontSize: 14,
+                                                              color:
+                                                                  secondaryColor,
+                                                            ),
+                                                          ),
+                                                        );
+                                                      } else {
+                                                        return Column(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .end,
+                                                          children: [
+                                                            Text(
+                                                              oCcy
+                                                                  .format(
+                                                                      currentPrice)
+                                                                  .toString(),
+                                                              style:
+                                                                  const TextStyle(
+                                                                fontSize: 18,
                                                               ),
-                                                              Text(
-                                                                priceChange >= 0
-                                                                    ? '+' +
-                                                                        oCcy
-                                                                            .format(
-                                                                                priceChange)
-                                                                            .toString()
-                                                                    : oCcy
-                                                                        .format(
-                                                                            priceChange)
-                                                                        .toString(),
-                                                                style:
-                                                                    TextStyle(
-                                                                  fontSize: 14,
-                                                                  color: priceChange >
-                                                                          0
-                                                                      ? secondaryColor
-                                                                      : heartRed,
-                                                                ),
+                                                            ),
+                                                            Text(
+                                                              priceChange >= 0
+                                                                  ? '+' +
+                                                                      oCcy
+                                                                          .format(
+                                                                              priceChange)
+                                                                          .toString()
+                                                                  : oCcy
+                                                                      .format(
+                                                                          priceChange)
+                                                                      .toString(),
+                                                              style: TextStyle(
+                                                                fontSize: 14,
+                                                                color: priceChange >
+                                                                        0
+                                                                    ? secondaryColor
+                                                                    : heartRed,
                                                               ),
-                                                            ]),
-                                                      )
-                                                    ]));
-                                          },
-                                        ),
-                                      );
-                                    }
-                                  },
+                                                            ),
+                                                          ],
+                                                        );
+                                                      }
+                                                    },
+                                                  ),
+                                                ),
+                                              ]));
+                                    },
+                                  ),
                                 );
                               });
                             } else {
