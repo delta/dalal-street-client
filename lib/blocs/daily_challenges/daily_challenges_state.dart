@@ -9,7 +9,11 @@ abstract class DailyChallengesState extends Equatable {
 
 class DailyChallengesLoading extends DailyChallengesState {}
 
-class DailyChallengesLoaded extends DailyChallengesState {}
+class DailyChallengesLoaded extends DailyChallengesState {
+  final List<DailyChallenge> challenges;
+
+  const DailyChallengesLoaded(this.challenges);
+}
 
 class DailyChallengesFailure extends DailyChallengesState {
   final String msg;
