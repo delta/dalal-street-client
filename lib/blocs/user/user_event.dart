@@ -12,14 +12,6 @@ class CheckUser extends UserEvent {
   const CheckUser();
 }
 
-class Subscribe extends UserEvent {
-  final DataStreamType dataStreamType;
-  const Subscribe(this.dataStreamType);
-
-  @override
-  List<Object> get props => [dataStreamType];
-}
-
 class GetUserData extends UserEvent {
   final String sessionId;
 

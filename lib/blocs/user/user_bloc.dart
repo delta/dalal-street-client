@@ -58,28 +58,6 @@ class UserBloc extends HydratedBloc<UserEvent, UserState> {
       }
       emit(const UserLoggedOut());
     });
-    // Bloc which will subscribe to given DataStream and return subscription ID
-    on<Subscribe>((event, emit) async {
-      try {
-        final subscribeResponse = await streamClient.subscribe(
-            SubscribeRequest(dataStreamType: event.dataStreamType),
-            options: sessionOptions(getIt<String>()));
-
-        if (subscribeResponse.statusCode == SubscribeResponse_StatusCode.OK) {
-          emit(SubscriptionDataLoaded(subscribeResponse.subscriptionId));
-        } else if (subscribeResponse.statusCode ==
-            SubscribeResponse_StatusCode.InvalidDataStreamId) {
-          emit(SubscriptonDataFailed(subscribeResponse.statusMessage));
-        } else if (subscribeResponse.statusCode ==
-            SubscribeResponse_StatusCode.InternalServerError) {
-          emit(SubscriptonDataFailed(subscribeResponse.statusMessage));
-        }
-      } catch (e) {
-        logger.e(e);
-        emit(const SubscriptonDataFailed(
-            'Failed to reach server. Try again later'));
-      }
-    });
   }
 
   // Methods required by HydratedBloc to persist state

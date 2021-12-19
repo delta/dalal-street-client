@@ -1,4 +1,5 @@
 import 'package:dalal_street_client/blocs/companies/companies_bloc.dart';
+import 'package:dalal_street_client/blocs/subscribe/subscribe_cubit.dart';
 import 'package:dalal_street_client/blocs/user/user_bloc.dart';
 import 'package:dalal_street_client/proto_build/datastreams/Subscribe.pb.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
@@ -28,8 +29,7 @@ class _HomePageState extends State<HomePage> {
     // Get List of Stocks
     BlocProvider.of<CompaniesBloc>(context).add(const GetStockList());
     // Subscribe to the stream of Stock Prices
-    BlocProvider.of<UserBloc>(context)
-        .add(const Subscribe(DataStreamType.STOCK_PRICES));
+    context.read<SubscribeCubit>().subscribe(DataStreamType.STOCK_PRICES);
     // TODO : Subscribe to the stream of News and Prices Graph
   }
 
@@ -47,7 +47,7 @@ class _HomePageState extends State<HomePage> {
                 const SizedBox(
                   height: 30,
                 ),
-                Flexible(
+                Expanded(
                   child: Container(
                     padding: const EdgeInsets.symmetric(
                         vertical: 10, horizontal: 10),
@@ -83,15 +83,12 @@ class _HomePageState extends State<HomePage> {
                           builder: (context, state) {
                             if (state is GetCompaniesSuccess) {
                               var mapOfStocks = state.stockList.stockList;
-                              return BlocBuilder<UserBloc, UserState>(
-                                  builder: (context, state) {
+                              return BlocBuilder<SubscribeCubit,
+                                  SubscribeState>(builder: (context, state) {
                                 if (state is SubscriptionDataLoaded) {
                                   SubscriptionId subscriptionId =
                                       state.subscriptionId;
-                                  // ignore: avoid_print
-                                  // print(
-                                  //     'Subscription ID for Stock Prices Steam is : ' +
-                                  //         subscriptionId.toString());
+                                  // Start the stream of Stock Prices
                                   context.read<CompaniesBloc>().add(
                                       SubscribeToStockPrices(subscriptionId));
                                 } else if (state is SubscriptonDataFailed) {
@@ -105,7 +102,7 @@ class _HomePageState extends State<HomePage> {
                                         is SubscriptionToStockPricesSuccess) {
                                       // ignore: avoid_print
                                       print(state.stockPrices);
-                                      return Flexible(
+                                      return Expanded(
                                         child: ListView.builder(
                                           itemCount: mapOfStocks.length,
                                           itemBuilder: (context, index) {
@@ -136,7 +133,7 @@ class _HomePageState extends State<HomePage> {
                                                             children: [
                                                               Text(
                                                                 company?.shortName ??
-                                                                    'AIRTEL',
+                                                                    'Airtel',
                                                                 style:
                                                                     const TextStyle(
                                                                   fontSize: 18,
@@ -144,7 +141,7 @@ class _HomePageState extends State<HomePage> {
                                                               ),
                                                               Text(
                                                                 company?.fullName ??
-                                                                    'AIRTEL PVT LTD',
+                                                                    'Airtel Pvt Ltd',
                                                                 style:
                                                                     const TextStyle(
                                                                   fontSize: 14,
@@ -212,9 +209,101 @@ class _HomePageState extends State<HomePage> {
                                         ),
                                       );
                                     } else {
-                                      return const Center(
-                                        child: CircularProgressIndicator(
-                                          color: primaryColor,
+                                      // We will show all companies with there prices which we get from [GetStockList] action instead of [StockPricesUpdate] stream
+                                      // We can also show shimmer here
+                                      return Flexible(
+                                        child: ListView.builder(
+                                          itemCount: mapOfStocks.length,
+                                          itemBuilder: (context, index) {
+                                            Stock? company = mapOfStocks[index];
+                                            int currentPrice =
+                                                company?.currentPrice.toInt() ??
+                                                    0;
+                                            int previousDayPrice = company
+                                                    ?.previousDayClose
+                                                    .toInt() ??
+                                                0;
+                                            var priceChange = (currentPrice -
+                                                previousDayPrice);
+                                            return Container(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                  vertical: 10,
+                                                ),
+                                                child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    children: [
+                                                      Expanded(
+                                                        child: Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Text(
+                                                                company?.shortName ??
+                                                                    'Airtel',
+                                                                style:
+                                                                    const TextStyle(
+                                                                  fontSize: 18,
+                                                                ),
+                                                              ),
+                                                              Text(
+                                                                company?.fullName ??
+                                                                    'Airtel Pvt Ltd',
+                                                                style:
+                                                                    const TextStyle(
+                                                                  fontSize: 14,
+                                                                  color:
+                                                                      whiteWithOpacity50,
+                                                                ),
+                                                              ),
+                                                            ]),
+                                                      ),
+                                                      Expanded(
+                                                        child: Image.network(
+                                                            'https://i.imgur.com/zrmdl8j.png'),
+                                                      ),
+                                                      Expanded(
+                                                        child: Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .end,
+                                                            children: [
+                                                              Text(
+                                                                oCcy
+                                                                    .format(
+                                                                        currentPrice)
+                                                                    .toString(),
+                                                                style:
+                                                                    const TextStyle(
+                                                                  fontSize: 18,
+                                                                ),
+                                                              ),
+                                                              Text(
+                                                                priceChange >= 0
+                                                                    ? '+' +
+                                                                        oCcy
+                                                                            .format(
+                                                                                priceChange)
+                                                                            .toString()
+                                                                    : oCcy
+                                                                        .format(
+                                                                            priceChange)
+                                                                        .toString(),
+                                                                style:
+                                                                    TextStyle(
+                                                                  fontSize: 14,
+                                                                  color: priceChange >
+                                                                          0
+                                                                      ? secondaryColor
+                                                                      : heartRed,
+                                                                ),
+                                                              ),
+                                                            ]),
+                                                      )
+                                                    ]));
+                                          },
                                         ),
                                       );
                                     }
@@ -237,8 +326,24 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
           ),
-          tablet: Container(),
-          desktop: Container(),
+          tablet: const Center(
+            child: Text(
+              'Tablet UI will design soon :)',
+              style: TextStyle(
+                fontSize: 14,
+                color: secondaryColor,
+              ),
+            ),
+          ),
+          desktop: const Center(
+            child: Text(
+              'Web UI will design soon :)',
+              style: TextStyle(
+                fontSize: 14,
+                color: secondaryColor,
+              ),
+            ),
+          ),
         ),
       ),
     );

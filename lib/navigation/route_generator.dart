@@ -5,6 +5,7 @@ import 'package:dalal_street_client/blocs/auth/register/register_cubit.dart';
 import 'package:dalal_street_client/blocs/auth/verify_phone/enter_otp/enter_otp_cubit.dart';
 import 'package:dalal_street_client/blocs/auth/verify_phone/enter_phone/enter_phone_cubit.dart';
 import 'package:dalal_street_client/blocs/companies/companies_bloc.dart';
+import 'package:dalal_street_client/blocs/subscribe/subscribe_cubit.dart';
 import 'package:dalal_street_client/pages/auth/check_mail_page.dart';
 import 'package:dalal_street_client/pages/auth/login_page.dart';
 import 'package:dalal_street_client/pages/auth/register_page.dart';
@@ -67,8 +68,15 @@ class RouteGenerator {
       // Home Pages
       case '/home':
         if (args is User) {
-          return BlocProvider(
-            create: (context) => CompaniesBloc(),
+          return MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (context) => CompaniesBloc(),
+              ),
+              BlocProvider(
+                create: (context) => SubscribeCubit(),
+              ),
+            ],
             child: HomePage(user: args),
           );
         }
