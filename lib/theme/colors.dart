@@ -10,7 +10,6 @@ const lightGrey = Color(0xff959595);
 // Misc
 const heartRed = Color(0xffE22B2B);
 const secondaryColor = Color(0xff1AA34A);
-const backgroundColor2 = Color(0xff161B1B);
 const blurredGray = Color(0xff595B64);
 const lightGray = Color(0xff959595);
 const red = Color(0xffFF3165);
