@@ -47,7 +47,7 @@ class _HomePageState extends State<HomePage> {
       child: Scaffold(
         backgroundColor: Colors.black,
         body: SingleChildScrollView(
-          child: Resposive(
+          child: Responsive(
             mobile: Padding(
               padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
               child: Column(
