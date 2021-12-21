@@ -1,4 +1,4 @@
-import 'package:dalal_street_client/blocs/daily_challenges/single_day_challenges_cubit.dart';
+import 'package:dalal_street_client/blocs/daily_challenges/single_day_challenges/single_day_challenges_cubit.dart';
 import 'package:dalal_street_client/pages/daily_challenges/daily_challenge_item.dart';
 import 'package:dalal_street_client/proto_build/models/DailyChallenge.pb.dart';
 import 'package:dalal_street_client/utils/snackbar.dart';
@@ -27,12 +27,12 @@ class _SingleDayChallengesState extends State<SingleDayChallenges>
     super.build(context);
     return BlocConsumer<SingleDayChallengesCubit, SingleDayChallengesState>(
       listener: (context, state) {
-        if (state is DailyChallengesFailure) {
+        if (state is SingleDayChallengesFailure) {
           showSnackBar(context, state.msg);
         }
       },
       builder: (context, state) {
-        if (state is DailyChallengesLoaded) {
+        if (state is SingleDayChallengesLoaded) {
           return buildList(state.challenges);
         }
         return const Center(child: CircularProgressIndicator());

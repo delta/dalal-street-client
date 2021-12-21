@@ -9,23 +9,22 @@ import 'package:equatable/equatable.dart';
 part 'single_day_challenges_state.dart';
 
 class SingleDayChallengesCubit extends Cubit<SingleDayChallengesState> {
-  SingleDayChallengesCubit() : super(DailyChallengesLoading());
+  SingleDayChallengesCubit() : super(SingleDayChallengesLoading());
 
   Future<void> getChallenges(int marketDay) async {
-    emit(DailyChallengesLoading());
     try {
       final resp = await actionClient.getDailyChallenges(
         GetDailyChallengesRequest(marketDay: marketDay),
         options: sessionOptions(getIt()),
       );
       if (resp.statusCode == GetDailyChallengesResponse_StatusCode.OK) {
-        emit(DailyChallengesLoaded(resp.dailyChallenges));
+        emit(SingleDayChallengesLoaded(resp.dailyChallenges));
       } else {
-        emit(DailyChallengesFailure(resp.statusMessage));
+        emit(SingleDayChallengesFailure(resp.statusMessage));
       }
     } catch (e) {
       logger.e(e);
-      emit(const DailyChallengesFailure(failedToReachServer));
+      emit(const SingleDayChallengesFailure(failedToReachServer));
     }
   }
 }
