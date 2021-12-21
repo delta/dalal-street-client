@@ -1,5 +1,6 @@
 import 'package:dalal_street_client/blocs/daily_challenges/daily_challenges_page_cubit.dart';
 import 'package:dalal_street_client/blocs/daily_challenges/single_day_challenges/single_day_challenges_cubit.dart';
+import 'package:dalal_street_client/components/failure_message.dart';
 import 'package:dalal_street_client/pages/daily_challenges/single_day_challenges.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -15,10 +16,12 @@ class DailyChallengesPage extends StatelessWidget {
           body: Center(
             child:
                 BlocBuilder<DailyChallengesPageCubit, DailyChallengesPageState>(
-              builder: (_, state) {
+              builder: (context, state) {
                 if (state is DailyChallengesPageFailure) {
-                  // TODO: add retry button
-                  return Text(state.msg);
+                  return FailureMessage(
+                    msg: state.msg,
+                    onClick: () => onRetryClick(context),
+                  );
                 }
                 if (state is DailyChallengesPageSuccess) {
                   return Column(
@@ -53,4 +56,7 @@ class DailyChallengesPage extends StatelessWidget {
           ),
         ),
       );
+
+  void onRetryClick(BuildContext context) =>
+      context.read<DailyChallengesPageCubit>().getConfig();
 }
