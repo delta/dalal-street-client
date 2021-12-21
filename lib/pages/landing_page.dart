@@ -20,7 +20,7 @@ class LandingPage extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Image.asset('assets/images/DalalImage.png'),
+                  // Image.asset('assets/images/DalalImage.png'),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [

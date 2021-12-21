@@ -102,7 +102,7 @@ class DalalApp extends StatelessWidget {
 
               logger.i('user logged in');
               if (state.user.isPhoneVerified) {
-                showSnackBar(context, 'Welcome ${state.user.name}');
+                //showSnackBar(context, 'Welcome ${state.user.name}');
                 _navigator.pushNamedAndRemoveUntil(
                   '/home',
                   (route) => false,
