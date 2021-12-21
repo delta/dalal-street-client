@@ -6,10 +6,10 @@ import 'package:dalal_street_client/proto_build/actions/GetDailyChallenges.pb.da
 import 'package:dalal_street_client/proto_build/models/DailyChallenge.pb.dart';
 import 'package:equatable/equatable.dart';
 
-part 'daily_challenges_state.dart';
+part 'single_day_challenges_state.dart';
 
-class DailyChallengesCubit extends Cubit<DailyChallengesState> {
-  DailyChallengesCubit() : super(DailyChallengesLoading());
+class SingleDayChallengesCubit extends Cubit<SingleDayChallengesState> {
+  SingleDayChallengesCubit() : super(DailyChallengesLoading());
 
   Future<void> getChallenges(int marketDay) async {
     emit(DailyChallengesLoading());
