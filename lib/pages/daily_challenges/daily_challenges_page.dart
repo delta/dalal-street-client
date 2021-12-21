@@ -7,49 +7,63 @@ class DailyChallengesPage extends StatelessWidget {
   const DailyChallengesPage({Key? key}) : super(key: key);
 
   @override
-  build(context) => Scaffold(
-        appBar: AppBar(title: const Text('Daily Challenges')),
-        body: Center(
-          child: Column(
-            children: [
-              const SizedBox(height: 16),
-              Text(
-                'Daily Challenges',
-                style: Theme.of(context).textTheme.headline4,
-              ),
-              const SizedBox(height: 16),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: const [
-                  Expanded(
-                    flex: 1,
-                    child: Text(
-                      'Rewards',
-                      textAlign: TextAlign.center,
+  build(context) => DefaultTabController(
+        length: 2,
+        child: Scaffold(
+          appBar: AppBar(title: const Text('Daily Challenges')),
+          body: Center(
+            child: Column(
+              children: [
+                const TabBar(
+                  tabs: [
+                    Tab(text: 'Day 1'),
+                    Tab(text: 'Day 2'),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: const [
+                    Expanded(
+                      flex: 1,
+                      child: Text(
+                        'Rewards',
+                        textAlign: TextAlign.center,
+                      ),
                     ),
-                  ),
-                  Expanded(
-                    flex: 2,
-                    child: Text(
-                      'Challenges',
-                      textAlign: TextAlign.center,
+                    Expanded(
+                      flex: 2,
+                      child: Text(
+                        'Challenges',
+                        textAlign: TextAlign.center,
+                      ),
                     ),
-                  ),
-                  Expanded(
-                    flex: 1,
-                    child: Text(
-                      'Progress',
-                      textAlign: TextAlign.center,
+                    Expanded(
+                      flex: 1,
+                      child: Text(
+                        'Progress',
+                        textAlign: TextAlign.center,
+                      ),
                     ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                Expanded(
+                  child: TabBarView(
+                    children: [
+                      BlocProvider(
+                        create: (_) => SingleDayChallengesCubit(),
+                        child: const SingleDayChallenges(day: 1),
+                      ),
+                      BlocProvider(
+                        create: (_) => SingleDayChallengesCubit(),
+                        child: const SingleDayChallenges(day: 2),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-              const SizedBox(height: 16),
-              BlocProvider(
-                create: (_) => SingleDayChallengesCubit()..getChallenges(1),
-                child: const SingleDayChallenges(day: 1),
-              ),
-            ],
+                ),
+              ],
+            ),
           ),
         ),
       );
