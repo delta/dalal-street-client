@@ -35,7 +35,7 @@ class DailyChallengesPage extends StatelessWidget {
       context.read<DailyChallengesPageCubit>().getConfig();
 }
 
-class _DailyChallengesPageBody extends StatelessWidget {
+class _DailyChallengesPageBody extends StatefulWidget {
   const _DailyChallengesPageBody({
     Key? key,
     required this.successState,
@@ -44,30 +44,69 @@ class _DailyChallengesPageBody extends StatelessWidget {
   final DailyChallengesPageSuccess successState;
 
   @override
+  State<_DailyChallengesPageBody> createState() =>
+      _DailyChallengesPageBodyState();
+}
+
+// TODO: handle isDailyChallengesOpen field
+class _DailyChallengesPageBodyState extends State<_DailyChallengesPageBody>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController =
+        TabController(length: widget.successState.totalMarketDays, vsync: this);
+    _tabController.addListener(() {
+      if ((_tabController.index + 1) > widget.successState.marketDay) {
+        int index = _tabController.previousIndex;
+        setState(() => _tabController.index = index);
+      }
+    });
+    _tabController.index = widget.successState.marketDay - 1;
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final days = 1.to(successState.totalMarketDays);
-    return DefaultTabController(
-      length: successState.totalMarketDays,
-      child: Column(
-        children: [
-          TabBar(
-            isScrollable: true,
-            tabs: [for (final day in days) Text('Day $day')],
+    final days = 1.to(widget.successState.totalMarketDays);
+    return Column(
+      children: [
+        TabBar(
+          controller: _tabController,
+          isScrollable: true,
+          tabs: [
+            for (final day in days)
+              Tab(
+                text: 'Day $day',
+                icon: Icon(
+                  (day <= widget.successState.marketDay)
+                      ? Icons.lock_open
+                      : Icons.lock,
+                ),
+              )
+          ],
+        ),
+        const SizedBox(height: 16),
+        Expanded(
+          child: TabBarView(
+            controller: _tabController,
+            children: [
+              for (final day in days)
+                BlocProvider(
+                  create: (_) => SingleDayChallengesCubit(),
+                  child: SingleDayChallenges(day: day),
+                )
+            ],
           ),
-          const SizedBox(height: 16),
-          Expanded(
-            child: TabBarView(
-              children: [
-                for (final day in days)
-                  BlocProvider(
-                    create: (_) => SingleDayChallengesCubit(),
-                    child: SingleDayChallenges(day: day),
-                  )
-              ],
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
