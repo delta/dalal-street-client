@@ -43,7 +43,7 @@ class _SingleDayChallengesState extends State<SingleDayChallenges>
   Widget buildList(List<DailyChallenge> challenges) => ListView.separated(
         itemCount: challenges.length,
         itemBuilder: (_, i) => DailyChallengeItem(challenge: challenges[i]),
-        separatorBuilder: (_, __) => const SizedBox(height: 16),
+        separatorBuilder: (_, __) => const SizedBox(height: 10),
       );
 
   // For preserving state between tab view pages: https://stackoverflow.com/questions/49087703/preserving-state-between-tab-view-pages

@@ -1,4 +1,5 @@
 import 'package:dalal_street_client/proto_build/models/DailyChallenge.pb.dart';
+import 'package:dalal_street_client/theme/colors.dart';
 import 'package:flutter/material.dart';
 
 class DailyChallengeItem extends StatelessWidget {
@@ -8,31 +9,26 @@ class DailyChallengeItem extends StatelessWidget {
       : super(key: key);
 
   @override
-  build(context) => Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          Expanded(
-            flex: 1,
-            child: Text(
-              '${challenge.reward}',
-              textAlign: TextAlign.center,
+  build(context) => Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Card(
+          color: baseColor,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(12),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(challenge.challengeType),
+                Text(challengeDescription(challenge)),
+                Text('0/${challenge.value}'),
+              ],
             ),
           ),
-          Expanded(
-            flex: 2,
-            child: Text(
-              challengeDescription(challenge),
-              textAlign: TextAlign.center,
-            ),
-          ),
-          Expanded(
-            flex: 1,
-            child: Text(
-              '0/${challenge.value}',
-              textAlign: TextAlign.center,
-            ),
-          ),
-        ],
+        ),
       );
 }
 
