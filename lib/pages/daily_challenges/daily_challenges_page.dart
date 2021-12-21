@@ -1,5 +1,4 @@
 import 'package:dalal_street_client/blocs/daily_challenges/daily_challenges_cubit.dart';
-import 'package:dalal_street_client/main.dart';
 import 'package:dalal_street_client/pages/daily_challenges/daily_challenge_item.dart';
 import 'package:dalal_street_client/proto_build/models/DailyChallenge.pb.dart';
 import 'package:dalal_street_client/utils/snackbar.dart';
@@ -17,33 +16,39 @@ class DailyChallengesPage extends StatelessWidget {
         body: Center(
           child: Column(
             children: [
+              const SizedBox(height: 16),
               Text(
                 'Daily Challenges',
                 style: Theme.of(context).textTheme.headline4,
               ),
+              const SizedBox(height: 16),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: const [
                   Expanded(
-                      flex: 1,
-                      child: Text(
-                        'Rewards',
-                        textAlign: TextAlign.center,
-                      )),
+                    flex: 1,
+                    child: Text(
+                      'Rewards',
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
                   Expanded(
-                      flex: 2,
-                      child: Text(
-                        'Challenges',
-                        textAlign: TextAlign.center,
-                      )),
+                    flex: 2,
+                    child: Text(
+                      'Challenges',
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
                   Expanded(
-                      flex: 1,
-                      child: Text(
-                        'Progress',
-                        textAlign: TextAlign.center,
-                      )),
+                    flex: 1,
+                    child: Text(
+                      'Progress',
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
                 ],
               ),
+              const SizedBox(height: 16),
               buildBody(),
             ],
           ),
@@ -66,11 +71,10 @@ class DailyChallengesPage extends StatelessWidget {
       );
 
   Widget buildList(List<DailyChallenge> challenges) => Expanded(
-        child: ListView.builder(
+        child: ListView.separated(
           itemCount: challenges.length,
-          itemBuilder: (_, i) => DailyChallengeItem(
-            challenge: challenges[i],
-          ),
+          itemBuilder: (_, i) => DailyChallengeItem(challenge: challenges[i]),
+          separatorBuilder: (_, __) => const SizedBox(height: 16),
         ),
       );
 }
