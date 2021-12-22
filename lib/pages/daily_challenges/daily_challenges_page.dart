@@ -48,7 +48,8 @@ class _DailyChallengesPageBody extends StatefulWidget {
       _DailyChallengesPageBodyState();
 }
 
-// TODO: handle isDailyChallengesOpen field
+// TODO: Handle isDailyChallengesOpen field
+// TODO: Disable swiping until this is resolved properly: https://github.com/flutter/flutter/issues/31206
 class _DailyChallengesPageBodyState extends State<_DailyChallengesPageBody>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
@@ -97,6 +98,8 @@ class _DailyChallengesPageBodyState extends State<_DailyChallengesPageBody>
         Expanded(
           child: TabBarView(
             controller: _tabController,
+            // Disable Scrolling
+            physics: const NeverScrollableScrollPhysics(),
             children: [
               for (final day in days)
                 BlocProvider(
