@@ -43,6 +43,7 @@ dependencies:
   pin_code_fields: ^7.3.0
   url_launcher: ^6.0.15
   super_tooltip: ^1.0.1
+  fixnum: ^1.0.0
 
 dev_dependencies:
   flutter_test:
