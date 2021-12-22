@@ -10,7 +10,7 @@ abstract class ExchangeState extends Equatable {
 class ExchangeInitial extends ExchangeState {}
 
 class ExchangeLoading extends ExchangeState {
-  const ExchangeLoading();  
+  const ExchangeLoading();
 }
 
 class ExchangeFailure extends ExchangeState {

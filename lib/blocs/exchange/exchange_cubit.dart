@@ -13,18 +13,19 @@ class ExchangeCubit extends Cubit<ExchangeState> {
 
   Future<void> buyStocksFromExchange(int stockId, int stockQuantity) async {
     emit(const ExchangeLoading());
-    try{
-      final resp = await actionClient.buyStocksFromExchange(BuyStocksFromExchangeRequest(stockId: stockId,stockQuantity: Int64(stockQuantity)),options: sessionOptions(getIt()));
-      if(resp.statusCode == BuyStocksFromExchangeResponse_StatusCode.OK) {
+    try {
+      final resp = await actionClient.buyStocksFromExchange(
+          BuyStocksFromExchangeRequest(
+              stockId: stockId, stockQuantity: Int64(stockQuantity)),
+          options: sessionOptions(getIt()));
+      if (resp.statusCode == BuyStocksFromExchangeResponse_StatusCode.OK) {
         emit(ExchangeSuccess(resp));
       } else {
         emit(ExchangeFailure(resp.statusMessage));
       }
-
-    }catch (e) {
+    } catch (e) {
       logger.e(e);
       emit(const ExchangeFailure(failedToReachServer));
     }
-
   }
 }
