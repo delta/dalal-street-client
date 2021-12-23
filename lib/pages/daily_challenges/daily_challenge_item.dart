@@ -1,13 +1,16 @@
+import 'package:dalal_street_client/main.dart';
 import 'package:dalal_street_client/models/daily_challenge_info.dart';
 import 'package:dalal_street_client/proto_build/models/DailyChallenge.pb.dart';
+import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
 import 'package:dalal_street_client/theme/colors.dart';
 import 'package:flutter/material.dart';
 
 class DailyChallengeItem extends StatelessWidget {
   final DailyChallengeInfo challengeInfo;
 
-  const DailyChallengeItem({Key? key, required this.challengeInfo})
-      : super(key: key);
+  DailyChallengeItem({Key? key, required this.challengeInfo}) : super(key: key);
+
+  final Map<int, Stock> stockList = getIt();
 
   @override
   build(context) {
@@ -30,7 +33,8 @@ class DailyChallengeItem extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(challenge.challengeType),
-                  Text(challengeDescription(challenge)),
+                  Text(challengeDescription(
+                      challenge, stockList[challenge.stockId]!)),
                   Text(
                       '${userState.finalValue - userState.initialValue}/${challenge.value}'),
                 ],
@@ -54,10 +58,10 @@ class DailyChallengeItem extends StatelessWidget {
       );
 }
 
-String challengeDescription(DailyChallenge challenge) {
+String challengeDescription(DailyChallenge challenge, Stock stock) {
   // TODO: do for remaining cases
   if (challenge.challengeType == 'SpecificStock') {
-    return 'Buy ${challenge.value} stocks from ${challenge.stockId}';
+    return 'Buy ${challenge.value} stocks from ${stock.fullName}';
   }
   return '?!?!?!?!';
 }
