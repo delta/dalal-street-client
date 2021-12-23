@@ -10,33 +10,54 @@ class DailyChallengeItem extends StatelessWidget {
       : super(key: key);
 
   @override
-  build(context) => Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Card(
-          color: baseColor,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(12),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(challengeInfo.challenge.challengeType),
-                Text(challengeDescription(challengeInfo.challenge)),
-                Text('0/${challengeInfo.challenge.value}'),
-              ],
-            ),
+  build(context) {
+    final challenge = challengeInfo.challenge;
+    final userState = challengeInfo.userState;
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Card(
+        color: baseColor,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(12),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(challenge.challengeType),
+                  Text(challengeDescription(challenge)),
+                  Text(
+                      '${userState.finalValue - userState.initialValue}/${challenge.value}'),
+                ],
+              ),
+              rewardIndicator(),
+            ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget rewardIndicator() => Column(
+        children: [
+          Image.asset('assets/images/Coin.png'),
+          Text(
+            '₹${challengeInfo.challenge.reward}',
+            style: const TextStyle(color: gold),
+          )
+        ],
       );
 }
 
 String challengeDescription(DailyChallenge challenge) {
   // TODO: do for remaining cases
   if (challenge.challengeType == 'SpecificStock') {
-    return 'Increase the number of stocks by ${challenge.value}';
+    return 'Buy ${challenge.value} stocks from ${challenge.stockId}';
   }
   return '?!?!?!?!';
 }
