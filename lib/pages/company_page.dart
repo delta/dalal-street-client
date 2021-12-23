@@ -1,11 +1,15 @@
+import 'package:dalal_street_client/components/buttons/primary_button.dart';
 import 'package:dalal_street_client/components/buttons/secondary_button.dart';
+import 'package:dalal_street_client/constants/icons.dart';
 import 'package:dalal_street_client/main.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
 import 'package:dalal_street_client/theme/colors.dart';
 import 'package:dalal_street_client/utils/responsive.dart';
 import 'package:fixnum/fixnum.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 
 final oCcy = NumberFormat('#,##0.00', 'en_US');
@@ -30,26 +34,68 @@ class _CompanyPageState extends State<CompanyPage> {
       child: Responsive(
         mobile: Scaffold(
           backgroundColor: Colors.black,
-          body: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-              child: Column(
-                children: [
-                  const SizedBox(
-                    height: 20,
+          body: Stack(
+            alignment: Alignment.bottomCenter,
+            children: [
+              SingleChildScrollView(
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                  child: Column(
+                    children: [
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      _companyPrices(priceChange, priceChangePercentage),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      _companyTabView(context)
+                    ],
                   ),
-                  _companyPrices(priceChange, priceChangePercentage),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  _companyTabView(context)
-                ],
+                ),
               ),
-            ),
+              Container(
+                height: 70,
+                decoration: const BoxDecoration(
+                    color: baseColor,
+                    borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(15),
+                      topLeft: Radius.circular(15),
+                    )),
+                alignment: Alignment.bottomCenter,
+                child: const Center(
+                  child: PrimaryButton(
+                    height: 45,
+                    width: 340,
+                    title: 'Place Order',
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
         tablet: Container(),
         desktop: Container(),
+      ),
+    );
+  }
+
+  Container _companyRecentNewsView(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      decoration: BoxDecoration(
+        color: backgroundColor,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Text(
+        'Recent News',
+        style: TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.w500,
+          color: white.withOpacity(0.75),
+        ),
+        textAlign: TextAlign.start,
       ),
     );
   }
@@ -63,51 +109,57 @@ class _CompanyPageState extends State<CompanyPage> {
         ),
         child: DefaultTabController(
           length: 3,
-          child: Column(
-            children: [
-              const TabBar(tabs: [
-                Tab(
-                  child: Text(
-                    'Overview',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                      color: lightGrey,
+          child: Expanded(
+            child: Column(
+              children: [
+                const TabBar(
+                  tabs: [
+                    Tab(
+                      child: Text(
+                        'Overview',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                          color: lightGrey,
+                        ),
+                        textAlign: TextAlign.start,
+                      ),
                     ),
-                    textAlign: TextAlign.start,
-                  ),
-                ),
-                Tab(
-                  child: Text(
-                    'Market Depth',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                      color: lightGrey,
+                    Tab(
+                      child: Text(
+                        'Market Depth',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                          color: lightGrey,
+                        ),
+                        textAlign: TextAlign.start,
+                      ),
                     ),
-                    textAlign: TextAlign.start,
-                  ),
-                ),
-                Tab(
-                  child: Text(
-                    'News',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                      color: lightGrey,
+                    Tab(
+                      child: Text(
+                        'News',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                          color: lightGrey,
+                        ),
+                        textAlign: TextAlign.start,
+                      ),
                     ),
-                    textAlign: TextAlign.start,
-                  ),
+                  ],
+                  indicatorColor: lightGray,
+                  indicatorPadding: EdgeInsets.symmetric(horizontal: 20),
                 ),
-              ]),
-              Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                height: MediaQuery.of(context).size.height * 0.6,
-                child: TabBarView(
-                    children: [_overView(), _marketDepth(), _news()]),
-              )
-            ],
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                  height: MediaQuery.of(context).size.height * 0.8,
+                  child: TabBarView(
+                      children: [_overView(), _marketDepth(), _news()]),
+                )
+              ],
+            ),
           ),
         ));
   }
@@ -195,15 +247,11 @@ class _CompanyPageState extends State<CompanyPage> {
   Image _companyGraph() => Image.network('https://i.imgur.com/Y6CBCX2.png');
 
   Container _news() {
-    return Container(
-      color: bronze,
-    );
+    return Container();
   }
 
   Container _marketDepth() {
-    return Container(
-      color: silver,
-    );
+    return Container();
   }
 
   Column _overView() {
@@ -234,7 +282,66 @@ class _CompanyPageState extends State<CompanyPage> {
           ),
           textAlign: TextAlign.start,
         ),
+        const SizedBox(
+          height: 30,
+        ),
+        const Text(
+          'Market Status',
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.w500,
+            color: lightGray,
+          ),
+          textAlign: TextAlign.start,
+        ),
+        marketStatusTile(AppIcons().currentPrice, 'Current Price',
+            oCcy.format(widget.company.currentPrice).toString(), false),
+        marketStatusTile(AppIcons().dayHigh, 'Day High',
+            oCcy.format(widget.company.dayHigh).toString(), false),
+        marketStatusTile(AppIcons().dayHigh, 'Day Low',
+            oCcy.format(widget.company.dayLow).toString(), true),
+        marketStatusTile(AppIcons().alltimeHigh, 'All Time High',
+            oCcy.format(widget.company.allTimeHigh).toString(), false),
+        marketStatusTile(AppIcons().alltimeHigh, 'All Time Low',
+            oCcy.format(widget.company.allTimeLow).toString(), true),
       ],
     );
   }
+}
+
+Widget marketStatusTile(String icon, String name, String value, bool isRed) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(vertical: 9),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Wrap(
+          spacing: 14,
+          children: [
+            SvgPicture.asset(
+              icon,
+              width: 18,
+            ),
+            Text(
+              name,
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+                color: white,
+              ),
+              textAlign: TextAlign.start,
+            ),
+          ],
+        ),
+        Text(
+          '₹ ' + value,
+          style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+              color: !isRed ? primaryColor : heartRed),
+          textAlign: TextAlign.start,
+        ),
+      ],
+    ),
+  );
 }
