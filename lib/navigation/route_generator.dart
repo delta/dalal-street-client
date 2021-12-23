@@ -5,6 +5,8 @@ import 'package:dalal_street_client/blocs/auth/register/register_cubit.dart';
 import 'package:dalal_street_client/blocs/auth/verify_phone/enter_otp/enter_otp_cubit.dart';
 import 'package:dalal_street_client/blocs/auth/verify_phone/enter_phone/enter_phone_cubit.dart';
 import 'package:dalal_street_client/blocs/companies/companies_bloc.dart';
+import 'package:dalal_street_client/blocs/market_depth/market_depth_bloc.dart';
+import 'package:dalal_street_client/blocs/stock_prices/stock_prices_bloc.dart';
 import 'package:dalal_street_client/blocs/subscribe/subscribe_cubit.dart';
 import 'package:dalal_street_client/pages/auth/check_mail_page.dart';
 import 'package:dalal_street_client/pages/auth/login_page.dart';
@@ -15,7 +17,6 @@ import 'package:dalal_street_client/pages/company_page.dart';
 import 'package:dalal_street_client/pages/home_page.dart';
 import 'package:dalal_street_client/pages/landing_page.dart';
 import 'package:dalal_street_client/pages/splash_page.dart';
-import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
 import 'package:dalal_street_client/proto_build/models/User.pb.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -76,6 +77,9 @@ class RouteGenerator {
                 create: (context) => CompaniesBloc(),
               ),
               BlocProvider(
+                create: (context) => StockPricesBloc(),
+              ),
+              BlocProvider(
                 create: (context) => SubscribeCubit(),
               ),
             ],
@@ -85,8 +89,21 @@ class RouteGenerator {
         throw Exception('Invalid user args');
       // Company Page
       case '/company':
-        if (args is Stock) {
-          return CompanyPage(company: args);
+        if (args is int) {
+          return MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (context) => CompaniesBloc(),
+              ),
+              BlocProvider(
+                create: (context) => MarketDepthBloc(),
+              ),
+              BlocProvider(
+                create: (context) => SubscribeCubit(),
+              ),
+            ],
+            child: CompanyPage(stockId: args),
+          );
         }
         throw Exception('Invalid company args');
       default:

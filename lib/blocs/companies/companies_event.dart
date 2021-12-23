@@ -8,14 +8,14 @@ abstract class CompaniesEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class SubscribeToStockPrices extends CompaniesEvent {
-  final SubscriptionId subscriptionId;
-  const SubscribeToStockPrices(this.subscriptionId);
-
-  @override
-  List<Object> get props => [subscriptionId];
-}
-
 class GetStockList extends CompaniesEvent {
   const GetStockList();
+}
+
+class GetStockById extends CompaniesEvent {
+  final int stockId;
+  const GetStockById(this.stockId);
+
+  @override
+  List<Object> get props => [stockId];
 }

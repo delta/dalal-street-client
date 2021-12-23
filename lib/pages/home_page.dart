@@ -1,3 +1,4 @@
+import 'package:dalal_street_client/blocs/stock_prices/stock_prices_bloc.dart';
 import 'package:dalal_street_client/blocs/companies/companies_bloc.dart';
 import 'package:dalal_street_client/blocs/subscribe/subscribe_cubit.dart';
 import 'package:dalal_street_client/main.dart';
@@ -11,6 +12,7 @@ import 'package:dalal_street_client/theme/colors.dart';
 import 'package:intl/intl.dart';
 
 final oCcy = NumberFormat('#,##0.00', 'en_US');
+int price = 200;
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key, required this.user}) : super(key: key);
@@ -46,10 +48,64 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(context) {
+    /// TODO : Remove this after testing
+    // Timer.periodic(const Duration(seconds: 1), (timer) async {
+    //   logger.i('Updating prices....');
+    //   Random rnd;
+    //   int min = 457;
+    //   int max = 10000;
+    //   rnd = Random();
+    //   price = min + rnd.nextInt(max - min);
+    //   try {
+    //     final resp = await actionClient.updateStockPrice(
+    //         UpdateStockPriceRequest(stockId: 1, newPrice: Int64(price)),
+    //         options: sessionOptions(getIt()));
+
+    //     rnd = Random();
+    //     price = min + rnd.nextInt(max - min);
+    //     final resp1 = await actionClient.updateStockPrice(
+    //         UpdateStockPriceRequest(stockId: 2, newPrice: Int64(price)),
+    //         options: sessionOptions(getIt()));
+
+    //     rnd = Random();
+    //     price = min + rnd.nextInt(max - min);
+    //     final resp2 = await actionClient.updateStockPrice(
+    //         UpdateStockPriceRequest(stockId: 3, newPrice: Int64(price)),
+    //         options: sessionOptions(getIt()));
+
+    //     rnd = Random();
+    //     price = min + rnd.nextInt(max - min);
+    //     final resp3 = await actionClient.updateStockPrice(
+    //         UpdateStockPriceRequest(stockId: 4, newPrice: Int64(price)),
+    //         options: sessionOptions(getIt()));
+
+    //     rnd = Random();
+    //     price = min + rnd.nextInt(max - min);
+    //     final resp4 = await actionClient.updateStockPrice(
+    //         UpdateStockPriceRequest(stockId: 5, newPrice: Int64(price)),
+    //         options: sessionOptions(getIt()));
+
+    //     rnd = Random();
+    //     price = min + rnd.nextInt(max - min);
+    //     final resp5 = await actionClient.updateStockPrice(
+    //         UpdateStockPriceRequest(stockId: 6, newPrice: Int64(price)),
+    //         options: sessionOptions(getIt()));
+    //     if (resp.statusCode == UpdateStockPriceResponse_StatusCode.OK) {
+    //       logger.i('Price has been Updated');
+    //     } else {
+    //       logger.e('Price Update Failed');
+    //     }
+    //   } catch (e) {
+    //     logger.e(e);
+    //   }
+    // });
+    ///////////////////////////////////////////////
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.black,
         body: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(
+              parent: AlwaysScrollableScrollPhysics()),
           child: Responsive(
             mobile: Padding(
               padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
@@ -96,19 +152,19 @@ class _HomePageState extends State<HomePage> {
                           builder: (context, state) {
                             if (state is GetCompaniesSuccess) {
                               var mapOfStocks = state.stockList.stockList;
-                              logger.i(state.stockList.stockList.length);
+                              logger.i(state.stockList.stockList);
                               return BlocBuilder<SubscribeCubit,
                                   SubscribeState>(builder: (context, state) {
                                 if (state is SubscriptionDataLoaded) {
                                   // Start the stream of Stock Prices
-                                  context.read<CompaniesBloc>().add(
+                                  context.read<StockPricesBloc>().add(
                                       SubscribeToStockPrices(
                                           state.subscriptionId));
                                   return ListView.builder(
                                     shrinkWrap: true,
                                     itemCount: mapOfStocks.length,
                                     itemBuilder: (context, index) {
-                                      Stock? company = mapOfStocks[index];
+                                      Stock? company = mapOfStocks[index + 1];
                                       int currentPrice =
                                           company?.currentPrice.toInt() ?? 0;
                                       int previousDayPrice =
@@ -119,7 +175,7 @@ class _HomePageState extends State<HomePage> {
                                       return GestureDetector(
                                         onTap: () => Navigator.pushNamed(
                                             context, '/company',
-                                            arguments: company),
+                                            arguments: company!.id),
                                         child: Container(
                                             padding: const EdgeInsets.symmetric(
                                               vertical: 10,
@@ -162,26 +218,36 @@ class _HomePageState extends State<HomePage> {
                                                   ),
                                                   Expanded(
                                                     child: BlocBuilder<
-                                                        CompaniesBloc,
-                                                        CompaniesState>(
+                                                        StockPricesBloc,
+                                                        StockPricesState>(
                                                       builder:
                                                           (context, state) {
                                                         if (state
                                                             is SubscriptionToStockPricesSuccess) {
-                                                          var currentStockPrice =
-                                                              state.stockPrices
+                                                          if (state.stockPrices
                                                                       .prices[
-                                                                  index];
+                                                                  index] !=
+                                                              null) {
+                                                            currentPrice = state
+                                                                .stockPrices
+                                                                .prices[index]!
+                                                                .toInt();
+
+                                                            priceChange =
+                                                                (currentPrice -
+                                                                    previousDayPrice);
+                                                          }
                                                           return Column(
                                                             crossAxisAlignment:
                                                                 CrossAxisAlignment
                                                                     .end,
                                                             children: [
                                                               Text(
-                                                                oCcy
-                                                                    .format(
-                                                                        currentStockPrice)
-                                                                    .toString(),
+                                                                '₹ ' +
+                                                                    oCcy
+                                                                        .format(
+                                                                            currentPrice)
+                                                                        .toString(),
                                                                 style:
                                                                     const TextStyle(
                                                                   fontSize: 18,
@@ -228,10 +294,11 @@ class _HomePageState extends State<HomePage> {
                                                                     .end,
                                                             children: [
                                                               Text(
-                                                                oCcy
-                                                                    .format(
-                                                                        currentPrice)
-                                                                    .toString(),
+                                                                '₹ ' +
+                                                                    oCcy
+                                                                        .format(
+                                                                            currentPrice)
+                                                                        .toString(),
                                                                 style:
                                                                     const TextStyle(
                                                                   fontSize: 18,
@@ -292,7 +359,7 @@ class _HomePageState extends State<HomePage> {
                             } else {
                               return const Center(
                                 child: CircularProgressIndicator(
-                                  color: secondaryColor,
+                                  color: heartRed,
                                 ),
                               );
                             }
