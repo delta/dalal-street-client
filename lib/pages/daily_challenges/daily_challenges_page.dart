@@ -6,6 +6,8 @@ import 'package:dalal_street_client/utils/range.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+// TODO: update isDailyChallengesOpen using GameState stream
+// TODO: Disable swiping until this is resolved properly: https://github.com/flutter/flutter/issues/31206
 class DailyChallengesPage extends StatelessWidget {
   const DailyChallengesPage({Key? key}) : super(key: key);
 
@@ -23,7 +25,13 @@ class DailyChallengesPage extends StatelessWidget {
                 );
               }
               if (state is DailyChallengesPageSuccess) {
-                return _DailyChallengesPageBody(successState: state);
+                if (state.isDailyChallengesOpen) {
+                  return _DailyChallengesPageBody(successState: state);
+                } else {
+                  return const Center(
+                    child: Text('Daily Challenges is closed now'),
+                  );
+                }
               }
               return const Center(child: CircularProgressIndicator());
             },
@@ -48,8 +56,6 @@ class _DailyChallengesPageBody extends StatefulWidget {
       _DailyChallengesPageBodyState();
 }
 
-// TODO: Handle isDailyChallengesOpen field
-// TODO: Disable swiping until this is resolved properly: https://github.com/flutter/flutter/issues/31206
 class _DailyChallengesPageBodyState extends State<_DailyChallengesPageBody>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
