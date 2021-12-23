@@ -152,7 +152,6 @@ class _ExchangePageState extends State<ExchangePage> {
         builder: (context, state) {
       if (state is GetCompaniesSuccess) {
         var mapOfStocks = state.stockList.stockList;
-        var length = mapOfStocks.length;
         return BlocBuilder<SubscribeCubit, SubscribeState>(
             builder: (context, state) {
           if (state is SubscriptionDataLoaded) {
@@ -204,7 +203,7 @@ class _ExchangePageState extends State<ExchangePage> {
   Container _stockExchangeItem(
       Stock? company, int index, int priceChange, int currentPrice) {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 10),
+      padding: const EdgeInsets.symmetric(vertical: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -449,7 +448,7 @@ class _ExchangePageState extends State<ExchangePage> {
                   );
                 },
               ),
-              padding: EdgeInsets.all(20.0),
+              padding: const EdgeInsets.all(20.0),
             ),
           );
         });
