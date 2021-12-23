@@ -1,3 +1,6 @@
+import 'package:dalal_street_client/blocs/streams/gamestate/gamestate_cubit.dart';
+import 'package:dalal_street_client/blocs/streams/notification/notification_cubit.dart';
+import 'package:dalal_street_client/blocs/streams/stockprice/stockprice_cubit.dart';
 import 'package:dalal_street_client/blocs/user/user_bloc.dart';
 import 'package:dalal_street_client/config.dart';
 import 'package:dalal_street_client/grpc/client.dart';
@@ -70,8 +73,21 @@ void main() async {
   // Start the app
   runApp(
     // Provide UserBloc at the root of the App
-    BlocProvider(
-      create: (_) => UserBloc(),
+    MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (_) => UserBloc(),
+        ),
+        BlocProvider(
+          create: (context) => GamestateCubit(),
+        ),
+        BlocProvider(
+          create: (context) => NotificationStreamCubit(),
+        ),
+        BlocProvider(
+          create: (context) => StockpriceStreamCubit(),
+        ),
+      ],
       child: DalalApp(),
     ),
   );
@@ -102,7 +118,7 @@ class DalalApp extends StatelessWidget {
 
               logger.i('user logged in');
               if (state.user.isPhoneVerified) {
-                //showSnackBar(context, 'Welcome ${state.user.name}');
+                showSnackBar(context, 'Welcome ${state.user.name}');
                 _navigator.pushNamedAndRemoveUntil(
                   '/home',
                   (route) => false,
