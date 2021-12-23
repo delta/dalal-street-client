@@ -1,6 +1,6 @@
 import 'package:dalal_street_client/blocs/daily_challenges/single_day_challenges/single_day_challenges_cubit.dart';
+import 'package:dalal_street_client/models/daily_challenge_info.dart';
 import 'package:dalal_street_client/pages/daily_challenges/daily_challenge_item.dart';
-import 'package:dalal_street_client/proto_build/models/DailyChallenge.pb.dart';
 import 'package:dalal_street_client/utils/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -33,16 +33,18 @@ class _SingleDayChallengesState extends State<SingleDayChallenges>
       },
       builder: (context, state) {
         if (state is SingleDayChallengesLoaded) {
-          return buildList(state.challenges);
+          return buildList(state.challengeInfos);
         }
         return const Center(child: CircularProgressIndicator());
       },
     );
   }
 
-  Widget buildList(List<DailyChallenge> challenges) => ListView.separated(
-        itemCount: challenges.length,
-        itemBuilder: (_, i) => DailyChallengeItem(challenge: challenges[i]),
+  Widget buildList(List<DailyChallengeInfo> challengeInfos) =>
+      ListView.separated(
+        itemCount: challengeInfos.length,
+        itemBuilder: (_, i) =>
+            DailyChallengeItem(challengeInfo: challengeInfos[i]),
         separatorBuilder: (_, __) => const SizedBox(height: 10),
       );
 

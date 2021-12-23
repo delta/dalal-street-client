@@ -10,12 +10,12 @@ abstract class SingleDayChallengesState extends Equatable {
 class SingleDayChallengesLoading extends SingleDayChallengesState {}
 
 class SingleDayChallengesLoaded extends SingleDayChallengesState {
-  final List<DailyChallenge> challenges;
+  final List<DailyChallengeInfo> challengeInfos;
 
-  const SingleDayChallengesLoaded(this.challenges);
+  const SingleDayChallengesLoaded(this.challengeInfos);
 
   @override
-  List<Object> get props => [challenges];
+  List<Object> get props => [challengeInfos];
 }
 
 class SingleDayChallengesFailure extends SingleDayChallengesState {

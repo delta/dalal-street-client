@@ -1,11 +1,12 @@
+import 'package:dalal_street_client/models/daily_challenge_info.dart';
 import 'package:dalal_street_client/proto_build/models/DailyChallenge.pb.dart';
 import 'package:dalal_street_client/theme/colors.dart';
 import 'package:flutter/material.dart';
 
 class DailyChallengeItem extends StatelessWidget {
-  final DailyChallenge challenge;
+  final DailyChallengeInfo challengeInfo;
 
-  const DailyChallengeItem({Key? key, required this.challenge})
+  const DailyChallengeItem({Key? key, required this.challengeInfo})
       : super(key: key);
 
   @override
@@ -22,9 +23,9 @@ class DailyChallengeItem extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(challenge.challengeType),
-                Text(challengeDescription(challenge)),
-                Text('0/${challenge.value}'),
+                Text(challengeInfo.challenge.challengeType),
+                Text(challengeDescription(challengeInfo.challenge)),
+                Text('0/${challengeInfo.challenge.value}'),
               ],
             ),
           ),
