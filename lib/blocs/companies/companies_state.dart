@@ -41,3 +41,19 @@ class GetCompaniesFailed extends CompaniesState {
   @override
   List<Object> get props => [error];
 }
+
+class SubscriptionToStockExchangeSuccess extends CompaniesState {
+  final StockExchangeUpdate stockExchangeUpdate;
+  const SubscriptionToStockExchangeSuccess(this.stockExchangeUpdate);
+
+  @override
+  List<Object> get props => [stockExchangeUpdate];
+}
+
+class SubscriptionToStockExchangeFailed extends CompaniesState {
+  final String subscriptionId;
+  const SubscriptionToStockExchangeFailed(this.subscriptionId);
+
+  @override
+  List<Object> get props => [subscriptionId];
+}
