@@ -56,7 +56,7 @@ class _CompanyPageState extends State<CompanyPage> {
 
   Container _companyTabView(BuildContext context) {
     return Container(
-        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+        padding: const EdgeInsets.symmetric(vertical: 10),
         decoration: BoxDecoration(
           color: backgroundColor,
           borderRadius: BorderRadius.circular(10),
@@ -70,7 +70,7 @@ class _CompanyPageState extends State<CompanyPage> {
                   child: Text(
                     'Overview',
                     style: TextStyle(
-                      fontSize: 14,
+                      fontSize: 16,
                       fontWeight: FontWeight.w500,
                       color: lightGrey,
                     ),
@@ -81,7 +81,7 @@ class _CompanyPageState extends State<CompanyPage> {
                   child: Text(
                     'Market Depth',
                     style: TextStyle(
-                      fontSize: 14,
+                      fontSize: 16,
                       fontWeight: FontWeight.w500,
                       color: lightGrey,
                     ),
@@ -92,7 +92,7 @@ class _CompanyPageState extends State<CompanyPage> {
                   child: Text(
                     'News',
                     style: TextStyle(
-                      fontSize: 14,
+                      fontSize: 16,
                       fontWeight: FontWeight.w500,
                       color: lightGrey,
                     ),
@@ -100,7 +100,9 @@ class _CompanyPageState extends State<CompanyPage> {
                   ),
                 ),
               ]),
-              SizedBox(
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                 height: MediaQuery.of(context).size.height * 0.6,
                 child: TabBarView(
                     children: [_overView(), _marketDepth(), _news()]),
