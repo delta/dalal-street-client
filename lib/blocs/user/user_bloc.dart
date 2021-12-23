@@ -1,7 +1,9 @@
 import 'package:dalal_street_client/grpc/client.dart';
 import 'package:dalal_street_client/main.dart';
+import 'package:dalal_street_client/proto_build/actions/GetStockList.pb.dart';
 import 'package:dalal_street_client/proto_build/actions/Login.pb.dart';
 import 'package:dalal_street_client/proto_build/actions/Logout.pb.dart';
+import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
 import 'package:dalal_street_client/proto_build/models/User.pb.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
@@ -36,7 +38,22 @@ class UserBloc extends HydratedBloc<UserEvent, UserState> {
       try {
         final loginResponse = await actionClient.login(LoginRequest(),
             options: sessionOptions(event.sessionId));
-        emit(UserDataLoaded(loginResponse.user, loginResponse.sessionId));
+        // Need a seperate try catch because login failure is different from stock response failure
+        try {
+          final stockResponse = await actionClient.getStockList(
+            GetStockListRequest(),
+            options: sessionOptions(event.sessionId),
+          );
+          if (stockResponse.statusCode != GetStockListResponse_StatusCode.OK) {
+            emit(const StockDataFailed());
+            return;
+          }
+          emit(UserDataLoaded(loginResponse.user, loginResponse.sessionId,
+              stockResponse.stockList));
+        } catch (e) {
+          logger.e(e);
+          emit(const StockDataFailed());
+        }
       } catch (e) {
         // Session invalid or expired
         logger.e(e);
@@ -45,7 +62,10 @@ class UserBloc extends HydratedBloc<UserEvent, UserState> {
     });
 
     on<UserLogIn>((event, emit) => emit(UserDataLoaded(
-        event.loginResponse.user, event.loginResponse.sessionId)));
+          event.loginResponse.user,
+          event.loginResponse.sessionId,
+          event.stockList,
+        )));
 
     on<UserLogOut>((event, emit) {
       try {

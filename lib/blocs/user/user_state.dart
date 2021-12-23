@@ -37,9 +37,14 @@ class UserLoggedIn extends UserState {
 class UserDataLoaded extends UserState {
   final User user;
   final String sessionId;
+  final Map<int, Stock> stockList;
 
-  const UserDataLoaded(this.user, this.sessionId);
+  const UserDataLoaded(this.user, this.sessionId, this.stockList);
 
   @override
   List<Object> get props => [sessionId, user];
+}
+
+class StockDataFailed extends UserState {
+  const StockDataFailed();
 }
