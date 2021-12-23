@@ -27,4 +27,3 @@ class SubscribeToStockExchange extends CompaniesEvent {
   @override
   List<Object> get props => [subscriptionId];
 }
-

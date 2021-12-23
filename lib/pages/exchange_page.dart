@@ -438,7 +438,7 @@ class _ExchangePageState extends State<ExchangePage> {
                             context
                                 .read<ExchangeCubit>()
                                 .buyStocksFromExchange(stockId, stockQuantity);
-                             //context.read<CompaniesBloc>().add(const GetStockList());
+                            //context.read<CompaniesBloc>().add(const GetStockList());
                           }
                           _controller.text = '';
                           Navigator.pop(context);
