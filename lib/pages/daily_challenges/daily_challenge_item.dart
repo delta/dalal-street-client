@@ -32,7 +32,7 @@ class DailyChallengeItem extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(challenge.challengeType),
+                  Text(challengeTitle(challenge)),
                   Text(challengeDescription(
                       challenge, stockList[challenge.stockId]!)),
                   Text(
@@ -58,10 +58,32 @@ class DailyChallengeItem extends StatelessWidget {
       );
 }
 
-String challengeDescription(DailyChallenge challenge, Stock stock) {
-  // TODO: do for remaining cases
-  if (challenge.challengeType == 'SpecificStock') {
-    return 'Buy ${challenge.value} stocks from ${stock.fullName}';
+String challengeTitle(DailyChallenge challenge) {
+  switch (challenge.challengeType) {
+    case 'Cash':
+      return 'Cash';
+    case 'NetWorth':
+      return 'Net Worth';
+    case 'StockWorth':
+      return 'Stock Worth';
+    case 'SpecificStock':
+      return 'Specific Stock';
+    default:
+      return '?!?!?!?!';
   }
-  return '?!?!?!?!';
+}
+
+String challengeDescription(DailyChallenge challenge, Stock stock) {
+  switch (challenge.challengeType) {
+    case 'Cash':
+      return 'Increase cash worth by ₹${challenge.value}';
+    case 'NetWorth':
+      return 'Increase net worth by ₹${challenge.value}';
+    case 'StockWorth':
+      return 'Increase stock worth by ₹${challenge.value}';
+    case 'SpecificStock':
+      return 'Buy ${challenge.value} stocks from ${stock.fullName}';
+    default:
+      return '?!?!?!?!';
+  }
 }
