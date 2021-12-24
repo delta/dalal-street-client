@@ -1,11 +1,10 @@
 import 'package:dalal_street_client/grpc/client.dart';
 import 'package:dalal_street_client/main.dart';
 import 'package:dalal_street_client/models/company_info.dart';
-import 'package:dalal_street_client/proto_build/actions/GetStockList.pb.dart';
+import 'package:dalal_street_client/post_login.dart';
 import 'package:dalal_street_client/proto_build/actions/Login.pb.dart';
 import 'package:dalal_street_client/proto_build/actions/Logout.pb.dart';
 import 'package:dalal_street_client/proto_build/datastreams/GameState.pb.dart';
-import 'package:dalal_street_client/proto_build/datastreams/Subscribe.pb.dart';
 import 'package:dalal_street_client/proto_build/models/User.pb.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
@@ -46,32 +45,14 @@ class UserBloc extends HydratedBloc<UserEvent, UserState> {
         );
         // Internal Error. User should be given option to try again
         if (loginResponse.statusCode != LoginResponse_StatusCode.OK) {
-          // TODO: show proper messages in all exceptions
           throw Exception();
         }
-        final stockResponse = await actionClient.getStockList(
-          GetStockListRequest(),
-          options: sessionOptions(sessionId),
-        );
-        if (stockResponse.statusCode != GetStockListResponse_StatusCode.OK) {
-          throw Exception();
-        }
-        final gameStateResp = await streamClient.subscribe(
-          SubscribeRequest(dataStreamType: DataStreamType.GAME_STATE),
-          options: sessionOptions(sessionId),
-        );
-        if (gameStateResp.statusCode != SubscribeResponse_StatusCode.OK) {
-          throw Exception();
-        }
-        final gameStateStream = streamClient.getGameStateUpdates(
-          gameStateResp.subscriptionId,
-          options: sessionOptions(sessionId),
-        );
+        final postLogin = await getPostLoginData(sessionId);
         emit(UserDataLoaded(
           loginResponse.user,
           loginResponse.sessionId,
-          stockMapToCompanyMap(stockResponse.stockList),
-          gameStateStream,
+          stockMapToCompanyMap(postLogin.stockList),
+          postLogin.gameStateStream,
         ));
       } on GrpcError catch (e) {
         logger.e(e);

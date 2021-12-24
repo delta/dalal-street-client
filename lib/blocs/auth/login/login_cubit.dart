@@ -5,9 +5,8 @@ import 'package:dalal_street_client/grpc/client.dart';
 import 'package:dalal_street_client/main.dart';
 import 'package:dalal_street_client/models/company_info.dart';
 import 'package:dalal_street_client/pages/auth/login_page.dart';
-import 'package:dalal_street_client/proto_build/actions/GetStockList.pb.dart';
+import 'package:dalal_street_client/post_login.dart';
 import 'package:dalal_street_client/proto_build/actions/Login.pb.dart';
-import 'package:dalal_street_client/proto_build/datastreams/Subscribe.pb.dart';
 import 'package:equatable/equatable.dart';
 
 part 'login_state.dart';
@@ -27,29 +26,12 @@ class LoginCubit extends Cubit<LoginState> {
       if (loginResp.statusCode != LoginResponse_StatusCode.OK) {
         throw Exception();
       }
-      final stockResponse = await actionClient.getStockList(
-        GetStockListRequest(),
-        options: sessionOptions(sessionId),
-      );
-      if (stockResponse.statusCode != GetStockListResponse_StatusCode.OK) {
-        throw Exception();
-      }
-      final gameStateResp = await streamClient.subscribe(
-        SubscribeRequest(dataStreamType: DataStreamType.GAME_STATE),
-        options: sessionOptions(sessionId),
-      );
-      if (gameStateResp.statusCode != SubscribeResponse_StatusCode.OK) {
-        throw Exception();
-      }
-      final gameStateStream = streamClient.getGameStateUpdates(
-        gameStateResp.subscriptionId,
-        options: sessionOptions(sessionId),
-      );
+      final postLogin = await getPostLoginData(sessionId);
       emit(LoginSuccess(loginResp));
       userBloc.add(UserLogIn(
         loginResp,
-        stockMapToCompanyMap(stockResponse.stockList),
-        gameStateStream,
+        stockMapToCompanyMap(postLogin.stockList),
+        postLogin.gameStateStream,
       ));
     } catch (e) {
       // Inavlid session id error not possible because this is first time login
