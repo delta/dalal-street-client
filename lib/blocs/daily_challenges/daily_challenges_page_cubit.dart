@@ -24,7 +24,7 @@ class DailyChallengesPageCubit extends Cubit<DailyChallengesPageState> {
           resp.isDailyChallengOpen,
           resp.totalMarketDays,
         ));
-        listenToGameStateSteam();
+        listenToGameStateStream();
       } else {
         emit(DailyChallengesPageFailure(resp.statusMessage));
       }
@@ -36,7 +36,7 @@ class DailyChallengesPageCubit extends Cubit<DailyChallengesPageState> {
 
   /// Updates `isDailyChallengeOpen` in [DailyChallengesPageSuccess]
   /// Only call this after [getChallengesConfig] is succesful
-  Future<void> listenToGameStateSteam() async {
+  Future<void> listenToGameStateStream() async {
     final ResponseStream<GameStateUpdate> gameStateStream = getIt();
     await for (var update in gameStateStream) {
       try {
