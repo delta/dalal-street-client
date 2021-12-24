@@ -123,19 +123,21 @@ class DalalApp extends StatelessWidget {
               }
             } else if (state is UserLoggedOut) {
               if (!state.fromSplash) {
-                // Unregister sessionId
-                getIt.unregister<String>();
-                // Unregister company infos
-                getIt.unregister<Map<int, CompanyInfo>>();
-                // Unregister Global Streams
-                getIt.unregister<ResponseStream<GameStateUpdate>>();
+                // Unregister everything
+                getIt.reset();
+                // // Unregister sessionId
+                // getIt.unregister<String>();
+                // // Unregister company infos
+                // getIt.unregister<Map<int, CompanyInfo>>();
+                // // Unregister Global Streams
+                // getIt.unregister<ResponseStream<GameStateUpdate>>();
 
                 // Show msg only when comming from a page other than splash
                 logger.i('user logged out');
                 showSnackBar(context, 'User Logged Out');
               }
               _navigator.pushNamedAndRemoveUntil('/landing', (route) => false);
-            } else if (state is StockDataFailed) {
+            } else if (state is UserLoginFailed) {
               // TODO: add retry button
               showSnackBar(context, failedToReachServer);
             }

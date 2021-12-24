@@ -39,9 +39,16 @@ class UserBloc extends HydratedBloc<UserEvent, UserState> {
 
     on<GetUserData>((event, emit) async {
       try {
-        final loginResponse = await actionClient.login(LoginRequest(),
-            options: sessionOptions(event.sessionId));
+        final loginResponse = await actionClient.login(
+          LoginRequest(),
+          options: sessionOptions(event.sessionId),
+        );
         final sessionId = event.sessionId;
+        // TODO: handle LoginResponse_StatusCode.InvalidCredentialsError separately
+        if (loginResponse.statusCode != LoginResponse_StatusCode.OK) {
+          emit(UserLoginFailed(sessionId));
+          return;
+        }
         // Need a seperate try catch because login failure is different from stock response failure
         try {
           final stockResponse = await actionClient.getStockList(
@@ -49,7 +56,7 @@ class UserBloc extends HydratedBloc<UserEvent, UserState> {
             options: sessionOptions(sessionId),
           );
           if (stockResponse.statusCode != GetStockListResponse_StatusCode.OK) {
-            emit(const StockDataFailed());
+            emit(UserLoginFailed(sessionId));
             return;
           }
           final gameStateResp = await streamClient.subscribe(
@@ -57,7 +64,7 @@ class UserBloc extends HydratedBloc<UserEvent, UserState> {
             options: sessionOptions(sessionId),
           );
           if (gameStateResp.statusCode != SubscribeResponse_StatusCode.OK) {
-            emit(const StockDataFailed());
+            emit(UserLoginFailed(sessionId));
             return;
           }
           final gameStateStream = streamClient.getGameStateUpdates(
@@ -72,7 +79,7 @@ class UserBloc extends HydratedBloc<UserEvent, UserState> {
           ));
         } catch (e) {
           logger.e(e);
-          emit(const StockDataFailed());
+          emit(UserLoginFailed(sessionId));
         }
       } catch (e) {
         // Session invalid or expired
@@ -115,6 +122,8 @@ class UserBloc extends HydratedBloc<UserEvent, UserState> {
     if (state is UserDataLoaded) {
       return {'sessionId': state.sessionId};
     } else if (state is UserLoggedIn) {
+      return {'sessionId': state.sessionId};
+    } else if (state is UserLoginFailed) {
       return {'sessionId': state.sessionId};
     }
     return {};

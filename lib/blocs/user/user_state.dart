@@ -53,6 +53,8 @@ class UserDataLoaded extends UserState {
   List<Object> get props => [sessionId, user];
 }
 
-class StockDataFailed extends UserState {
-  const StockDataFailed();
+class UserLoginFailed extends UserState {
+  final String sessionId;
+
+  const UserLoginFailed(this.sessionId);
 }
