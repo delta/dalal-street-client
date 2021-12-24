@@ -85,7 +85,8 @@ class RouteGenerator {
         throw Exception('Invalid user args');
       case '/dailyChallenges':
         return BlocProvider(
-          create: (context) => DailyChallengesPageCubit()..getChallengesConfig(),
+          create: (context) =>
+              DailyChallengesPageCubit()..getChallengesConfig(),
           child: const DailyChallengesPage(),
         );
       default:

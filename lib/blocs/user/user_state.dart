@@ -42,7 +42,12 @@ class UserDataLoaded extends UserState {
   // Global Streams
   final ResponseStream<GameStateUpdate> gameStateStream;
 
-  const UserDataLoaded(this.user, this.sessionId, this.companies, this.gameStateStream);
+  const UserDataLoaded(
+    this.user,
+    this.sessionId,
+    this.companies,
+    this.gameStateStream,
+  );
 
   @override
   List<Object> get props => [sessionId, user];
