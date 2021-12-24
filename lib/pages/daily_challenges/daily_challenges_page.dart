@@ -6,7 +6,6 @@ import 'package:dalal_street_client/utils/range.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-// TODO: update isDailyChallengesOpen using GameState stream
 // TODO: Disable swiping until this is resolved properly: https://github.com/flutter/flutter/issues/31206
 class DailyChallengesPage extends StatelessWidget {
   const DailyChallengesPage({Key? key}) : super(key: key);
@@ -40,7 +39,7 @@ class DailyChallengesPage extends StatelessWidget {
       );
 
   void onRetryClick(BuildContext context) =>
-      context.read<DailyChallengesPageCubit>().getConfig();
+      context.read<DailyChallengesPageCubit>().getChallengesConfig();
 }
 
 class _DailyChallengesPageBody extends StatefulWidget {
