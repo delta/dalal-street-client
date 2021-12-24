@@ -1,7 +1,7 @@
 import 'package:dalal_street_client/main.dart';
+import 'package:dalal_street_client/models/company_info.dart';
 import 'package:dalal_street_client/models/daily_challenge_info.dart';
 import 'package:dalal_street_client/proto_build/models/DailyChallenge.pb.dart';
-import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
 import 'package:dalal_street_client/theme/colors.dart';
 import 'package:flutter/material.dart';
 
@@ -10,7 +10,7 @@ class DailyChallengeItem extends StatelessWidget {
 
   DailyChallengeItem({Key? key, required this.challengeInfo}) : super(key: key);
 
-  final Map<int, Stock> stockList = getIt();
+  final Map<int, CompanyInfo> companies = getIt();
 
   @override
   build(context) {
@@ -34,7 +34,7 @@ class DailyChallengeItem extends StatelessWidget {
                 children: [
                   Text(challengeTitle(challenge)),
                   Text(challengeDescription(
-                      challenge, stockList[challenge.stockId]!)),
+                      challenge, companies[challenge.stockId]!)),
                   Text(
                       '${userState.finalValue - userState.initialValue}/${challenge.value}'),
                 ],
@@ -73,7 +73,7 @@ String challengeTitle(DailyChallenge challenge) {
   }
 }
 
-String challengeDescription(DailyChallenge challenge, Stock stock) {
+String challengeDescription(DailyChallenge challenge, CompanyInfo company) {
   switch (challenge.challengeType) {
     case 'Cash':
       return 'Increase cash worth by ₹${challenge.value}';
@@ -82,7 +82,7 @@ String challengeDescription(DailyChallenge challenge, Stock stock) {
     case 'StockWorth':
       return 'Increase stock worth by ₹${challenge.value}';
     case 'SpecificStock':
-      return 'Buy ${challenge.value} stocks from ${stock.fullName}';
+      return 'Buy ${challenge.value} stocks from ${company.fullName}';
     default:
       return '?!?!?!?!';
   }

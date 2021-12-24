@@ -1,9 +1,9 @@
 import 'package:dalal_street_client/grpc/client.dart';
 import 'package:dalal_street_client/main.dart';
+import 'package:dalal_street_client/models/company_info.dart';
 import 'package:dalal_street_client/proto_build/actions/GetStockList.pb.dart';
 import 'package:dalal_street_client/proto_build/actions/Login.pb.dart';
 import 'package:dalal_street_client/proto_build/actions/Logout.pb.dart';
-import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
 import 'package:dalal_street_client/proto_build/models/User.pb.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
@@ -48,8 +48,11 @@ class UserBloc extends HydratedBloc<UserEvent, UserState> {
             emit(const StockDataFailed());
             return;
           }
-          emit(UserDataLoaded(loginResponse.user, loginResponse.sessionId,
-              stockResponse.stockList));
+          emit(UserDataLoaded(
+            loginResponse.user,
+            loginResponse.sessionId,
+            stockMapToCompanyMap(stockResponse.stockList),
+          ));
         } catch (e) {
           logger.e(e);
           emit(const StockDataFailed());
@@ -64,7 +67,7 @@ class UserBloc extends HydratedBloc<UserEvent, UserState> {
     on<UserLogIn>((event, emit) => emit(UserDataLoaded(
           event.loginResponse.user,
           event.loginResponse.sessionId,
-          event.stockList,
+          event.companies,
         )));
 
     on<UserLogOut>((event, emit) {

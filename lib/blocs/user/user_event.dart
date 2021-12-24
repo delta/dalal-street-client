@@ -23,12 +23,12 @@ class GetUserData extends UserEvent {
 
 class UserLogIn extends UserEvent {
   final LoginResponse loginResponse;
-  final Map<int, Stock> stockList;
+  final Map<int, CompanyInfo> companies;
 
-  const UserLogIn(this.loginResponse, this.stockList);
+  const UserLogIn(this.loginResponse, this.companies);
 
   @override
-  List<Object> get props => [loginResponse];
+  List<Object> get props => [loginResponse, companies];
 }
 
 class UserLogOut extends UserEvent {

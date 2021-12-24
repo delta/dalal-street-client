@@ -2,8 +2,8 @@ import 'package:dalal_street_client/blocs/user/user_bloc.dart';
 import 'package:dalal_street_client/config.dart';
 import 'package:dalal_street_client/constants/error_messages.dart';
 import 'package:dalal_street_client/grpc/client.dart';
+import 'package:dalal_street_client/models/company_info.dart';
 import 'package:dalal_street_client/navigation/route_generator.dart';
-import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
 import 'package:dalal_street_client/theme/theme.dart';
 import 'package:dalal_street_client/utils/snackbar.dart';
 import 'package:flutter/foundation.dart';
@@ -101,8 +101,8 @@ class DalalApp extends StatelessWidget {
             if (state is UserDataLoaded) {
               // Register sessionId
               getIt.registerSingleton(state.sessionId);
-              // Register stockList
-              getIt.registerSingleton(state.stockList);
+              // Register static company infos
+              getIt.registerSingleton(state.companies);
 
               logger.i('user logged in');
               if (state.user.isPhoneVerified) {
@@ -121,8 +121,8 @@ class DalalApp extends StatelessWidget {
               if (!state.fromSplash) {
                 // Unregister sessionId
                 getIt.unregister<String>();
-                // Unregister stockList
-                getIt.unregister<Map<int, Stock>>();
+                // Unregister company infos
+                getIt.unregister<Map<int, CompanyInfo>>();
 
                 // Show msg only when comming from a page other than splash
                 logger.i('user logged out');
