@@ -43,3 +43,9 @@ class UserDataLoaded extends UserState {
   @override
   List<Object> get props => [sessionId, user];
 }
+
+/// after UserLoggedIn state when there is any error in
+/// fetching user data or subscribing to global streams
+///
+/// redirect to Login Page
+class UserDataError extends UserState {}

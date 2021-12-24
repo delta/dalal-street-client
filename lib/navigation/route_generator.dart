@@ -39,8 +39,7 @@ class RouteGenerator {
       // Auth Pages
       case '/login':
         return BlocProvider(
-          create: (context) => LoginCubit(
-              context.read(), context.read(), context.read(), context.read()),
+          create: (context) => LoginCubit(context.read()),
           child: LoginPage(),
         );
       case '/register':

@@ -76,9 +76,6 @@ void main() async {
     MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (_) => UserBloc(),
-        ),
-        BlocProvider(
           create: (context) => GamestateStreamCubit(),
         ),
         BlocProvider(
@@ -86,6 +83,10 @@ void main() async {
         ),
         BlocProvider(
           create: (context) => StockpriceStreamCubit(),
+        ),
+        BlocProvider(
+          create: (context) =>
+              UserBloc(context.read(), context.read(), context.read()),
         ),
       ],
       child: DalalApp(),
@@ -113,9 +114,6 @@ class DalalApp extends StatelessWidget {
         builder: (context, child) => BlocListener<UserBloc, UserState>(
           listener: (context, state) {
             if (state is UserDataLoaded) {
-              // Register sessionId
-              getIt.registerSingleton(state.sessionId);
-
               logger.i('user logged in');
               if (state.user.isPhoneVerified) {
                 showSnackBar(context, 'Welcome ${state.user.name}');
@@ -139,6 +137,15 @@ class DalalApp extends StatelessWidget {
                 showSnackBar(context, 'User Logged Out');
               }
               _navigator.pushNamedAndRemoveUntil('/landing', (route) => false);
+            } else if (state is UserDataError) {
+              logger.i('here');
+              // Unregister sessionId
+              getIt.unregister<String>();
+
+              showSnackBar(
+                  context, 'something went wrong, please try again later');
+
+              _navigator.pushNamedAndRemoveUntil('/login', (route) => false);
             }
           },
           child: child,

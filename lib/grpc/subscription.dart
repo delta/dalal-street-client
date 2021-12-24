@@ -33,10 +33,9 @@ class Subscription {
         throw internalServerError;
       }
 
-      logger.d('[${_subscriptionId?.dataStreamType}]: subscribe successful');
-
       _subscriptionId = subscribeResponse.subscriptionId;
 
+      logger.d('[${_subscriptionId?.dataStreamType}]: subscribe successful');
       return _subscriptionId!;
     } catch (e) {
       logger.e(e);
