@@ -25,24 +25,21 @@ class LoginCubit extends Cubit<LoginState> {
           .login(LoginRequest(email: email, password: password));
       final sessionId = loginResp.sessionId;
       if (loginResp.statusCode != LoginResponse_StatusCode.OK) {
-        emit(LoginFailure(loginResp.statusMessage));
-        return;
+        throw Exception();
       }
       final stockResponse = await actionClient.getStockList(
         GetStockListRequest(),
         options: sessionOptions(sessionId),
       );
       if (stockResponse.statusCode != GetStockListResponse_StatusCode.OK) {
-        emit(LoginFailure(stockResponse.statusMessage));
-        return;
+        throw Exception();
       }
       final gameStateResp = await streamClient.subscribe(
         SubscribeRequest(dataStreamType: DataStreamType.GAME_STATE),
         options: sessionOptions(sessionId),
       );
       if (gameStateResp.statusCode != SubscribeResponse_StatusCode.OK) {
-        emit(LoginFailure(gameStateResp.statusMessage));
-        return;
+        throw Exception();
       }
       final gameStateStream = streamClient.getGameStateUpdates(
         gameStateResp.subscriptionId,
@@ -55,6 +52,8 @@ class LoginCubit extends Cubit<LoginState> {
         gameStateStream,
       ));
     } catch (e) {
+      // Inavlid session id error not possible because this is first time login
+      // No need to check for grpc error code 16
       logger.e(e);
       emit(const LoginFailure(failedToReachServer));
     }

@@ -38,53 +38,53 @@ class UserBloc extends HydratedBloc<UserEvent, UserState> {
     });
 
     on<GetUserData>((event, emit) async {
+      final sessionId = event.sessionId;
       try {
         final loginResponse = await actionClient.login(
           LoginRequest(),
           options: sessionOptions(event.sessionId),
         );
-        final sessionId = event.sessionId;
-        // TODO: handle LoginResponse_StatusCode.InvalidCredentialsError separately
+        // Internal Error. User should be given option to try again
         if (loginResponse.statusCode != LoginResponse_StatusCode.OK) {
-          emit(UserLoginFailed(sessionId));
-          return;
+          // TODO: show proper messages in all exceptions
+          throw Exception();
         }
-        // Need a seperate try catch because login failure is different from stock response failure
-        try {
-          final stockResponse = await actionClient.getStockList(
-            GetStockListRequest(),
-            options: sessionOptions(sessionId),
-          );
-          if (stockResponse.statusCode != GetStockListResponse_StatusCode.OK) {
-            emit(UserLoginFailed(sessionId));
-            return;
-          }
-          final gameStateResp = await streamClient.subscribe(
-            SubscribeRequest(dataStreamType: DataStreamType.GAME_STATE),
-            options: sessionOptions(sessionId),
-          );
-          if (gameStateResp.statusCode != SubscribeResponse_StatusCode.OK) {
-            emit(UserLoginFailed(sessionId));
-            return;
-          }
-          final gameStateStream = streamClient.getGameStateUpdates(
-            gameStateResp.subscriptionId,
-            options: sessionOptions(sessionId),
-          );
-          emit(UserDataLoaded(
-            loginResponse.user,
-            loginResponse.sessionId,
-            stockMapToCompanyMap(stockResponse.stockList),
-            gameStateStream,
-          ));
-        } catch (e) {
-          logger.e(e);
+        final stockResponse = await actionClient.getStockList(
+          GetStockListRequest(),
+          options: sessionOptions(sessionId),
+        );
+        if (stockResponse.statusCode != GetStockListResponse_StatusCode.OK) {
+          throw Exception();
+        }
+        final gameStateResp = await streamClient.subscribe(
+          SubscribeRequest(dataStreamType: DataStreamType.GAME_STATE),
+          options: sessionOptions(sessionId),
+        );
+        if (gameStateResp.statusCode != SubscribeResponse_StatusCode.OK) {
+          throw Exception();
+        }
+        final gameStateStream = streamClient.getGameStateUpdates(
+          gameStateResp.subscriptionId,
+          options: sessionOptions(sessionId),
+        );
+        emit(UserDataLoaded(
+          loginResponse.user,
+          loginResponse.sessionId,
+          stockMapToCompanyMap(stockResponse.stockList),
+          gameStateStream,
+        ));
+      } on GrpcError catch (e) {
+        logger.e(e);
+        if (e.code == 16) {
+          // Unauthenticated
+          logger.i('Logged out becuase of invalid sessionId');
+          emit(const UserLoggedOut(fromSplash: true));
+        } else {
           emit(UserLoginFailed(sessionId));
         }
       } catch (e) {
-        // Session invalid or expired
         logger.e(e);
-        emit(const UserLoggedOut(fromSplash: true));
+        emit(UserLoginFailed(sessionId));
       }
     });
 
