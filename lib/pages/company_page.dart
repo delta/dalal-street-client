@@ -1,12 +1,13 @@
 // ignore_for_file: must_call_super
-
 import 'package:dalal_street_client/blocs/companies/companies_bloc.dart';
 import 'package:dalal_street_client/blocs/market_depth/market_depth_bloc.dart';
 import 'package:dalal_street_client/blocs/subscribe/subscribe_cubit.dart';
 import 'package:dalal_street_client/components/buttons/primary_button.dart';
 import 'package:dalal_street_client/components/buttons/secondary_button.dart';
 import 'package:dalal_street_client/constants/icons.dart';
+import 'package:dalal_street_client/grpc/client.dart';
 import 'package:dalal_street_client/main.dart';
+import 'package:dalal_street_client/proto_build/datastreams/MarketDepth.pb.dart';
 import 'package:dalal_street_client/proto_build/datastreams/Subscribe.pb.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
 import 'package:dalal_street_client/theme/colors.dart';
@@ -176,7 +177,11 @@ Container _companyTabView(BuildContext context, Stock company) {
               child: TabBarView(
                   physics: const BouncingScrollPhysics(
                       parent: AlwaysScrollableScrollPhysics()),
-                  children: [_overView(company), _marketDepth(), _news()]),
+                  children: [
+                    _overView(company),
+                    _marketDepth(company),
+                    _news()
+                  ]),
             )
           ],
         ),
@@ -288,7 +293,7 @@ Container _news() {
   );
 }
 
-Widget _marketDepth() {
+Widget _marketDepth(Stock company) {
   return Column(
     children: [
       Row(
@@ -312,72 +317,127 @@ Widget _marketDepth() {
         builder: (context, state) {
           if (state is SubscriptionDataLoaded) {
             logger.i(state.subscriptionId);
-            // Start the stream of Stock Prices
+            // Start the stream of Market Depths
             context
                 .read<MarketDepthBloc>()
                 .add(SubscribeToMarketDepthUpdates(state.subscriptionId));
+            List<MarketDepthUpdate> marketDepthUpdates = [];
             return BlocBuilder<MarketDepthBloc, MarketDepthState>(
               builder: (context, state) {
                 if (state is SubscriptionToMarketDepthSuccess) {
                   logger.i(state.marketDepthUpdate.toString());
-                }
-                return SingleChildScrollView(
-                  scrollDirection: Axis.vertical,
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: DataTable(
-                      columns: const <DataColumn>[
-                        DataColumn(
-                          label: Text('Volume'),
-                        ),
-                        DataColumn(
-                          label: Text('Price'),
-                        ),
-                        DataColumn(
-                          label: Text('Volume'),
-                        ),
-                        DataColumn(
-                          label: Text('Price'),
-                        ),
-                      ],
-                      rows: const <DataRow>[
-                        DataRow(
-                          cells: <DataCell>[
-                            DataCell(Text('Data')),
-                            DataCell(Text('Data')),
-                            DataCell(Text('Data')),
-                            DataCell(Text('Data')),
-                          ],
-                        ),
-                        DataRow(
-                          cells: <DataCell>[
-                            DataCell(Text('Data')),
-                            DataCell(Text('Data')),
-                            DataCell(Text('Data')),
-                            DataCell(Text('Data')),
-                          ],
-                        ),
-                        DataRow(
-                          cells: <DataCell>[
-                            DataCell(Text('Data')),
-                            DataCell(Text('Data')),
-                            DataCell(Text('Data')),
-                            DataCell(Text('Data')),
-                          ],
-                        ),
-                      ],
+                  if (state.marketDepthUpdate.stockId == company.id) {
+                    marketDepthUpdates.add(state.marketDepthUpdate);
+                  }
+                  return SingleChildScrollView(
+                    scrollDirection: Axis.vertical,
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: DataTable(
+                        columns: const <DataColumn>[
+                          DataColumn(
+                            label: Text('Volume'),
+                          ),
+                          DataColumn(
+                            label: Text('Price'),
+                          ),
+                          DataColumn(
+                            label: Text('Volume'),
+                          ),
+                          DataColumn(
+                            label: Text('Price'),
+                          ),
+                        ],
+                        rows: buildRowsOfMarketDepth(marketDepthUpdates),
+                      ),
                     ),
-                  ),
-                );
+                  );
+                } else if (state is SubscriptionToMarketDepthFailed) {
+                  return Center(
+                    child: Text(
+                      'Failed to load data \nReason : ${state.error}',
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: secondaryColor,
+                      ),
+                    ),
+                  );
+                } else {
+                  return const Center(
+                    child: CircularProgressIndicator(
+                      color: primaryColor,
+                    ),
+                  );
+                }
               },
             );
+          } else if (state is SubscriptonDataFailed) {
+            return Center(
+              child: Text(
+                'Failed to load data \nReason : ${state.message}',
+                style: const TextStyle(
+                  fontSize: 14,
+                  color: secondaryColor,
+                ),
+              ),
+            );
+          } else {
+            return const Center(
+              child: CircularProgressIndicator(
+                color: primaryColor,
+              ),
+            );
           }
-
-          return Container();
         },
       ),
     ],
   );
+}
+
+List<DataRow> buildRowsOfMarketDepth(
+    List<MarketDepthUpdate> marketDepthUpdates) {
+  return marketDepthUpdates.map((marketDepth) {
+    return DataRow(
+      cells: [
+        DataCell(
+          Text(
+            marketDepth.bidDepth.toString(),
+            style: const TextStyle(
+              fontSize: 14,
+              color: white,
+            ),
+          ),
+        ),
+        DataCell(
+          Text(
+            marketDepth.bidDepthDiff.toString(),
+            style: const TextStyle(
+              fontSize: 14,
+              color: white,
+            ),
+          ),
+        ),
+        DataCell(
+          Text(
+            marketDepth.askDepth.toString(),
+            style: const TextStyle(
+              fontSize: 14,
+              color: white,
+            ),
+          ),
+        ),
+        DataCell(
+          Text(
+            marketDepth.askDepthDiff.toString(),
+            style: const TextStyle(
+              fontSize: 14,
+              color: white,
+            ),
+          ),
+        ),
+      ],
+    );
+  }).toList();
 }
 
 Column _overView(Stock company) {
