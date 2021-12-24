@@ -24,8 +24,9 @@ class GetUserData extends UserEvent {
 class UserLogIn extends UserEvent {
   final LoginResponse loginResponse;
   final Map<int, CompanyInfo> companies;
+  final ResponseStream<GameStateUpdate> gameStateStream;
 
-  const UserLogIn(this.loginResponse, this.companies);
+  const UserLogIn(this.loginResponse, this.companies, this.gameStateStream);
 
   @override
   List<Object> get props => [loginResponse, companies];

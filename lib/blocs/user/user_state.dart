@@ -36,10 +36,13 @@ class UserLoggedIn extends UserState {
 /// Show home page
 class UserDataLoaded extends UserState {
   final User user;
+  // Extra Data
   final String sessionId;
   final Map<int, CompanyInfo> companies;
+  // Global Streams
+  final ResponseStream<GameStateUpdate> gameStateStream;
 
-  const UserDataLoaded(this.user, this.sessionId, this.companies);
+  const UserDataLoaded(this.user, this.sessionId, this.companies, this.gameStateStream);
 
   @override
   List<Object> get props => [sessionId, user];

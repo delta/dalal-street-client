@@ -4,12 +4,14 @@ import 'package:dalal_street_client/constants/error_messages.dart';
 import 'package:dalal_street_client/grpc/client.dart';
 import 'package:dalal_street_client/models/company_info.dart';
 import 'package:dalal_street_client/navigation/route_generator.dart';
+import 'package:dalal_street_client/proto_build/datastreams/GameState.pb.dart';
 import 'package:dalal_street_client/theme/theme.dart';
 import 'package:dalal_street_client/utils/snackbar.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:grpc/grpc_or_grpcweb.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:logger/logger.dart';
 import 'package:path_provider/path_provider.dart';
@@ -103,6 +105,8 @@ class DalalApp extends StatelessWidget {
               getIt.registerSingleton(state.sessionId);
               // Register static company infos
               getIt.registerSingleton(state.companies);
+              // Register Global Streams
+              getIt.registerSingleton(state.gameStateStream);
 
               logger.i('user logged in');
               if (state.user.isPhoneVerified) {
@@ -123,6 +127,8 @@ class DalalApp extends StatelessWidget {
                 getIt.unregister<String>();
                 // Unregister company infos
                 getIt.unregister<Map<int, CompanyInfo>>();
+                // Unregister Global Streams
+                getIt.unregister<ResponseStream<GameStateUpdate>>();
 
                 // Show msg only when comming from a page other than splash
                 logger.i('user logged out');

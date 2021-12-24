@@ -4,9 +4,12 @@ import 'package:dalal_street_client/models/company_info.dart';
 import 'package:dalal_street_client/proto_build/actions/GetStockList.pb.dart';
 import 'package:dalal_street_client/proto_build/actions/Login.pb.dart';
 import 'package:dalal_street_client/proto_build/actions/Logout.pb.dart';
+import 'package:dalal_street_client/proto_build/datastreams/GameState.pb.dart';
+import 'package:dalal_street_client/proto_build/datastreams/Subscribe.pb.dart';
 import 'package:dalal_street_client/proto_build/models/User.pb.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
+import 'package:grpc/grpc_or_grpcweb.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
 part 'user_event.dart';
@@ -38,20 +41,34 @@ class UserBloc extends HydratedBloc<UserEvent, UserState> {
       try {
         final loginResponse = await actionClient.login(LoginRequest(),
             options: sessionOptions(event.sessionId));
+        final sessionId = event.sessionId;
         // Need a seperate try catch because login failure is different from stock response failure
         try {
           final stockResponse = await actionClient.getStockList(
             GetStockListRequest(),
-            options: sessionOptions(event.sessionId),
+            options: sessionOptions(sessionId),
           );
           if (stockResponse.statusCode != GetStockListResponse_StatusCode.OK) {
             emit(const StockDataFailed());
             return;
           }
+          final gameStateResp = await streamClient.subscribe(
+            SubscribeRequest(dataStreamType: DataStreamType.GAME_STATE),
+            options: sessionOptions(sessionId),
+          );
+          if (gameStateResp.statusCode != SubscribeResponse_StatusCode.OK) {
+            emit(const StockDataFailed());
+            return;
+          }
+          final gameStateStream = streamClient.getGameStateUpdates(
+            gameStateResp.subscriptionId,
+            options: sessionOptions(sessionId),
+          );
           emit(UserDataLoaded(
             loginResponse.user,
             loginResponse.sessionId,
             stockMapToCompanyMap(stockResponse.stockList),
+            gameStateStream,
           ));
         } catch (e) {
           logger.e(e);
@@ -68,6 +85,7 @@ class UserBloc extends HydratedBloc<UserEvent, UserState> {
           event.loginResponse.user,
           event.loginResponse.sessionId,
           event.companies,
+          event.gameStateStream,
         )));
 
     on<UserLogOut>((event, emit) {
