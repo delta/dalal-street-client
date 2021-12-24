@@ -22,9 +22,8 @@ class ExchangePage extends StatefulWidget {
   _ExchangePageState createState() => _ExchangePageState();
 }
 
-
 class _ExchangePageState extends State<ExchangePage> {
-  Map<int,Stock> mapOfStocks = {};
+  Map<int, Stock> mapOfStocks = {};
   // Unsubscribe to the streams when the widget is disposed
   @override
   void dispose() {
@@ -218,7 +217,8 @@ class _ExchangePageState extends State<ExchangePage> {
               if (state is SubscriptionToStockExchangeSuccess) {
                 logger.i('$index here');
                 int stocksInMarket = state.stockExchangeUpdate
-                        .stocksInExchange[index]?.stocksInMarket.toInt() ??
+                        .stocksInExchange[index]?.stocksInMarket
+                        .toInt() ??
                     (mapOfStocks[index]?.stocksInMarket.toInt() ?? 0);
                 mapOfStocks[index]?.stocksInMarket = Int64(stocksInMarket);
                 return Row(
@@ -257,7 +257,8 @@ class _ExchangePageState extends State<ExchangePage> {
             builder: (context, state) {
               if (state is SubscriptionToStockExchangeSuccess) {
                 int stocksInExchange = state.stockExchangeUpdate
-                        .stocksInExchange[index]?.stocksInExchange.toInt() ??
+                        .stocksInExchange[index]?.stocksInExchange
+                        .toInt() ??
                     (mapOfStocks[index]?.stocksInExchange.toInt() ?? 0);
                 mapOfStocks[index]?.stocksInExchange = Int64(stocksInExchange);
                 return Row(
@@ -351,9 +352,12 @@ class _ExchangePageState extends State<ExchangePage> {
       child: BlocBuilder<ExchangeStreamBloc, ExchangeStreamState>(
         builder: (context, state) {
           if (state is SubscriptionToStockExchangeSuccess) {
-            int currentStockPrice =
-                state.stockExchangeUpdate.stocksInExchange[index]?.price.toInt() ?? mapOfStocks[index]?.currentPrice.toInt() ?? 0; 
-                    
+            int currentStockPrice = state
+                    .stockExchangeUpdate.stocksInExchange[index]?.price
+                    .toInt() ??
+                mapOfStocks[index]?.currentPrice.toInt() ??
+                0;
+
             mapOfStocks[index]?.currentPrice = Int64(currentStockPrice);
             return Column(
               crossAxisAlignment: CrossAxisAlignment.end,
@@ -432,7 +436,6 @@ class _ExchangePageState extends State<ExchangePage> {
                   if (state is ExchangeSuccess) {
                     Navigator.maybePop(context);
                   }
-
                 },
                 builder: (context, state) {
                   if (state is ExchangeLoading) {
@@ -442,7 +445,7 @@ class _ExchangePageState extends State<ExchangePage> {
                       ),
                     );
                   } else if (state is ExchangeFailure) {
-                    return  Center(
+                    return Center(
                       child: Text(state.msg),
                     );
                   }

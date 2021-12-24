@@ -2,7 +2,7 @@ part of 'exchange_stream_bloc.dart';
 
 abstract class ExchangeStreamState extends Equatable {
   const ExchangeStreamState();
-  
+
   @override
   List<Object> get props => [];
 }

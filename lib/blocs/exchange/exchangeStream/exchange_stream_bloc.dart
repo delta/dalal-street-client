@@ -8,16 +8,17 @@ import 'package:equatable/equatable.dart';
 part 'exchange_stream_event.dart';
 part 'exchange_stream_state.dart';
 
-class ExchangeStreamBloc extends Bloc<ExchangeStreamEvent, ExchangeStreamState> {
+class ExchangeStreamBloc
+    extends Bloc<ExchangeStreamEvent, ExchangeStreamState> {
   ExchangeStreamBloc() : super(ExchangeStreamInitial()) {
     on<SubscribeToStockExchange>((event, emit) async {
       try {
         final stockExchangeStream = streamClient.getStockExchangeUpdates(
             event.subscriptionId,
             options: sessionOptions(getIt()));
-        
+
         await for (final stockExchange in stockExchangeStream) {
-         logger.d(stockExchange);
+          logger.d(stockExchange);
           emit(SubscriptionToStockExchangeSuccess(stockExchange));
         }
       } catch (e) {
