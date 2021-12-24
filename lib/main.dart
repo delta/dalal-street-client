@@ -79,7 +79,7 @@ void main() async {
           create: (_) => UserBloc(),
         ),
         BlocProvider(
-          create: (context) => GamestateCubit(),
+          create: (context) => GamestateStreamCubit(),
         ),
         BlocProvider(
           create: (context) => NotificationStreamCubit(),

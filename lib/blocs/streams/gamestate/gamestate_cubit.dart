@@ -9,10 +9,10 @@ import '../../../main.dart';
 
 part 'gamestate_state.dart';
 
-class GamestateCubit extends Cubit<GamestateStreamState> {
+class GamestateStreamCubit extends Cubit<GamestateStreamState> {
   late final Subscription subscription;
 
-  GamestateCubit() : super(GamestateStreamLoading()) {
+  GamestateStreamCubit() : super(GamestateStreamLoading()) {
     subscription = Subscription();
   }
 
