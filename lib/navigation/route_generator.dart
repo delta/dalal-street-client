@@ -6,6 +6,7 @@ import 'package:dalal_street_client/blocs/auth/register/register_cubit.dart';
 import 'package:dalal_street_client/blocs/auth/verify_phone/enter_otp/enter_otp_cubit.dart';
 import 'package:dalal_street_client/blocs/auth/verify_phone/enter_phone/enter_phone_cubit.dart';
 import 'package:dalal_street_client/blocs/companies/companies_bloc.dart';
+import 'package:dalal_street_client/blocs/exchange/exchangeStream/exchange_stream_bloc.dart';
 import 'package:dalal_street_client/blocs/exchange/exchange_cubit.dart';
 import 'package:dalal_street_client/blocs/subscribe/subscribe_cubit.dart';
 import 'package:dalal_street_client/blocs/daily_challenges/daily_challenges_page_cubit.dart';
@@ -102,13 +103,12 @@ class RouteGenerator {
 
       // Stock Exchange Page
       case '/exchange':
-        return MultiBlocProvider(
-          providers: [
-            BlocProvider(create: (context) => CompaniesBloc()),
-            BlocProvider(create: (context) => SubscribeCubit()),
-            BlocProvider(create: (context) => ExchangeCubit()),
-          ],
-          child: const ExchangePage());
+        return MultiBlocProvider(providers: [
+          BlocProvider(create: (context) => CompaniesBloc()),
+          BlocProvider(create: (context) => ExchangeStreamBloc()),
+          BlocProvider(create: (context) => SubscribeCubit()),
+          BlocProvider(create: (context) => ExchangeCubit()),
+        ], child: const ExchangePage());
 
       default:
         throw Exception('Invalid Route');

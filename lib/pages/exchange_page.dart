@@ -1,4 +1,5 @@
 import 'package:dalal_street_client/blocs/companies/companies_bloc.dart';
+import 'package:dalal_street_client/blocs/exchange/exchangeStream/exchange_stream_bloc.dart';
 import 'package:dalal_street_client/blocs/exchange/exchange_cubit.dart';
 import 'package:dalal_street_client/blocs/subscribe/subscribe_cubit.dart';
 import 'package:dalal_street_client/main.dart';
@@ -7,6 +8,7 @@ import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
 import 'package:dalal_street_client/theme/buttons.dart';
 import 'package:dalal_street_client/theme/colors.dart';
 import 'package:dalal_street_client/utils/responsive.dart';
+import 'package:fixnum/fixnum.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -20,13 +22,9 @@ class ExchangePage extends StatefulWidget {
   _ExchangePageState createState() => _ExchangePageState();
 }
 
-class StockNameMap {
-  const StockNameMap(this.id, this.name);
-  final String name;
-  final int id;
-}
 
 class _ExchangePageState extends State<ExchangePage> {
+  Map<int,Stock> mapOfStocks = {};
   // Unsubscribe to the streams when the widget is disposed
   @override
   void dispose() {
@@ -151,13 +149,13 @@ class _ExchangePageState extends State<ExchangePage> {
     return BlocBuilder<CompaniesBloc, CompaniesState>(
         builder: (context, state) {
       if (state is GetCompaniesSuccess) {
-        var mapOfStocks = state.stockList.stockList;
+        mapOfStocks = state.stockList.stockList;
         return BlocBuilder<SubscribeCubit, SubscribeState>(
             builder: (context, state) {
           if (state is SubscriptionDataLoaded) {
             // Start the stream of Stock Prices
             context
-                .read<CompaniesBloc>()
+                .read<ExchangeStreamBloc>()
                 .add(SubscribeToStockExchange(state.subscriptionId));
             return ListView.builder(
               shrinkWrap: true,
@@ -215,24 +213,81 @@ class _ExchangePageState extends State<ExchangePage> {
           const SizedBox(
             height: 10,
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Expanded(child: Text('Stocks in Market')),
-              const SizedBox(width: 10),
-              Text(company?.stocksInMarket.toString() ?? '0')
-            ],
+          BlocBuilder<ExchangeStreamBloc, ExchangeStreamState>(
+            builder: (context, state) {
+              if (state is SubscriptionToStockExchangeSuccess) {
+                logger.i('$index here');
+                int stocksInMarket = state.stockExchangeUpdate
+                        .stocksInExchange[index]?.stocksInMarket.toInt() ??
+                    (mapOfStocks[index]?.stocksInMarket.toInt() ?? 0);
+                mapOfStocks[index]?.stocksInMarket = Int64(stocksInMarket);
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Expanded(child: Text('Stocks in Market')),
+                    const SizedBox(width: 10),
+                    Text(stocksInMarket.toString())
+                  ],
+                );
+              } else if (state is SubscriptionToStockExchangeFailed) {
+                return const Center(
+                  child: Text(
+                    'Failed to load data \nReason : //',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: secondaryColor,
+                    ),
+                  ),
+                );
+              }
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Expanded(child: Text('Stocks in Market')),
+                  const SizedBox(width: 10),
+                  Text(company?.stocksInMarket.toString() ?? '0')
+                ],
+              );
+            },
           ),
           const SizedBox(
             height: 10,
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Expanded(child: Text('Stocks in Exchange')),
-              const SizedBox(width: 10),
-              Text(company?.stocksInExchange.toString() ?? '0')
-            ],
+          BlocBuilder<ExchangeStreamBloc, ExchangeStreamState>(
+            builder: (context, state) {
+              if (state is SubscriptionToStockExchangeSuccess) {
+                int stocksInExchange = state.stockExchangeUpdate
+                        .stocksInExchange[index]?.stocksInExchange.toInt() ??
+                    (mapOfStocks[index]?.stocksInExchange.toInt() ?? 0);
+                mapOfStocks[index]?.stocksInExchange = Int64(stocksInExchange);
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Expanded(child: Text('Stocks in Exchange')),
+                    const SizedBox(width: 10),
+                    Text(stocksInExchange.toString())
+                  ],
+                );
+              } else if (state is SubscriptionToStockExchangeFailed) {
+                return const Center(
+                  child: Text(
+                    'Failed to load data \nReason : //',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: secondaryColor,
+                    ),
+                  ),
+                );
+              }
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Expanded(child: Text('Stocks in Exchange')),
+                  const SizedBox(width: 10),
+                  Text(company?.stocksInExchange.toString() ?? '0')
+                ],
+              );
+            },
           ),
           const SizedBox(
             height: 10,
@@ -293,12 +348,13 @@ class _ExchangePageState extends State<ExchangePage> {
 
   Expanded _stockPrices(int index, int priceChange, int currentPrice) {
     return Expanded(
-      child: BlocBuilder<CompaniesBloc, CompaniesState>(
+      child: BlocBuilder<ExchangeStreamBloc, ExchangeStreamState>(
         builder: (context, state) {
           if (state is SubscriptionToStockExchangeSuccess) {
-            var currentStockPrice = state
-                .stockExchangeUpdate.stocksInExchange[index]?.price
-                .toInt();
+            int currentStockPrice =
+                state.stockExchangeUpdate.stocksInExchange[index]?.price.toInt() ?? mapOfStocks[index]?.currentPrice.toInt() ?? 0; 
+                    
+            mapOfStocks[index]?.currentPrice = Int64(currentStockPrice);
             return Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
@@ -371,13 +427,23 @@ class _ExchangePageState extends State<ExchangePage> {
           return BlocProvider.value(
             value: BlocProvider.of<ExchangeCubit>(context),
             child: Padding(
-              child: BlocBuilder<ExchangeCubit, ExchangeState>(
+              child: BlocConsumer<ExchangeCubit, ExchangeState>(
+                listener: (context, state) {
+                  if (state is ExchangeSuccess) {
+                    Navigator.maybePop(context);
+                  }
+
+                },
                 builder: (context, state) {
                   if (state is ExchangeLoading) {
                     return const Center(
                       child: CircularProgressIndicator(
                         color: Colors.green,
                       ),
+                    );
+                  } else if (state is ExchangeFailure) {
+                    return  Center(
+                      child: Text(state.msg),
                     );
                   }
                   return Column(
@@ -437,10 +503,8 @@ class _ExchangePageState extends State<ExchangePage> {
                             context
                                 .read<ExchangeCubit>()
                                 .buyStocksFromExchange(stockId, stockQuantity);
-                            //context.read<CompaniesBloc>().add(const GetStockList());
                           }
                           _controller.text = '';
-                          Navigator.pop(context);
                         },
                         child: const Text('Buy Stocks from Exchange'),
                       )

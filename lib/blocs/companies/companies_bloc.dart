@@ -44,23 +44,5 @@ class CompaniesBloc extends Bloc<CompaniesEvent, CompaniesState> {
         emit(GetCompaniesFailed(e.toString()));
       }
     });
-
-    on<SubscribeToStockExchange>((event, emit) async {
-      try {
-        final stockExchangeStream = streamClient.getStockExchangeUpdates(
-            event.subscriptionId,
-            options: sessionOptions(getIt()));
-        // ignore: avoid_print
-        print(event.subscriptionId);
-        await for (final stockExchange in stockExchangeStream) {
-          // ignore: avoid_print
-          print(stockExchange);
-          emit(SubscriptionToStockExchangeSuccess(stockExchange));
-        }
-      } catch (e) {
-        logger.e(e);
-        emit(SubscriptionToStockExchangeFailed(e.toString()));
-      }
-    });
   }
 }

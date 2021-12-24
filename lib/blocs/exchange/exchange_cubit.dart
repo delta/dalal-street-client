@@ -21,7 +21,9 @@ class ExchangeCubit extends Cubit<ExchangeState> {
       if (resp.statusCode == BuyStocksFromExchangeResponse_StatusCode.OK) {
         emit(ExchangeSuccess(resp));
       } else {
+        logger.e(resp.statusMessage);
         emit(ExchangeFailure(resp.statusMessage));
+        emit(ExchangeInitial());
       }
     } catch (e) {
       logger.e(e);
