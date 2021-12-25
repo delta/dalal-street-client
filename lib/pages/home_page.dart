@@ -345,27 +345,207 @@ class _HomePageState extends State<HomePage> {
                           ]))
                 ],
               ),
+              SizedBox(
+                height: 20,
+              )
+            ]));
+  }
+
+  Container _companies() {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+      decoration: BoxDecoration(
+        color: backgroundColor,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Home',
+            style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w500,
+                color: whiteWithOpacity75),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          const Text(
+            'Top Companies',
+            style: TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.w700,
+              color: white,
             ),
-            tablet: const Center(
-              child: Text(
-                'Tablet UI will design soon :)',
-                style: TextStyle(
-                  fontSize: 14,
+            textAlign: TextAlign.start,
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          _stockList(),
+        ],
+      ),
+    );
+  }
+
+  BlocBuilder<CompaniesBloc, CompaniesState> _stockList() {
+    return BlocBuilder<CompaniesBloc, CompaniesState>(
+      builder: (context, state) {
+        if (state is GetCompaniesSuccess) {
+          var mapOfStocks = state.stockList.stockList;
+          logger.i(state.stockList.stockList.length);
+          return BlocBuilder<SubscribeCubit, SubscribeState>(
+              builder: (context, state) {
+            if (state is SubscriptionDataLoaded) {
+              // Start the stream of Stock Prices
+              context
+                  .read<CompaniesBloc>()
+                  .add(SubscribeToStockPrices(state.subscriptionId));
+              return ListView.builder(
+                shrinkWrap: true,
+                itemCount: mapOfStocks.length,
+                itemBuilder: (context, index) {
+                  Stock? company = mapOfStocks[index];
+                  int currentPrice = company?.currentPrice.toInt() ?? 0;
+                  int previousDayPrice = company?.previousDayClose.toInt() ?? 0;
+                  var priceChange = (currentPrice - previousDayPrice);
+                  return _stockItem(company, index, priceChange, currentPrice);
+                },
+              );
+            } else if (state is SubscriptonDataFailed) {
+              logger.i('Stock Prices Stream Failed $state');
+              return const Center(
+                child: Text(
+                  'Failed to load data \nReason : //',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: secondaryColor,
+                  ),
+                ),
+              );
+            } else {
+              return const Center(
+                child: CircularProgressIndicator(
                   color: secondaryColor,
                 ),
-              ),
+              );
+            }
+          });
+        } else {
+          return const Center(
+            child: CircularProgressIndicator(
+              color: secondaryColor,
             ),
-            desktop: const Center(
-              child: Text(
-                'Web UI will design soon :)',
-                style: TextStyle(
-                  fontSize: 14,
-                  color: secondaryColor,
-                ),
-              ),
-            ),
+          );
+        }
+      },
+    );
+  }
+
+  Container _stockItem(
+      Stock? company, int index, int priceChange, int currentPrice) {
+    return Container(
+        padding: const EdgeInsets.symmetric(
+          vertical: 10,
+        ),
+        child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+          _stockNames(company),
+          _stockGraph(),
+          _stockPrices(index, priceChange, currentPrice),
+        ]));
+  }
+
+  Expanded _stockNames(Stock? company) {
+    return Expanded(
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Text(
+          company?.shortName ?? 'Airtel',
+          style: const TextStyle(
+            fontSize: 18,
           ),
         ),
+        Text(
+          company?.fullName ?? 'Airtel Pvt Ltd',
+          style: const TextStyle(
+            fontSize: 14,
+            color: whiteWithOpacity50,
+          ),
+        ),
+      ]),
+    );
+  }
+
+  Expanded _stockGraph() {
+    return Expanded(
+      child: Image.network(
+        'https://i.imgur.com/zrmdl8j.png',
+        height: 23,
+      ),
+    );
+  }
+
+  Expanded _stockPrices(int index, int priceChange, int currentPrice) {
+    return Expanded(
+      child: BlocBuilder<CompaniesBloc, CompaniesState>(
+        builder: (context, state) {
+          if (state is SubscriptionToStockPricesSuccess) {
+            var currentStockPrice = state.stockPrices.prices[index];
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(
+                  oCcy.format(currentStockPrice).toString(),
+                  style: const TextStyle(
+                    fontSize: 18,
+                  ),
+                ),
+                Text(
+                  priceChange >= 0
+                      ? '+' + oCcy.format(priceChange).toString()
+                      : oCcy.format(priceChange).toString(),
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: priceChange > 0 ? secondaryColor : heartRed,
+                  ),
+                ),
+              ],
+            );
+          } else if (state is SubscriptionToStockPricesFailed) {
+            return const Center(
+              child: Text(
+                'Failed to load data \nReason : //',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: secondaryColor,
+                ),
+              ),
+            );
+          } else {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(
+                  oCcy.format(currentPrice).toString(),
+                  style: const TextStyle(
+                    fontSize: 18,
+                  ),
+                ),
+                Text(
+                  priceChange >= 0
+                      ? '+' + oCcy.format(priceChange).toString()
+                      : oCcy.format(priceChange).toString(),
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: priceChange > 0 ? secondaryColor : heartRed,
+                  ),
+                ),
+              ],
+            );
+          }
+        },
       ),
     );
   }
