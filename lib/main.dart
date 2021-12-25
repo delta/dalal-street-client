@@ -105,7 +105,7 @@ class DalalApp extends StatelessWidget {
               // Register static company infos
               getIt.registerSingleton(state.companies);
               // Register Global Streams
-              getIt.registerSingleton(state.gameStateStream);
+              getIt.registerSingleton(state.globalStreams);
 
               logger.i('user logged in');
               if (state.user.isPhoneVerified) {
@@ -121,11 +121,11 @@ class DalalApp extends StatelessWidget {
                     '/enterPhone', (route) => false);
               }
             } else if (state is UserLoggedOut) {
-              if (!state.fromSplash) {
-                // Unregister everything
-                getIt.reset();
+              // Unregister everything
+              getIt.reset();
 
-                // Show msg only when comming from a page other than splash
+              if (!state.fromSplash) {
+                // Show msg only when coming from a page other than splash
                 logger.i('user logged out');
                 showSnackBar(context, 'User Logged Out');
               }

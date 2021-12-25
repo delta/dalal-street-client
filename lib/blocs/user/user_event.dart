@@ -24,12 +24,12 @@ class GetUserData extends UserEvent {
 class UserLogIn extends UserEvent {
   final LoginResponse loginResponse;
   final Map<int, CompanyInfo> companies;
-  final ResponseStream<GameStateUpdate> gameStateStream;
+  final GlobalStreams globalStreams;
 
-  const UserLogIn(this.loginResponse, this.companies, this.gameStateStream);
+  const UserLogIn(this.loginResponse, this.companies, this.globalStreams);
 
   @override
-  List<Object> get props => [loginResponse, companies];
+  List<Object> get props => [loginResponse, companies, globalStreams];
 }
 
 class UserLogOut extends UserEvent {

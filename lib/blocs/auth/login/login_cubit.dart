@@ -24,14 +24,15 @@ class LoginCubit extends Cubit<LoginState> {
           .login(LoginRequest(email: email, password: password));
       final sessionId = loginResp.sessionId;
       if (loginResp.statusCode != LoginResponse_StatusCode.OK) {
-        throw Exception(loginResp.statusMessage);
+        emit(LoginFailure(loginResp.statusMessage));
+        return;
       }
       final globalStreams = await subscribeToGlobalStreams(sessionId);
       emit(LoginSuccess(loginResp));
       userBloc.add(UserLogIn(
         loginResp,
         stockMapToCompanyMap(globalStreams.stockList),
-        globalStreams.gameStateStream,
+        globalStreams,
       ));
     } catch (e) {
       // Inavlid session id error not possible because this is first time login

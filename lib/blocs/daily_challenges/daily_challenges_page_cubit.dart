@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:dalal_street_client/constants/error_messages.dart';
+import 'package:dalal_street_client/global_streams.dart';
 import 'package:dalal_street_client/grpc/client.dart';
 import 'package:dalal_street_client/main.dart';
 import 'package:dalal_street_client/proto_build/actions/GetDailyChallengeConfig.pb.dart';
@@ -37,7 +38,8 @@ class DailyChallengesPageCubit extends Cubit<DailyChallengesPageState> {
   /// Updates `isDailyChallengeOpen` in [DailyChallengesPageSuccess]
   /// Only call this after [getChallengesConfig] is succesful
   Future<void> listenToGameStateStream() async {
-    final ResponseStream<GameStateUpdate> gameStateStream = getIt();
+    final ResponseStream<GameStateUpdate> gameStateStream =
+        getIt<GlobalStreams>().gameStateStream;
     // TODO: only update state if `isDailyChallengeOpen` is changed
     await for (var update in gameStateStream) {
       try {

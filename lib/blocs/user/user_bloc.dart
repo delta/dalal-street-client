@@ -4,7 +4,6 @@ import 'package:dalal_street_client/models/company_info.dart';
 import 'package:dalal_street_client/global_streams.dart';
 import 'package:dalal_street_client/proto_build/actions/Login.pb.dart';
 import 'package:dalal_street_client/proto_build/actions/Logout.pb.dart';
-import 'package:dalal_street_client/proto_build/datastreams/GameState.pb.dart';
 import 'package:dalal_street_client/proto_build/models/User.pb.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
@@ -14,6 +13,7 @@ import 'package:hydrated_bloc/hydrated_bloc.dart';
 part 'user_event.dart';
 part 'user_state.dart';
 
+// TODO: rename to DalalBloc
 /// Handles the Authentication State of User. Also persists the state using [HydratedBloc]
 ///
 /// Must be provided at the root of the app widget tree
@@ -52,7 +52,7 @@ class UserBloc extends HydratedBloc<UserEvent, UserState> {
           loginResponse.user,
           loginResponse.sessionId,
           stockMapToCompanyMap(globalStreams.stockList),
-          globalStreams.gameStateStream,
+          globalStreams,
         ));
       } on GrpcError catch (e) {
         logger.e(e);
@@ -69,23 +69,32 @@ class UserBloc extends HydratedBloc<UserEvent, UserState> {
       }
     });
 
+    // TODO: UserLogIn event and UserDataLoaded state has the exact same data. Maybe some refactoring can be done?
     on<UserLogIn>((event, emit) => emit(UserDataLoaded(
           event.loginResponse.user,
           event.loginResponse.sessionId,
           event.companies,
-          event.gameStateStream,
+          event.globalStreams,
         )));
 
     on<UserLogOut>((event, emit) {
       try {
-        actionClient.logout(LogoutRequest(),
-            options: sessionOptions(getIt<String>()));
+        actionClient.logout(LogoutRequest(), options: sessionOptions(getIt()));
+        unsubscribeFromGlobalStreams(getIt(), getIt());
       } catch (e) {
         // Cant do anything
         logger.e(e);
       }
       emit(const UserLoggedOut());
     });
+  }
+
+  @override
+  Future<void> close() {
+    if (state is! UserLoggedOut) {
+      unsubscribeFromGlobalStreams(getIt(), getIt());
+    }
+    return super.close();
   }
 
   // Methods required by HydratedBloc to persist state

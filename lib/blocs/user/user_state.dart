@@ -39,22 +39,27 @@ class UserDataLoaded extends UserState {
   // Extra Data
   final String sessionId;
   final Map<int, CompanyInfo> companies;
-  // Global Streams
-  final ResponseStream<GameStateUpdate> gameStateStream;
+  final GlobalStreams globalStreams;
 
   const UserDataLoaded(
     this.user,
     this.sessionId,
     this.companies,
-    this.gameStateStream,
+    this.globalStreams,
   );
 
   @override
-  List<Object> get props => [sessionId, user];
+  List<Object> get props => [user, sessionId, companies, globalStreams];
 }
 
+/// When failure happens in getting user data
+///
+/// Stays in splash page. Shows snackbar with retry button
 class UserLoginFailed extends UserState {
   final String sessionId;
 
   const UserLoginFailed(this.sessionId);
+
+  @override
+  List<Object> get props => [sessionId];
 }

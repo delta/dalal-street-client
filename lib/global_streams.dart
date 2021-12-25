@@ -1,4 +1,5 @@
 import 'package:dalal_street_client/grpc/client.dart';
+import 'package:dalal_street_client/main.dart';
 import 'package:dalal_street_client/proto_build/actions/GetStockList.pb.dart';
 import 'package:dalal_street_client/proto_build/datastreams/GameState.pb.dart';
 import 'package:dalal_street_client/proto_build/datastreams/Subscribe.pb.dart';
@@ -12,7 +13,10 @@ class GlobalStreams {
   // TODO: add remaining global streams
   final ResponseStream<GameStateUpdate> gameStateStream;
 
-  GlobalStreams(this.stockList, this.gameStateStream);
+  // Only used to unsubscribe from global streams. Don't use these to subscribe again
+  final List<SubscriptionId> subscriptionIds;
+
+  GlobalStreams(this.stockList, this.gameStateStream, this.subscriptionIds);
 }
 
 /// Subscribes to all Global Streams after login and returns the stream objects
@@ -39,5 +43,26 @@ Future<GlobalStreams> subscribeToGlobalStreams(String sessionId) async {
   return GlobalStreams(
     stockResponse.stockList,
     gameStateStream,
+    [
+      gameStateResp.subscriptionId,
+    ],
   );
+}
+
+/// Unsubscribes from all Global Streams
+Future<void> unsubscribeFromGlobalStreams(
+  String sessionId,
+  GlobalStreams globalStreams,
+) async {
+  logger.i('Unsubscribing from all global streams');
+  try {
+    for (final id in globalStreams.subscriptionIds) {
+      streamClient.unsubscribe(
+        UnsubscribeRequest(subscriptionId: id),
+        options: sessionOptions(sessionId),
+      );
+    }
+  } catch (e) {
+    logger.e(e);
+  }
 }
