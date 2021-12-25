@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../blocs/market_event/market_event_bloc.dart';
 
+// ignore: camel_case_types
 class News_Page extends StatefulWidget {
   const News_Page({Key? key}) : super(key: key);
 
@@ -13,6 +14,7 @@ class News_Page extends StatefulWidget {
   _News_PageState createState() => _News_PageState();
 }
 
+// ignore: camel_case_types
 class _News_PageState extends State<News_Page> {
   @override
   initState() {
@@ -34,6 +36,7 @@ class _News_PageState extends State<News_Page> {
   }
 }
 
+// ignore: non_constant_identifier_names
 Container Feed() {
   return Container(
     // color: ,

@@ -1,6 +1,6 @@
 // TODO: Need a better and simpler routing strategy
 
-import 'dart:js';
+// ignore: avoid_web_libraries_in_flutter
 
 import 'package:dalal_street_client/blocs/auth/login/login_cubit.dart';
 import 'package:dalal_street_client/blocs/auth/register/register_cubit.dart';
