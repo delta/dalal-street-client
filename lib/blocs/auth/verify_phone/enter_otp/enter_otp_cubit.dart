@@ -1,5 +1,5 @@
 import 'package:bloc/bloc.dart';
-import 'package:dalal_street_client/blocs/user/user_bloc.dart';
+import 'package:dalal_street_client/blocs/dalal/dalal_bloc.dart';
 import 'package:dalal_street_client/constants/error_messages.dart';
 import 'package:dalal_street_client/grpc/client.dart';
 import 'package:dalal_street_client/main.dart';
@@ -10,12 +10,12 @@ import 'package:equatable/equatable.dart';
 part 'enter_otp_state.dart';
 
 class EnterOtpCubit extends Cubit<OtpState> {
-  final UserBloc userBloc;
+  final DalalBloc dalalBloc;
   final String phone;
 
-  EnterOtpCubit(this.userBloc, this.phone) : super(OtpInitial(phone));
+  EnterOtpCubit(this.dalalBloc, this.phone) : super(OtpInitial(phone));
 
-  void logout() => userBloc.add(const UserLogOut());
+  void logout() => dalalBloc.add(const DalalLogOut());
 
   Future<void> resendOTP() async {
     emit(const OtpLoading());
@@ -48,7 +48,7 @@ class EnterOtpCubit extends Cubit<OtpState> {
         emit(const OtpSuccess());
         // sessionId will be registered again in the root BlocListener
         getIt.unregister<String>();
-        userBloc.add(GetUserData(sessionId));
+        dalalBloc.add(GetUserData(sessionId));
       } else {
         emit(OtpFailure(resp.statusMessage));
         emit(OtpInitial(phone));

@@ -116,6 +116,7 @@ class RegisterPage extends StatelessWidget {
                 labelText: 'Referral Code',
                 suffixIcon: Builder(
                   builder: (context) => IconButton(
+                    // TODO: When we show tooltip and click back button, current page is popped but tooltip is not disappearing
                     onPressed: () => showTooltip(
                         context, 'Enter referral code to get cash reward'),
                     icon: const Icon(Icons.info_outline),

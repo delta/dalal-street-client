@@ -1,5 +1,6 @@
-import 'package:dalal_street_client/blocs/user/user_bloc.dart';
+import 'package:dalal_street_client/blocs/dalal/dalal_bloc.dart';
 import 'package:dalal_street_client/config.dart';
+import 'package:dalal_street_client/constants/error_messages.dart';
 import 'package:dalal_street_client/grpc/client.dart';
 import 'package:dalal_street_client/navigation/route_generator.dart';
 import 'package:dalal_street_client/theme/theme.dart';
@@ -47,6 +48,8 @@ final Logger logger = Logger();
 /// getIt.unregister<User>();
 /// // Can unregister with names
 /// getIt.unregister(instanceName: 'String 2');
+/// // Or unregister everything:
+/// getIt.reset();
 /// ```
 ///
 /// For more complex usecases checkout [get_it](https://pub.dev/packages/get_it)
@@ -69,16 +72,17 @@ void main() async {
 
   // Start the app
   runApp(
-    // Provide UserBloc at the root of the App
+    // Provide DalalBloc at the root of the App
     BlocProvider(
-      create: (_) => UserBloc(),
+      create: (_) => DalalBloc(),
       child: DalalApp(),
     ),
   );
 }
 
 // TODO: add proper validationMessages in all ReactiveForms
-// TODO: add metadata in all forms to facilitate Autfofill
+// TODO: add metadata in all forms to facilitate Autofill
+// TODO: do that thing where if we hit enter while filling a form the focus will shift to the next textfield. Don't know what it's called
 class DalalApp extends StatelessWidget {
   DalalApp({Key? key}) : super(key: key);
 
@@ -94,35 +98,42 @@ class DalalApp extends StatelessWidget {
         theme: appTheme,
         themeMode: ThemeMode.dark,
         // Show snackbar and navigate to Home or Login page whenever UserState changes
-        builder: (context, child) => BlocListener<UserBloc, UserState>(
+        builder: (context, child) => BlocListener<DalalBloc, DalalState>(
           listener: (context, state) {
-            if (state is UserDataLoaded) {
+            if (state is DalalDataLoaded) {
               // Register sessionId
               getIt.registerSingleton(state.sessionId);
+              // Register static company infos
+              getIt.registerSingleton(state.companies);
+              // Register Global Streams
+              getIt.registerSingleton(state.globalStreams);
 
               logger.i('user logged in');
               if (state.user.isPhoneVerified) {
                 //showSnackBar(context, 'Welcome ${state.user.name}');
                 _navigator.pushNamedAndRemoveUntil(
-                  '/home',
+                  '/dailyChallenges',
                   (route) => false,
-                  arguments: state.user,
+                  // arguments: state.user,
                 );
               } else {
                 showSnackBar(context, 'Verify your phone to continue');
                 _navigator.pushNamedAndRemoveUntil(
                     '/enterPhone', (route) => false);
               }
-            } else if (state is UserLoggedOut) {
-              if (!state.fromSplash) {
-                // Unregister sessionId
-                getIt.unregister<String>();
+            } else if (state is DalalLoggedOut) {
+              // Unregister everything
+              getIt.reset();
 
-                // Show msg only when comming from a page other than splash
+              if (!state.fromSplash) {
+                // Show msg only when coming from a page other than splash
                 logger.i('user logged out');
                 showSnackBar(context, 'User Logged Out');
               }
               _navigator.pushNamedAndRemoveUntil('/landing', (route) => false);
+            } else if (state is DalalLoginFailed) {
+              // TODO: add retry button
+              showSnackBar(context, failedToReachServer);
             }
           },
           child: child,

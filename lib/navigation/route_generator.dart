@@ -6,11 +6,13 @@ import 'package:dalal_street_client/blocs/auth/verify_phone/enter_otp/enter_otp_
 import 'package:dalal_street_client/blocs/auth/verify_phone/enter_phone/enter_phone_cubit.dart';
 import 'package:dalal_street_client/blocs/companies/companies_bloc.dart';
 import 'package:dalal_street_client/blocs/subscribe/subscribe_cubit.dart';
+import 'package:dalal_street_client/blocs/daily_challenges/daily_challenges_page_cubit.dart';
 import 'package:dalal_street_client/pages/auth/check_mail_page.dart';
 import 'package:dalal_street_client/pages/auth/login_page.dart';
 import 'package:dalal_street_client/pages/auth/register_page.dart';
 import 'package:dalal_street_client/pages/auth/verify_phone/enter_otp_page.dart';
 import 'package:dalal_street_client/pages/auth/verify_phone/enter_phone_page.dart';
+import 'package:dalal_street_client/pages/daily_challenges/daily_challenges_page.dart';
 import 'package:dalal_street_client/pages/home_page.dart';
 import 'package:dalal_street_client/pages/landing_page.dart';
 import 'package:dalal_street_client/pages/splash_page.dart';
@@ -81,6 +83,12 @@ class RouteGenerator {
           );
         }
         throw Exception('Invalid user args');
+      case '/dailyChallenges':
+        return BlocProvider(
+          create: (context) =>
+              DailyChallengesPageCubit()..getChallengesConfig(),
+          child: const DailyChallengesPage(),
+        );
       default:
         throw Exception('Invalid Route');
     }
