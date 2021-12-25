@@ -1,10 +1,13 @@
 // TODO: Need a better and simpler routing strategy
 
+import 'dart:js';
+
 import 'package:dalal_street_client/blocs/auth/login/login_cubit.dart';
 import 'package:dalal_street_client/blocs/auth/register/register_cubit.dart';
 import 'package:dalal_street_client/blocs/auth/verify_phone/enter_otp/enter_otp_cubit.dart';
 import 'package:dalal_street_client/blocs/auth/verify_phone/enter_phone/enter_phone_cubit.dart';
 import 'package:dalal_street_client/blocs/companies/companies_bloc.dart';
+import 'package:dalal_street_client/blocs/market_event/market_event_bloc.dart';
 import 'package:dalal_street_client/blocs/subscribe/subscribe_cubit.dart';
 import 'package:dalal_street_client/pages/auth/check_mail_page.dart';
 import 'package:dalal_street_client/pages/auth/login_page.dart';
@@ -13,6 +16,7 @@ import 'package:dalal_street_client/pages/auth/verify_phone/enter_otp_page.dart'
 import 'package:dalal_street_client/pages/auth/verify_phone/enter_phone_page.dart';
 import 'package:dalal_street_client/pages/home_page.dart';
 import 'package:dalal_street_client/pages/landing_page.dart';
+import 'package:dalal_street_client/pages/news_page.dart';
 import 'package:dalal_street_client/pages/splash_page.dart';
 import 'package:dalal_street_client/proto_build/models/User.pb.dart';
 import 'package:flutter/material.dart';
@@ -64,6 +68,9 @@ class RouteGenerator {
           );
         }
         throw Exception('Invalid phone args');
+      case '/news_page':
+       return BlocProvider(create: (context) => MarketEventBloc(),
+       child: const News_Page(),);
 
       // Home Pages
       case '/home':
