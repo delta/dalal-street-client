@@ -1,4 +1,3 @@
-import 'package:dalal_street_client/blocs/companies/companies_bloc.dart';
 import 'package:dalal_street_client/blocs/stock_prices/stock_prices_bloc.dart';
 import 'package:dalal_street_client/blocs/subscribe/subscribe_cubit.dart';
 import 'package:dalal_street_client/main.dart';
@@ -38,8 +37,6 @@ class _HomePageState extends State<HomePage> {
   @override
   initState() {
     super.initState();
-    // Get List of Stocks
-    context.read<CompaniesBloc>().add(const GetStockList());
     // Subscribe to the stream of Stock Prices
     context.read<SubscribeCubit>().subscribe(DataStreamType.STOCK_PRICES);
     // TODO : Subscribe to the stream of News and Prices Graph
@@ -169,71 +166,63 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  BlocBuilder<CompaniesBloc, CompaniesState> _stockList() {
-    return BlocBuilder<CompaniesBloc, CompaniesState>(
-      builder: (context, state) {
-        if (state is GetCompaniesSuccess) {
-          var mapOfStocks = state.stockList.stockList;
-          logger.i(state.stockList.stockList.length);
-          return BlocBuilder<SubscribeCubit, SubscribeState>(
-              builder: (context, state) {
-            if (state is SubscriptionDataLoaded) {
-              // Start the stream of Stock Prices
-              context
-                  .read<StockPricesBloc>()
-                  .add(SubscribeToStockPrices(state.subscriptionId));
-              return ListView.builder(
-                shrinkWrap: true,
-                itemCount: mapOfStocks.length,
-                itemBuilder: (context, index) {
-                  Stock? company = mapOfStocks[index];
-                  int currentPrice = company?.currentPrice.toInt() ?? 0;
-                  int previousDayPrice = company?.previousDayClose.toInt() ?? 0;
-                  var priceChange = (currentPrice - previousDayPrice);
-                  return _stockItem(company, index, priceChange, currentPrice);
-                },
-              );
-            } else if (state is SubscriptonDataFailed) {
-              logger.i('Stock Prices Stream Failed $state');
-              return const Center(
-                child: Text(
-                  'Failed to load data \nReason : //',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: secondaryColor,
-                  ),
-                ),
-              );
-            } else {
-              return const Center(
-                child: CircularProgressIndicator(
-                  color: secondaryColor,
-                ),
-              );
-            }
-          });
-        } else {
-          return const Center(
-            child: CircularProgressIndicator(
+  Widget _stockList() {
+    var stockList = getIt<Map<int, Stock>>();
+    return BlocBuilder<SubscribeCubit, SubscribeState>(
+        builder: (context, state) {
+      if (state is SubscriptionDataLoaded) {
+        // Start the stream of Stock Prices
+        context
+            .read<StockPricesBloc>()
+            .add(SubscribeToStockPrices(state.subscriptionId));
+        return ListView.builder(
+          shrinkWrap: true,
+          itemCount: stockList.length,
+          itemBuilder: (context, index) {
+            Stock? company = stockList[index];
+            int currentPrice = company?.currentPrice.toInt() ?? 0;
+            int previousDayPrice = company?.previousDayClose.toInt() ?? 0;
+            var priceChange = (currentPrice - previousDayPrice);
+            return _stockItem(company, index, priceChange, currentPrice);
+          },
+        );
+      } else if (state is SubscriptonDataFailed) {
+        logger.i('Stock Prices Stream Failed $state');
+        return const Center(
+          child: Text(
+            'Failed to load data \nReason : //',
+            style: TextStyle(
+              fontSize: 14,
               color: secondaryColor,
             ),
-          );
-        }
-      },
-    );
+          ),
+        );
+      } else {
+        return const Center(
+          child: CircularProgressIndicator(
+            color: secondaryColor,
+          ),
+        );
+      }
+    });
   }
 
-  Container _stockItem(
+  Widget _stockItem(
       Stock? company, int index, int priceChange, int currentPrice) {
-    return Container(
-        padding: const EdgeInsets.symmetric(
-          vertical: 10,
-        ),
-        child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-          _stockNames(company),
-          _stockGraph(),
-          _stockPrices(index, priceChange, currentPrice),
-        ]));
+    return GestureDetector(
+      onTap: () {
+        Navigator.pushNamed(context, '/company', arguments: company!.id);
+      },
+      child: Container(
+          padding: const EdgeInsets.symmetric(
+            vertical: 10,
+          ),
+          child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+            _stockNames(company),
+            _stockGraph(),
+            _stockPrices(index, priceChange, currentPrice),
+          ])),
+    );
   }
 
   Expanded _stockNames(Stock? company) {

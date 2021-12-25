@@ -31,7 +31,7 @@ class LoginCubit extends Cubit<LoginState> {
       emit(LoginSuccess(loginResp));
       dalalBloc.add(DalalLogIn(
         loginResp,
-        stockMapToCompanyMap(globalStreams.stockList),
+        globalStreams.stockList,
         globalStreams,
       ));
     } catch (e) {

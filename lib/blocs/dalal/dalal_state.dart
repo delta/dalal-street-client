@@ -38,7 +38,7 @@ class DalalDataLoaded extends DalalState {
   final User user;
   // Extra Data
   final String sessionId;
-  final Map<int, CompanyInfo> companies;
+  final Map<int, Stock> companies;
   final GlobalStreams globalStreams;
 
   const DalalDataLoaded(

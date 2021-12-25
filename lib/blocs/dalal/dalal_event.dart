@@ -24,7 +24,7 @@ class GetUserData extends DalalEvent {
 
 class DalalLogIn extends DalalEvent {
   final LoginResponse loginResponse;
-  final Map<int, CompanyInfo> companies;
+  final Map<int, Stock> companies;
   final GlobalStreams globalStreams;
 
   const DalalLogIn(this.loginResponse, this.companies, this.globalStreams);

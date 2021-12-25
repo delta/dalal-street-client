@@ -10,22 +10,6 @@ abstract class CompaniesState extends Equatable {
 
 class CompaniesInitial extends CompaniesState {}
 
-class GetCompaniesSuccess extends CompaniesState {
-  final GetStockListResponse stockList;
-  const GetCompaniesSuccess(this.stockList);
-
-  @override
-  List<Object> get props => [stockList];
-}
-
-class GetCompaniesFailed extends CompaniesState {
-  final String error;
-  const GetCompaniesFailed(this.error);
-
-  @override
-  List<Object> get props => [error];
-}
-
 class GetCompanyByIdSuccess extends CompaniesState {
   final GetCompanyProfileResponse company;
   const GetCompanyByIdSuccess(this.company);
