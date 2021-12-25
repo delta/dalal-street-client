@@ -94,7 +94,7 @@ Container newsItem(String headline, String text, String imagePath) {
           )),
           Flexible(
               child: Text(headline,
-                  style: TextStyle(color: Colors.white, fontSize: 15)),
+                  style: const TextStyle(color: Colors.white, fontSize: 15)),
               fit: FlexFit.loose),
           //  Text(text,style: TextStyle(color: Color.fromARGB(255, 179, 0, 0),fontSize: 10 )
           //  ),
