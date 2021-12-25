@@ -4,6 +4,7 @@ import 'package:dalal_street_client/grpc/client.dart';
 import 'package:dalal_street_client/streams/global_streams.dart';
 import 'package:dalal_street_client/proto_build/actions/Login.pb.dart';
 import 'package:dalal_street_client/proto_build/actions/Logout.pb.dart';
+import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
 import 'package:dalal_street_client/proto_build/models/User.pb.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';

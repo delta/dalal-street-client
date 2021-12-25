@@ -4,6 +4,7 @@ import 'package:dalal_street_client/blocs/market_depth/market_depth_bloc.dart';
 import 'package:dalal_street_client/blocs/subscribe/subscribe_cubit.dart';
 import 'package:dalal_street_client/components/buttons/primary_button.dart';
 import 'package:dalal_street_client/components/buttons/secondary_button.dart';
+import 'package:dalal_street_client/config/get_it.dart';
 import 'package:dalal_street_client/constants/icons.dart';
 import 'package:dalal_street_client/main.dart';
 import 'package:dalal_street_client/proto_build/datastreams/MarketDepth.pb.dart';
@@ -35,84 +36,60 @@ class _CompanyPageState extends State<CompanyPage>
   @override
   initState() {
     super.initState();
-    // Get List of Stocks
-    context.read<CompaniesBloc>().add(GetStockById(widget.stockId));
     // Subscribe to the stream of Market Depth Updates
     context.read<SubscribeCubit>().subscribe(DataStreamType.MARKET_DEPTH);
   }
 
   @override
   Widget build(BuildContext context) {
+    final stockList = getIt<Map<int, Stock>>();
+    Stock company = stockList[widget.stockId]!;
     return SafeArea(
       child: Responsive(
         mobile: Scaffold(
-          backgroundColor: Colors.black,
-          body: BlocBuilder<CompaniesBloc, CompaniesState>(
-              builder: (context, state) {
-            if (state is GetCompanyByIdSuccess) {
-              Stock company = state.company.stockDetails;
-
-              return Stack(
-                alignment: Alignment.bottomCenter,
-                children: [
-                  SingleChildScrollView(
-                    physics: const BouncingScrollPhysics(
-                        parent: AlwaysScrollableScrollPhysics()),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 10, horizontal: 10),
-                      child: Column(
-                        children: [
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          _companyPrices(company),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          _companyTabView(context, company)
-                        ],
-                      ),
+            backgroundColor: Colors.black,
+            body: Stack(
+              alignment: Alignment.bottomCenter,
+              children: [
+                SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(
+                      parent: AlwaysScrollableScrollPhysics()),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10, horizontal: 10),
+                    child: Column(
+                      children: [
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        _companyPrices(company),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        _companyTabView(context, company)
+                      ],
                     ),
                   ),
-                  Container(
-                    height: 70,
-                    decoration: const BoxDecoration(
-                        color: baseColor,
-                        borderRadius: BorderRadius.only(
-                          topRight: Radius.circular(15),
-                          topLeft: Radius.circular(15),
-                        )),
-                    alignment: Alignment.bottomCenter,
-                    child: const Center(
-                      child: PrimaryButton(
-                        height: 45,
-                        width: 340,
-                        title: 'Place Order',
-                      ),
+                ),
+                Container(
+                  height: 70,
+                  decoration: const BoxDecoration(
+                      color: baseColor,
+                      borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(15),
+                        topLeft: Radius.circular(15),
+                      )),
+                  alignment: Alignment.bottomCenter,
+                  child: const Center(
+                    child: PrimaryButton(
+                      height: 45,
+                      width: 340,
+                      title: 'Place Order',
                     ),
                   ),
-                ],
-              );
-            } else if (state is GetCompaniesFailed) {
-              return const Center(
-                child: Text(
-                  'Failed to load data \nReason : //',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: secondaryColor,
-                  ),
                 ),
-              );
-            } else {
-              return const Center(
-                child: CircularProgressIndicator(
-                  color: primaryColor,
-                ),
-              );
-            }
-          }),
-        ),
+              ],
+            )),
         tablet: Container(),
         desktop: Container(),
       ),
@@ -139,7 +116,7 @@ Container _companyTabView(BuildContext context, Stock company) {
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
-                      color: lightGrey,
+                      color: lightGray,
                     ),
                     textAlign: TextAlign.start,
                   ),
@@ -150,7 +127,7 @@ Container _companyTabView(BuildContext context, Stock company) {
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
-                      color: lightGrey,
+                      color: lightGray,
                     ),
                     textAlign: TextAlign.start,
                   ),
@@ -161,7 +138,7 @@ Container _companyTabView(BuildContext context, Stock company) {
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
-                      color: lightGrey,
+                      color: lightGray,
                     ),
                     textAlign: TextAlign.start,
                   ),
@@ -464,7 +441,7 @@ Column _overView(Stock company) {
         style: const TextStyle(
           fontSize: 16,
           fontWeight: FontWeight.w500,
-          color: lightGrey,
+          color: lightGray,
         ),
         textAlign: TextAlign.start,
       ),
@@ -480,15 +457,15 @@ Column _overView(Stock company) {
         ),
         textAlign: TextAlign.start,
       ),
-      marketStatusTile(AppIcons().currentPrice, 'Current Price',
+      marketStatusTile(AppIcons.currentPrice, 'Current Price',
           oCcy.format(company.currentPrice).toString(), false),
-      marketStatusTile(AppIcons().dayHigh, 'Day High',
+      marketStatusTile(AppIcons.dayHigh, 'Day High',
           oCcy.format(company.dayHigh).toString(), false),
-      marketStatusTile(AppIcons().dayHigh, 'Day Low',
+      marketStatusTile(AppIcons.dayHigh, 'Day Low',
           oCcy.format(company.dayLow).toString(), true),
-      marketStatusTile(AppIcons().alltimeHigh, 'All Time High',
+      marketStatusTile(AppIcons.alltimeHigh, 'All Time High',
           oCcy.format(company.allTimeHigh).toString(), false),
-      marketStatusTile(AppIcons().alltimeHigh, 'All Time Low',
+      marketStatusTile(AppIcons.alltimeHigh, 'All Time Low',
           oCcy.format(company.allTimeLow).toString(), true),
     ],
   );
