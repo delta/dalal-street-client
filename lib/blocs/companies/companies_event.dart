@@ -8,10 +8,6 @@ abstract class CompaniesEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class GetStockList extends CompaniesEvent {
-  const GetStockList();
-}
-
 class GetStockById extends CompaniesEvent {
   final int stockId;
   const GetStockById(this.stockId);
