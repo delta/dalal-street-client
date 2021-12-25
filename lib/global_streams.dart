@@ -1,11 +1,12 @@
 import 'package:dalal_street_client/grpc/client.dart';
-import 'package:dalal_street_client/main.dart';
 import 'package:dalal_street_client/proto_build/actions/GetStockList.pb.dart';
 import 'package:dalal_street_client/proto_build/datastreams/GameState.pb.dart';
 import 'package:dalal_street_client/proto_build/datastreams/Subscribe.pb.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
 import 'package:equatable/equatable.dart';
 import 'package:grpc/grpc_or_grpcweb.dart';
+
+import 'config/log.dart';
 
 /// Streams used in many places in the app
 class GlobalStreams extends Equatable {

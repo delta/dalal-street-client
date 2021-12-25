@@ -1,8 +1,9 @@
 import 'package:bloc/bloc.dart';
+import 'package:dalal_street_client/config/get_it.dart';
+import 'package:dalal_street_client/config/log.dart';
 import 'package:dalal_street_client/constants/error_messages.dart';
 import 'package:dalal_street_client/global_streams.dart';
 import 'package:dalal_street_client/grpc/client.dart';
-import 'package:dalal_street_client/main.dart';
 import 'package:dalal_street_client/proto_build/actions/GetDailyChallengeConfig.pb.dart';
 import 'package:dalal_street_client/proto_build/datastreams/GameState.pb.dart';
 import 'package:dalal_street_client/proto_build/models/GameState.pbenum.dart';
