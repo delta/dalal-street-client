@@ -21,9 +21,10 @@ class GetMarketEventFailure extends MarketEventState {
   @override
   List<Object> get props => [error];
 }
+
 class SubscriptionToMarketEventSuccess extends MarketEventState {
   final MarketEventUpdate news;
-  const SubscriptionToMarketEventSuccess (this.news);
+  const SubscriptionToMarketEventSuccess(this.news);
 
   @override
   List<Object> get props => [news];

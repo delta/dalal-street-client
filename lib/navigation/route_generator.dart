@@ -69,8 +69,10 @@ class RouteGenerator {
         }
         throw Exception('Invalid phone args');
       case '/news_page':
-       return BlocProvider(create: (context) => MarketEventBloc(),
-       child: const News_Page(),);
+        return BlocProvider(
+          create: (context) => MarketEventBloc(),
+          child: const News_Page(),
+        );
 
       // Home Pages
       case '/home':

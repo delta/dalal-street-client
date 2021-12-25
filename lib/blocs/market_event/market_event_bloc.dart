@@ -24,19 +24,18 @@ class MarketEventBloc extends Bloc<GetMarketEvent, MarketEventState> {
         emit(GetMarketEventFailure(e.toString()));
       }
     });
-  
-  // on<GetMarketEventFeed>((event, emit) async {
-  //     try {
-  //       final newsFeed =
-  //           streamClient.getMarketEventUpdates(event.subscriptionId);
-  //       await for (final news in newsFeed) {
-  //         emit(SubscriptionToMarketEventSuccess(news));
-  //       }
-  //     } catch (e) {
-  //       logger.e(e);
-  //       emit(SubscriptionToMarketEventFailed(e.toString()));
-  //     }
-  //   });
-  
-}
+
+    // on<GetMarketEventFeed>((event, emit) async {
+    //     try {
+    //       final newsFeed =
+    //           streamClient.getMarketEventUpdates(event.subscriptionId);
+    //       await for (final news in newsFeed) {
+    //         emit(SubscriptionToMarketEventSuccess(news));
+    //       }
+    //     } catch (e) {
+    //       logger.e(e);
+    //       emit(SubscriptionToMarketEventFailed(e.toString()));
+    //     }
+    //   });
+  }
 }
