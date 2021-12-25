@@ -139,6 +139,7 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.4"
+<<<<<<< HEAD
   flutter_spinbox:
     dependency: "direct main"
     description:
@@ -146,6 +147,8 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.8.0"
+=======
+>>>>>>> [feat]: Add Company Page and MarketDepth
   flutter_svg:
     dependency: "direct main"
     description:

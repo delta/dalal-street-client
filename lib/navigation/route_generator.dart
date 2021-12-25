@@ -122,6 +122,9 @@ class RouteGenerator {
                 create: (context) => MarketDepthBloc(),
               ),
               BlocProvider(
+                create: (context) => StockPricesBloc(),
+              ),
+              BlocProvider(
                 create: (context) => SubscribeCubit(),
               ),
             ],
