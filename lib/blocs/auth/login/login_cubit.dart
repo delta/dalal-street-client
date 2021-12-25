@@ -5,7 +5,7 @@ import 'package:dalal_street_client/grpc/client.dart';
 import 'package:dalal_street_client/main.dart';
 import 'package:dalal_street_client/models/company_info.dart';
 import 'package:dalal_street_client/pages/auth/login_page.dart';
-import 'package:dalal_street_client/post_login.dart';
+import 'package:dalal_street_client/global_streams.dart';
 import 'package:dalal_street_client/proto_build/actions/Login.pb.dart';
 import 'package:equatable/equatable.dart';
 
@@ -24,14 +24,14 @@ class LoginCubit extends Cubit<LoginState> {
           .login(LoginRequest(email: email, password: password));
       final sessionId = loginResp.sessionId;
       if (loginResp.statusCode != LoginResponse_StatusCode.OK) {
-        throw Exception();
+        throw Exception(loginResp.statusMessage);
       }
-      final postLogin = await getPostLoginData(sessionId);
+      final globalStreams = await subscribeToGlobalStreams(sessionId);
       emit(LoginSuccess(loginResp));
       userBloc.add(UserLogIn(
         loginResp,
-        stockMapToCompanyMap(postLogin.stockList),
-        postLogin.gameStateStream,
+        stockMapToCompanyMap(globalStreams.stockList),
+        globalStreams.gameStateStream,
       ));
     } catch (e) {
       // Inavlid session id error not possible because this is first time login

@@ -23,6 +23,7 @@ dependencies:
   protobuf: ^2.0.0
 
   # BLoC - Stage Management Library
+  # TODO: update bloc version
   bloc: ^7.2.1
   bloc_concurrency: ^0.1.0
   flutter_bloc: ^7.3.0

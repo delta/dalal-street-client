@@ -38,6 +38,7 @@ class DailyChallengesPageCubit extends Cubit<DailyChallengesPageState> {
   /// Only call this after [getChallengesConfig] is succesful
   Future<void> listenToGameStateStream() async {
     final ResponseStream<GameStateUpdate> gameStateStream = getIt();
+    // TODO: only update state if `isDailyChallengeOpen` is changed
     await for (var update in gameStateStream) {
       try {
         final success = state as DailyChallengesPageSuccess;

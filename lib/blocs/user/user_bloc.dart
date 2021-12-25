@@ -1,7 +1,7 @@
 import 'package:dalal_street_client/grpc/client.dart';
 import 'package:dalal_street_client/main.dart';
 import 'package:dalal_street_client/models/company_info.dart';
-import 'package:dalal_street_client/post_login.dart';
+import 'package:dalal_street_client/global_streams.dart';
 import 'package:dalal_street_client/proto_build/actions/Login.pb.dart';
 import 'package:dalal_street_client/proto_build/actions/Logout.pb.dart';
 import 'package:dalal_street_client/proto_build/datastreams/GameState.pb.dart';
@@ -45,14 +45,14 @@ class UserBloc extends HydratedBloc<UserEvent, UserState> {
         );
         // Internal Error. User should be given option to try again
         if (loginResponse.statusCode != LoginResponse_StatusCode.OK) {
-          throw Exception();
+          throw Exception(loginResponse.statusMessage);
         }
-        final postLogin = await getPostLoginData(sessionId);
+        final globalStreams = await subscribeToGlobalStreams(sessionId);
         emit(UserDataLoaded(
           loginResponse.user,
           loginResponse.sessionId,
-          stockMapToCompanyMap(postLogin.stockList),
-          postLogin.gameStateStream,
+          stockMapToCompanyMap(globalStreams.stockList),
+          globalStreams.gameStateStream,
         ));
       } on GrpcError catch (e) {
         logger.e(e);

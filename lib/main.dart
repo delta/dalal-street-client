@@ -48,6 +48,8 @@ final Logger logger = Logger();
 /// getIt.unregister<User>();
 /// // Can unregister with names
 /// getIt.unregister(instanceName: 'String 2');
+/// // Or unregister everything:
+/// getIt.reset();
 /// ```
 ///
 /// For more complex usecases checkout [get_it](https://pub.dev/packages/get_it)
