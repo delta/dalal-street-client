@@ -5,7 +5,6 @@ import 'package:dalal_street_client/blocs/subscribe/subscribe_cubit.dart';
 import 'package:dalal_street_client/components/buttons/primary_button.dart';
 import 'package:dalal_street_client/components/buttons/secondary_button.dart';
 import 'package:dalal_street_client/constants/icons.dart';
-import 'package:dalal_street_client/grpc/client.dart';
 import 'package:dalal_street_client/main.dart';
 import 'package:dalal_street_client/proto_build/datastreams/MarketDepth.pb.dart';
 import 'package:dalal_street_client/proto_build/datastreams/Subscribe.pb.dart';
@@ -272,6 +271,7 @@ Container _companyPrices(Stock company) {
           ]));
 }
 
+// TODO : Add Graph
 Image _companyGraph() => Image.network('https://i.imgur.com/Y6CBCX2.png');
 
 Container _news() {

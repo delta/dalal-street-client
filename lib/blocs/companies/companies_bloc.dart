@@ -8,7 +8,7 @@ import '../../main.dart';
 part 'companies_event.dart';
 part 'companies_state.dart';
 
-/// Bloc which manages states of all the company specific data streams
+/// Bloc which manages states of all the company specific rpc calls
 class CompaniesBloc extends Bloc<CompaniesEvent, CompaniesState> {
   CompaniesBloc() : super(CompaniesInitial()) {
     on<GetStockList>((event, emit) async {

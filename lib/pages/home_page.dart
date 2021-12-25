@@ -48,58 +48,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(context) {
-    /// TODO : Remove this after testing
-    // Timer.periodic(const Duration(seconds: 1), (timer) async {
-    //   logger.i('Updating prices....');
-    //   Random rnd;
-    //   int min = 457;
-    //   int max = 10000;
-    //   rnd = Random();
-    //   price = min + rnd.nextInt(max - min);
-    //   try {
-    //     final resp = await actionClient.updateStockPrice(
-    //         UpdateStockPriceRequest(stockId: 1, newPrice: Int64(price)),
-    //         options: sessionOptions(getIt()));
-
-    //     rnd = Random();
-    //     price = min + rnd.nextInt(max - min);
-    //     final resp1 = await actionClient.updateStockPrice(
-    //         UpdateStockPriceRequest(stockId: 2, newPrice: Int64(price)),
-    //         options: sessionOptions(getIt()));
-
-    //     rnd = Random();
-    //     price = min + rnd.nextInt(max - min);
-    //     final resp2 = await actionClient.updateStockPrice(
-    //         UpdateStockPriceRequest(stockId: 3, newPrice: Int64(price)),
-    //         options: sessionOptions(getIt()));
-
-    //     rnd = Random();
-    //     price = min + rnd.nextInt(max - min);
-    //     final resp3 = await actionClient.updateStockPrice(
-    //         UpdateStockPriceRequest(stockId: 4, newPrice: Int64(price)),
-    //         options: sessionOptions(getIt()));
-
-    //     rnd = Random();
-    //     price = min + rnd.nextInt(max - min);
-    //     final resp4 = await actionClient.updateStockPrice(
-    //         UpdateStockPriceRequest(stockId: 5, newPrice: Int64(price)),
-    //         options: sessionOptions(getIt()));
-
-    //     rnd = Random();
-    //     price = min + rnd.nextInt(max - min);
-    //     final resp5 = await actionClient.updateStockPrice(
-    //         UpdateStockPriceRequest(stockId: 6, newPrice: Int64(price)),
-    //         options: sessionOptions(getIt()));
-    //     if (resp.statusCode == UpdateStockPriceResponse_StatusCode.OK) {
-    //       logger.i('Price has been Updated');
-    //     } else {
-    //       logger.e('Price Update Failed');
-    //     }
-    //   } catch (e) {
-    //     logger.e(e);
-    //   }
-    // });
-    ///////////////////////////////////////////////
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.black,
