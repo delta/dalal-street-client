@@ -1,4 +1,5 @@
 import 'package:dalal_street_client/blocs/companies/companies_bloc.dart';
+import 'package:dalal_street_client/blocs/stock_prices/stock_prices_bloc.dart';
 import 'package:dalal_street_client/blocs/subscribe/subscribe_cubit.dart';
 import 'package:dalal_street_client/main.dart';
 import 'package:dalal_street_client/proto_build/datastreams/Subscribe.pb.dart';
@@ -179,7 +180,7 @@ class _HomePageState extends State<HomePage> {
             if (state is SubscriptionDataLoaded) {
               // Start the stream of Stock Prices
               context
-                  .read<CompaniesBloc>()
+                  .read<StockPricesBloc>()
                   .add(SubscribeToStockPrices(state.subscriptionId));
               return ListView.builder(
                 shrinkWrap: true,
@@ -266,7 +267,7 @@ class _HomePageState extends State<HomePage> {
 
   Expanded _stockPrices(int index, int priceChange, int currentPrice) {
     return Expanded(
-      child: BlocBuilder<CompaniesBloc, CompaniesState>(
+      child: BlocBuilder<StockPricesBloc, StockPricesState>(
         builder: (context, state) {
           if (state is SubscriptionToStockPricesSuccess) {
             var currentStockPrice = state.stockPrices.prices[index];
