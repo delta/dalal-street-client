@@ -19,8 +19,8 @@ part 'dalal_state.dart';
 ///
 /// The [DalalBloc] object can be accesed from anywhere in the widget tree easily using a [BuildContext] :
 /// ```dart
-/// final userBloc = context.read<UserBloc>();
-/// userBloc.add(const UserLogOut());
+/// final dalalBloc = context.read<DalalBloc>();
+/// dalalBloc.add(const DalalLogOut());
 /// ```
 class DalalBloc extends HydratedBloc<DalalEvent, DalalState> {
   DalalBloc() : super(const DalalLoggedOut()) {
@@ -68,7 +68,7 @@ class DalalBloc extends HydratedBloc<DalalEvent, DalalState> {
       }
     });
 
-    // TODO: UserLogIn event and UserDataLoaded state has the exact same data. Maybe some refactoring can be done?
+    // TODO: DalalLogIn event and DalalDataLoaded state has the exact same data. Maybe some refactoring can be done?
     on<DalalLogIn>((event, emit) => emit(DalalDataLoaded(
           event.loginResponse.user,
           event.loginResponse.sessionId,

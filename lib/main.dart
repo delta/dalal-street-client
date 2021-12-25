@@ -72,7 +72,7 @@ void main() async {
 
   // Start the app
   runApp(
-    // Provide UserBloc at the root of the App
+    // Provide DalalBloc at the root of the App
     BlocProvider(
       create: (_) => DalalBloc(),
       child: DalalApp(),
