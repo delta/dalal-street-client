@@ -1,4 +1,4 @@
-import 'package:dalal_street_client/blocs/user/user_bloc.dart';
+import 'package:dalal_street_client/blocs/dalal/dalal_bloc.dart';
 import 'package:dalal_street_client/config.dart';
 import 'package:dalal_street_client/constants/error_messages.dart';
 import 'package:dalal_street_client/grpc/client.dart';
@@ -74,14 +74,15 @@ void main() async {
   runApp(
     // Provide UserBloc at the root of the App
     BlocProvider(
-      create: (_) => UserBloc(),
+      create: (_) => DalalBloc(),
       child: DalalApp(),
     ),
   );
 }
 
 // TODO: add proper validationMessages in all ReactiveForms
-// TODO: add metadata in all forms to facilitate Autfofill
+// TODO: add metadata in all forms to facilitate Autofill
+// TODO: do that thing where if we hit enter while filling a form the focus will shift to the next textfield. Don't know what it's called
 class DalalApp extends StatelessWidget {
   DalalApp({Key? key}) : super(key: key);
 
@@ -97,9 +98,9 @@ class DalalApp extends StatelessWidget {
         theme: appTheme,
         themeMode: ThemeMode.dark,
         // Show snackbar and navigate to Home or Login page whenever UserState changes
-        builder: (context, child) => BlocListener<UserBloc, UserState>(
+        builder: (context, child) => BlocListener<DalalBloc, DalalState>(
           listener: (context, state) {
-            if (state is UserDataLoaded) {
+            if (state is DalalDataLoaded) {
               // Register sessionId
               getIt.registerSingleton(state.sessionId);
               // Register static company infos
@@ -120,7 +121,7 @@ class DalalApp extends StatelessWidget {
                 _navigator.pushNamedAndRemoveUntil(
                     '/enterPhone', (route) => false);
               }
-            } else if (state is UserLoggedOut) {
+            } else if (state is DalalLoggedOut) {
               // Unregister everything
               getIt.reset();
 
@@ -130,7 +131,7 @@ class DalalApp extends StatelessWidget {
                 showSnackBar(context, 'User Logged Out');
               }
               _navigator.pushNamedAndRemoveUntil('/landing', (route) => false);
-            } else if (state is UserLoginFailed) {
+            } else if (state is DalalLoginFailed) {
               // TODO: add retry button
               showSnackBar(context, failedToReachServer);
             }

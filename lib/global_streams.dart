@@ -4,10 +4,11 @@ import 'package:dalal_street_client/proto_build/actions/GetStockList.pb.dart';
 import 'package:dalal_street_client/proto_build/datastreams/GameState.pb.dart';
 import 'package:dalal_street_client/proto_build/datastreams/Subscribe.pb.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
+import 'package:equatable/equatable.dart';
 import 'package:grpc/grpc_or_grpcweb.dart';
 
 /// Streams used in many places in the app
-class GlobalStreams {
+class GlobalStreams extends Equatable {
   // TODO: convert this into a stream, make this update in realtime using appropriate streams
   final Map<int, Stock> stockList;
   // TODO: add remaining global streams
@@ -16,7 +17,14 @@ class GlobalStreams {
   // Only used to unsubscribe from global streams. Don't use these to subscribe again
   final List<SubscriptionId> subscriptionIds;
 
-  GlobalStreams(this.stockList, this.gameStateStream, this.subscriptionIds);
+  const GlobalStreams(
+    this.stockList,
+    this.gameStateStream,
+    this.subscriptionIds,
+  );
+
+  @override
+  List<Object?> get props => [stockList, gameStateStream, subscriptionIds];
 }
 
 /// Subscribes to all Global Streams after login and returns the stream objects

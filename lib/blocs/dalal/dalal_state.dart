@@ -1,7 +1,7 @@
-part of 'user_bloc.dart';
+part of 'dalal_bloc.dart';
 
-abstract class UserState extends Equatable {
-  const UserState();
+abstract class DalalState extends Equatable {
+  const DalalState();
 
   @override
   List<Object> get props => [];
@@ -10,10 +10,10 @@ abstract class UserState extends Equatable {
 /// User is logged out
 ///
 /// Show Login Page
-class UserLoggedOut extends UserState {
+class DalalLoggedOut extends DalalState {
   final bool fromSplash;
 
-  const UserLoggedOut({this.fromSplash = false});
+  const DalalLoggedOut({this.fromSplash = false});
 
   @override
   List<Object> get props => [fromSplash];
@@ -22,10 +22,10 @@ class UserLoggedOut extends UserState {
 /// User is logged in but User data needs to fetched(already authenticated, just opened the app)
 ///
 /// Show splash page and fetch user data, then go to home page
-class UserLoggedIn extends UserState {
+class DalalLoggedIn extends DalalState {
   final String sessionId;
 
-  const UserLoggedIn(this.sessionId);
+  const DalalLoggedIn(this.sessionId);
 
   @override
   List<Object> get props => [sessionId];
@@ -34,14 +34,14 @@ class UserLoggedIn extends UserState {
 /// User is logged in(user is currently using the app)
 ///
 /// Show home page
-class UserDataLoaded extends UserState {
+class DalalDataLoaded extends DalalState {
   final User user;
   // Extra Data
   final String sessionId;
   final Map<int, CompanyInfo> companies;
   final GlobalStreams globalStreams;
 
-  const UserDataLoaded(
+  const DalalDataLoaded(
     this.user,
     this.sessionId,
     this.companies,
@@ -55,10 +55,10 @@ class UserDataLoaded extends UserState {
 /// When failure happens in getting user data
 ///
 /// Stays in splash page. Shows snackbar with retry button
-class UserLoginFailed extends UserState {
+class DalalLoginFailed extends DalalState {
   final String sessionId;
 
-  const UserLoginFailed(this.sessionId);
+  const DalalLoginFailed(this.sessionId);
 
   @override
   List<Object> get props => [sessionId];

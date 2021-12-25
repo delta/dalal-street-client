@@ -1,5 +1,5 @@
 import 'package:bloc/bloc.dart';
-import 'package:dalal_street_client/blocs/user/user_bloc.dart';
+import 'package:dalal_street_client/blocs/dalal/dalal_bloc.dart';
 import 'package:dalal_street_client/constants/error_messages.dart';
 import 'package:dalal_street_client/grpc/client.dart';
 import 'package:dalal_street_client/main.dart';
@@ -13,9 +13,9 @@ part 'login_state.dart';
 
 /// Handles the state for [LoginPage]
 class LoginCubit extends Cubit<LoginState> {
-  final UserBloc userBloc;
+  final DalalBloc dalalBloc;
 
-  LoginCubit(this.userBloc) : super(LoginInitial());
+  LoginCubit(this.dalalBloc) : super(LoginInitial());
 
   Future<void> login(String email, String password) async {
     emit(const LoginLoading());
@@ -29,7 +29,7 @@ class LoginCubit extends Cubit<LoginState> {
       }
       final globalStreams = await subscribeToGlobalStreams(sessionId);
       emit(LoginSuccess(loginResp));
-      userBloc.add(UserLogIn(
+      dalalBloc.add(DalalLogIn(
         loginResp,
         stockMapToCompanyMap(globalStreams.stockList),
         globalStreams,
