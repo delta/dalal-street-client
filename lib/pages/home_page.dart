@@ -1,6 +1,6 @@
 import 'package:dalal_street_client/blocs/companies/companies_bloc.dart';
 import 'package:dalal_street_client/blocs/subscribe/subscribe_cubit.dart';
-import 'package:dalal_street_client/main.dart';
+import 'package:dalal_street_client/config/log.dart';
 import 'package:dalal_street_client/proto_build/datastreams/Subscribe.pb.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
 import 'package:dalal_street_client/proto_build/models/User.pb.dart';

@@ -1,4 +1,4 @@
-import 'package:dalal_street_client/config.dart';
+import 'package:dalal_street_client/config/config.dart';
 import 'package:dalal_street_client/grpc/read_cert.dart';
 import 'package:grpc/grpc.dart';
 import 'package:grpc/grpc_connection_interface.dart';
