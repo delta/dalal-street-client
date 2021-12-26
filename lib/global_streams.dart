@@ -60,7 +60,7 @@ Future<GlobalStreams> subscribeToGlobalStreams(String sessionId) async {
     }
 
     // subscription api to subscribe to stream
-    final subscription = Subscription();
+    final subscription = Subscription(sessionId);
 
     // subscribing to global streams
     late final SubscriptionId stockPriceSubscriptionId;
@@ -85,13 +85,22 @@ Future<GlobalStreams> subscribeToGlobalStreams(String sessionId) async {
     gameStateSubscriptionId = await subscription
         .subscribe(SubscribeRequest(dataStreamType: DataStreamType.GAME_STATE));
 
-    stockPriceStream =
-        streamClient.getStockPricesUpdates(stockPriceSubscriptionId);
-    notificationStream =
-        streamClient.getNotificationUpdates(notificationSubscriptionId);
-    transactionStream =
-        streamClient.getTransactionUpdates(transactionSubscriptionId);
-    gameStateStream = streamClient.getGameStateUpdates(gameStateSubscriptionId);
+    stockPriceStream = streamClient.getStockPricesUpdates(
+      stockPriceSubscriptionId,
+      options: sessionOptions(sessionId),
+    );
+    notificationStream = streamClient.getNotificationUpdates(
+      notificationSubscriptionId,
+      options: sessionOptions(sessionId),
+    );
+    transactionStream = streamClient.getTransactionUpdates(
+      transactionSubscriptionId,
+      options: sessionOptions(sessionId),
+    );
+    gameStateStream = streamClient.getGameStateUpdates(
+      gameStateSubscriptionId,
+      options: sessionOptions(sessionId),
+    );
 
     final subscriptionIds = [
       stockPriceSubscriptionId,

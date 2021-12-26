@@ -1,4 +1,3 @@
-import 'package:dalal_street_client/config/get_it.dart';
 import 'package:dalal_street_client/config/log.dart';
 import 'package:dalal_street_client/constants/exception.dart';
 import 'package:dalal_street_client/grpc/client.dart';
@@ -15,10 +14,14 @@ import 'package:dalal_street_client/proto_build/datastreams/Subscribe.pb.dart';
 ///  - unsubcribe to that stream, with [SubscriptionId]
 ///
 class Subscription {
+  final String _sessionid;
+
+  Subscription(this._sessionid);
+
   Future<SubscriptionId> subscribe(SubscribeRequest subscribeRequest) async {
     try {
       final subscribeResponse = await streamClient.subscribe(subscribeRequest,
-          options: sessionOptions(getIt<String>()));
+          options: sessionOptions(_sessionid));
 
       if (subscribeResponse.statusCode ==
           SubscribeResponse_StatusCode.InvalidDataStreamId) {
@@ -31,7 +34,7 @@ class Subscription {
       }
 
       logger.d(
-          '[$subscribeResponse.subscriptionId.dataStreamType}]: subscribe successful');
+          '[${subscribeResponse.subscriptionId.dataStreamType}]: subscribe successful');
 
       return subscribeResponse.subscriptionId;
     } catch (e) {
@@ -44,7 +47,7 @@ class Subscription {
     try {
       final unsubscribeResponse = await streamClient.unsubscribe(
           UnsubscribeRequest(subscriptionId: subscriptionId),
-          options: sessionOptions(getIt<String>()));
+          options: sessionOptions(_sessionid));
 
       if (unsubscribeResponse.statusCode ==
           UnsubscribeResponse_StatusCode.InvalidDataStreamId) {
