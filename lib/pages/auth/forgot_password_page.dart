@@ -1,6 +1,8 @@
+import 'package:dalal_street_client/blocs/auth/forgot_password/forgot_password_cubit.dart';
 import 'package:dalal_street_client/components/dalal_back_button.dart';
 import 'package:dalal_street_client/components/fill_max_height_scroll_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 
 class ForgotPasswordPage extends StatelessWidget {
@@ -20,7 +22,7 @@ class ForgotPasswordPage extends StatelessWidget {
                 children: [
                   header(context),
                   const SizedBox(height: 150),
-                  form(),
+                  form(context),
                 ],
               ),
             ),
@@ -45,7 +47,7 @@ class ForgotPasswordPage extends StatelessWidget {
         ],
       );
 
-  Widget form() => SizedBox(
+  Widget form(BuildContext context) => SizedBox(
         width: 320,
         child: ReactiveForm(
           formGroup: formGroup,
@@ -63,7 +65,7 @@ class ForgotPasswordPage extends StatelessWidget {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: onResetClick,
+                  onPressed: () => onResetClick(context),
                   child: const Text('Reset'),
                 ),
               ),
@@ -72,9 +74,11 @@ class ForgotPasswordPage extends StatelessWidget {
         ),
       );
 
-  void onResetClick() {
+  void onResetClick(BuildContext context) {
     if (formGroup.valid) {
-      //
+      context
+          .read<ForgotPasswordCubit>()
+          .requestReset(formGroup.control('email').value);
     } else {
       formGroup.markAllAsTouched();
     }
