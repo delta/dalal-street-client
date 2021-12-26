@@ -82,7 +82,7 @@ void main() async {
 
 // TODO: add proper validationMessages in all ReactiveForms
 // TODO: add metadata in all forms to facilitate Autofill
-// TODO: do that thing where if we hit enter while filling a form the focus will shift to the next textfield. Don't know what it's called
+// TODO: do that thing where if we hit enter while filling a form the focus will shift to the next textfield, and submits the form on hitting enter in the last field. Don't know what it's called
 class DalalApp extends StatelessWidget {
   DalalApp({Key? key}) : super(key: key);
 
@@ -112,7 +112,7 @@ class DalalApp extends StatelessWidget {
               if (state.user.isPhoneVerified) {
                 //showSnackBar(context, 'Welcome ${state.user.name}');
                 _navigator.pushNamedAndRemoveUntil(
-                  '/dailyChallenges',
+                  '/home',
                   (route) => false,
                   // arguments: state.user,
                 );
