@@ -14,11 +14,11 @@ class ForgotPasswordPage extends StatelessWidget {
   build(context) => Scaffold(
         body: SafeArea(
           child: FillMaxHeightScrollView(
-            builder: (_) => Padding(
+            builder: (context) => Padding(
               padding: const EdgeInsets.all(30),
               child: Column(
                 children: [
-                  header(),
+                  header(context),
                   const SizedBox(height: 150),
                   form(),
                 ],
@@ -28,12 +28,20 @@ class ForgotPasswordPage extends StatelessWidget {
         ),
       );
 
-  Widget header() => Column(
+  Widget header(BuildContext context) => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: const [
-          DalalBackButton(),
-          Text('Forgot Password'),
-          Text('Enter your email to reset password'),
+        children: [
+          const DalalBackButton(),
+          const SizedBox(height: 20),
+          Text(
+            'Forgot Password',
+            style: Theme.of(context).textTheme.headline1,
+          ),
+          const SizedBox(height: 5),
+          Text(
+            'Enter your email to reset password',
+            style: Theme.of(context).textTheme.headline6,
+          ),
         ],
       );
 
