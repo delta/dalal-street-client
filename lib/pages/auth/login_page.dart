@@ -85,7 +85,7 @@ class LoginPage extends StatelessWidget {
             Align(
               alignment: Alignment.centerRight,
               child: GestureDetector(
-                onTap: _onForgotPasswordClick,
+                onTap: () => _onForgotPasswordClick(context),
                 child: Text(
                   'Forgot password?',
                   style:
@@ -128,7 +128,8 @@ class LoginPage extends StatelessWidget {
         ),
       );
 
-  void _onForgotPasswordClick() {}
+  void _onForgotPasswordClick(BuildContext context) =>
+      Navigator.of(context).pushNamed('/forgotPassword');
 
   void _onLoginClicked(BuildContext context) {
     if (form.valid) {
