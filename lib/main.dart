@@ -59,24 +59,28 @@ void main() async {
   // Something doesnt work without this line. Dont remember what
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Provide storage directory for persisting/restoring the HydratedBloc state
-  HydratedBloc.storage = await HydratedStorage.build(
+  // Read GrpcConfig from config.json and initialise ActionClient, StreamClient
+  await readConfig();
+  await initClients();
+
+  // Provide storage directory for persisting the HydratedBloc state
+  final storage = await HydratedStorage.build(
     storageDirectory: kIsWeb
         ? HydratedStorage.webStorageDirectory
         : await getTemporaryDirectory(),
   );
 
-  // Read GrpcConfig from config.json and initialise ActionClient, StreamClient
-  await readConfig();
-  await initClients();
-
-  // Start the app
-  runApp(
-    // Provide DalalBloc at the root of the App
-    BlocProvider(
-      create: (_) => DalalBloc(),
-      child: DalalApp(),
+  // Initialize HydratedBloc storage
+  HydratedBlocOverrides.runZoned(
+    // Start the app
+    () => runApp(
+      // Provide DalalBloc at the root of the App
+      BlocProvider(
+        create: (_) => DalalBloc(),
+        child: DalalApp(),
+      ),
     ),
+    storage: storage,
   );
 }
 
