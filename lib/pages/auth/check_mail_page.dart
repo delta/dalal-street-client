@@ -26,32 +26,27 @@ class CheckMailPage extends StatelessWidget {
       );
 
   Widget buildHeader(BuildContext context) => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const SizedBox(height: 30),
-          Align(
-            alignment: Alignment.topLeft,
-            child: Text(
-              'Check Your\nEmail',
-              style: Theme.of(context).textTheme.headline1,
-              textAlign: TextAlign.start,
-            ),
+          Text(
+            'Check Your\nEmail',
+            style: Theme.of(context).textTheme.headline1,
           ),
           const SizedBox(height: 24),
-          Align(
-            alignment: Alignment.topLeft,
-            child: RichText(
-              text: TextSpan(
-                style: Theme.of(context).textTheme.headline6,
-                children: [
-                  const TextSpan(
-                      text: 'We have sent a verification email to \n'),
-                  TextSpan(
-                    text: mail,
-                    style: Theme.of(context).textTheme.headline6?.copyWith(
-                        color: Theme.of(context).colorScheme.primary),
-                  ),
-                ],
-              ),
+          RichText(
+            text: TextSpan(
+              style: Theme.of(context).textTheme.headline6,
+              children: [
+                const TextSpan(text: 'We have sent a verification email to \n'),
+                TextSpan(
+                  text: mail,
+                  style: Theme.of(context)
+                      .textTheme
+                      .headline6
+                      ?.copyWith(color: Theme.of(context).colorScheme.primary),
+                ),
+              ],
             ),
           ),
         ],

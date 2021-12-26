@@ -50,24 +50,21 @@ class LoginPage extends StatelessWidget {
         ),
       );
 
-  Widget buildHeader(BuildContext context) => Align(
-        alignment: Alignment.topLeft,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const DalalBackButton(),
-            const SizedBox(height: 18),
-            Text(
-              'Login',
-              style: Theme.of(context).textTheme.headline1,
-            ),
-            const SizedBox(height: 14),
-            Text(
-              'Please sign in to continue',
-              style: Theme.of(context).textTheme.headline6,
-            ),
-          ],
-        ),
+  Widget buildHeader(BuildContext context) => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const DalalBackButton(),
+          const SizedBox(height: 18),
+          Text(
+            'Login',
+            style: Theme.of(context).textTheme.headline1,
+          ),
+          const SizedBox(height: 14),
+          Text(
+            'Please sign in to continue',
+            style: Theme.of(context).textTheme.headline6,
+          ),
+        ],
       );
 
   Widget buildForm(BuildContext context) => ReactiveForm(

@@ -54,28 +54,25 @@ class _EnterOtpPageState extends State<EnterOtpPage> {
       );
 
   Widget buildHeader(String phone) => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             'Verify Phone Number',
             style: Theme.of(context).textTheme.headline1,
           ),
           const SizedBox(height: 10),
-          Align(
-            alignment: Alignment.topLeft,
-            child: RichText(
-              textAlign: TextAlign.start,
-              text: TextSpan(
-                style: Theme.of(context).textTheme.bodyText1,
-                children: [
-                  const TextSpan(text: 'We have sent a verification code to\n'),
-                  TextSpan(
-                    text: phone,
-                    style: Theme.of(context).textTheme.bodyText1?.copyWith(
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
-                  ),
-                ],
-              ),
+          RichText(
+            text: TextSpan(
+              style: Theme.of(context).textTheme.bodyText1,
+              children: [
+                const TextSpan(text: 'We have sent a verification code to\n'),
+                TextSpan(
+                  text: phone,
+                  style: Theme.of(context).textTheme.bodyText1?.copyWith(
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                ),
+              ],
             ),
           ),
         ],
