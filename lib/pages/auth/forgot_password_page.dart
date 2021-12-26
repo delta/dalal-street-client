@@ -1,10 +1,12 @@
 import 'package:dalal_street_client/blocs/auth/forgot_password/forgot_password_cubit.dart';
 import 'package:dalal_street_client/components/dalal_back_button.dart';
 import 'package:dalal_street_client/components/fill_max_height_scroll_view.dart';
+import 'package:dalal_street_client/utils/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 
+// TODO: also do reset password page
 class ForgotPasswordPage extends StatelessWidget {
   ForgotPasswordPage({Key? key}) : super(key: key);
 
@@ -15,17 +17,35 @@ class ForgotPasswordPage extends StatelessWidget {
   @override
   build(context) => Scaffold(
         body: SafeArea(
-          child: FillMaxHeightScrollView(
-            builder: (context) => Padding(
-              padding: const EdgeInsets.all(30),
-              child: Column(
-                children: [
-                  header(context),
-                  const SizedBox(height: 150),
-                  form(context),
-                ],
-              ),
-            ),
+          child: BlocConsumer<ForgotPasswordCubit, ForgotPasswordState>(
+            listener: (context, state) {
+              if (state is ForgotPasswordFailure) {
+                showSnackBar(context, state.msg);
+              } else if (state is ForgotPasswordSuccess) {
+                Navigator.maybePop(context);
+                showSnackBar(context,
+                    'A temporary password and Password reset link have been sent to your registered Email Id');
+              }
+            },
+            builder: (context, state) {
+              if (state is ForgotPasswordLoading) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              return body();
+            },
+          ),
+        ),
+      );
+
+  Widget body() => FillMaxHeightScrollView(
+        builder: (context) => Padding(
+          padding: const EdgeInsets.all(30),
+          child: Column(
+            children: [
+              header(context),
+              const SizedBox(height: 150),
+              form(context),
+            ],
           ),
         ),
       );
@@ -78,7 +98,7 @@ class ForgotPasswordPage extends StatelessWidget {
     if (formGroup.valid) {
       context
           .read<ForgotPasswordCubit>()
-          .requestReset(formGroup.control('email').value);
+          .forgotPassword(formGroup.control('email').value);
     } else {
       formGroup.markAllAsTouched();
     }
