@@ -48,78 +48,66 @@ class GlobalStreams extends Equatable {
 /// Subscribes to all Global Streams after login and returns the stream objects
 /// Throws exception if any of them fails. Exception must be handled
 Future<GlobalStreams> subscribeToGlobalStreams(String sessionId) async {
-  try {
-    // getStockList request, return map of stockId -> Stock
-    final stockResponse = await actionClient.getStockList(
-      GetStockListRequest(),
-      options: sessionOptions(sessionId),
-    );
+  // getStockList request, return map of stockId -> Stock
+  final stockResponse = await actionClient.getStockList(
+    GetStockListRequest(),
+    options: sessionOptions(sessionId),
+  );
 
-    if (stockResponse.statusCode != GetStockListResponse_StatusCode.OK) {
-      throw Exception(stockResponse.statusMessage);
-    }
-
-    // subscription api to subscribe to stream
-    final subscription = Subscription(sessionId);
-
-    // subscribing to global streams
-    late final SubscriptionId stockPriceSubscriptionId;
-    late final SubscriptionId notificationSubscriptionId;
-    late final SubscriptionId transactionSubscriptionId;
-    late final SubscriptionId gameStateSubscriptionId;
-
-    late final ResponseStream<StockPricesUpdate> stockPriceStream;
-    late final ResponseStream<NotificationUpdate> notificationStream;
-    late final ResponseStream<TransactionUpdate> transactionStream;
-    late final ResponseStream<GameStateUpdate> gameStateStream;
-
-    stockPriceSubscriptionId = await subscription.subscribe(
-        SubscribeRequest(dataStreamType: DataStreamType.STOCK_PRICES));
-
-    notificationSubscriptionId = await subscription.subscribe(
-        SubscribeRequest(dataStreamType: DataStreamType.NOTIFICATIONS));
-
-    transactionSubscriptionId = await subscription.subscribe(
-        SubscribeRequest(dataStreamType: DataStreamType.TRANSACTIONS));
-
-    gameStateSubscriptionId = await subscription
-        .subscribe(SubscribeRequest(dataStreamType: DataStreamType.GAME_STATE));
-
-    stockPriceStream = streamClient.getStockPricesUpdates(
-      stockPriceSubscriptionId,
-      options: sessionOptions(sessionId),
-    );
-    notificationStream = streamClient.getNotificationUpdates(
-      notificationSubscriptionId,
-      options: sessionOptions(sessionId),
-    );
-    transactionStream = streamClient.getTransactionUpdates(
-      transactionSubscriptionId,
-      options: sessionOptions(sessionId),
-    );
-    gameStateStream = streamClient.getGameStateUpdates(
-      gameStateSubscriptionId,
-      options: sessionOptions(sessionId),
-    );
-
-    final subscriptionIds = [
-      stockPriceSubscriptionId,
-      notificationSubscriptionId,
-      transactionSubscriptionId,
-      gameStateSubscriptionId
-    ];
-
-    return GlobalStreams(
-        stockResponse.stockList,
-        gameStateStream,
-        notificationStream,
-        transactionStream,
-        stockPriceStream,
-        subscriptionIds);
-  } catch (e) {
-    logger.e(e.toString());
-    throw Exception(e.toString());
+  if (stockResponse.statusCode != GetStockListResponse_StatusCode.OK) {
+    throw Exception(stockResponse.statusMessage);
   }
+
+  // subscribing to global streams
+  late final SubscriptionId stockPriceSubscriptionId;
+  late final SubscriptionId notificationSubscriptionId;
+  late final SubscriptionId transactionSubscriptionId;
+  late final SubscriptionId gameStateSubscriptionId;
+
+  late final ResponseStream<StockPricesUpdate> stockPriceStream;
+  late final ResponseStream<NotificationUpdate> notificationStream;
+  late final ResponseStream<TransactionUpdate> transactionStream;
+  late final ResponseStream<GameStateUpdate> gameStateStream;
+
+  stockPriceSubscriptionId = await subscribe(
+      SubscribeRequest(dataStreamType: DataStreamType.STOCK_PRICES), sessionId);
+
+  notificationSubscriptionId = await subscribe(
+      SubscribeRequest(dataStreamType: DataStreamType.NOTIFICATIONS),
+      sessionId);
+
+  transactionSubscriptionId = await subscribe(
+      SubscribeRequest(dataStreamType: DataStreamType.TRANSACTIONS), sessionId);
+
+  gameStateSubscriptionId = await subscribe(
+      SubscribeRequest(dataStreamType: DataStreamType.GAME_STATE), sessionId);
+
+  stockPriceStream = streamClient.getStockPricesUpdates(
+    stockPriceSubscriptionId,
+    options: sessionOptions(sessionId),
+  );
+  notificationStream = streamClient.getNotificationUpdates(
+    notificationSubscriptionId,
+    options: sessionOptions(sessionId),
+  );
+  transactionStream = streamClient.getTransactionUpdates(
+    transactionSubscriptionId,
+    options: sessionOptions(sessionId),
+  );
+  gameStateStream = streamClient.getGameStateUpdates(
+    gameStateSubscriptionId,
+    options: sessionOptions(sessionId),
+  );
+
+  final subscriptionIds = [
+    stockPriceSubscriptionId,
+    notificationSubscriptionId,
+    transactionSubscriptionId,
+    gameStateSubscriptionId
+  ];
+
+  return GlobalStreams(stockResponse.stockList, gameStateStream,
+      notificationStream, transactionStream, stockPriceStream, subscriptionIds);
 }
 
 /// Unsubscribes from all Global Streams
@@ -130,10 +118,7 @@ Future<void> unsubscribeFromGlobalStreams(
   logger.i('Unsubscribing from all global streams');
   try {
     for (final id in globalStreams.subscriptionIds) {
-      streamClient.unsubscribe(
-        UnsubscribeRequest(subscriptionId: id),
-        options: sessionOptions(sessionId),
-      );
+      unSubscribe(id, sessionId);
     }
   } catch (e) {
     logger.e(e);
