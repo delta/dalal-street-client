@@ -8,6 +8,7 @@ import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
 import 'package:dalal_street_client/theme/buttons.dart';
 import 'package:dalal_street_client/theme/colors.dart';
 import 'package:dalal_street_client/utils/responsive.dart';
+import 'package:dalal_street_client/utils/snackbar.dart';
 import 'package:fixnum/fixnum.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -423,7 +424,6 @@ class _ExchangePageState extends State<ExchangePage> {
     showModalBottomSheet(
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(top: Radius.circular(25.0))),
-        //isScrollControlled: true,
         backgroundColor: Colors.black38,
         context: context,
         builder: (_) {
@@ -434,7 +434,10 @@ class _ExchangePageState extends State<ExchangePage> {
               child: BlocConsumer<ExchangeCubit, ExchangeState>(
                 listener: (context, state) {
                   if (state is ExchangeSuccess) {
+                    showSnackBar(context, 'Successfully bought $stockName stocks');
                     Navigator.maybePop(context);
+                  }else if (state is ExchangeFailure){
+                    showSnackBar(context, state.msg);
                   }
                 },
                 builder: (context, state) {
@@ -468,7 +471,7 @@ class _ExchangePageState extends State<ExchangePage> {
                         height: 10,
                       ),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           const Padding(
                             padding: EdgeInsets.all(8.0),
@@ -480,9 +483,10 @@ class _ExchangePageState extends State<ExchangePage> {
                             ),
                           ),
                           const SizedBox(
-                            width: 20.0,
+                            width: 30.0,
                           ),
                           Container(
+                            alignment: Alignment.centerRight,
                             width: 100.0,
                             padding: const EdgeInsets.all(8.0),
                             child: TextField(
@@ -490,7 +494,6 @@ class _ExchangePageState extends State<ExchangePage> {
                                   fontSize: 20.0,
                                   height: 0.25,
                                   color: Colors.white),
-                              //autofocus: true,
                               controller: _controller,
                               keyboardType: TextInputType.number,
                             ),
