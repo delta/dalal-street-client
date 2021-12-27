@@ -3,6 +3,8 @@ import 'package:dalal_street_client/blocs/market_depth/market_depth_bloc.dart';
 import 'package:dalal_street_client/blocs/subscribe/subscribe_cubit.dart';
 import 'package:dalal_street_client/components/buttons/primary_button.dart';
 import 'package:dalal_street_client/components/buttons/secondary_button.dart';
+import 'package:dalal_street_client/components/buttons/tertiary_button.dart';
+import 'package:dalal_street_client/constants/constants.dart';
 import 'package:dalal_street_client/constants/icons.dart';
 import 'package:dalal_street_client/main.dart';
 import 'package:dalal_street_client/proto_build/datastreams/MarketDepth.pb.dart';
@@ -14,6 +16,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_spinbox/flutter_spinbox.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 
@@ -78,11 +81,17 @@ class _CompanyPageState extends State<CompanyPage>
                         topLeft: Radius.circular(15),
                       )),
                   alignment: Alignment.bottomCenter,
-                  child: const Center(
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  child: Align(
+                    alignment: Alignment.bottomCenter,
                     child: PrimaryButton(
                       height: 45,
                       width: 340,
+                      fontSize: 18,
                       title: 'Place Order',
+                      onPressed: () {
+                        _chooseBuyOrSellBottomSheet(context, company);
+                      },
                     ),
                   ),
                 ),
@@ -93,6 +102,439 @@ class _CompanyPageState extends State<CompanyPage>
       ),
     );
   }
+}
+
+_tradingBottomSheet(BuildContext context, Stock company, String orderType) {
+  int priceChange = (company.currentPrice - company.previousDayClose).toInt();
+  int quantity = 1;
+  int totalPrice = company.currentPrice.toInt() * quantity;
+  int orderFee = _calculateOrderFee(totalPrice);
+  showModalBottomSheet(
+      isScrollControlled: true,
+      context: context,
+      builder: (ctx) {
+        return BottomSheet(
+          backgroundColor: backgroundColor,
+          builder: (context) {
+            List<String> priceTypeMap = ['Limit', 'Market', 'Stop'];
+            var selectedPriceType = 'Limit';
+            var orderPriceWindow = _showPriceWindow(totalPrice);
+            return StatefulBuilder(builder:
+                (BuildContext context, StateSetter setBottomSheetState) {
+              return Container(
+                height: 400,
+                width: MediaQuery.of(context).size.width,
+                decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(15),
+                      topRight: Radius.circular(15)),
+                ),
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Container(
+                          width: 150,
+                          height: 4.5,
+                          decoration: const BoxDecoration(
+                            color: lightGray,
+                            borderRadius: BorderRadius.all(Radius.circular(12)),
+                          )),
+                      const SizedBox(
+                        height: 3,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          InkWell(
+                              onTap: () {
+                                Navigator.pop(context);
+                              },
+                              child: SvgPicture.asset(AppIcons().crossWhite)),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 15,
+                        ),
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        company.shortName,
+                                        textAlign: TextAlign.left,
+                                        style: const TextStyle(
+                                          fontSize: 18,
+                                        ),
+                                      ),
+                                      Wrap(
+                                        spacing: 4,
+                                        children: [
+                                          Text(
+                                            oCcy
+                                                .format(company.currentPrice)
+                                                .toString(),
+                                            style: const TextStyle(
+                                              fontSize: 14,
+                                            ),
+                                          ),
+                                          Text(
+                                            priceChange >= 0
+                                                ? '+' +
+                                                    oCcy
+                                                        .format(priceChange)
+                                                        .toString()
+                                                : oCcy
+                                                    .format(priceChange)
+                                                    .toString(),
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                              color: priceChange > 0
+                                                  ? secondaryColor
+                                                  : heartRed,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ]),
+                                SecondaryButton(
+                                  height: 25,
+                                  width: 135,
+                                  fontSize: 14,
+                                  title: 'Order Type: ' + orderType,
+                                  onPressed: () {},
+                                ),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const Text(
+                                    'Number of Stocks',
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      color: Colors.white70,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 150,
+                                    height: 30,
+                                    child: SpinBox(
+                                      min: 1,
+                                      max: 100,
+                                      value: 01,
+                                      onChanged: (value) {
+                                        setBottomSheetState(() {
+                                          quantity = value.toInt();
+                                          totalPrice =
+                                              company.currentPrice.toInt() *
+                                                  quantity;
+                                          orderPriceWindow =
+                                              _showPriceWindow(totalPrice);
+                                          orderFee =
+                                              _calculateOrderFee(totalPrice);
+                                        });
+                                      },
+                                      cursorColor: primaryColor,
+                                      iconColor: MaterialStateProperty.all(
+                                          primaryColor),
+                                    ),
+                                  )
+                                ]),
+                            const SizedBox(
+                              height: 30,
+                            ),
+                            Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Wrap(
+                                    spacing: 15,
+                                    children: [
+                                      const Text(
+                                        'Price',
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                          color: Colors.white70,
+                                        ),
+                                      ),
+                                      DropdownButton(
+                                        value: selectedPriceType,
+                                        onChanged: (newValue) {
+                                          setBottomSheetState(() {
+                                            selectedPriceType =
+                                                newValue.toString();
+                                            logger.i(selectedPriceType);
+                                          });
+                                        },
+                                        items: priceTypeMap.map((type) {
+                                          return DropdownMenuItem(
+                                            child: Text(
+                                              type,
+                                              style: const TextStyle(
+                                                  fontSize: 18,
+                                                  color: whiteWithOpacity75),
+                                            ),
+                                            value: type,
+                                          );
+                                        }).toList(),
+                                      ),
+                                    ],
+                                  ),
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      Text(
+                                        '₹' +
+                                            oCcy.format(totalPrice).toString(),
+                                        textAlign: TextAlign.center,
+                                        style: const TextStyle(
+                                          color: primaryColor,
+                                          fontSize: 18,
+                                        ),
+                                      ),
+                                      Text(
+                                        orderPriceWindow,
+                                        textAlign: TextAlign.center,
+                                        style: const TextStyle(
+                                          color: bronze,
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ]),
+                            const SizedBox(
+                              height: 30,
+                            ),
+                            Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const Text(
+                                    'Order Fee',
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      color: Colors.white70,
+                                    ),
+                                  ),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        '₹' + oCcy.format(orderFee).toString(),
+                                        textAlign: TextAlign.center,
+                                        style: const TextStyle(
+                                          color: primaryColor,
+                                          fontSize: 18,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ]),
+                            Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  SvgPicture.asset(
+                                    AppIcons().balance,
+                                  ),
+                                  const Text(
+                                    ' Balance :',
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: Colors.white70,
+                                    ),
+                                  ),
+                                  Text(
+                                    ' ₹' +
+                                        oCcy
+                                            .format(company.currentPrice)
+                                            .toString(),
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(
+                                      color: Colors.white70,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                ]),
+                            const SizedBox(
+                              height: 25,
+                            ),
+                            PrimaryButton(
+                              height: 45,
+                              width: 340,
+                              fontSize: 18,
+                              title: 'Place Order',
+                              onPressed: () {
+                                _chooseBuyOrSellBottomSheet(context, company);
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            });
+          },
+          onClosing: () {},
+        );
+      });
+}
+
+int _calculateOrderFee(int totalPrice) {
+  var orderFee = (ORDER_FEE_RATE * totalPrice);
+  return orderFee.toInt();
+}
+
+String _showPriceWindow(int currentPrice) {
+  var lowerLimit =
+      currentPrice.toDouble() * (1 - ORDER_PRICE_WINDOW.toDouble() / 100);
+  var higherLimit =
+      currentPrice.toDouble() * (1 + ORDER_PRICE_WINDOW.toDouble() / 100);
+
+  return 'Between ₹' +
+      lowerLimit.toStringAsFixed(2) +
+      ' and ₹' +
+      higherLimit.toStringAsFixed(2);
+}
+
+_chooseBuyOrSellBottomSheet(BuildContext context, Stock company) {
+  int priceChange = (company.currentPrice - company.previousDayClose).toInt();
+  showModalBottomSheet(
+      backgroundColor: backgroundColor,
+      isScrollControlled: true,
+      context: context,
+      builder: (ctx) {
+        return Wrap(
+          children: [
+            SizedBox(
+              height: 180,
+              width: MediaQuery.of(context).size.width,
+              child: Container(
+                decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(15),
+                      topRight: Radius.circular(15)),
+                ),
+                child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10, horizontal: 30),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Container(
+                            width: 150,
+                            height: 4.5,
+                            decoration: const BoxDecoration(
+                              color: lightGray,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(12)),
+                            )),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Expanded(
+                                child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        company.shortName,
+                                        style: const TextStyle(
+                                          fontSize: 18,
+                                        ),
+                                      ),
+                                      Text(
+                                        company.fullName,
+                                        style: const TextStyle(
+                                          fontSize: 14,
+                                          color: whiteWithOpacity50,
+                                        ),
+                                      ),
+                                    ]),
+                              ),
+                              Column(
+                                children: [
+                                  Text(
+                                    oCcy
+                                        .format(company.currentPrice)
+                                        .toString(),
+                                    style: const TextStyle(
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                  Text(
+                                    priceChange >= 0
+                                        ? '+' +
+                                            oCcy.format(priceChange).toString()
+                                        : oCcy.format(priceChange).toString(),
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: priceChange > 0
+                                          ? secondaryColor
+                                          : heartRed,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ]),
+                        const SizedBox(
+                          height: 15,
+                        ),
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              SecondaryButton(
+                                height: 50,
+                                width: 150,
+                                title: 'Sell',
+                                fontSize: 18,
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                  _tradingBottomSheet(context, company, 'Sell');
+                                },
+                              ),
+                              TertiaryButton(
+                                height: 50,
+                                width: 150,
+                                title: 'Buy',
+                                fontSize: 18,
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                  _tradingBottomSheet(context, company, 'Buy');
+                                },
+                              ),
+                            ]),
+                      ],
+                    )),
+              ),
+            ),
+          ],
+        );
+      });
 }
 
 Container _companyTabView(BuildContext context, Stock company) {

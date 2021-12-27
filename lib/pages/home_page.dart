@@ -179,7 +179,7 @@ class _HomePageState extends State<HomePage> {
           shrinkWrap: true,
           itemCount: stockList.length,
           itemBuilder: (context, index) {
-            Stock? company = stockList[index];
+            Stock? company = stockList[index + 1];
             int currentPrice = company?.currentPrice.toInt() ?? 0;
             int previousDayPrice = company?.previousDayClose.toInt() ?? 0;
             var priceChange = (currentPrice - previousDayPrice);

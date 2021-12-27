@@ -2,7 +2,7 @@ import 'package:dalal_street_client/theme/colors.dart';
 import 'package:flutter/material.dart';
 
 class PrimaryButton extends StatelessWidget {
-  final double height, width;
+  final double height, width, fontSize;
   final VoidCallback? onPressed;
   final String title;
 
@@ -11,7 +11,8 @@ class PrimaryButton extends StatelessWidget {
       this.height = 40,
       this.width = 100,
       this.onPressed,
-      this.title = ''})
+      this.title = '',
+      this.fontSize = 14})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -30,10 +31,10 @@ class PrimaryButton extends StatelessWidget {
               child: Text(
                 title,
                 textAlign: TextAlign.center,
-                style: const TextStyle(
-                    color: Colors.black,
+                style: TextStyle(
+                    color: backgroundColor,
                     fontWeight: FontWeight.w500,
-                    fontSize: 18),
+                    fontSize: fontSize),
               ),
             )));
   }

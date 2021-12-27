@@ -2,7 +2,7 @@ import 'package:dalal_street_client/theme/colors.dart';
 import 'package:flutter/material.dart';
 
 class TertiaryButton extends StatelessWidget {
-  final double height, width;
+  final double height, width, fontSize;
   final VoidCallback? onPressed;
   final String title;
 
@@ -11,6 +11,7 @@ class TertiaryButton extends StatelessWidget {
       this.height = 40,
       this.width = 100,
       this.onPressed,
+      this.fontSize = 14,
       this.title = ''})
       : super(key: key);
 
@@ -31,10 +32,10 @@ class TertiaryButton extends StatelessWidget {
               child: Text(
                 title,
                 textAlign: TextAlign.center,
-                style: const TextStyle(
+                style: TextStyle(
                     color: primaryColor,
                     fontWeight: FontWeight.w500,
-                    fontSize: 18),
+                    fontSize: fontSize),
               ),
             )));
   }

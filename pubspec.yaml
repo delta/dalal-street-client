@@ -45,6 +45,7 @@ dependencies:
   url_launcher: ^6.0.15
   super_tooltip: ^1.0.1
   flutter_svg: ^1.0.0
+  flutter_spinbox: ^0.8.0
 
 dev_dependencies:
   flutter_test:
