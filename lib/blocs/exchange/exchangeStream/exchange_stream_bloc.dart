@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
+import 'package:dalal_street_client/config/get_it.dart';
+import 'package:dalal_street_client/config/log.dart';
 import 'package:dalal_street_client/grpc/client.dart';
-import 'package:dalal_street_client/main.dart';
 import 'package:dalal_street_client/proto_build/datastreams/StockExchange.pb.dart';
 import 'package:dalal_street_client/proto_build/datastreams/Subscribe.pb.dart';
 import 'package:equatable/equatable.dart';
@@ -15,7 +16,7 @@ class ExchangeStreamBloc
       try {
         final stockExchangeStream = streamClient.getStockExchangeUpdates(
             event.subscriptionId,
-            options: sessionOptions(getIt()));
+            options: sessionOptions(getIt<String>()));
 
         await for (final stockExchange in stockExchangeStream) {
           logger.d(stockExchange);
