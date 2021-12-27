@@ -17,30 +17,34 @@ void main() async {
   // Something doesnt work without this line. Dont remember what
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Provide storage directory for persisting/restoring the HydratedBloc state
-  HydratedBloc.storage = await HydratedStorage.build(
+  // Read GrpcConfig from config.json and initialise ActionClient, StreamClient
+  await readConfig();
+  await initClients();
+
+  // Provide storage directory for persisting the HydratedBloc state
+  final storage = await HydratedStorage.build(
     storageDirectory: kIsWeb
         ? HydratedStorage.webStorageDirectory
         : await getTemporaryDirectory(),
   );
 
-  // Read GrpcConfig from config.json and initialise ActionClient, StreamClient
-  await readConfig();
-  await initClients();
-
-  // Start the app
-  runApp(
-    // Provide DalalBloc at the root of the App
-    BlocProvider(
-      create: (_) => DalalBloc(),
-      child: DalalApp(),
+  // Initialize HydratedBloc storage
+  HydratedBlocOverrides.runZoned(
+    // Start the app
+    () => runApp(
+      // Provide DalalBloc at the root of the App
+      BlocProvider(
+        create: (_) => DalalBloc(),
+        child: DalalApp(),
+      ),
     ),
+    storage: storage,
   );
 }
 
 // TODO: add proper validationMessages in all ReactiveForms
 // TODO: add metadata in all forms to facilitate Autofill
-// TODO: do that thing where if we hit enter while filling a form the focus will shift to the next textfield. Don't know what it's called
+// TODO: do that thing where if we hit enter while filling a form the focus will shift to the next textfield, and submits the form on hitting enter in the last field. Don't know what it's called
 class DalalApp extends StatelessWidget {
   DalalApp({Key? key}) : super(key: key);
 

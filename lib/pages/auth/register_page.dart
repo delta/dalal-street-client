@@ -66,19 +66,16 @@ class RegisterPage extends StatelessWidget {
         ),
       );
 
-  Widget buildHeader(BuildContext context) => Align(
-        alignment: Alignment.topLeft,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const DalalBackButton(),
-            const SizedBox(height: 18),
-            Text(
-              'Create An Account',
-              style: Theme.of(context).textTheme.headline1,
-            ),
-          ],
-        ),
+  Widget buildHeader(BuildContext context) => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const DalalBackButton(),
+          const SizedBox(height: 18),
+          Text(
+            'Create An Account',
+            style: Theme.of(context).textTheme.headline1,
+          ),
+        ],
       );
 
   Widget buildForm(BuildContext context) => ReactiveForm(

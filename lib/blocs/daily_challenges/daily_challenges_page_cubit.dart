@@ -5,10 +5,8 @@ import 'package:dalal_street_client/constants/error_messages.dart';
 import 'package:dalal_street_client/global_streams.dart';
 import 'package:dalal_street_client/grpc/client.dart';
 import 'package:dalal_street_client/proto_build/actions/GetDailyChallengeConfig.pb.dart';
-import 'package:dalal_street_client/proto_build/datastreams/GameState.pb.dart';
 import 'package:dalal_street_client/proto_build/models/GameState.pbenum.dart';
 import 'package:equatable/equatable.dart';
-import 'package:grpc/grpc_or_grpcweb.dart';
 
 part 'daily_challenges_page_state.dart';
 
@@ -40,8 +38,7 @@ class DailyChallengesPageCubit extends Cubit<DailyChallengesPageState> {
   /// Updates `isDailyChallengeOpen` in [DailyChallengesPageSuccess]
   /// Only call this after [getChallengesConfig] is succesful
   Future<void> listenToGameStateStream() async {
-    final ResponseStream<GameStateUpdate> gameStateStream =
-        getIt<GlobalStreams>().gameStateStream;
+    final gameStateStream = getIt<GlobalStreams>().gameStateStream;
     await for (var update in gameStateStream) {
       final gameState = update.gameState;
       if (gameState.type == GameStateUpdateType.DailyChallengeStatusUpdate) {
