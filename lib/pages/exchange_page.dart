@@ -434,9 +434,10 @@ class _ExchangePageState extends State<ExchangePage> {
               child: BlocConsumer<ExchangeCubit, ExchangeState>(
                 listener: (context, state) {
                   if (state is ExchangeSuccess) {
-                    showSnackBar(context, 'Successfully bought $stockName stocks');
+                    showSnackBar(
+                        context, 'Successfully bought $stockName stocks');
                     Navigator.maybePop(context);
-                  }else if (state is ExchangeFailure){
+                  } else if (state is ExchangeFailure) {
                     showSnackBar(context, state.msg);
                   }
                 },
