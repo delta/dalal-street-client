@@ -50,61 +50,27 @@ class _ExchangePageState extends State<ExchangePage> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: Colors.black,
-        body: SingleChildScrollView(
-          child: Responsive(
-            mobile: _mobileBody(),
-            tablet: _tabletBody(),
-            desktop: _desktopBody(),
+  Widget build(BuildContext context) => SafeArea(
+        child: Scaffold(
+          backgroundColor: Colors.black,
+          body: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+              child: Column(
+                children: [
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  _exchangeBody(),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                ],
+              ),
+            ),
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _desktopBody() {
-    return const Center(
-      child: Text(
-        'Web UI will design soon :)',
-        style: TextStyle(
-          fontSize: 14,
-          color: secondaryColor,
-        ),
-      ),
-    );
-  }
-
-  Widget _tabletBody() {
-    return const Center(
-      child: Text(
-        'Tablet UI will design soon :)',
-        style: TextStyle(
-          fontSize: 14,
-          color: secondaryColor,
-        ),
-      ),
-    );
-  }
-
-  Widget _mobileBody() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-      child: Column(
-        children: [
-          const SizedBox(
-            height: 30,
-          ),
-          _buildBody(),
-          const SizedBox(
-            height: 10,
-          ),
-        ],
-      ),
-    );
-  }
+      );
 
   Widget _buildBody() {
     return Container(
@@ -140,64 +106,62 @@ class _ExchangePageState extends State<ExchangePage> {
           const SizedBox(
             height: 20,
           ),
-          _exchangeListBody(),
+          _exchangeBody(),
         ],
       ),
     );
   }
 
-  Widget _exchangeListBody() {
-    return BlocBuilder<CompaniesBloc, CompaniesState>(
-        builder: (context, state) {
-      if (state is GetCompaniesSuccess) {
-        mapOfStocks = state.stockList.stockList;
-        return BlocBuilder<SubscribeCubit, SubscribeState>(
-            builder: (context, state) {
-          if (state is SubscriptionDataLoaded) {
-            // Start the stream of Stock Prices
-            context
-                .read<ExchangeStreamBloc>()
-                .add(SubscribeToStockExchange(state.subscriptionId));
-            return ListView.builder(
-              shrinkWrap: true,
-              itemCount: mapOfStocks.length,
-              itemBuilder: (context, index) {
-                Stock? company = mapOfStocks[index + 1];
-                int currentPrice = company?.currentPrice.toInt() ?? 0;
-                int previousDayPrice = company?.previousDayClose.toInt() ?? 0;
-                var priceChange = (currentPrice - previousDayPrice);
-                return _exchangeListItem(
-                    company, index + 1, priceChange, currentPrice);
-              },
-            );
-          } else if (state is SubscriptonDataFailed) {
-            logger.i('Stock Prices Stream Failed $state');
-            return const Center(
-              child: Text(
-                'Failed to load data \nReason : //',
-                style: TextStyle(
-                  fontSize: 14,
+  Widget _exchangeBody() =>
+      BlocBuilder<CompaniesBloc, CompaniesState>(builder: (context, state) {
+        if (state is GetCompaniesSuccess) {
+          mapOfStocks = state.stockList.stockList;
+          return BlocBuilder<SubscribeCubit, SubscribeState>(
+              builder: (context, state) {
+            if (state is SubscriptionDataLoaded) {
+              // Start the stream of Stock Prices
+              context
+                  .read<ExchangeStreamBloc>()
+                  .add(SubscribeToStockExchange(state.subscriptionId));
+              return ListView.builder(
+                shrinkWrap: true,
+                itemCount: mapOfStocks.length,
+                itemBuilder: (context, index) {
+                  Stock? company = mapOfStocks[index + 1];
+                  int currentPrice = company?.currentPrice.toInt() ?? 0;
+                  int previousDayPrice = company?.previousDayClose.toInt() ?? 0;
+                  var priceChange = (currentPrice - previousDayPrice);
+                  return _exchangeListItem(
+                      company, index + 1, priceChange, currentPrice);
+                },
+              );
+            } else if (state is SubscriptonDataFailed) {
+              logger.i('Stock Prices Stream Failed $state');
+              return const Center(
+                child: Text(
+                  'Failed to load data \nReason : //',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: secondaryColor,
+                  ),
+                ),
+              );
+            } else {
+              return const Center(
+                child: CircularProgressIndicator(
                   color: secondaryColor,
                 ),
-              ),
-            );
-          } else {
-            return const Center(
-              child: CircularProgressIndicator(
-                color: secondaryColor,
-              ),
-            );
-          }
-        });
-      } else {
-        return const Center(
-          child: CircularProgressIndicator(
-            color: secondaryColor,
-          ),
-        );
-      }
-    });
-  }
+              );
+            }
+          });
+        } else {
+          return const Center(
+            child: CircularProgressIndicator(
+              color: secondaryColor,
+            ),
+          );
+        }
+      });
 
 // Company list item widget for stock exchange
   Widget _exchangeListItem(
