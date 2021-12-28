@@ -135,10 +135,4 @@ class StockBarItem extends StatelessWidget {
       ],
     );
   }
-
-  Int64 modulus(Int64 number) {
-    if (number < 0) return -number;
-
-    return number;
-  }
 }
