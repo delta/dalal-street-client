@@ -44,7 +44,7 @@ class _ExchangePageState extends State<ExchangePage> {
                   const SizedBox(
                     height: 30,
                   ),
-                  _exchangeBody(),
+                  _companiesExchange(),
                   const SizedBox(
                     height: 10,
                   ),
@@ -55,43 +55,43 @@ class _ExchangePageState extends State<ExchangePage> {
         ),
       );
 
-  // Container _companiesExchange() => Container(
-  //       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-  //       decoration: BoxDecoration(
-  //         color: backgroundColor,
-  //         borderRadius: BorderRadius.circular(10),
-  //       ),
-  //       child: Column(
-  //         mainAxisAlignment: MainAxisAlignment.start,
-  //         crossAxisAlignment: CrossAxisAlignment.start,
-  //         children: [
-  //           const Text(
-  //             'Stock Exchange',
-  //             style: TextStyle(
-  //                 fontSize: 18,
-  //                 fontWeight: FontWeight.w500,
-  //                 color: whiteWithOpacity75),
-  //             textAlign: TextAlign.center,
-  //           ),
-  //           const SizedBox(
-  //             height: 20,
-  //           ),
-  //           const Text(
-  //             'Companies',
-  //             style: TextStyle(
-  //               fontSize: 22,
-  //               fontWeight: FontWeight.w700,
-  //               color: white,
-  //             ),
-  //             textAlign: TextAlign.start,
-  //           ),
-  //           const SizedBox(
-  //             height: 20,
-  //           ),
-  //           _exchangeBody(),
-  //         ],
-  //       ),
-  //     );
+  Container _companiesExchange() => Container(
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+        decoration: BoxDecoration(
+          color: backgroundColor,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Stock Exchange',
+              style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w500,
+                  color: whiteWithOpacity75),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            const Text(
+              'Companies',
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.w700,
+                color: white,
+              ),
+              textAlign: TextAlign.start,
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            _exchangeBody(),
+          ],
+        ),
+      );
 
   Widget _exchangeBody() => BlocBuilder<ExchangeCubit, ExchangeState>(
         builder: (context, state) {
