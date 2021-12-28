@@ -319,6 +319,8 @@ class _ExchangePageState extends State<ExchangePage> {
         },
       );
 
+  // todo: Better UI for the model sheet similar to figma
+  // todo: validations
   void _showModalSheet(int stockId, String stockName, int currentPrice) {
     showModalBottomSheet(
         shape: const RoundedRectangleBorder(

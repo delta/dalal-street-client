@@ -2,7 +2,6 @@ import 'package:bloc/bloc.dart';
 import 'package:dalal_street_client/config/get_it.dart';
 import 'package:dalal_street_client/config/log.dart';
 import 'package:dalal_street_client/global_streams.dart';
-import 'package:dalal_street_client/proto_build/actions/BuyStocksFromExchange.pb.dart';
 import 'package:dalal_street_client/proto_build/datastreams/StockExchange.pb.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
 import 'package:dalal_street_client/utils/convert.dart';
