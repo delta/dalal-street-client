@@ -1,14 +1,12 @@
 import 'package:dalal_street_client/blocs/exchange/exchange_cubit.dart';
 import 'package:dalal_street_client/blocs/exchange/sheet/exchange_sheet_cubit.dart';
 import 'package:dalal_street_client/config/get_it.dart';
-import 'package:dalal_street_client/config/log.dart';
 import 'package:dalal_street_client/global_streams.dart';
-import 'package:dalal_street_client/proto_build/datastreams/StockExchange.pb.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
 import 'package:dalal_street_client/theme/buttons.dart';
 import 'package:dalal_street_client/theme/colors.dart';
-import 'package:dalal_street_client/utils/convert.dart';
 import 'package:dalal_street_client/utils/snackbar.dart';
+import 'package:fixnum/fixnum.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -93,38 +91,20 @@ class _ExchangePageState extends State<ExchangePage> {
         ),
       );
 
-  Widget _exchangeBody() => BlocBuilder<ExchangeCubit, ExchangeState>(
-        builder: (context, state) {
-          if (state is ExchangeDataLoaded) {
-            final exchangeData = state.exchangeData;
-            return ListView.builder(
-              shrinkWrap: true,
-              itemCount: mapOfStocks.length,
-              itemBuilder: (context, index) {
-                final exchangeDataPoint = exchangeData[index + 1] ??
-                    stockDataToExchangeData(mapOfStocks[index + 1]!);
-                // Update mapOfStocks
-                mapOfStocks[index + 1]?.stocksInMarket =
-                    exchangeDataPoint.stocksInMarket;
-                mapOfStocks[index + 1]?.stocksInExchange =
-                    exchangeDataPoint.stocksInExchange;
-                mapOfStocks[index + 1]?.currentPrice = exchangeDataPoint.price;
-                Stock? company = mapOfStocks[index + 1];
-                int currentPrice =
-                    mapOfStocks[index + 1]?.currentPrice.toInt() ?? 0;
-                int previousDayPrice = company?.previousDayClose.toInt() ?? 0;
-                var priceChange = (currentPrice - previousDayPrice);
-                return _stockExchangeItem(
-                  company,
-                  index + 1,
-                  priceChange,
-                  currentPrice,
-                  exchangeDataPoint,
-                );
-              },
-            );
-          }
-          return const Center(child: CircularProgressIndicator());
+  Widget _exchangeBody() => ListView.builder(
+        shrinkWrap: true,
+        itemCount: mapOfStocks.length,
+        itemBuilder: (context, index) {
+          Stock? company = mapOfStocks[index + 1];
+          int currentPrice = mapOfStocks[index + 1]?.currentPrice.toInt() ?? 0;
+          int previousDayPrice = company?.previousDayClose.toInt() ?? 0;
+          var priceChange = (currentPrice - previousDayPrice);
+          return _stockExchangeItem(
+            company,
+            index + 1,
+            priceChange,
+            currentPrice,
+          );
         },
       );
 
@@ -133,7 +113,6 @@ class _ExchangePageState extends State<ExchangePage> {
     int index,
     int priceChange,
     int currentPrice,
-    StockExchangeDataPoint exchangeDataPoint,
   ) =>
       Container(
         padding: const EdgeInsets.symmetric(vertical: 10),
@@ -147,38 +126,12 @@ class _ExchangePageState extends State<ExchangePage> {
                 index,
                 priceChange,
                 currentPrice,
-                exchangeDataPoint,
               ),
             ]),
             const SizedBox(
               height: 10,
             ),
-            () {
-              logger.i('$index here');
-              int stocksInMarket = exchangeDataPoint.stocksInMarket.toInt();
-              return Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Expanded(child: Text('Stocks in Market')),
-                  const SizedBox(width: 10),
-                  Text(stocksInMarket.toString())
-                ],
-              );
-            }(),
-            const SizedBox(
-              height: 10,
-            ),
-            () {
-              int stocksInExchange = exchangeDataPoint.stocksInExchange.toInt();
-              return Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Expanded(child: Text('Stocks in Exchange')),
-                  const SizedBox(width: 10),
-                  Text(stocksInExchange.toString())
-                ],
-              );
-            }(),
+            _stockExchangeDetails(index, company),
             const SizedBox(
               height: 10,
             ),
@@ -235,41 +188,136 @@ class _ExchangePageState extends State<ExchangePage> {
     );
   }
 
-  Expanded _stockPrices(
+  Widget _stockPrices(
     int index,
     int priceChange,
     int currentPrice,
-    StockExchangeDataPoint exchangeDataPoint,
-  ) {
-    return Expanded(
-      child: () {
-        int currentStockPrice = exchangeDataPoint.price.toInt();
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            Text(
-              oCcy.format(currentStockPrice).toString(),
-              style: const TextStyle(
-                fontSize: 18,
+  ) =>
+      BlocBuilder<ExchangeCubit, ExchangeState>(
+        builder: (context, state) {
+          if (state is ExchangeDataLoaded) {
+            return Expanded(
+              child: () {
+                int currentStockPrice =
+                    state.exchangeData[index + 1]?.price.toInt() ??
+                        mapOfStocks[index]?.currentPrice.toInt() ??
+                        0;
+
+                mapOfStocks[index]?.currentPrice = Int64(currentStockPrice);
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text(
+                      oCcy.format(currentStockPrice).toString(),
+                      style: const TextStyle(
+                        fontSize: 18,
+                      ),
+                    ),
+                    Text(
+                      priceChange >= 0
+                          ? '+' + oCcy.format(priceChange).toString()
+                          : oCcy.format(priceChange).toString(),
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: priceChange > 0 ? secondaryColor : heartRed,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                  ],
+                );
+              }(),
+            );
+          }
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(
+                oCcy.format(currentPrice).toString(),
+                style: const TextStyle(
+                  fontSize: 18,
+                ),
               ),
-            ),
-            Text(
-              priceChange >= 0
-                  ? '+' + oCcy.format(priceChange).toString()
-                  : oCcy.format(priceChange).toString(),
-              style: TextStyle(
-                fontSize: 14,
-                color: priceChange > 0 ? secondaryColor : heartRed,
+              Text(
+                priceChange >= 0
+                    ? '+' + oCcy.format(priceChange).toString()
+                    : oCcy.format(priceChange).toString(),
+                style: TextStyle(
+                  fontSize: 14,
+                  color: priceChange > 0 ? secondaryColor : heartRed,
+                ),
               ),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-          ],
-        );
-      }(),
-    );
-  }
+            ],
+          );
+        },
+      );
+
+  Widget _stockExchangeDetails(
+    int index,
+    Stock? company,
+  ) =>
+      BlocBuilder<ExchangeCubit, ExchangeState>(
+        builder: (context, state) {
+          if (state is ExchangeDataLoaded) {
+            int stocksInMarket =
+                state.exchangeData[index]?.stocksInMarket.toInt() ??
+                    (mapOfStocks[index]?.stocksInMarket.toInt() ?? 0);
+            mapOfStocks[index]?.stocksInMarket = Int64(stocksInMarket);
+            int stocksInExchange =
+                state.exchangeData[index]?.stocksInExchange.toInt() ??
+                    (mapOfStocks[index]?.stocksInExchange.toInt() ?? 0);
+            mapOfStocks[index]?.stocksInExchange = Int64(stocksInExchange);
+            return Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Expanded(child: Text('Stocks in Market')),
+                    const SizedBox(width: 10),
+                    Text(stocksInMarket.toString())
+                  ],
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Expanded(child: Text('Stocks in Exchange')),
+                    const SizedBox(width: 10),
+                    Text(stocksInExchange.toString())
+                  ],
+                ),
+              ],
+            );
+          }
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Expanded(child: Text('Stocks in Market')),
+                  const SizedBox(width: 10),
+                  Text(company?.stocksInMarket.toString() ?? '0')
+                ],
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Expanded(child: Text('Stocks in Exchange')),
+                  const SizedBox(width: 10),
+                  Text(company?.stocksInExchange.toString() ?? '0')
+                ],
+              )
+            ],
+          );
+        },
+      );
 
   void _showModalSheet(int stockId, String stockName, int currentPrice) {
     showModalBottomSheet(

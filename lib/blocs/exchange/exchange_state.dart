@@ -20,15 +20,6 @@ class ExchangeDataLoaded extends ExchangeState {
   List<Object> get props => [exchangeData];
 }
 
-class BuyFromExchangeSuccess extends ExchangeState {
-  final BuyStocksFromExchangeResponse exchangeResponse;
-
-  const BuyFromExchangeSuccess(this.exchangeResponse);
-
-  @override
-  List<Object> get props => [exchangeResponse];
-}
-
 class ExchangeFailure extends ExchangeState {
   final String msg;
 
