@@ -7,10 +7,17 @@ abstract class ExchangeState extends Equatable {
   List<Object> get props => [];
 }
 
-class ExchangeInitial extends ExchangeState {}
-
 class ExchangeLoading extends ExchangeState {
   const ExchangeLoading();
+}
+
+class ExchangeDataLoaded extends ExchangeState {
+  final Map<int, StockExchangeDataPoint> exchangeData;
+
+  const ExchangeDataLoaded(this.exchangeData);
+
+  @override
+  List<Object> get props => [exchangeData];
 }
 
 class ExchangeFailure extends ExchangeState {
@@ -20,13 +27,4 @@ class ExchangeFailure extends ExchangeState {
 
   @override
   List<Object> get props => [msg];
-}
-
-class ExchangeSuccess extends ExchangeState {
-  final BuyStocksFromExchangeResponse exchangeResponse;
-
-  const ExchangeSuccess(this.exchangeResponse);
-
-  @override
-  List<Object> get props => [exchangeResponse];
 }
