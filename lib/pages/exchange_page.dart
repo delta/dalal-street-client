@@ -101,8 +101,17 @@ class _ExchangePageState extends State<ExchangePage> {
               shrinkWrap: true,
               itemCount: mapOfStocks.length,
               itemBuilder: (context, index) {
+                final exchangeDataPoint = exchangeData[index + 1] ??
+                    stockDataToExchangeData(mapOfStocks[index + 1]!);
+                // Update mapOfStocks
+                mapOfStocks[index + 1]?.stocksInMarket =
+                    exchangeDataPoint.stocksInMarket;
+                mapOfStocks[index + 1]?.stocksInExchange =
+                    exchangeDataPoint.stocksInExchange;
+                mapOfStocks[index + 1]?.currentPrice = exchangeDataPoint.price;
                 Stock? company = mapOfStocks[index + 1];
-                int currentPrice = exchangeData[index + 1]?.price.toInt() ?? 0;
+                int currentPrice =
+                    mapOfStocks[index + 1]?.currentPrice.toInt() ?? 0;
                 int previousDayPrice = company?.previousDayClose.toInt() ?? 0;
                 var priceChange = (currentPrice - previousDayPrice);
                 return _stockExchangeItem(
@@ -110,8 +119,7 @@ class _ExchangePageState extends State<ExchangePage> {
                   index + 1,
                   priceChange,
                   currentPrice,
-                  exchangeData[index + 1] ??
-                      stockDataToExchangeData(mapOfStocks[index + 1]!),
+                  exchangeDataPoint,
                 );
               },
             );
