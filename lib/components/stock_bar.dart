@@ -1,7 +1,7 @@
 import 'package:dalal_street_client/blocs/stock_bar/stockbar_cubit.dart';
 import 'package:dalal_street_client/components/marquee.dart';
 import 'package:dalal_street_client/config/get_it.dart';
-import 'package:dalal_street_client/config/log.dart';
+import 'package:dalal_street_client/constants/format.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
 import 'package:dalal_street_client/theme/colors.dart';
 import 'package:flutter/material.dart';
@@ -21,8 +21,8 @@ class StockBar extends StatelessWidget {
       child: Container(
         child: StockBarMarquee(),
         color: backgroundColor,
-        height: 100.0,
-        margin: const EdgeInsets.only(bottom: 4.0),
+        height: 30.0,
+        margin: const EdgeInsets.only(bottom: 1.0),
       ),
     );
   }
@@ -47,7 +47,13 @@ class StockBarMarquee extends StatelessWidget {
 
     return Marquee(
       child: Row(
-        children: stockBarItemList,
+        children: [
+          const SizedBox(width: 2.0),
+          ...stockBarItemList,
+          const SizedBox(
+            width: 2.0,
+          )
+        ],
       ),
       pauseDuration: const Duration(milliseconds: 0),
       backDuration: const Duration(milliseconds: 10000),
@@ -91,13 +97,15 @@ class StockBarItem extends StatelessWidget {
               stockPrice = state.stockPrice[stockId]!;
             }
 
-            bool isLowOrHigh = stockPrice >= previousDayClosePrice;
+            bool isLowOrHigh = stockPrice > previousDayClosePrice;
 
-            logger.d(previousDayClosePrice);
+            Int64 percentageHighOrLow = previousDayClosePrice == 0
+                ? previousDayClosePrice
+                : (previousDayClosePrice - stockPrice) ~/ previousDayClosePrice;
 
             return Row(
               children: [
-                Text('$currentPrice',
+                Text(oCcy.format(stockPrice).toString(),
                     style: const TextStyle(
                       fontSize: 13,
                       color: whiteWithOpacity50,
@@ -105,18 +113,18 @@ class StockBarItem extends StatelessWidget {
                 const SizedBox(
                   width: 5.0,
                 ),
-                Text('${previousDayClosePrice - stockPrice}',
+                Text('${oCcy.format(percentageHighOrLow).toString()}%',
                     style: TextStyle(
                         fontSize: 13,
                         color: isLowOrHigh ? secondaryColor : heartRed)),
                 const SizedBox(
-                  width: 5.0,
+                  width: 3.0,
                 ),
                 isLowOrHigh
                     ? Image.asset('assets/images/trendingUp.png',
-                        width: 8, height: 8)
+                        width: 20, height: 20)
                     : Image.asset('assets/images/trendingDown.png',
-                        width: 8, height: 8),
+                        width: 25, height: 25),
                 const SizedBox(
                   width: 13.0,
                 )

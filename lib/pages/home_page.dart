@@ -1,6 +1,8 @@
 import 'package:dalal_street_client/blocs/companies/companies_bloc.dart';
 import 'package:dalal_street_client/blocs/subscribe/subscribe_cubit.dart';
+import 'package:dalal_street_client/components/stock_bar.dart';
 import 'package:dalal_street_client/config/log.dart';
+import 'package:dalal_street_client/constants/format.dart';
 import 'package:dalal_street_client/proto_build/datastreams/Subscribe.pb.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
 import 'package:dalal_street_client/proto_build/models/User.pb.dart';
@@ -8,9 +10,6 @@ import 'package:dalal_street_client/utils/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dalal_street_client/theme/colors.dart';
-import 'package:intl/intl.dart';
-
-final oCcy = NumberFormat('#,##0.00', 'en_US');
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key, required this.user}) : super(key: key);
@@ -89,8 +88,9 @@ class _HomePageState extends State<HomePage> {
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
       child: Column(
         children: [
+          const StockBar(),
           const SizedBox(
-            height: 30,
+            height: 10,
           ),
           _companies(),
           const SizedBox(
