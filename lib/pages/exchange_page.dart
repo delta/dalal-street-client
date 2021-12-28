@@ -1,4 +1,5 @@
 import 'package:dalal_street_client/blocs/exchange/exchange_cubit.dart';
+import 'package:dalal_street_client/blocs/exchange/sheet/exchange_sheet_cubit.dart';
 import 'package:dalal_street_client/config/get_it.dart';
 import 'package:dalal_street_client/config/log.dart';
 import 'package:dalal_street_client/global_streams.dart';
@@ -262,7 +263,6 @@ class _ExchangePageState extends State<ExchangePage> {
     );
   }
 
-  // todo: modal sheet UI
   void _showModalSheet(int stockId, String stockName, int currentPrice) {
     showModalBottomSheet(
         shape: const RoundedRectangleBorder(
@@ -271,27 +271,27 @@ class _ExchangePageState extends State<ExchangePage> {
         context: context,
         builder: (_) {
           final _controller = TextEditingController();
-          return BlocProvider.value(
-            value: BlocProvider.of<ExchangeCubit>(context),
-            child: Padding(
-              child: BlocConsumer<ExchangeCubit, ExchangeState>(
+          return Padding(
+            child: BlocProvider(
+              create: (context) => ExchangeSheetCubit(),
+              child: BlocConsumer<ExchangeSheetCubit, ExchangeSheetState>(
                 listener: (context, state) {
-                  if (state is BuyFromExchangeSuccess) {
+                  if (state is ExchangeSheetSuccess) {
                     showSnackBar(
                         context, 'Successfully bought $stockName stocks');
                     Navigator.maybePop(context);
-                  } else if (state is ExchangeFailure) {
+                  } else if (state is ExchangeSheetFailure) {
                     showSnackBar(context, state.msg);
                   }
                 },
                 builder: (context, state) {
-                  if (state is ExchangeLoading) {
+                  if (state is ExchangeSheetLoading) {
                     return const Center(
                       child: CircularProgressIndicator(
                         color: Colors.green,
                       ),
                     );
-                  } else if (state is ExchangeFailure) {
+                  } else if (state is ExchangeSheetFailure) {
                     return Center(
                       child: Text(state.msg),
                     );
@@ -351,7 +351,7 @@ class _ExchangePageState extends State<ExchangePage> {
 
                           if (stockQuantity > 0) {
                             context
-                                .read<ExchangeCubit>()
+                                .read<ExchangeSheetCubit>()
                                 .buyStocksFromExchange(stockId, stockQuantity);
                           }
                           _controller.text = '';
@@ -362,8 +362,8 @@ class _ExchangePageState extends State<ExchangePage> {
                   );
                 },
               ),
-              padding: const EdgeInsets.all(20.0),
             ),
+            padding: const EdgeInsets.all(20.0),
           );
         });
   }
