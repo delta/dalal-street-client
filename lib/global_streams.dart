@@ -2,6 +2,7 @@ import 'package:dalal_street_client/grpc/client.dart';
 import 'package:dalal_street_client/proto_build/actions/GetStockList.pb.dart';
 import 'package:dalal_street_client/proto_build/datastreams/GameState.pb.dart';
 import 'package:dalal_street_client/proto_build/datastreams/Notifications.pb.dart';
+import 'package:dalal_street_client/proto_build/datastreams/StockExchange.pb.dart';
 import 'package:dalal_street_client/proto_build/datastreams/StockPrices.pb.dart';
 import 'package:dalal_street_client/proto_build/datastreams/Subscribe.pb.dart';
 import 'package:dalal_street_client/proto_build/datastreams/Transactions.pb.dart';
@@ -21,6 +22,7 @@ class GlobalStreams extends Equatable {
   final ResponseStream<NotificationUpdate> notificationStream;
   final ResponseStream<TransactionUpdate> transactionStream;
   final ResponseStream<StockPricesUpdate> stockPricesStream;
+  final ResponseStream<StockExchangeUpdate> stockExchangeStream;
 
   // Only used to unsubscribe from global streams. Don't use these to subscribe again
   final List<SubscriptionId> subscriptionIds;
@@ -31,6 +33,7 @@ class GlobalStreams extends Equatable {
     this.notificationStream,
     this.transactionStream,
     this.stockPricesStream,
+    this.stockExchangeStream,
     this.subscriptionIds,
   );
 
@@ -41,7 +44,8 @@ class GlobalStreams extends Equatable {
         notificationStream,
         transactionStream,
         stockPricesStream,
-        subscriptionIds
+        stockExchangeStream,
+        subscriptionIds,
       ];
 }
 
@@ -63,11 +67,13 @@ Future<GlobalStreams> subscribeToGlobalStreams(String sessionId) async {
   late final SubscriptionId notificationSubscriptionId;
   late final SubscriptionId transactionSubscriptionId;
   late final SubscriptionId gameStateSubscriptionId;
+  late final SubscriptionId stockExchangeSubscriptionId;
 
   late final ResponseStream<StockPricesUpdate> stockPriceStream;
   late final ResponseStream<NotificationUpdate> notificationStream;
   late final ResponseStream<TransactionUpdate> transactionStream;
   late final ResponseStream<GameStateUpdate> gameStateStream;
+  late final ResponseStream<StockExchangeUpdate> stockExchangeStream;
 
   stockPriceSubscriptionId = await subscribe(
       SubscribeRequest(dataStreamType: DataStreamType.STOCK_PRICES), sessionId);
@@ -81,6 +87,10 @@ Future<GlobalStreams> subscribeToGlobalStreams(String sessionId) async {
 
   gameStateSubscriptionId = await subscribe(
       SubscribeRequest(dataStreamType: DataStreamType.GAME_STATE), sessionId);
+
+  stockExchangeSubscriptionId = await subscribe(
+      SubscribeRequest(dataStreamType: DataStreamType.STOCK_EXCHANGE),
+      sessionId);
 
   stockPriceStream = streamClient.getStockPricesUpdates(
     stockPriceSubscriptionId,
@@ -98,16 +108,28 @@ Future<GlobalStreams> subscribeToGlobalStreams(String sessionId) async {
     gameStateSubscriptionId,
     options: sessionOptions(sessionId),
   );
+  stockExchangeStream = streamClient.getStockExchangeUpdates(
+    stockExchangeSubscriptionId,
+    options: sessionOptions(sessionId),
+  );
 
   final subscriptionIds = [
     stockPriceSubscriptionId,
     notificationSubscriptionId,
     transactionSubscriptionId,
-    gameStateSubscriptionId
+    gameStateSubscriptionId,
+    stockExchangeSubscriptionId
   ];
 
-  return GlobalStreams(stockResponse.stockList, gameStateStream,
-      notificationStream, transactionStream, stockPriceStream, subscriptionIds);
+  return GlobalStreams(
+    stockResponse.stockList,
+    gameStateStream,
+    notificationStream,
+    transactionStream,
+    stockPriceStream,
+    stockExchangeStream,
+    subscriptionIds,
+  );
 }
 
 /// Unsubscribes from all Global Streams
