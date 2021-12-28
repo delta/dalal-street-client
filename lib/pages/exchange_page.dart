@@ -204,42 +204,40 @@ class _ExchangePageState extends State<ExchangePage> {
       Stock? company, int index, int priceChange, int currentPrice) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-            _stockNames(company),
-            _stockGraph(),
-            _stockPrices(index, priceChange, currentPrice),
-          ]),
-          const SizedBox(
-            height: 10,
-          ),
-          _stockExchangeDetails(index, company),
-          const SizedBox(
-            height: 10,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Expanded(
-                child: ElevatedButton(
-                  style: secondaryButtonStyle,
-                  onPressed: () {},
-                  child: const Text('View'),
-                ),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
+        Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+          _stockNames(company),
+          _stockGraph(),
+          _stockPrices(index, priceChange, currentPrice),
+        ]),
+        const SizedBox(
+          height: 10,
+        ),
+        _stockExchangeDetails(index, company),
+        const SizedBox(
+          height: 10,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Expanded(
+              child: ElevatedButton(
+                style: secondaryButtonStyle,
+                onPressed: () {},
+                child: const Text('View'),
               ),
-              const SizedBox(width: 20),
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: () => _showModalSheet(
-                      index, company?.fullName ?? 'Airtel', currentPrice),
-                  child: const Text('Buy'),
-                ),
+            ),
+            const SizedBox(width: 20),
+            Expanded(
+              child: ElevatedButton(
+                onPressed: () => _showModalSheet(
+                    index, company?.fullName ?? 'Airtel', currentPrice),
+                child: const Text('Buy'),
               ),
-        ],)
-        ]
-      ),
+            ),
+          ],
+        )
+      ]),
     );
   }
 
@@ -424,6 +422,7 @@ class _ExchangePageState extends State<ExchangePage> {
       },
     );
   }
+
   // todo: modal sheet UI
   void _showModalSheet(int stockId, String stockName, int currentPrice) {
     showModalBottomSheet(
