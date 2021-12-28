@@ -16,6 +16,7 @@ import 'package:intl/intl.dart';
 
 final oCcy = NumberFormat('#,##0.00', 'en_US');
 
+// todo: UI similar to figma mock up
 class ExchangePage extends StatefulWidget {
   const ExchangePage({Key? key}) : super(key: key);
 
@@ -64,7 +65,7 @@ class _ExchangePageState extends State<ExchangePage> {
     );
   }
 
-  Center _desktopBody() {
+  Widget _desktopBody() {
     return const Center(
       child: Text(
         'Web UI will design soon :)',
@@ -76,7 +77,7 @@ class _ExchangePageState extends State<ExchangePage> {
     );
   }
 
-  Center _tabletBody() {
+  Widget _tabletBody() {
     return const Center(
       child: Text(
         'Tablet UI will design soon :)',
@@ -88,7 +89,7 @@ class _ExchangePageState extends State<ExchangePage> {
     );
   }
 
-  Padding _mobileBody() {
+  Widget _mobileBody() {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
       child: Column(
@@ -96,7 +97,7 @@ class _ExchangePageState extends State<ExchangePage> {
           const SizedBox(
             height: 30,
           ),
-          _companiesExchange(),
+          _buildBody(),
           const SizedBox(
             height: 10,
           ),
@@ -105,7 +106,7 @@ class _ExchangePageState extends State<ExchangePage> {
     );
   }
 
-  Container _companiesExchange() {
+  Widget _buildBody() {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
       decoration: BoxDecoration(
@@ -139,13 +140,13 @@ class _ExchangePageState extends State<ExchangePage> {
           const SizedBox(
             height: 20,
           ),
-          _exchangeBody(),
+          _exchangeListBody(),
         ],
       ),
     );
   }
 
-  BlocBuilder<CompaniesBloc, CompaniesState> _exchangeBody() {
+  Widget _exchangeListBody() {
     return BlocBuilder<CompaniesBloc, CompaniesState>(
         builder: (context, state) {
       if (state is GetCompaniesSuccess) {
@@ -165,7 +166,7 @@ class _ExchangePageState extends State<ExchangePage> {
                 int currentPrice = company?.currentPrice.toInt() ?? 0;
                 int previousDayPrice = company?.previousDayClose.toInt() ?? 0;
                 var priceChange = (currentPrice - previousDayPrice);
-                return _stockExchangeItem(
+                return _exchangeListItem(
                     company, index + 1, priceChange, currentPrice);
               },
             );
@@ -198,7 +199,8 @@ class _ExchangePageState extends State<ExchangePage> {
     });
   }
 
-  Container _stockExchangeItem(
+// Company list item widget for stock exchange
+  Widget _exchangeListItem(
       Stock? company, int index, int priceChange, int currentPrice) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 10),
@@ -213,84 +215,7 @@ class _ExchangePageState extends State<ExchangePage> {
           const SizedBox(
             height: 10,
           ),
-          BlocBuilder<ExchangeStreamBloc, ExchangeStreamState>(
-            builder: (context, state) {
-              if (state is SubscriptionToStockExchangeSuccess) {
-                logger.i('$index here');
-                int stocksInMarket = state.stockExchangeUpdate
-                        .stocksInExchange[index]?.stocksInMarket
-                        .toInt() ??
-                    (mapOfStocks[index]?.stocksInMarket.toInt() ?? 0);
-                mapOfStocks[index]?.stocksInMarket = Int64(stocksInMarket);
-                return Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Expanded(child: Text('Stocks in Market')),
-                    const SizedBox(width: 10),
-                    Text(stocksInMarket.toString())
-                  ],
-                );
-              } else if (state is SubscriptionToStockExchangeFailed) {
-                return const Center(
-                  child: Text(
-                    'Failed to load data \nReason : //',
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: secondaryColor,
-                    ),
-                  ),
-                );
-              }
-              return Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Expanded(child: Text('Stocks in Market')),
-                  const SizedBox(width: 10),
-                  Text(company?.stocksInMarket.toString() ?? '0')
-                ],
-              );
-            },
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          BlocBuilder<ExchangeStreamBloc, ExchangeStreamState>(
-            builder: (context, state) {
-              if (state is SubscriptionToStockExchangeSuccess) {
-                int stocksInExchange = state.stockExchangeUpdate
-                        .stocksInExchange[index]?.stocksInExchange
-                        .toInt() ??
-                    (mapOfStocks[index]?.stocksInExchange.toInt() ?? 0);
-                mapOfStocks[index]?.stocksInExchange = Int64(stocksInExchange);
-                return Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Expanded(child: Text('Stocks in Exchange')),
-                    const SizedBox(width: 10),
-                    Text(stocksInExchange.toString())
-                  ],
-                );
-              } else if (state is SubscriptionToStockExchangeFailed) {
-                return const Center(
-                  child: Text(
-                    'Failed to load data \nReason : //',
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: secondaryColor,
-                    ),
-                  ),
-                );
-              }
-              return Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Expanded(child: Text('Stocks in Exchange')),
-                  const SizedBox(width: 10),
-                  Text(company?.stocksInExchange.toString() ?? '0')
-                ],
-              );
-            },
-          ),
+          _stockExchangeDetails(index, company),
           const SizedBox(
             height: 10,
           ),
@@ -312,14 +237,13 @@ class _ExchangePageState extends State<ExchangePage> {
                   child: const Text('Buy'),
                 ),
               ),
-            ],
-          )
-        ],
+        ],)
+        ]
       ),
     );
   }
 
-  Expanded _stockNames(Stock? company) {
+  Widget _stockNames(Stock? company) {
     return Expanded(
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Text(
@@ -339,7 +263,7 @@ class _ExchangePageState extends State<ExchangePage> {
     );
   }
 
-  Expanded _stockGraph() {
+  Widget _stockGraph() {
     return Expanded(
       child: Image.network(
         'https://i.imgur.com/zrmdl8j.png',
@@ -348,7 +272,7 @@ class _ExchangePageState extends State<ExchangePage> {
     );
   }
 
-  Expanded _stockPrices(int index, int priceChange, int currentPrice) {
+  Widget _stockPrices(int index, int priceChange, int currentPrice) {
     return Expanded(
       child: BlocBuilder<ExchangeStreamBloc, ExchangeStreamState>(
         builder: (context, state) {
@@ -420,6 +344,87 @@ class _ExchangePageState extends State<ExchangePage> {
     );
   }
 
+  Widget _stockExchangeDetails(
+    int index,
+    Stock? company,
+  ) {
+    return BlocBuilder<ExchangeStreamBloc, ExchangeStreamState>(
+      builder: (context, state) {
+        if (state is SubscriptionToStockExchangeSuccess) {
+          int stocksInMarket = state
+                  .stockExchangeUpdate.stocksInExchange[index]?.stocksInMarket
+                  .toInt() ??
+              (mapOfStocks[index]?.stocksInMarket.toInt() ?? 0);
+          mapOfStocks[index]?.stocksInMarket = Int64(stocksInMarket);
+          int stocksInExchange = state
+                  .stockExchangeUpdate.stocksInExchange[index]?.stocksInExchange
+                  .toInt() ??
+              (mapOfStocks[index]?.stocksInExchange.toInt() ?? 0);
+          mapOfStocks[index]?.stocksInExchange = Int64(stocksInExchange);
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Expanded(child: Text('Stocks in Market')),
+                  const SizedBox(width: 10),
+                  Text(stocksInMarket.toString())
+                ],
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Expanded(child: Text('Stocks in Exchange')),
+                  const SizedBox(width: 10),
+                  Text(stocksInExchange.toString())
+                ],
+              )
+            ],
+          );
+        } else if (state is SubscriptionToStockExchangeFailed) {
+          return const Center(
+            child: Text(
+              'Failed to load data \nReason : //',
+              style: TextStyle(
+                fontSize: 14,
+                color: secondaryColor,
+              ),
+            ),
+          );
+        } else {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Expanded(child: Text('Stocks in Market')),
+                  const SizedBox(width: 10),
+                  Text(company?.stocksInMarket.toString() ?? '0')
+                ],
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Expanded(child: Text('Stocks in Exchange')),
+                  const SizedBox(width: 10),
+                  Text(company?.stocksInExchange.toString() ?? '0')
+                ],
+              )
+            ],
+          );
+        }
+      },
+    );
+  }
+  // todo: modal sheet UI
   void _showModalSheet(int stockId, String stockName, int currentPrice) {
     showModalBottomSheet(
         shape: const RoundedRectangleBorder(
