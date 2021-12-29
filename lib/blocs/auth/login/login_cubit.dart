@@ -27,7 +27,10 @@ class LoginCubit extends Cubit<LoginState> {
         emit(LoginFailure(loginResp.statusMessage));
         return;
       }
-      final globalStreams = await subscribeToGlobalStreams(sessionId);
+      final globalStreams = await subscribeToGlobalStreams(
+        loginResp.user,
+        sessionId,
+      );
       emit(LoginSuccess(loginResp));
       dalalBloc.add(DalalLogIn(
         loginResp,

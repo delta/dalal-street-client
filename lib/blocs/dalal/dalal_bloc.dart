@@ -47,7 +47,10 @@ class DalalBloc extends HydratedBloc<DalalEvent, DalalState> {
         if (loginResponse.statusCode != LoginResponse_StatusCode.OK) {
           throw Exception(loginResponse.statusMessage);
         }
-        final globalStreams = await subscribeToGlobalStreams(sessionId);
+        final globalStreams = await subscribeToGlobalStreams(
+          loginResponse.user,
+          sessionId,
+        );
         emit(DalalDataLoaded(
           loginResponse.user,
           loginResponse.sessionId,
