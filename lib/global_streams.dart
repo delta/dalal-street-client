@@ -8,7 +8,6 @@ import 'package:dalal_street_client/proto_build/datastreams/Subscribe.pb.dart';
 import 'package:dalal_street_client/proto_build/datastreams/Transactions.pb.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
 import 'package:equatable/equatable.dart';
-import 'package:grpc/grpc_or_grpcweb.dart';
 
 import 'config/log.dart';
 import 'grpc/subscription.dart';
@@ -18,11 +17,11 @@ class GlobalStreams extends Equatable {
   // TODO: convert this into a stream, make this update in realtime using appropriate streams
   final Map<int, Stock> stockList;
 
-  final ResponseStream<GameStateUpdate> gameStateStream;
-  final ResponseStream<NotificationUpdate> notificationStream;
-  final ResponseStream<TransactionUpdate> transactionStream;
-  final ResponseStream<StockPricesUpdate> stockPricesStream;
-  final ResponseStream<StockExchangeUpdate> stockExchangeStream;
+  final Stream<GameStateUpdate> gameStateStream;
+  final Stream<StockPricesUpdate> stockPricesStream;
+  final Stream<StockExchangeUpdate> stockExchangeStream;
+  final Stream<TransactionUpdate> transactionStream;
+  final Stream<NotificationUpdate> notificationStream;
 
   // Only used to unsubscribe from global streams. Don't use these to subscribe again
   final List<SubscriptionId> subscriptionIds;
@@ -30,10 +29,10 @@ class GlobalStreams extends Equatable {
   const GlobalStreams(
     this.stockList,
     this.gameStateStream,
-    this.notificationStream,
-    this.transactionStream,
     this.stockPricesStream,
     this.stockExchangeStream,
+    this.transactionStream,
+    this.notificationStream,
     this.subscriptionIds,
   );
 
@@ -63,71 +62,91 @@ Future<GlobalStreams> subscribeToGlobalStreams(String sessionId) async {
   }
 
   // subscribing to global streams
-  late final SubscriptionId stockPriceSubscriptionId;
-  late final SubscriptionId notificationSubscriptionId;
-  late final SubscriptionId transactionSubscriptionId;
   late final SubscriptionId gameStateSubscriptionId;
+  late final SubscriptionId stockPriceSubscriptionId;
   late final SubscriptionId stockExchangeSubscriptionId;
+  late final SubscriptionId transactionSubscriptionId;
+  late final SubscriptionId notificationSubscriptionId;
 
-  late final ResponseStream<StockPricesUpdate> stockPriceStream;
-  late final ResponseStream<NotificationUpdate> notificationStream;
-  late final ResponseStream<TransactionUpdate> transactionStream;
-  late final ResponseStream<GameStateUpdate> gameStateStream;
-  late final ResponseStream<StockExchangeUpdate> stockExchangeStream;
-
-  stockPriceSubscriptionId = await subscribe(
-      SubscribeRequest(dataStreamType: DataStreamType.STOCK_PRICES), sessionId);
-
-  notificationSubscriptionId = await subscribe(
-      SubscribeRequest(dataStreamType: DataStreamType.NOTIFICATIONS),
-      sessionId);
-
-  transactionSubscriptionId = await subscribe(
-      SubscribeRequest(dataStreamType: DataStreamType.TRANSACTIONS), sessionId);
+  late final Stream<GameStateUpdate> gameStateStream;
+  late final Stream<StockPricesUpdate> stockPriceStream;
+  late final Stream<StockExchangeUpdate> stockExchangeStream;
+  late final Stream<TransactionUpdate> transactionStream;
+  late final Stream<NotificationUpdate> notificationStream;
 
   gameStateSubscriptionId = await subscribe(
-      SubscribeRequest(dataStreamType: DataStreamType.GAME_STATE), sessionId);
+    SubscribeRequest(dataStreamType: DataStreamType.GAME_STATE),
+    sessionId,
+  );
+
+  stockPriceSubscriptionId = await subscribe(
+    SubscribeRequest(dataStreamType: DataStreamType.STOCK_PRICES),
+    sessionId,
+  );
 
   stockExchangeSubscriptionId = await subscribe(
-      SubscribeRequest(dataStreamType: DataStreamType.STOCK_EXCHANGE),
-      sessionId);
+    SubscribeRequest(dataStreamType: DataStreamType.STOCK_EXCHANGE),
+    sessionId,
+  );
 
-  stockPriceStream = streamClient.getStockPricesUpdates(
-    stockPriceSubscriptionId,
-    options: sessionOptions(sessionId),
+  transactionSubscriptionId = await subscribe(
+    SubscribeRequest(dataStreamType: DataStreamType.TRANSACTIONS),
+    sessionId,
   );
-  notificationStream = streamClient.getNotificationUpdates(
-    notificationSubscriptionId,
-    options: sessionOptions(sessionId),
+
+  notificationSubscriptionId = await subscribe(
+    SubscribeRequest(dataStreamType: DataStreamType.NOTIFICATIONS),
+    sessionId,
   );
-  transactionStream = streamClient.getTransactionUpdates(
-    transactionSubscriptionId,
-    options: sessionOptions(sessionId),
-  );
-  gameStateStream = streamClient.getGameStateUpdates(
-    gameStateSubscriptionId,
-    options: sessionOptions(sessionId),
-  );
-  stockExchangeStream = streamClient.getStockExchangeUpdates(
-    stockExchangeSubscriptionId,
-    options: sessionOptions(sessionId),
-  );
+
+  gameStateStream = streamClient
+      .getGameStateUpdates(
+        gameStateSubscriptionId,
+        options: sessionOptions(sessionId),
+      )
+      .asBroadcastStream();
+  stockPriceStream = streamClient
+      .getStockPricesUpdates(
+        stockPriceSubscriptionId,
+        options: sessionOptions(sessionId),
+      )
+      .asBroadcastStream();
+  stockExchangeStream = streamClient
+      .getStockExchangeUpdates(
+        stockExchangeSubscriptionId,
+        options: sessionOptions(sessionId),
+      )
+      .asBroadcastStream();
+
+  transactionStream = streamClient
+      .getTransactionUpdates(
+        transactionSubscriptionId,
+        options: sessionOptions(sessionId),
+      )
+      .asBroadcastStream();
+
+  notificationStream = streamClient
+      .getNotificationUpdates(
+        notificationSubscriptionId,
+        options: sessionOptions(sessionId),
+      )
+      .asBroadcastStream();
 
   final subscriptionIds = [
-    stockPriceSubscriptionId,
-    notificationSubscriptionId,
-    transactionSubscriptionId,
     gameStateSubscriptionId,
-    stockExchangeSubscriptionId
+    stockPriceSubscriptionId,
+    stockExchangeSubscriptionId,
+    transactionSubscriptionId,
+    notificationSubscriptionId,
   ];
 
   return GlobalStreams(
     stockResponse.stockList,
     gameStateStream,
-    notificationStream,
-    transactionStream,
     stockPriceStream,
     stockExchangeStream,
+    transactionStream,
+    notificationStream,
     subscriptionIds,
   );
 }
