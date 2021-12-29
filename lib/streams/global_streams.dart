@@ -1,5 +1,7 @@
 import 'package:dalal_street_client/grpc/client.dart';
 import 'package:dalal_street_client/models/user_info/user_cash_info.dart';
+import 'package:dalal_street_client/models/user_info/user_stock_info.dart';
+import 'package:dalal_street_client/proto_build/actions/GetPortfolio.pb.dart';
 import 'package:dalal_street_client/proto_build/actions/GetStockList.pb.dart';
 import 'package:dalal_street_client/proto_build/datastreams/GameState.pb.dart';
 import 'package:dalal_street_client/proto_build/datastreams/Notifications.pb.dart';
@@ -31,7 +33,7 @@ class GlobalStreams extends Equatable {
 
   // Custom streams generated from server streams
   final Stream<UserCashInfo> userCashStream;
-  // final Stream<UserStockInfo> userStockStream;
+  final Stream<UserStockInfo> userStockStream;
 
   // Only used to unsubscribe from global streams. Don't use these to subscribe again
   final List<SubscriptionId> subscriptionIds;
@@ -44,7 +46,7 @@ class GlobalStreams extends Equatable {
     this.transactionStream,
     this.notificationStream,
     this.userCashStream,
-    // this.userStockStream,
+    this.userStockStream,
     this.subscriptionIds,
   );
 
@@ -57,7 +59,7 @@ class GlobalStreams extends Equatable {
         transactionStream,
         notificationStream,
         userCashStream,
-        // userStockStream,
+        userStockStream,
         subscriptionIds,
       ];
 }
@@ -143,6 +145,18 @@ Future<GlobalStreams> subscribeToGlobalStreams(
     user,
     transactionStream,
   ).asBroadcastStream();
+  // Portfolio needs to be fetched for userStockStream
+  final portfolioResponse = await actionClient.getPortfolio(
+    GetPortfolioRequest(),
+    options: sessionOptions(sessionId),
+  );
+  if (portfolioResponse.statusCode != GetPortfolioResponse_StatusCode.OK) {
+    throw Exception(portfolioResponse.statusMessage);
+  }
+  final userStockStream = _generateUserStockStream(
+    UserStockInfo.from(portfolioResponse),
+    transactionStream,
+  ).asBroadcastStream();
 
   return GlobalStreams(
     stockResponse.stockList,
@@ -152,6 +166,7 @@ Future<GlobalStreams> subscribeToGlobalStreams(
     transactionStream,
     notificationStream,
     userCashStream,
+    userStockStream,
     subscriptionIds,
   );
 }
