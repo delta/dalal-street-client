@@ -120,17 +120,14 @@ Future<GlobalStreams> subscribeToGlobalStreams(
         stockPriceSubscriptionId,
         options: sessionOptions(sessionId),
       )
-      .shareValueSeeded(
-        StockPricesUpdate(prices: stocksMapToPricesMap(initialStocks)),
-      );
+      .shareValueSeeded(StockPricesUpdate(prices: initialStocks.toPricesMap()));
   final stockExchangeStream = streamClient
       .getStockExchangeUpdates(
         stockExchangeSubscriptionId,
         options: sessionOptions(sessionId),
       )
       .shareValueSeeded(
-        StockExchangeUpdate(
-            stocksInExchange: stocksMapToExchangeMap(initialStocks)),
+        StockExchangeUpdate(stocksInExchange: initialStocks.toExchangeMap()),
       );
   final transactionStream = streamClient
       .getTransactionUpdates(

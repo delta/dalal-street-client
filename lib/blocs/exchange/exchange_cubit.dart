@@ -15,7 +15,7 @@ class ExchangeCubit extends Cubit<ExchangeState> {
   Future<void> listenToExchangeStream(Map<int, Stock> mapOfStocks) async {
     // Load initial state
     emit(ExchangeDataLoaded(mapOfStocks
-        .map((key, value) => MapEntry(key, stockDataToExchangeData(value)))));
+        .map((key, value) => MapEntry(key, stockToExchangeData(value)))));
     final exchangeStream = getIt<GlobalStreams>().stockExchangeStream;
     await for (var item in exchangeStream) {
       final exchangeData = item.stocksInExchange;
