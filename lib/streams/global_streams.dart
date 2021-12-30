@@ -10,7 +10,9 @@ import 'package:dalal_street_client/proto_build/datastreams/Subscribe.pb.dart';
 import 'package:dalal_street_client/proto_build/datastreams/Transactions.pb.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
 import 'package:dalal_street_client/proto_build/models/User.pb.dart';
+import 'package:dalal_street_client/utils/convert.dart';
 import 'package:equatable/equatable.dart';
+import 'package:rxdart/streams.dart';
 
 import '../config/log.dart';
 import '../grpc/subscription.dart';
@@ -18,43 +20,43 @@ import '../grpc/subscription.dart';
 part 'custom_streams.dart';
 
 /// Streams used in many places in the app
+///
+/// All the global streams must be broadcast streams(ValueStreams are broadcast streams by default)
 class GlobalStreams extends Equatable {
-  // TODO: convert this into a stream, make this update in realtime using appropriate streams
-  final Map<int, Stock> stockList;
-
   // Global streams from the server
-  // All the global streams must be broadcast streams
   final Stream<GameStateUpdate> gameStateStream;
-  final Stream<StockPricesUpdate> stockPricesStream;
-  final Stream<StockExchangeUpdate> stockExchangeStream;
+  final ValueStream<StockPricesUpdate> stockPricesStream;
+  final ValueStream<StockExchangeUpdate> stockExchangeStream;
   final Stream<TransactionUpdate> transactionStream;
   final Stream<NotificationUpdate> notificationStream;
 
   // Custom streams generated from server streams
+  final ValueStream<Map<int, Stock>> stockMapStream;
+  // TODO: change this to ValueStream after doing necessary changes
   final Stream<DynamicUserInfo> dynamicUserInfoStream;
 
   // Only used to unsubscribe from global streams. Don't use these to subscribe again
   final List<SubscriptionId> subscriptionIds;
 
   const GlobalStreams(
-    this.stockList,
     this.gameStateStream,
     this.stockPricesStream,
     this.stockExchangeStream,
     this.transactionStream,
     this.notificationStream,
+    this.stockMapStream,
     this.dynamicUserInfoStream,
     this.subscriptionIds,
   );
 
   @override
   List<Object?> get props => [
-        stockList,
         gameStateStream,
         stockPricesStream,
         stockExchangeStream,
         transactionStream,
         notificationStream,
+        stockMapStream,
         dynamicUserInfoStream,
         subscriptionIds,
       ];
@@ -66,6 +68,7 @@ Future<GlobalStreams> subscribeToGlobalStreams(
   User user,
   String sessionId,
 ) async {
+  logger.i('Subscribing to all global streams');
   // getStockList request, return map of stockId -> Stock
   final stockResponse = await actionClient.getStockList(
     GetStockListRequest(),
@@ -74,8 +77,9 @@ Future<GlobalStreams> subscribeToGlobalStreams(
   if (stockResponse.statusCode != GetStockListResponse_StatusCode.OK) {
     throw Exception(stockResponse.statusMessage);
   }
+  final initialStocks = stockResponse.stockList;
 
-  // Subscribe to the streams
+  // Subscribe to all the streams
   final gameStateSubscriptionId = await subscribe(
     SubscribeRequest(dataStreamType: DataStreamType.GAME_STATE),
     sessionId,
@@ -104,7 +108,7 @@ Future<GlobalStreams> subscribeToGlobalStreams(
     notificationSubscriptionId,
   ];
 
-  // Get the streams from the subscription ids
+  // Get the streams using the subscription ids
   final gameStateStream = streamClient
       .getGameStateUpdates(
         gameStateSubscriptionId,
@@ -116,13 +120,18 @@ Future<GlobalStreams> subscribeToGlobalStreams(
         stockPriceSubscriptionId,
         options: sessionOptions(sessionId),
       )
-      .asBroadcastStream();
+      .shareValueSeeded(
+        StockPricesUpdate(prices: stocksMapToPricesMap(initialStocks)),
+      );
   final stockExchangeStream = streamClient
       .getStockExchangeUpdates(
         stockExchangeSubscriptionId,
         options: sessionOptions(sessionId),
       )
-      .asBroadcastStream();
+      .shareValueSeeded(
+        StockExchangeUpdate(
+            stocksInExchange: stocksMapToExchangeMap(initialStocks)),
+      );
   final transactionStream = streamClient
       .getTransactionUpdates(
         transactionSubscriptionId,
@@ -137,6 +146,15 @@ Future<GlobalStreams> subscribeToGlobalStreams(
       .asBroadcastStream();
 
   // Generate custom streams
+  logger.i('Generating custom streams from server streams');
+  // Stock map stream
+  final stockMapStream = _generateStockMapStream(
+    initialStocks,
+    stockPriceStream,
+    stockExchangeStream,
+  );
+
+  // DynamicUserInfo stream
   final portfolioResponse = await actionClient.getPortfolio(
     GetPortfolioRequest(),
     options: sessionOptions(sessionId),
@@ -151,12 +169,12 @@ Future<GlobalStreams> subscribeToGlobalStreams(
   ).asBroadcastStream();
 
   return GlobalStreams(
-    stockResponse.stockList,
     gameStateStream,
     stockPriceStream,
     stockExchangeStream,
     transactionStream,
     notificationStream,
+    stockMapStream,
     dynamicUserInfoStream,
     subscriptionIds,
   );

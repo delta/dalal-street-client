@@ -1,7 +1,24 @@
 part of 'global_streams.dart';
 
-/// Generates a Stream of [DynamicUserInfo] which is updated based on [transactionStream]
-/// 
+/// Generates a Stream of Stocks Map which is updated using [stockPricesStream] and [stockExchangeStream]
+ValueStream<Map<int, Stock>> _generateStockMapStream(
+  Map<int, Stock> initialStocks,
+  ValueStream<StockPricesUpdate> stockPricesStream,
+  ValueStream<StockExchangeUpdate> stockExchangeStream,
+) =>
+    CombineLatestStream.combine2<StockPricesUpdate, StockExchangeUpdate,
+        Map<int, Stock>>(
+      stockPricesStream,
+      stockExchangeStream,
+      (priceUpdate, exchangeUpdate) {
+        logger.d('Stock List Combiner called');
+        // TODO: Logic for updating stocks
+        return initialStocks;
+      },
+    ).shareValue();
+
+/// Generates a Stream of [DynamicUserInfo] which is updated using [transactionStream]
+///
 /// [porfolioResponse] status code must be [OK]
 Stream<DynamicUserInfo> _generateDynamicUserInfoStream(
   User user,

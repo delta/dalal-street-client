@@ -54,7 +54,7 @@ class DalalBloc extends HydratedBloc<DalalEvent, DalalState> {
         emit(DalalDataLoaded(
           loginResponse.user,
           loginResponse.sessionId,
-          stockMapToCompanyMap(globalStreams.stockList),
+          stockMapToCompanyMap(globalStreams.stockMapStream.value),
           globalStreams,
         ));
       } on GrpcError catch (e) {
