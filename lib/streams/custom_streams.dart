@@ -1,8 +1,10 @@
 part of 'global_streams.dart';
 
 /// Generates a Stream of Stocks Map which is updated using [stockPricesStream] and [stockExchangeStream]
+///
+/// Both [stockPricesStream] and [stockExchangeStream] must be seeded with initial values.
 ValueStream<Map<int, Stock>> _generateStockMapStream(
-  Map<int, Stock> initialStocks,
+  Map<int, Stock> stocksMap,
   ValueStream<StockPricesUpdate> stockPricesStream,
   ValueStream<StockExchangeUpdate> stockExchangeStream,
 ) =>
@@ -11,9 +13,34 @@ ValueStream<Map<int, Stock>> _generateStockMapStream(
       stockPricesStream,
       stockExchangeStream,
       (priceUpdate, exchangeUpdate) {
-        logger.d('Stock List Combiner called');
-        // TODO: Logic for updating stocks
-        return initialStocks;
+        logger.d('Stock map combiner called');
+
+        // Update prices
+        priceUpdate.prices.forEach((id, newPrice) {
+          var stock = stocksMap[id]!;
+          stock.currentPrice = newPrice;
+
+          if (newPrice > stock.allTimeHigh) {
+            stock.allTimeHigh = newPrice;
+          } else if (newPrice > stock.dayHigh) {
+            stock.dayHigh = newPrice;
+          } else if (newPrice < stock.dayLow) {
+            stock.dayLow = newPrice;
+          } else if (newPrice < stock.allTimeLow) {
+            stock.allTimeLow = newPrice;
+          }
+
+          stock.upOrDown = stock.previousDayClose < newPrice;
+
+          stocksMap[id] = stock;
+        });
+
+        // Update exchange data
+        exchangeUpdate.stocksInExchange.forEach((id, exchangeData) {
+          stocksMap[id]!.stocksInExchange = exchangeData.stocksInExchange;
+          stocksMap[id]!.stocksInMarket = exchangeData.stocksInMarket;
+        });
+        return stocksMap;
       },
     ).shareValue();
 

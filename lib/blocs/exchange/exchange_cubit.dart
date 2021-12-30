@@ -1,6 +1,5 @@
 import 'package:bloc/bloc.dart';
 import 'package:dalal_street_client/config/get_it.dart';
-import 'package:dalal_street_client/config/log.dart';
 import 'package:dalal_street_client/streams/global_streams.dart';
 import 'package:dalal_street_client/proto_build/datastreams/StockExchange.pb.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
@@ -19,7 +18,6 @@ class ExchangeCubit extends Cubit<ExchangeState> {
     final exchangeStream = getIt<GlobalStreams>().stockExchangeStream;
     await for (var item in exchangeStream) {
       final exchangeData = item.stocksInExchange;
-      logger.d(exchangeData);
       // Load new updates
       emit(ExchangeDataLoaded(exchangeData));
     }
