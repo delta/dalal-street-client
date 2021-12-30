@@ -9,12 +9,10 @@ ValueStream<Map<int, Stock>> _generateStockMapStream(
   ValueStream<StockExchangeUpdate> stockExchangeStream,
 ) =>
     CombineLatestStream.combine2<StockPricesUpdate, StockExchangeUpdate,
-        Map<int, Stock>>(
+            Map<int, Stock>>(
       stockPricesStream,
       stockExchangeStream,
       (priceUpdate, exchangeUpdate) {
-        logger.d('Stock map combiner called');
-
         // Update prices
         priceUpdate.prices.forEach((id, newPrice) {
           var stock = stocksMap[id]!;
@@ -42,7 +40,15 @@ ValueStream<Map<int, Stock>> _generateStockMapStream(
         });
         return stocksMap;
       },
-    ).shareValueSeeded(stocksMap);
+    )
+
+        /// ValueStream needs to be seeded to access stream.value without exception. So it is seeded in last step
+        /// But because both prices and exchange streams are seeded, the resulting stream will emit the same stockMap again, so skip 1 value
+        ///
+        /// Why should prices and exchange streams be seeded?
+        /// Combiner function will not be called until all the provided streams emit atleast one value
+        .skip(1)
+        .shareValueSeeded(stocksMap);
 
 /// Generates a Stream of [DynamicUserInfo] which is updated using [transactionStream]
 ///
