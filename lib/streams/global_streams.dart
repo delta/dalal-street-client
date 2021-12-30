@@ -1,6 +1,5 @@
 import 'package:dalal_street_client/grpc/client.dart';
-import 'package:dalal_street_client/models/user_info/user_cash_info.dart';
-import 'package:dalal_street_client/models/user_info/user_stock_info.dart';
+import 'package:dalal_street_client/models/dynamic_user_info.dart';
 import 'package:dalal_street_client/proto_build/actions/GetPortfolio.pb.dart';
 import 'package:dalal_street_client/proto_build/actions/GetStockList.pb.dart';
 import 'package:dalal_street_client/proto_build/datastreams/GameState.pb.dart';
@@ -32,8 +31,7 @@ class GlobalStreams extends Equatable {
   final Stream<NotificationUpdate> notificationStream;
 
   // Custom streams generated from server streams
-  final Stream<UserCashInfo> userCashStream;
-  final Stream<UserStockInfo> userStockStream;
+  final Stream<DynamicUserInfo> dynamicUserInfoStream;
 
   // Only used to unsubscribe from global streams. Don't use these to subscribe again
   final List<SubscriptionId> subscriptionIds;
@@ -45,8 +43,7 @@ class GlobalStreams extends Equatable {
     this.stockExchangeStream,
     this.transactionStream,
     this.notificationStream,
-    this.userCashStream,
-    this.userStockStream,
+    this.dynamicUserInfoStream,
     this.subscriptionIds,
   );
 
@@ -58,8 +55,7 @@ class GlobalStreams extends Equatable {
         stockExchangeStream,
         transactionStream,
         notificationStream,
-        userCashStream,
-        userStockStream,
+        dynamicUserInfoStream,
         subscriptionIds,
       ];
 }
@@ -141,11 +137,6 @@ Future<GlobalStreams> subscribeToGlobalStreams(
       .asBroadcastStream();
 
   // Generate custom streams
-  final userCashStream = _generateUserCashStream(
-    user,
-    transactionStream,
-  ).asBroadcastStream();
-  // Portfolio needs to be fetched for userStockStream
   final portfolioResponse = await actionClient.getPortfolio(
     GetPortfolioRequest(),
     options: sessionOptions(sessionId),
@@ -153,8 +144,9 @@ Future<GlobalStreams> subscribeToGlobalStreams(
   if (portfolioResponse.statusCode != GetPortfolioResponse_StatusCode.OK) {
     throw Exception(portfolioResponse.statusMessage);
   }
-  final userStockStream = _generateUserStockStream(
-    UserStockInfo.from(portfolioResponse),
+  final dynamicUserInfoStream = _generateDynamicUserInfoStream(
+    user,
+    portfolioResponse,
     transactionStream,
   ).asBroadcastStream();
 
@@ -165,8 +157,7 @@ Future<GlobalStreams> subscribeToGlobalStreams(
     stockExchangeStream,
     transactionStream,
     notificationStream,
-    userCashStream,
-    userStockStream,
+    dynamicUserInfoStream,
     subscriptionIds,
   );
 }

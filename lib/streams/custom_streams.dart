@@ -1,38 +1,33 @@
 part of 'global_streams.dart';
 
-/// Generates a Stream of [UserCashInfo] which is updated based on [transactionStream]
-Stream<UserCashInfo> _generateUserCashStream(
+/// Generates a Stream of [DynamicUserInfo] which is updated based on [transactionStream]
+/// 
+/// [porfolioResponse] status code must be [OK]
+Stream<DynamicUserInfo> _generateDynamicUserInfoStream(
   User user,
+  GetPortfolioResponse portfolioResponse,
   Stream<TransactionUpdate> transactionStream,
 ) async* {
+  // Add initial values to the Stream
   int cash = user.cash.toInt();
   int reservedCash = user.reservedCash.toInt();
-  // TODO: Should we add the initial values to the stream?
-  yield UserCashInfo(cash, reservedCash);
-
-  await for (var item in transactionStream) {
-    final transaction = item.transaction;
-    // Update cash values from new transaction
-    cash += transaction.total.toInt();
-    reservedCash += transaction.reservedCashTotal.toInt();
-
-    // Add to the stream
-    yield UserCashInfo(cash, reservedCash);
-  }
-}
-
-Stream<UserStockInfo> _generateUserStockStream(
-  UserStockInfo stockInfo,
-  Stream<TransactionUpdate> transactionStream,
-) async* {
-  final stocksOwnedMap = stockInfo.stocksOwnedMap;
-  final stocksReservedMap = stockInfo.stocksReservedMap;
-  // TODO: Should we add the initial values to the stream?
-  yield stockInfo;
+  Map<int, int> stocksOwnedMap = portfolioResponse.stocksOwned
+      .map((key, value) => MapEntry(key, value.toInt()));
+  Map<int, int> stocksReservedMap = portfolioResponse.reservedStocksOwned
+      .map((key, value) => MapEntry(key, value.toInt()));
+  yield DynamicUserInfo(
+    cash,
+    reservedCash,
+    stocksOwnedMap,
+    stocksReservedMap,
+  );
 
   await for (var item in transactionStream) {
     final transaction = item.transaction;
     final stockId = transaction.stockId;
+    // Update cash values from new transaction
+    cash += transaction.total.toInt();
+    reservedCash += transaction.reservedCashTotal.toInt();
     // Update stock values from new transaction
     if (stocksOwnedMap.containsKey(stockId)) {
       stocksOwnedMap[stockId] =
@@ -47,7 +42,12 @@ Stream<UserStockInfo> _generateUserStockStream(
       stocksReservedMap[stockId] = transaction.reservedStockQuantity.toInt();
     }
 
-    // Add to the stream
-    yield UserStockInfo(stocksOwnedMap, stocksReservedMap);
+    // Add new values to the stream
+    yield DynamicUserInfo(
+      cash,
+      reservedCash,
+      stocksOwnedMap,
+      stocksReservedMap,
+    );
   }
 }
