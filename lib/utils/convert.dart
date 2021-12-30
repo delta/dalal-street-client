@@ -19,6 +19,10 @@ extension StockMapConverter on Map<int, Stock> {
           ));
 }
 
+extension Int64MapConverter on Map<int, Int64> {
+  Map<int, int> toIntMap() => map((key, value) => MapEntry(key, value.toInt()));
+}
+
 StockExchangeDataPoint stockToExchangeData(Stock stock) =>
     StockExchangeDataPoint(
       price: stock.currentPrice,

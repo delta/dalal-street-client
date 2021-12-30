@@ -32,8 +32,7 @@ class GlobalStreams extends Equatable {
 
   // Custom streams generated from server streams
   final ValueStream<Map<int, Stock>> stockMapStream;
-  // TODO: change this to ValueStream after doing necessary changes
-  final Stream<DynamicUserInfo> dynamicUserInfoStream;
+  final ValueStream<DynamicUserInfo> dynamicUserInfoStream;
 
   // Only used to unsubscribe from global streams. Don't use these to subscribe again
   final List<SubscriptionId> subscriptionIds;
@@ -160,10 +159,14 @@ Future<GlobalStreams> subscribeToGlobalStreams(
     throw Exception(portfolioResponse.statusMessage);
   }
   final dynamicUserInfoStream = _generateDynamicUserInfoStream(
-    user,
-    portfolioResponse,
+    DynamicUserInfo(
+      user.cash.toInt(),
+      user.reservedCash.toInt(),
+      portfolioResponse.stocksOwned.toIntMap(),
+      portfolioResponse.reservedStocksOwned.toIntMap(),
+    ),
     transactionStream,
-  ).asBroadcastStream();
+  );
 
   return GlobalStreams(
     gameStateStream,

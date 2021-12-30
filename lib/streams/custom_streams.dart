@@ -42,56 +42,44 @@ ValueStream<Map<int, Stock>> _generateStockMapStream(
         });
         return stocksMap;
       },
-    ).shareValue();
+    ).shareValueSeeded(stocksMap);
 
 /// Generates a Stream of [DynamicUserInfo] which is updated using [transactionStream]
 ///
 /// [porfolioResponse] status code must be [OK]
-Stream<DynamicUserInfo> _generateDynamicUserInfoStream(
-  User user,
-  GetPortfolioResponse portfolioResponse,
+ValueStream<DynamicUserInfo> _generateDynamicUserInfoStream(
+  DynamicUserInfo dynamicUserInfo,
   Stream<TransactionUpdate> transactionStream,
-) async* {
-  // Add initial values to the Stream
-  int cash = user.cash.toInt();
-  int reservedCash = user.reservedCash.toInt();
-  Map<int, int> stocksOwnedMap = portfolioResponse.stocksOwned
-      .map((key, value) => MapEntry(key, value.toInt()));
-  Map<int, int> stocksReservedMap = portfolioResponse.reservedStocksOwned
-      .map((key, value) => MapEntry(key, value.toInt()));
-  yield DynamicUserInfo(
-    cash,
-    reservedCash,
-    stocksOwnedMap,
-    stocksReservedMap,
-  );
+) =>
+    transactionStream.map((newUpdate) {
+      final transaction = newUpdate.transaction;
+      final stockId = transaction.stockId;
 
-  await for (var item in transactionStream) {
-    final transaction = item.transaction;
-    final stockId = transaction.stockId;
-    // Update cash values from new transaction
-    cash += transaction.total.toInt();
-    reservedCash += transaction.reservedCashTotal.toInt();
-    // Update stock values from new transaction
-    if (stocksOwnedMap.containsKey(stockId)) {
-      stocksOwnedMap[stockId] =
-          stocksOwnedMap[stockId]! + transaction.stockQuantity.toInt();
-    } else {
-      stocksOwnedMap[stockId] = transaction.stockQuantity.toInt();
-    }
-    if (stocksReservedMap.containsKey(stockId)) {
-      stocksReservedMap[stockId] = stocksReservedMap[stockId]! +
-          transaction.reservedStockQuantity.toInt();
-    } else {
-      stocksReservedMap[stockId] = transaction.reservedStockQuantity.toInt();
-    }
+      int cash = dynamicUserInfo.cash,
+          reservedCash = dynamicUserInfo.reservedCash;
+      Map<int, int> stocksOwnedMap = dynamicUserInfo.stocksOwnedMap,
+          stocksReservedMap = dynamicUserInfo.stocksReservedMap;
+      // Update cash values from new transaction
+      cash += transaction.total.toInt();
+      reservedCash += transaction.reservedCashTotal.toInt();
+      // Update stock values from new transaction
+      if (stocksOwnedMap.containsKey(stockId)) {
+        stocksOwnedMap[stockId] =
+            stocksOwnedMap[stockId]! + transaction.stockQuantity.toInt();
+      } else {
+        stocksOwnedMap[stockId] = transaction.stockQuantity.toInt();
+      }
+      if (stocksReservedMap.containsKey(stockId)) {
+        stocksReservedMap[stockId] = stocksReservedMap[stockId]! +
+            transaction.reservedStockQuantity.toInt();
+      } else {
+        stocksReservedMap[stockId] = transaction.reservedStockQuantity.toInt();
+      }
 
-    // Add new values to the stream
-    yield DynamicUserInfo(
-      cash,
-      reservedCash,
-      stocksOwnedMap,
-      stocksReservedMap,
-    );
-  }
-}
+      return DynamicUserInfo(
+        cash,
+        reservedCash,
+        stocksOwnedMap,
+        stocksReservedMap,
+      );
+    }).shareValueSeeded(dynamicUserInfo);
