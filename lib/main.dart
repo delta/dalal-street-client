@@ -65,8 +65,6 @@ class DalalApp extends StatelessWidget {
             if (state is DalalDataLoaded) {
               // Register sessionId
               getIt.registerSingleton(state.sessionId);
-              // Register static company infos
-              getIt.registerSingleton(state.companies);
               // Register Global Streams
               getIt.registerSingleton(state.globalStreams);
 
@@ -74,7 +72,7 @@ class DalalApp extends StatelessWidget {
               if (state.user.isPhoneVerified) {
                 //showSnackBar(context, 'Welcome ${state.user.name}');
                 _navigator.pushNamedAndRemoveUntil(
-                  '/exchange',
+                  '/home',
                   (route) => false,
                   arguments: state.user,
                 );

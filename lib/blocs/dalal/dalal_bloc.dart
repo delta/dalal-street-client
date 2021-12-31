@@ -1,7 +1,6 @@
 import 'package:dalal_street_client/config/get_it.dart';
 import 'package:dalal_street_client/config/log.dart';
 import 'package:dalal_street_client/grpc/client.dart';
-import 'package:dalal_street_client/models/company_info.dart';
 import 'package:dalal_street_client/streams/global_streams.dart';
 import 'package:dalal_street_client/proto_build/actions/Login.pb.dart';
 import 'package:dalal_street_client/proto_build/actions/Logout.pb.dart';
@@ -54,7 +53,6 @@ class DalalBloc extends HydratedBloc<DalalEvent, DalalState> {
         emit(DalalDataLoaded(
           loginResponse.user,
           loginResponse.sessionId,
-          stockMapToCompanyMap(globalStreams.stockMapStream.value),
           globalStreams,
         ));
       } on GrpcError catch (e) {
@@ -76,7 +74,6 @@ class DalalBloc extends HydratedBloc<DalalEvent, DalalState> {
     on<DalalLogIn>((event, emit) => emit(DalalDataLoaded(
           event.loginResponse.user,
           event.loginResponse.sessionId,
-          event.companies,
           event.globalStreams,
         )));
 

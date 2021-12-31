@@ -48,6 +48,11 @@ class GlobalStreams extends Equatable {
     this.subscriptionIds,
   );
 
+  /// Returns the last emitted value of [stockMapStream]
+  ///
+  /// Won't throw exception if we make sure [stockMapStream] is seeded
+  Map<int, Stock> get stockMap => stockMapStream.value;
+
   @override
   List<Object?> get props => [
         gameStateStream,

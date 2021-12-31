@@ -22,7 +22,7 @@ class ExchangePage extends StatefulWidget {
 }
 
 class _ExchangePageState extends State<ExchangePage> {
-  Map<int, Stock> mapOfStocks = getIt<GlobalStreams>().stockMapStream.value;
+  Map<int, Stock> mapOfStocks = getIt<GlobalStreams>().stockMap;
 
   @override
   void initState() {

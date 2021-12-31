@@ -1,7 +1,8 @@
 import 'package:dalal_street_client/config/get_it.dart';
-import 'package:dalal_street_client/models/company_info.dart';
 import 'package:dalal_street_client/models/daily_challenge_info.dart';
 import 'package:dalal_street_client/proto_build/models/DailyChallenge.pb.dart';
+import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
+import 'package:dalal_street_client/streams/global_streams.dart';
 import 'package:dalal_street_client/theme/colors.dart';
 import 'package:flutter/material.dart';
 
@@ -10,7 +11,8 @@ class DailyChallengeItem extends StatelessWidget {
 
   DailyChallengeItem({Key? key, required this.challengeInfo}) : super(key: key);
 
-  final Map<int, CompanyInfo> companies = getIt();
+  // TODO: refactor DailyChallengeItem to accept the stock as parameter
+  final Map<int, Stock> stocks = getIt<GlobalStreams>().stockMap;
 
   @override
   build(context) {
@@ -34,7 +36,7 @@ class DailyChallengeItem extends StatelessWidget {
                 children: [
                   Text(challengeTitle(challenge)),
                   Text(challengeDescription(
-                      challenge, companies[challenge.stockId]!)),
+                      challenge, stocks[challenge.stockId]!)),
                   Text(
                       '${userState.finalValue - userState.initialValue}/${challenge.value}'),
                 ],
@@ -73,7 +75,7 @@ String challengeTitle(DailyChallenge challenge) {
   }
 }
 
-String challengeDescription(DailyChallenge challenge, CompanyInfo company) {
+String challengeDescription(DailyChallenge challenge, Stock stock) {
   switch (challenge.challengeType) {
     case 'Cash':
       return 'Increase cash worth by ₹${challenge.value}';
@@ -82,7 +84,7 @@ String challengeDescription(DailyChallenge challenge, CompanyInfo company) {
     case 'StockWorth':
       return 'Increase stock worth by ₹${challenge.value}';
     case 'SpecificStock':
-      return 'Buy ${challenge.value} stocks from ${company.fullName}';
+      return 'Buy ${challenge.value} stocks from ${stock.fullName}';
     default:
       return '?!?!?!?!';
   }
