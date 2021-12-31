@@ -51,24 +51,30 @@ ValueStream<Map<int, Stock>> _generateStockMapStream(
         .shareValueSeeded(stocksMap);
 
 /// Generates a Stream of [DynamicUserInfo] which is updated using [transactionStream]
+/// Also requires the latest stockMap, but doesn't need to update for every new stockMap update
 ///
 /// [porfolioResponse] status code must be [OK]
 ValueStream<DynamicUserInfo> _generateDynamicUserInfoStream(
   DynamicUserInfo dynamicUserInfo,
   Stream<TransactionUpdate> transactionStream,
+  ValueStream<Map<int, Stock>> stockMapStream,
 ) =>
     transactionStream.map((newUpdate) {
+      // New transaction
       final transaction = newUpdate.transaction;
       final stockId = transaction.stockId;
+      // Latest stockMap
+      final stocks = stockMapStream.value;
 
+      // Update cash values
       int cash = dynamicUserInfo.cash,
           reservedCash = dynamicUserInfo.reservedCash;
-      Map<int, int> stocksOwnedMap = dynamicUserInfo.stocksOwnedMap,
-          stocksReservedMap = dynamicUserInfo.stocksReservedMap;
-      // Update cash values from new transaction
       cash += transaction.total.toInt();
       reservedCash += transaction.reservedCashTotal.toInt();
-      // Update stock values from new transaction
+
+      // Update stock values
+      var stocksOwnedMap = dynamicUserInfo.stocksOwnedMap,
+          stocksReservedMap = dynamicUserInfo.stocksReservedMap;
       if (stocksOwnedMap.containsKey(stockId)) {
         stocksOwnedMap[stockId] =
             stocksOwnedMap[stockId]! + transaction.stockQuantity.toInt();
@@ -82,10 +88,21 @@ ValueStream<DynamicUserInfo> _generateDynamicUserInfoStream(
         stocksReservedMap[stockId] = transaction.reservedStockQuantity.toInt();
       }
 
-      return DynamicUserInfo(
+      // Update stock worth values
+      int stockWorth = dynamicUserInfo.stockWorth,
+          reservedStockWorth = dynamicUserInfo.reservedStocksWorth;
+      stockWorth += transaction.stockQuantity.toInt() *
+          (stocks[stockId]?.currentPrice.toInt() ?? 0);
+      reservedStockWorth += transaction.reservedStockQuantity.toInt() *
+          (stocks[stockId]?.currentPrice.toInt() ?? 0);
+
+      dynamicUserInfo = DynamicUserInfo(
         cash,
         reservedCash,
         stocksOwnedMap,
         stocksReservedMap,
+        stockWorth,
+        reservedStockWorth,
       );
+      return dynamicUserInfo;
     }).shareValueSeeded(dynamicUserInfo);

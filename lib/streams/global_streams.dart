@@ -164,13 +164,13 @@ Future<GlobalStreams> subscribeToGlobalStreams(
     throw Exception(portfolioResponse.statusMessage);
   }
   final dynamicUserInfoStream = _generateDynamicUserInfoStream(
-    DynamicUserInfo(
-      user.cash.toInt(),
-      user.reservedCash.toInt(),
-      portfolioResponse.stocksOwned.toIntMap(),
-      portfolioResponse.reservedStocksOwned.toIntMap(),
+    DynamicUserInfo.from(
+      user,
+      portfolioResponse,
+      initialStocks,
     ),
     transactionStream,
+    stockMapStream,
   );
 
   return GlobalStreams(
