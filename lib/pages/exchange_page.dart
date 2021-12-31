@@ -157,14 +157,13 @@ class _ExchangePageState extends State<ExchangePage> {
                           ),
                         )),
                         overlayColor: MaterialStateProperty.all(secondaryColor),
-                        backgroundColor: MaterialStateProperty.all(primaryColor.withOpacity(0.2))),
+                        backgroundColor: MaterialStateProperty.all(
+                            primaryColor.withOpacity(0.2))),
                     onPressed: () {},
                     child: const Text(
                       'View',
-                      style: TextStyle(
-                        color: primaryColor,
-                        fontSize: 14),
-                        ),
+                      style: TextStyle(color: primaryColor, fontSize: 14),
+                    ),
                   ),
                 ),
                 const SizedBox(width: 20),
@@ -173,23 +172,22 @@ class _ExchangePageState extends State<ExchangePage> {
                   width: 100,
                   child: ElevatedButton(
                     style: ButtonStyle(
-                      shape: MaterialStateProperty.all<OutlinedBorder>(
-                          const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(10.0),
-                        ),
-                      )),
-                      overlayColor: MaterialStateProperty.all(secondaryColor)
-                    ),
+                        shape: MaterialStateProperty.all<OutlinedBorder>(
+                            const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(10.0),
+                          ),
+                        )),
+                        overlayColor:
+                            MaterialStateProperty.all(secondaryColor)),
                     onPressed: () => _showModalSheet(
                         stockId, company?.fullName ?? 'Airtel', currentPrice),
                     child: const Text(
                       'Buy',
-                       style: TextStyle(fontSize: 14),
+                      style: TextStyle(fontSize: 14),
                     ),
                   ),
                 ),
-                
               ],
             )
           ],
