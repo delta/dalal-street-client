@@ -19,7 +19,7 @@ final appTextTheme = ThemeData.dark().textTheme.copyWith(
       ),
       headline6: const TextStyle(
         fontSize: 18,
-        color: lightGrey,
+        color: lightGray,
       ),
       subtitle1: const TextStyle(
         fontSize: 18,
@@ -31,7 +31,7 @@ final appTextTheme = ThemeData.dark().textTheme.copyWith(
       ),
       bodyText1: const TextStyle(
         fontSize: 13,
-        color: lightGrey,
+        color: lightGray,
       ),
       caption: const TextStyle(
         fontSize: 15,
