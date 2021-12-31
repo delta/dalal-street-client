@@ -90,11 +90,14 @@ ValueStream<DynamicUserInfo> _generateDynamicUserInfoStream(
 
       // Update stock worth values
       int stockWorth = dynamicUserInfo.stockWorth,
-          reservedStockWorth = dynamicUserInfo.reservedStocksWorth;
+          reservedStockWorth = dynamicUserInfo.reservedStocksWorth,
+          totalWorth = dynamicUserInfo.totalWorth;
       stockWorth += transaction.stockQuantity.toInt() *
           (stocks[stockId]?.currentPrice.toInt() ?? 0);
       reservedStockWorth += transaction.reservedStockQuantity.toInt() *
           (stocks[stockId]?.currentPrice.toInt() ?? 0);
+      totalWorth = calculateTotalWorth(
+          cash, reservedCash, stocksOwnedMap, stocksReservedMap, stocks);
 
       dynamicUserInfo = DynamicUserInfo(
         cash,
@@ -103,6 +106,7 @@ ValueStream<DynamicUserInfo> _generateDynamicUserInfoStream(
         stocksReservedMap,
         stockWorth,
         reservedStockWorth,
+        totalWorth,
       );
       return dynamicUserInfo;
     }).shareValueSeeded(dynamicUserInfo);

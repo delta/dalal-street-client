@@ -1,7 +1,4 @@
-import 'package:dalal_street_client/proto_build/actions/GetPortfolio.pb.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
-import 'package:dalal_street_client/proto_build/models/User.pb.dart';
-import 'package:dalal_street_client/utils/convert.dart';
 import 'package:equatable/equatable.dart';
 
 // User info that keeps changing after each transaction
@@ -15,6 +12,7 @@ class DynamicUserInfo extends Equatable {
   // Stock worth info
   final int stockWorth;
   final int reservedStocksWorth;
+  final int totalWorth;
 
   const DynamicUserInfo(
     this.cash,
@@ -23,20 +21,24 @@ class DynamicUserInfo extends Equatable {
     this.stocksReservedMap,
     this.stockWorth,
     this.reservedStocksWorth,
+    this.totalWorth,
   );
 
   DynamicUserInfo.from(
-    User user,
-    GetPortfolioResponse portfolioResponse,
+    this.cash,
+    this.reservedCash,
+    this.stocksOwnedMap,
+    this.stocksReservedMap,
     Map<int, Stock> stocks,
-  )   : cash = user.cash.toInt(),
-        reservedCash = user.reservedCash.toInt(),
-        stocksOwnedMap = portfolioResponse.stocksOwned.toIntMap(),
-        stocksReservedMap = portfolioResponse.reservedStocksOwned.toIntMap(),
-        stockWorth = calculateStockWorth(
-            portfolioResponse.stocksOwned.toIntMap(), stocks),
-        reservedStocksWorth = calculateStockWorth(
-            portfolioResponse.reservedStocksOwned.toIntMap(), stocks);
+  )   : stockWorth = calculateStockWorth(stocksOwnedMap, stocks),
+        reservedStocksWorth = calculateStockWorth(stocksReservedMap, stocks),
+        totalWorth = calculateTotalWorth(
+          cash,
+          reservedCash,
+          stocksOwnedMap,
+          stocksReservedMap,
+          stocks,
+        );
 
   @override
   List<Object?> get props => [
@@ -46,6 +48,7 @@ class DynamicUserInfo extends Equatable {
         stocksReservedMap,
         stockWorth,
         reservedStocksWorth,
+        totalWorth,
       ];
 }
 
@@ -72,4 +75,23 @@ int calculateReservedStockWorth(
     },
   );
   return worth;
+}
+
+int calculateTotalWorth(
+  int cash,
+  int reservedCash,
+  Map<int, int> stocksOwned,
+  Map<int, int> stocksReseved,
+  Map<int, Stock> stocks,
+) {
+  var total = cash + reservedCash;
+  stocks.forEach((id, stock) {
+    if (stocksOwned.containsKey(id)) {
+      total += stocksOwned[id]! * stocks[id]!.currentPrice.toInt();
+    }
+    if (stocksReseved.containsKey(id)) {
+      total += stocksReseved[id]! * stocks[id]!.currentPrice.toInt();
+    }
+  });
+  return total;
 }
