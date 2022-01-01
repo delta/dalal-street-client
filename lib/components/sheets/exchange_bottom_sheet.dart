@@ -56,7 +56,8 @@ class _ExchangeBottomSheetState extends State<ExchangeBottomSheet>
           }
           return BottomSheet(
             shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.vertical(top: Radius.circular(25.0))),
+                borderRadius:
+                    BorderRadius.vertical(top: Radius.circular(25.0))),
             enableDrag: true,
             backgroundColor: backgroundColor,
             animationController: BottomSheet.createAnimationController(this),
@@ -180,10 +181,12 @@ class _ExchangeBottomSheetState extends State<ExchangeBottomSheet>
                                           width: 150,
                                           padding: EdgeInsets.zero,
                                           decoration: BoxDecoration(
-                                            borderRadius: const BorderRadius.all(Radius.circular(5)),
-                                            color: primaryColor
-                                                    .withOpacity(0.2),
-                                            ),
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                                    Radius.circular(5)),
+                                            color:
+                                                primaryColor.withOpacity(0.2),
+                                          ),
                                           child: SpinBox(
                                             min: 1,
                                             max: 100,
@@ -199,14 +202,14 @@ class _ExchangeBottomSheetState extends State<ExchangeBottomSheet>
                                                     totalPrice);
                                               });
                                             },
-                                            iconColor: MaterialStateProperty.all(primaryColor),
+                                            iconColor:
+                                                MaterialStateProperty.all(
+                                                    primaryColor),
                                             cursorColor: primaryColor,
                                             spacing: 10,
                                             decoration: const InputDecoration(
                                                 contentPadding: EdgeInsets.zero,
-                                                border: InputBorder.none
-                                                ),
-                                              
+                                                border: InputBorder.none),
                                             textStyle: const TextStyle(
                                               color: primaryColor,
                                               fontSize: 14,
@@ -235,10 +238,16 @@ class _ExchangeBottomSheetState extends State<ExchangeBottomSheet>
                                             Container(
                                               alignment: Alignment.center,
                                               decoration: BoxDecoration(
-                                                borderRadius: const BorderRadius.all(Radius.circular(5)),
-                                                color: primaryColor.withOpacity(0.2),
-                                                ),
-                                              padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 5),
+                                                borderRadius:
+                                                    const BorderRadius.all(
+                                                        Radius.circular(5)),
+                                                color: primaryColor
+                                                    .withOpacity(0.2),
+                                              ),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 15,
+                                                      vertical: 5),
                                               child: Text(
                                                 '₹' +
                                                     oCcy

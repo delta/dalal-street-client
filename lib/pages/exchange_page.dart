@@ -179,8 +179,8 @@ class _ExchangePageState extends State<ExchangePage> {
                         )),
                         overlayColor:
                             MaterialStateProperty.all(secondaryColor)),
-                    onPressed: () => _showModalSheet(
-                        stockId, company?.fullName ?? 'Airtel', currentPrice,company),
+                    onPressed: () => _showModalSheet(stockId,
+                        company?.fullName ?? 'Airtel', currentPrice, company),
                     child: const Text(
                       'Buy',
                       style: TextStyle(fontSize: 14),
@@ -348,7 +348,8 @@ class _ExchangePageState extends State<ExchangePage> {
         },
       );
 
-  void _showModalSheet(int stockId, String stockName, int currentPrice, Stock? company) {
+  void _showModalSheet(
+      int stockId, String stockName, int currentPrice, Stock? company) {
     showModalBottomSheet(
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(top: Radius.circular(25.0))),
