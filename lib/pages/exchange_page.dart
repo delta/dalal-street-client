@@ -1,10 +1,9 @@
 import 'package:dalal_street_client/blocs/exchange/exchange_cubit.dart';
-import 'package:dalal_street_client/blocs/exchange/sheet/exchange_sheet_cubit.dart';
+import 'package:dalal_street_client/components/sheets/exchange_bottom_sheet.dart';
 import 'package:dalal_street_client/config/get_it.dart';
 import 'package:dalal_street_client/streams/global_streams.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
 import 'package:dalal_street_client/theme/colors.dart';
-import 'package:dalal_street_client/utils/snackbar.dart';
 import 'package:fixnum/fixnum.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -181,7 +180,7 @@ class _ExchangePageState extends State<ExchangePage> {
                         overlayColor:
                             MaterialStateProperty.all(secondaryColor)),
                     onPressed: () => _showModalSheet(
-                        stockId, company?.fullName ?? 'Airtel', currentPrice),
+                        stockId, company?.fullName ?? 'Airtel', currentPrice,company),
                     child: const Text(
                       'Buy',
                       style: TextStyle(fontSize: 14),
@@ -349,110 +348,14 @@ class _ExchangePageState extends State<ExchangePage> {
         },
       );
 
-  // todo: Better UI for the model sheet similar to figma
-  // todo: validations
-  void _showModalSheet(int stockId, String stockName, int currentPrice) {
+  void _showModalSheet(int stockId, String stockName, int currentPrice, Stock? company) {
     showModalBottomSheet(
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(top: Radius.circular(25.0))),
         backgroundColor: Colors.black,
         context: context,
         builder: (_) {
-          final _controller = TextEditingController();
-          return Padding(
-            child: BlocProvider(
-              create: (context) => ExchangeSheetCubit(),
-              child: BlocConsumer<ExchangeSheetCubit, ExchangeSheetState>(
-                listener: (context, state) {
-                  if (state is ExchangeSheetSuccess) {
-                    showSnackBar(
-                        context, 'Successfully bought $stockName stocks');
-                    Navigator.maybePop(context);
-                  } else if (state is ExchangeSheetFailure) {
-                    showSnackBar(context, state.msg);
-                  }
-                },
-                builder: (context, state) {
-                  if (state is ExchangeSheetLoading) {
-                    return const Center(
-                      child: CircularProgressIndicator(
-                        color: Colors.green,
-                      ),
-                    );
-                  } else if (state is ExchangeSheetFailure) {
-                    return Center(
-                      child: Text(state.msg),
-                    );
-                  }
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        stockName,
-                        style: const TextStyle(
-                          fontSize: 26.0,
-                        ),
-                      ),
-                      Text(
-                        currentPrice.toString(),
-                        style: const TextStyle(
-                          fontSize: 20.0,
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          const Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Text(
-                              'Number of Stocks',
-                              style: TextStyle(
-                                fontSize: 22.0,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 30.0,
-                          ),
-                          Container(
-                            alignment: Alignment.centerRight,
-                            width: 100.0,
-                            padding: const EdgeInsets.all(8.0),
-                            child: TextField(
-                              style: const TextStyle(
-                                  fontSize: 20.0,
-                                  height: 0.25,
-                                  color: Colors.white),
-                              controller: _controller,
-                              keyboardType: TextInputType.number,
-                            ),
-                          )
-                        ],
-                      ),
-                      ElevatedButton(
-                        onPressed: () {
-                          int stockQuantity = int.parse(
-                              _controller.text == '' ? '0' : _controller.text);
-
-                          if (stockQuantity > 0) {
-                            context
-                                .read<ExchangeSheetCubit>()
-                                .buyStocksFromExchange(stockId, stockQuantity);
-                          }
-                          _controller.text = '';
-                        },
-                        child: const Text('Buy Stocks from Exchange'),
-                      )
-                    ],
-                  );
-                },
-              ),
-            ),
-            padding: const EdgeInsets.all(20.0),
-          );
+          return ExchangeBottomSheet(company: company ?? Stock());
         });
   }
 }
