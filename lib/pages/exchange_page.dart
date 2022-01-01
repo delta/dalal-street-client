@@ -11,7 +11,7 @@ import 'package:intl/intl.dart';
 
 final oCcy = NumberFormat('#,##0.00', 'en_US');
 
-// todo: UI similar to figma mock up
+// todo: navigate to company page on clicking view button
 class ExchangePage extends StatefulWidget {
   const ExchangePage({Key? key}) : super(key: key);
 
@@ -64,7 +64,7 @@ class _ExchangePageState extends State<ExchangePage> {
             const Text(
               'Delta Stock Exchange',
               style: TextStyle(
-                  fontSize: 22, fontWeight: FontWeight.w500, color: lightGray),
+                  fontSize: 18, fontWeight: FontWeight.w500, color: lightGray),
               textAlign: TextAlign.end,
             ),
             const SizedBox(
@@ -73,7 +73,7 @@ class _ExchangePageState extends State<ExchangePage> {
             const Text(
               'Companies in DSE',
               style: TextStyle(
-                fontSize: 26,
+                fontSize: 22,
                 fontWeight: FontWeight.w700,
                 color: white,
               ),
