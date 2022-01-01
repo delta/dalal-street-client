@@ -118,7 +118,7 @@ class _ExchangePageState extends State<ExchangePage> {
     int currentPrice,
   ) =>
       Container(
-        padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
         decoration: const BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(10.0)),
           color: baseColor,
