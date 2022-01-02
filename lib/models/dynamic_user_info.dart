@@ -3,7 +3,6 @@ import 'package:dalal_street_client/utils/convert.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fixnum/fixnum.dart';
 
-
 /// User info that keeps changing
 class DynamicUserInfo extends Equatable {
   // Cash info
