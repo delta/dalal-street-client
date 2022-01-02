@@ -10,6 +10,7 @@ import 'package:dalal_street_client/proto_build/datastreams/Subscribe.pb.dart';
 import 'package:dalal_street_client/proto_build/datastreams/Transactions.pb.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
 import 'package:dalal_street_client/proto_build/models/User.pb.dart';
+import 'package:dalal_street_client/streams/user_info_generator.dart';
 import 'package:dalal_street_client/utils/convert.dart';
 import 'package:equatable/equatable.dart';
 import 'package:rxdart/streams.dart';
@@ -17,7 +18,7 @@ import 'package:rxdart/streams.dart';
 import '../config/log.dart';
 import '../grpc/subscription.dart';
 
-part 'custom_streams.dart';
+part 'generate_stock_stream.dart';
 
 /// Streams used in many places in the app
 ///
@@ -30,6 +31,7 @@ class GlobalStreams extends Equatable {
   final Stream<TransactionUpdate> transactionStream;
   final Stream<NotificationUpdate> notificationStream;
 
+  // TODO: handle GameState stream to update custom streams
   // Custom streams generated from server streams
   final ValueStream<Map<int, Stock>> stockMapStream;
   final ValueStream<DynamicUserInfo> dynamicUserInfoStream;
@@ -49,9 +51,10 @@ class GlobalStreams extends Equatable {
   );
 
   /// Returns the last emitted value of [stockMapStream]
-  ///
-  /// Won't throw exception if we make sure [stockMapStream] is seeded
-  Map<int, Stock> get stockMap => stockMapStream.value;
+  Map<int, Stock> get latestStockMap => stockMapStream.value;
+
+  /// Returns the last emitted value of [dynamicUserInfoStream]
+  DynamicUserInfo get latestUserInfo => dynamicUserInfoStream.value;
 
   @override
   List<Object?> get props => [
@@ -119,7 +122,7 @@ Future<GlobalStreams> subscribeToGlobalStreams(
         options: sessionOptions(sessionId),
       )
       .asBroadcastStream();
-  final stockPriceStream = streamClient
+  final stockPricesStream = streamClient
       .getStockPricesUpdates(
         stockPriceSubscriptionId,
         options: sessionOptions(sessionId),
@@ -151,7 +154,7 @@ Future<GlobalStreams> subscribeToGlobalStreams(
   // Stock map stream
   final stockMapStream = _generateStockMapStream(
     initialStocks,
-    stockPriceStream,
+    stockPricesStream,
     stockExchangeStream,
   );
 
@@ -163,21 +166,21 @@ Future<GlobalStreams> subscribeToGlobalStreams(
   if (portfolioResponse.statusCode != GetPortfolioResponse_StatusCode.OK) {
     throw Exception(portfolioResponse.statusMessage);
   }
-  final dynamicUserInfoStream = _generateDynamicUserInfoStream(
-    DynamicUserInfo.from(
-      user.cash.toInt(),
-      user.reservedCash.toInt(),
-      portfolioResponse.stocksOwned.toIntMap(),
-      portfolioResponse.reservedStocksOwned.toIntMap(),
-      initialStocks,
-    ),
-    transactionStream,
-    stockMapStream,
+  final initialUserInfo = DynamicUserInfo.from(
+    user.cash.toInt(),
+    user.reservedCash.toInt(),
+    portfolioResponse.stocksOwned.toIntMap(),
+    portfolioResponse.reservedStocksOwned.toIntMap(),
+    initialStocks,
   );
+  final userGenerator = UserInfoGenerator(initialUserInfo, transactionStream,
+      stockMapStream, stockPricesStream.skip(1));
+  final dynamicUserInfoStream =
+      userGenerator.stream.shareValueSeeded(initialUserInfo);
 
   return GlobalStreams(
     gameStateStream,
-    stockPriceStream,
+    stockPricesStream,
     stockExchangeStream,
     transactionStream,
     notificationStream,

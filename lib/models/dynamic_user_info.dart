@@ -1,7 +1,10 @@
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
+import 'package:dalal_street_client/utils/convert.dart';
 import 'package:equatable/equatable.dart';
+import 'package:fixnum/fixnum.dart';
 
-// User info that keeps changing after each transaction
+
+/// User info that keeps changing
 class DynamicUserInfo extends Equatable {
   // Cash info
   final int cash;
@@ -37,8 +40,16 @@ class DynamicUserInfo extends Equatable {
           reservedCash,
           stocksOwnedMap,
           stocksReservedMap,
-          stocks,
+          stocks.toPricesMap(),
         );
+
+  int newTotalWorth(Map<int, Int64> stockPrices) => calculateTotalWorth(
+        cash,
+        reservedCash,
+        stocksOwnedMap,
+        stocksReservedMap,
+        stockPrices,
+      );
 
   @override
   List<Object?> get props => [
@@ -82,15 +93,15 @@ int calculateTotalWorth(
   int reservedCash,
   Map<int, int> stocksOwned,
   Map<int, int> stocksReseved,
-  Map<int, Stock> stocks,
+  Map<int, Int64> stockPrices,
 ) {
   var total = cash + reservedCash;
-  stocks.forEach((id, stock) {
+  stockPrices.forEach((id, price) {
     if (stocksOwned.containsKey(id)) {
-      total += stocksOwned[id]! * stocks[id]!.currentPrice.toInt();
+      total += stocksOwned[id]! * price.toInt();
     }
     if (stocksReseved.containsKey(id)) {
-      total += stocksReseved[id]! * stocks[id]!.currentPrice.toInt();
+      total += stocksReseved[id]! * price.toInt();
     }
   });
   return total;

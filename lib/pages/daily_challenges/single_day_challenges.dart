@@ -18,7 +18,7 @@ class SingleDayChallenges extends StatefulWidget {
 
 class _SingleDayChallengesState extends State<SingleDayChallenges>
     with AutomaticKeepAliveClientMixin {
-  final stocks = getIt<GlobalStreams>().stockMap;
+  final stocks = getIt<GlobalStreams>().latestStockMap;
 
   @override
   void initState() {
