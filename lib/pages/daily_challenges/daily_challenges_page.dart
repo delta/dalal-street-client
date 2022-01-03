@@ -59,18 +59,20 @@ class _DailyChallengesPageBodyState extends State<_DailyChallengesPageBody>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
+  int get marketDay => widget.successState.marketDay;
+
   @override
   void initState() {
     super.initState();
     _tabController =
         TabController(length: widget.successState.totalMarketDays, vsync: this);
     _tabController.addListener(() {
-      if ((_tabController.index + 1) > widget.successState.marketDay) {
+      if ((_tabController.index + 1) > marketDay) {
         int index = _tabController.previousIndex;
         setState(() => _tabController.index = index);
       }
     });
-    _tabController.index = widget.successState.marketDay - 1;
+    _tabController.index = marketDay - 1;
   }
 
   @override
@@ -92,9 +94,7 @@ class _DailyChallengesPageBodyState extends State<_DailyChallengesPageBody>
               Tab(
                 text: 'Day $day',
                 icon: Icon(
-                  (day <= widget.successState.marketDay)
-                      ? Icons.lock_open
-                      : Icons.lock,
+                  (day <= marketDay) ? Icons.lock_open : Icons.lock,
                 ),
               )
           ],
@@ -109,7 +109,10 @@ class _DailyChallengesPageBodyState extends State<_DailyChallengesPageBody>
               for (final day in days)
                 BlocProvider(
                   create: (_) => SingleDayChallengesCubit(),
-                  child: SingleDayChallenges(day: day),
+                  child: SingleDayChallenges(
+                    marketDay: marketDay,
+                    day: day,
+                  ),
                 )
             ],
           ),

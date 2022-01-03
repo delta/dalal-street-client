@@ -8,9 +8,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SingleDayChallenges extends StatefulWidget {
+  final int marketDay;
   final int day;
 
-  const SingleDayChallenges({Key? key, required this.day}) : super(key: key);
+  const SingleDayChallenges(
+      {Key? key, required this.marketDay, required this.day})
+      : super(key: key);
 
   @override
   State<SingleDayChallenges> createState() => _SingleDayChallengesState();
@@ -48,6 +51,7 @@ class _SingleDayChallengesState extends State<SingleDayChallenges>
       ListView.separated(
         itemCount: challengeInfos.length,
         itemBuilder: (_, i) => DailyChallengeItem(
+          marketDay: widget.marketDay,
           challenge: challengeInfos[i].challenge,
           userState: challengeInfos[i].userState,
           stock: challengeInfos[i].challenge.hasStockId()

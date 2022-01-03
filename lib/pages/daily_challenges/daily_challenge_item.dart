@@ -8,12 +8,15 @@ import 'package:dalal_street_client/utils/challenge_util.dart';
 import 'package:flutter/material.dart';
 
 class DailyChallengeItem extends StatelessWidget {
+  final int marketDay;
+
   final DailyChallenge challenge;
   final UserState userState;
   final Stock? stock;
 
   DailyChallengeItem({
     Key? key,
+    required this.marketDay,
     required this.challenge,
     required this.userState,
     required this.stock,
@@ -49,7 +52,7 @@ class DailyChallengeItem extends StatelessWidget {
                   children: [
                     Text(challenge.title),
                     Text(challenge.description(stock)),
-                    _challengeProgress(challenge),
+                    _challengeProgress(),
                   ],
                 ),
                 _challengeReward(challenge),
@@ -61,14 +64,26 @@ class DailyChallengeItem extends StatelessWidget {
 
   // TODO: add progress bar
   // TODO: animate between changes in userInfoStream
-  Widget _challengeProgress(DailyChallenge challenge) => StreamBuilder<int>(
-        stream: progressStream,
-        initialData: initialProgress,
-        builder: (context, snapshot) {
-          final progress = snapshot.data!;
-          return Text('$progress/${challenge.value}');
-        },
+  Widget _challengeProgress() {
+    if (challenge.marketDay != marketDay) {
+      return _progressUi(
+        (userState.finalValue - userState.initialValue).toInt(),
+        challenge.value.toInt(),
       );
+    }
+    // Update progress from stream only for challenges of current day
+    return StreamBuilder<int>(
+      stream: progressStream,
+      initialData: initialProgress,
+      builder: (context, snapshot) => _progressUi(
+        snapshot.data!,
+        challenge.value.toInt(),
+      ),
+    );
+  }
+
+  Text _progressUi(int progress, int targetValue) =>
+      Text('$progress/${challenge.value}');
 
   Widget _challengeReward(DailyChallenge challenge) => Column(
         children: [
