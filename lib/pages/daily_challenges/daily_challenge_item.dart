@@ -1,3 +1,4 @@
+import 'package:dalal_street_client/components/challenge_progress.dart';
 import 'package:dalal_street_client/config/get_it.dart';
 import 'package:dalal_street_client/proto_build/models/DailyChallenge.pb.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
@@ -66,24 +67,21 @@ class DailyChallengeItem extends StatelessWidget {
   // TODO: animate between changes in userInfoStream
   Widget _challengeProgress() {
     if (challenge.marketDay != marketDay) {
-      return _progressUi(
-        (userState.finalValue - userState.initialValue).toInt(),
-        challenge.value.toInt(),
+      return ChallengeProgress(
+        progress: (userState.finalValue - userState.initialValue).toInt(),
+        targetValue: challenge.value.toInt(),
       );
     }
     // Update progress from stream only for challenges of current day
     return StreamBuilder<int>(
       stream: progressStream,
       initialData: initialProgress,
-      builder: (context, snapshot) => _progressUi(
-        snapshot.data!,
-        challenge.value.toInt(),
+      builder: (_, snapshot) => ChallengeProgress(
+        progress: snapshot.data!,
+        targetValue: challenge.value.toInt(),
       ),
     );
   }
-
-  Text _progressUi(int progress, int targetValue) =>
-      Text('$progress/${challenge.value}');
 
   Widget _challengeReward() => Column(
         children: [
