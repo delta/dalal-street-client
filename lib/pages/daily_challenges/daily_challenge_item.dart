@@ -55,7 +55,7 @@ class DailyChallengeItem extends StatelessWidget {
                     _challengeProgress(),
                   ],
                 ),
-                _challengeReward(challenge),
+                _challengeReward(),
               ],
             ),
           ),
@@ -85,9 +85,11 @@ class DailyChallengeItem extends StatelessWidget {
   Text _progressUi(int progress, int targetValue) =>
       Text('$progress/${challenge.value}');
 
-  Widget _challengeReward(DailyChallenge challenge) => Column(
+  Widget _challengeReward() => Column(
         children: [
-          Image.asset('assets/images/Coin.png'),
+          Image.asset(userState.isCompleted
+              ? 'assets/images/Coin Done.png'
+              : 'assets/images/Coin.png'),
           Text(
             '₹${challenge.reward}',
             style: const TextStyle(color: gold),
