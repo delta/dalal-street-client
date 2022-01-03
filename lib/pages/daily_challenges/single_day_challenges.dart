@@ -48,7 +48,8 @@ class _SingleDayChallengesState extends State<SingleDayChallenges>
       ListView.separated(
         itemCount: challengeInfos.length,
         itemBuilder: (_, i) => DailyChallengeItem(
-          challengeInfo: challengeInfos[i],
+          challenge: challengeInfos[i].challenge,
+          userState: challengeInfos[i].userState,
           stock: challengeInfos[i].challenge.hasStockId()
               ? stocks[challengeInfos[i].challenge.stockId]
               : null,
