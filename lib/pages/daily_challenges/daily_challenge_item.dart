@@ -1,18 +1,25 @@
+import 'package:dalal_street_client/config/get_it.dart';
 import 'package:dalal_street_client/models/daily_challenge_info.dart';
+import 'package:dalal_street_client/models/dynamic_user_info.dart';
 import 'package:dalal_street_client/proto_build/models/DailyChallenge.pb.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
+import 'package:dalal_street_client/proto_build/models/UserState.pb.dart';
+import 'package:dalal_street_client/streams/global_streams.dart';
 import 'package:dalal_street_client/theme/colors.dart';
+import 'package:dalal_street_client/utils/challenge_util.dart';
 import 'package:flutter/material.dart';
 
 class DailyChallengeItem extends StatelessWidget {
   final DailyChallengeInfo challengeInfo;
   final Stock? stock;
 
-  const DailyChallengeItem({
+  DailyChallengeItem({
     Key? key,
     required this.challengeInfo,
     required this.stock,
   }) : super(key: key);
+
+  final userInfoStream = getIt<GlobalStreams>().dynamicUserInfoStream;
 
   @override
   build(context) {
@@ -34,13 +41,12 @@ class DailyChallengeItem extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(challengeTitle(challenge)),
-                  Text(challengeDescription(challenge, stock)),
-                  Text(
-                      '${userState.finalValue - userState.initialValue}/${challenge.value}'),
+                  Text(challenge.title),
+                  Text(challenge.description(stock)),
+                  _challengeProgress(challenge, userState),
                 ],
               ),
-              rewardIndicator(),
+              _challengeReward(),
             ],
           ),
         ),
@@ -48,7 +54,20 @@ class DailyChallengeItem extends StatelessWidget {
     );
   }
 
-  Widget rewardIndicator() => Column(
+  // TODO: add progress bar
+  // TODO: animate between changes in userInfoStream
+  Widget _challengeProgress(DailyChallenge challenge, UserState userState) =>
+      StreamBuilder(
+        stream: userInfoStream,
+        initialData: userInfoStream.value,
+        builder: (context, AsyncSnapshot<DynamicUserInfo> snapshot) {
+          final userInfo = snapshot.data!;
+          final progress = challenge.progress(userInfo, userState);
+          return Text('$progress/${challenge.value}');
+        },
+      );
+
+  Widget _challengeReward() => Column(
         children: [
           Image.asset('assets/images/Coin.png'),
           Text(
@@ -57,34 +76,4 @@ class DailyChallengeItem extends StatelessWidget {
           )
         ],
       );
-}
-
-String challengeTitle(DailyChallenge challenge) {
-  switch (challenge.challengeType) {
-    case 'Cash':
-      return 'Cash';
-    case 'NetWorth':
-      return 'Net Worth';
-    case 'StockWorth':
-      return 'Stock Worth';
-    case 'SpecificStock':
-      return 'Specific Stock';
-    default:
-      return '?!?!?!?!';
-  }
-}
-
-String challengeDescription(DailyChallenge challenge, Stock? stock) {
-  switch (challenge.challengeType) {
-    case 'Cash':
-      return 'Increase cash worth by ₹${challenge.value}';
-    case 'NetWorth':
-      return 'Increase net worth by ₹${challenge.value}';
-    case 'StockWorth':
-      return 'Increase stock worth by ₹${challenge.value}';
-    case 'SpecificStock':
-      return 'Buy ${challenge.value} stocks from ${stock?.fullName ?? '<ERROR>'}';
-    default:
-      return '?!?!?!?!';
-  }
 }

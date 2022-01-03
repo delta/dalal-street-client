@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 // TODO: Disable swiping until this is resolved properly: https://github.com/flutter/flutter/issues/31206
-// TODO: Realtime updates in progress of Challenges using stockListMap
 class DailyChallengesPage extends StatelessWidget {
   const DailyChallengesPage({Key? key}) : super(key: key);
 
