@@ -1,7 +1,6 @@
-// ignore_for_file: must_call_super
-import 'package:dalal_street_client/blocs/market_depth/market_depth_bloc.dart';
 import 'package:dalal_street_client/blocs/subscribe/subscribe_cubit.dart';
 import 'package:dalal_street_client/components/buttons/primary_button.dart';
+<<<<<<< HEAD
 import 'package:dalal_street_client/components/buttons/secondary_button.dart';
 <<<<<<< HEAD
 import 'package:dalal_street_client/config/get_it.dart';
@@ -10,18 +9,20 @@ import 'package:dalal_street_client/components/buttons/tertiary_button.dart';
 import 'package:dalal_street_client/constants/constants.dart';
 >>>>>>> [feat]: Add Trade Page as a Bottom Sheet
 import 'package:dalal_street_client/constants/icons.dart';
+=======
+>>>>>>> feat: place order implementation
 import 'package:dalal_street_client/main.dart';
-import 'package:dalal_street_client/proto_build/datastreams/MarketDepth.pb.dart';
 import 'package:dalal_street_client/proto_build/datastreams/Subscribe.pb.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
+import 'package:dalal_street_client/pages/homepage/components/company_tab_view.dart';
+import 'package:dalal_street_client/pages/homepage/components/company_prices.dart';
+import 'package:dalal_street_client/pages/homepage/components/choose_buy_or_sell_bottom_sheet.dart';
 import 'package:dalal_street_client/theme/colors.dart';
 import 'package:dalal_street_client/utils/responsive.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_spinbox/flutter_spinbox.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 
 final oCcy = NumberFormat('#,##0.00', 'en_US');
@@ -67,11 +68,11 @@ class _CompanyPageState extends State<CompanyPage>
                         const SizedBox(
                           height: 20,
                         ),
-                        _companyPrices(company),
+                        companyPrices(company),
                         const SizedBox(
                           height: 10,
                         ),
-                        _companyTabView(context, company)
+                        companyTabView(context, company)
                       ],
                     ),
                   ),
@@ -94,7 +95,7 @@ class _CompanyPageState extends State<CompanyPage>
                       fontSize: 18,
                       title: 'Place Order',
                       onPressed: () {
-                        _chooseBuyOrSellBottomSheet(context, company);
+                        chooseBuyOrSellBottomSheet(context, company);
                       },
                     ),
                   ),
@@ -107,6 +108,7 @@ class _CompanyPageState extends State<CompanyPage>
     );
   }
 }
+<<<<<<< HEAD
 
 _tradingBottomSheet(BuildContext context, Stock company, String orderType) {
   int priceChange = (company.currentPrice - company.previousDayClose).toInt();
@@ -951,3 +953,5 @@ Widget marketStatusTile(String icon, String name, String value, bool isRed) {
     ),
   );
 }
+=======
+>>>>>>> feat: place order implementation
