@@ -47,6 +47,7 @@ class _CompanyPageState extends State<CompanyPage>
   }
 
   @override
+  // ignore: must_call_super
   Widget build(BuildContext context) {
     final stockList = getIt<Map<int, Stock>>();
     Stock company = stockList[widget.stockId]!;
