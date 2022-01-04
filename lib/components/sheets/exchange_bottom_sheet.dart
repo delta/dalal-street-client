@@ -42,7 +42,6 @@ class _ExchangeBottomSheetState extends State<ExchangeBottomSheet>
 
   @override
   Widget build(BuildContext context) {
-
     int priceChange =
         (widget.company.currentPrice - widget.company.previousDayClose).toInt();
     int quantity = 1;
