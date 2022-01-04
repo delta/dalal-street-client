@@ -40,23 +40,31 @@ class DailyChallengeItem extends StatelessWidget {
         child: Card(
           color: baseColor,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(12),
           ),
           child: Padding(
-            padding: const EdgeInsets.all(12),
+            padding: const EdgeInsets.symmetric(vertical: 20),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(challenge.title),
-                    Text(challenge.description(stock)),
-                    _challengeProgress(),
-                  ],
+                Flexible(
+                  flex: 2,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(challenge.title),
+                      const SizedBox(height: 10),
+                      Text(challenge.description(stock)),
+                      const SizedBox(height: 25),
+                      _challengeProgress(),
+                    ],
+                  ),
                 ),
-                _challengeReward(),
+                Flexible(
+                  flex: 1,
+                  child: _challengeReward(),
+                ),
               ],
             ),
           ),
