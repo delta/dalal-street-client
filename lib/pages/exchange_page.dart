@@ -1,7 +1,7 @@
 import 'package:dalal_street_client/blocs/exchange/exchange_cubit.dart';
 import 'package:dalal_street_client/blocs/exchange/sheet/exchange_sheet_cubit.dart';
 import 'package:dalal_street_client/config/get_it.dart';
-import 'package:dalal_street_client/global_streams.dart';
+import 'package:dalal_street_client/streams/global_streams.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
 import 'package:dalal_street_client/theme/buttons.dart';
 import 'package:dalal_street_client/theme/colors.dart';
@@ -22,7 +22,7 @@ class ExchangePage extends StatefulWidget {
 }
 
 class _ExchangePageState extends State<ExchangePage> {
-  Map<int, Stock> mapOfStocks = getIt<GlobalStreams>().stockList;
+  Map<int, Stock> mapOfStocks = getIt<GlobalStreams>().latestStockMap;
 
   @override
   void initState() {
