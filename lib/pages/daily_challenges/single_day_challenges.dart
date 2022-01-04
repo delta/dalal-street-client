@@ -1,7 +1,8 @@
 import 'package:dalal_street_client/blocs/daily_challenges/single_day_challenges/single_day_challenges_cubit.dart';
 import 'package:dalal_street_client/config/get_it.dart';
 import 'package:dalal_street_client/models/daily_challenge_info.dart';
-import 'package:dalal_street_client/pages/daily_challenges/daily_challenge_item.dart';
+import 'package:dalal_street_client/pages/daily_challenges/components/single_day_progress.dart';
+import 'package:dalal_street_client/pages/daily_challenges/components/daily_challenge_item.dart';
 import 'package:dalal_street_client/streams/global_streams.dart';
 import 'package:dalal_street_client/utils/snackbar.dart';
 import 'package:flutter/material.dart';
@@ -40,23 +41,41 @@ class _SingleDayChallengesState extends State<SingleDayChallenges>
       },
       builder: (context, state) {
         if (state is SingleDayChallengesLoaded) {
-          return buildList(state.challengeInfos);
+          return Column(
+            children: [
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                child: SingleDayProgress(
+                  progress: 0.69,
+                  tasksDone: 2,
+                  totalTasks: 3,
+                  cashGained: 20000,
+                  totalCash: 50000,
+                ),
+              ),
+              const SizedBox(height: 18),
+              Expanded(child: challengesList(state.challengeInfos)),
+            ],
+          );
         }
         return const Center(child: CircularProgressIndicator());
       },
     );
   }
 
-  Widget buildList(List<DailyChallengeInfo> challengeInfos) =>
+  Widget challengesList(List<DailyChallengeInfo> challengeInfos) =>
       ListView.separated(
         itemCount: challengeInfos.length,
-        itemBuilder: (_, i) => DailyChallengeItem(
-          marketDay: widget.marketDay,
-          challenge: challengeInfos[i].challenge,
-          userState: challengeInfos[i].userState,
-          stock: challengeInfos[i].challenge.hasStockId()
-              ? stocks[challengeInfos[i].challenge.stockId]
-              : null,
+        itemBuilder: (_, i) => Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: DailyChallengeItem(
+            marketDay: widget.marketDay,
+            challenge: challengeInfos[i].challenge,
+            userState: challengeInfos[i].userState,
+            stock: challengeInfos[i].challenge.hasStockId()
+                ? stocks[challengeInfos[i].challenge.stockId]
+                : null,
+          ),
         ),
         separatorBuilder: (_, __) => const SizedBox(height: 10),
       );

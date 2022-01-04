@@ -1,4 +1,4 @@
-import 'package:dalal_street_client/components/challenge_progress.dart';
+import 'package:dalal_street_client/pages/daily_challenges/components/challenge_progress.dart';
 import 'package:dalal_street_client/config/get_it.dart';
 import 'package:dalal_street_client/proto_build/models/DailyChallenge.pb.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
@@ -35,38 +35,35 @@ class DailyChallengeItem extends StatelessWidget {
       .distinct();
 
   @override
-  build(context) => Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Card(
-          color: baseColor,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 20),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Flexible(
-                  flex: 2,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(challenge.title),
-                      const SizedBox(height: 10),
-                      Text(challenge.description(stock)),
-                      const SizedBox(height: 25),
-                      _challengeProgress(),
-                    ],
-                  ),
+  build(context) => Card(
+        color: baseColor,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 20),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Flexible(
+                flex: 2,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(challenge.title),
+                    const SizedBox(height: 10),
+                    Text(challenge.description(stock)),
+                    const SizedBox(height: 25),
+                    _challengeProgress(),
+                  ],
                 ),
-                Flexible(
-                  flex: 1,
-                  child: _challengeReward(),
-                ),
-              ],
-            ),
+              ),
+              Flexible(
+                flex: 1,
+                child: _challengeReward(),
+              ),
+            ],
           ),
         ),
       );
@@ -96,6 +93,7 @@ class DailyChallengeItem extends StatelessWidget {
           Image.asset(userState.isCompleted
               ? 'assets/images/Coin Done.png'
               : 'assets/images/Coin.png'),
+          const SizedBox(height: 10),
           Text(
             '₹${challenge.reward}',
             style: const TextStyle(color: gold),
