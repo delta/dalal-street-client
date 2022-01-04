@@ -293,6 +293,39 @@ void tradingBottomSheet(BuildContext context, Stock company, String orderType) {
                                               ),
                                             ],
                                           )
+                                        ] else if (selectedPriceType ==
+                                            'Limit') ...[
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.end,
+                                            children: [
+                                              SizedBox(
+                                                width: 150,
+                                                child: TextField(
+                                                    decoration: const InputDecoration(
+                                                        border:
+                                                            OutlineInputBorder(),
+                                                        labelText:
+                                                            'Price per stock',
+                                                        contentPadding:
+                                                            EdgeInsets.all(8)),
+                                                    onChanged: (value) =>
+                                                        totalPrice =
+                                                            int.parse(value)),
+                                              ),
+                                              Text(
+                                                // orderPriceWindow,
+                                                showPriceWindow(company
+                                                    .currentPrice
+                                                    .toInt()),
+                                                textAlign: TextAlign.center,
+                                                style: const TextStyle(
+                                                  color: bronze,
+                                                  fontSize: 11,
+                                                ),
+                                              ),
+                                            ],
+                                          )
                                         ] else ...[
                                           Column(
                                             crossAxisAlignment:
@@ -312,14 +345,6 @@ void tradingBottomSheet(BuildContext context, Stock company, String orderType) {
                                                     onChanged: (value) =>
                                                         totalPrice =
                                                             int.parse(value)),
-                                              ),
-                                              Text(
-                                                orderPriceWindow,
-                                                textAlign: TextAlign.center,
-                                                style: const TextStyle(
-                                                  color: bronze,
-                                                  fontSize: 11,
-                                                ),
                                               ),
                                             ],
                                           )
