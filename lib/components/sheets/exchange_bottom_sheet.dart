@@ -6,10 +6,7 @@ import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
 import 'package:dalal_street_client/theme/colors.dart';
 import 'package:dalal_street_client/utils/snackbar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_spinbox/flutter_spinbox.dart';
-import 'package:flutter_spinbox/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 
