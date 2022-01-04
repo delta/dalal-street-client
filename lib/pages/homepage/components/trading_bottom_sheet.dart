@@ -203,8 +203,7 @@ void tradingBottomSheet(BuildContext context, Stock company, String orderType) {
                                                         .currentPrice
                                                         .toInt() *
                                                     quantity;
-                                                orderPriceWindow =
-                                                    showPriceWindow(totalPrice);
+                                                orderPriceWindow;
                                                 orderFee = calculateOrderFee(
                                                     totalPrice);
                                               });
