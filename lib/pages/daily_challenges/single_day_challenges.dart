@@ -43,14 +43,11 @@ class _SingleDayChallengesState extends State<SingleDayChallenges>
         if (state is SingleDayChallengesLoaded) {
           return Column(
             children: [
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: SingleDayProgress(
+                  challengeInfos: state.challengeInfos,
                   progress: 0.69,
-                  tasksDone: 2,
-                  totalTasks: 3,
-                  cashGained: 20000,
-                  totalCash: 50000,
                 ),
               ),
               const SizedBox(height: 18),
