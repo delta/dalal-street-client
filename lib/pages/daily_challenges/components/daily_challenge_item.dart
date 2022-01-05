@@ -1,5 +1,6 @@
 import 'package:dalal_street_client/pages/daily_challenges/components/challenge_progress.dart';
 import 'package:dalal_street_client/config/get_it.dart';
+import 'package:dalal_street_client/pages/daily_challenges/components/challenge_reward.dart';
 import 'package:dalal_street_client/proto_build/models/DailyChallenge.pb.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
 import 'package:dalal_street_client/proto_build/models/UserState.pb.dart';
@@ -61,7 +62,10 @@ class DailyChallengeItem extends StatelessWidget {
               ),
               Flexible(
                 flex: 1,
-                child: _challengeReward(userState.isRewardClamied),
+                child: ChallengeReward(
+                  userState: userState,
+                  challenge: challenge,
+                ),
               ),
             ],
           ),
@@ -87,22 +91,4 @@ class DailyChallengeItem extends StatelessWidget {
       ),
     );
   }
-
-  Widget _challengeReward(bool rewardClamied) => Column(
-        children: [
-          Image.asset(rewardClamied
-              ? 'assets/images/Coin Done.png'
-              : 'assets/images/Coin.png'),
-          const SizedBox(height: 10),
-          Text(
-            '₹${challenge.reward}',
-            style: TextStyle(
-              color: gold,
-              decoration: rewardClamied
-                  ? TextDecoration.lineThrough
-                  : TextDecoration.none,
-            ),
-          )
-        ],
-      );
 }
