@@ -19,6 +19,14 @@ class ChallengeRewardLoading extends ChallengeRewardState {
   const ChallengeRewardLoading();
 }
 
+class ChallengeRewardFailure extends ChallengeRewardState {
+  final String msg;
+
+  const ChallengeRewardFailure(this.msg);
+}
+
 class ChallengeRewardCalimed extends ChallengeRewardState {
-  const ChallengeRewardCalimed();
+  final int reward;
+
+  const ChallengeRewardCalimed(this.reward);
 }

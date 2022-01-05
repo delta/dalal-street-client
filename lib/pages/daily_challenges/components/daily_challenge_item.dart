@@ -65,7 +65,10 @@ class DailyChallengeItem extends StatelessWidget {
               Flexible(
                 flex: 1,
                 child: BlocProvider(
-                  create: (_) => ChallengeRewardCubit(userState),
+                  create: (_) => ChallengeRewardCubit(
+                    challenge,
+                    userState,
+                  ),
                   child: ChallengeReward(
                     userState: userState,
                     challenge: challenge,
