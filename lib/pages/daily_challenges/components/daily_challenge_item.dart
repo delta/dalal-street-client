@@ -61,7 +61,7 @@ class DailyChallengeItem extends StatelessWidget {
               ),
               Flexible(
                 flex: 1,
-                child: _challengeReward(),
+                child: _challengeReward(userState.isRewardClamied),
               ),
             ],
           ),
@@ -88,15 +88,20 @@ class DailyChallengeItem extends StatelessWidget {
     );
   }
 
-  Widget _challengeReward() => Column(
+  Widget _challengeReward(bool rewardClamied) => Column(
         children: [
-          Image.asset(userState.isCompleted
+          Image.asset(rewardClamied
               ? 'assets/images/Coin Done.png'
               : 'assets/images/Coin.png'),
           const SizedBox(height: 10),
           Text(
             '₹${challenge.reward}',
-            style: const TextStyle(color: gold),
+            style: TextStyle(
+              color: gold,
+              decoration: rewardClamied
+                  ? TextDecoration.lineThrough
+                  : TextDecoration.none,
+            ),
           )
         ],
       );
