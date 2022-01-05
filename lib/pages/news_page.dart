@@ -1,17 +1,10 @@
-import 'dart:html';
-
 import 'package:dalal_street_client/blocs/subscribe/subscribe_cubit.dart';
 import 'package:dalal_street_client/main.dart';
-import 'package:dalal_street_client/proto_build/actions/GetMarketEvents.pb.dart';
-import 'package:dalal_street_client/proto_build/datastreams/MarketDepth.pbjson.dart';
 import 'package:dalal_street_client/proto_build/datastreams/Subscribe.pb.dart';
 import 'package:dalal_street_client/proto_build/models/MarketEvent.pb.dart';
-import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:dalal_street_client/theme/colors.dart';
 import 'package:flutter/material.dart';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import '../blocs/market_event/market_event_bloc.dart';
 
 class NewsPage extends StatefulWidget {
@@ -83,13 +76,13 @@ SingleChildScrollView feed(ScrollController _scrollController) {
           child: Column(
             children: <Widget>[
               Container(
-                child: Text(
+                child: const Text(
                   'Feed',
                   style: TextStyle(fontSize: 20, color: lightGray),
                   textAlign: TextAlign.left,
                 ),
                 alignment: Alignment.topLeft,
-                margin: EdgeInsets.all(10),
+                margin: const EdgeInsets.all(10),
               ),
               feedlist(_scrollController)
             ],
@@ -103,13 +96,13 @@ Widget news() => Container(
           color: backgroundColor, borderRadius: BorderRadius.circular(10)),
       child: Column(children: <Widget>[
         Container(
-          child: Text(
+          child: const Text(
             'News',
             style: TextStyle(fontSize: 20, color: lightGray),
             textAlign: TextAlign.left,
           ),
           alignment: Alignment.topLeft,
-          margin: EdgeInsets.all(10),
+          margin: const EdgeInsets.all(10),
         ),
         latestnews()
       ]),
@@ -136,7 +129,6 @@ Widget feedlist(ScrollController _scrollController) =>
               itemBuilder: (context, index) {
                 MarketEvent marketEvent = mapMarketEvents[index];
                 String headline = marketEvent.headline;
-                String text = marketEvent.text;
                 String imagePath = marketEvent.imagePath;
                 String createdAt = marketEvent.createdAt;
                 return (newsItem(headline, imagePath, createdAt));
@@ -186,7 +178,6 @@ Widget latestnews() =>
 
             MarketEvent marketEvent = mapMarketEvents[0];
             String headline = marketEvent.headline;
-            String text = marketEvent.text;
             String imagePath = marketEvent.imagePath;
             String createdAt = marketEvent.createdAt;
             return newsItem(headline, imagePath, createdAt);

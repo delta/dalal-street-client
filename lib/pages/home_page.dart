@@ -41,6 +41,7 @@ class _HomePageState extends State<HomePage> {
     context.read<CompaniesBloc>().add(const GetStockList());
     // Subscribe to the stream of Stock Prices
     context.read<SubscribeCubit>().subscribe(DataStreamType.STOCK_PRICES);
+    // ignore: todo
     // TODO : Subscribe to the stream of News and Prices Graph
   }
 

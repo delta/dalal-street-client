@@ -1,3 +1,4 @@
+// ignore: todo
 // TODO: Need a better and simpler routing strategy
 
 // ignore: avoid_web_libraries_in_flutter
@@ -71,7 +72,7 @@ class RouteGenerator {
       case '/news_page':
         return BlocProvider(
           create: (context) => MarketEventBloc(),
-          child: const News_Page(),
+          child: const NewsPage(),
         );
 
       // Home Pages

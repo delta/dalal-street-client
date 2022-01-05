@@ -3,9 +3,7 @@ import 'package:dalal_street_client/grpc/client.dart';
 import 'package:dalal_street_client/main.dart';
 import 'package:dalal_street_client/proto_build/actions/GetMarketEvents.pb.dart';
 import 'package:dalal_street_client/proto_build/datastreams/MarketEvents.pb.dart';
-import 'package:dalal_street_client/proto_build/models/MarketEvent.pb.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 
 import '../../proto_build/datastreams/Subscribe.pb.dart';
 

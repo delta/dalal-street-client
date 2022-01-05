@@ -139,6 +139,7 @@ class _EnterOtpPageState extends State<EnterOtpPage> {
   }
 
   void _onVerifyOTPClick(String phone) {
+    // ignore: todo
     // TODO: form validation
     context.read<EnterOtpCubit>().verifyOTP(int.parse(_otp), phone);
   }

@@ -37,16 +37,3 @@ class SubscriptionToMarketEventFailed extends MarketEventState {
   @override
   List<Object> get props => [subscriptionId];
 }
-
-class MarketEventsLoaded extends MarketEventState {
-  final List<MarketEvent> marketevents;
-
-  MarketEventsLoaded(this.marketevents);
-}
-
-class MarketEventsLoading extends MarketEventState {
-  final List<MarketEvent> oldmarketevents;
-  final bool isFirstFetch;
-
-  MarketEventsLoading(this.oldmarketevents, {this.isFirstFetch = false});
-}
