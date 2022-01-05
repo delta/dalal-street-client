@@ -1,6 +1,4 @@
 import 'package:dalal_street_client/theme/colors.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 
 Container news() {

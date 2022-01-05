@@ -3,8 +3,6 @@ import 'package:dalal_street_client/pages/company_page/components/overview.dart'
 import 'package:dalal_street_client/pages/company_page/components/market_depth.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
 import 'package:dalal_street_client/theme/colors.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 
 Container companyTabView(BuildContext context, Stock company) {
