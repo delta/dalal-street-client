@@ -14,19 +14,44 @@ class ChallengeReward extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  build(context) => Column(
+  build(context) {
+    if (!userState.isCompleted) {
+      return challengeIncomplete();
+    } else if (userState.isCompleted && !userState.isRewardClamied) {
+      return claimReward();
+    } else {
+      return rewardClaimed();
+    }
+  }
+
+  Widget challengeIncomplete() => Column(
         children: [
-          Image.asset(userState.isRewardClamied
-              ? 'assets/images/Coin Done.png'
-              : 'assets/images/Coin.png'),
+          Image.asset('assets/images/Coin.png'),
           const SizedBox(height: 10),
           Text(
             '₹${challenge.reward}',
-            style: TextStyle(
+            style: const TextStyle(color: gold),
+          )
+        ],
+      );
+
+  Widget claimReward() => SizedBox(
+        width: 80,
+        child: TextButton(
+          onPressed: () {},
+          child: const Text('Claim Reward'),
+        ),
+      );
+
+  Widget rewardClaimed() => Column(
+        children: [
+          Image.asset('assets/images/Coin Done.png'),
+          const SizedBox(height: 10),
+          Text(
+            '₹${challenge.reward}',
+            style: const TextStyle(
               color: gold,
-              decoration: userState.isRewardClamied
-                  ? TextDecoration.lineThrough
-                  : TextDecoration.none,
+              decoration: TextDecoration.lineThrough,
             ),
           )
         ],
