@@ -27,7 +27,6 @@ class ExchangeBottomSheet extends StatefulWidget {
 
 class _ExchangeBottomSheetState extends State<ExchangeBottomSheet>
     with TickerProviderStateMixin {
-
   @override
   Widget build(BuildContext context) {
     int priceChange =
@@ -207,7 +206,6 @@ class _ExchangeBottomSheetState extends State<ExchangeBottomSheet>
                                                   fontSize: 14,
                                                 ),
                                               ),
-                                              
                                             )
                                           ]),
                                       const SizedBox(
