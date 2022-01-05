@@ -24,10 +24,10 @@ class NewsPage extends StatefulWidget {
 class _NewsPageState extends State<NewsPage> {
   final ScrollController _scrollController = ScrollController();
   @override
- void initState() {
+  void initState() {
     super.initState();
     context.read<MarketEventBloc>().add(const GetMarketEvent());
-    
+
     context.read<SubscribeCubit>().subscribe(DataStreamType.MARKET_EVENTS);
     _scrollController.addListener(() {
       if (_scrollController.position.atEdge) {
@@ -35,7 +35,7 @@ class _NewsPageState extends State<NewsPage> {
           context.read<MarketEventBloc>().add(const GetMoreMarketEvent(10));
         }
       }
-     });
+    });
   }
 
   @override
@@ -56,49 +56,64 @@ class _NewsPageState extends State<NewsPage> {
         body: Container(
             padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
             color: Colors.black,
-            child: SingleChildScrollView (child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[news(),const SizedBox.square(dimension: 20,) ,feed(_scrollController)]
-            ),)));
-            
+            child: SingleChildScrollView(
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    news(),
+                    const SizedBox.square(
+                      dimension: 20,
+                    ),
+                    feed(_scrollController)
+                  ]),
+            )));
   }
 }
 
-SingleChildScrollView feed(ScrollController _scrollController){
-  return 
-  SingleChildScrollView(
-    child: Column(
+SingleChildScrollView feed(ScrollController _scrollController) {
+  return SingleChildScrollView(
+      child: Column(
     mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
+    crossAxisAlignment: CrossAxisAlignment.start,
     children: <Widget>[
       Container(
-        decoration: BoxDecoration(
-            color:  backgroundColor, borderRadius: BorderRadius.circular(10)),
-        child: Column (children: <Widget>[
-         
-         Container( child: Text('Feed',style: TextStyle(fontSize: 20,color: lightGray ),textAlign: TextAlign.left,),
-             alignment: Alignment.topLeft,margin: EdgeInsets.all(10),),
-          feedlist(_scrollController)
-        ],)
-      ),
+          decoration: BoxDecoration(
+              color: backgroundColor, borderRadius: BorderRadius.circular(10)),
+          child: Column(
+            children: <Widget>[
+              Container(
+                child: Text(
+                  'Feed',
+                  style: TextStyle(fontSize: 20, color: lightGray),
+                  textAlign: TextAlign.left,
+                ),
+                alignment: Alignment.topLeft,
+                margin: EdgeInsets.all(10),
+              ),
+              feedlist(_scrollController)
+            ],
+          )),
     ],
   ));
 }
 
-Widget news()
-=>Container(
-   decoration: BoxDecoration(
-     color: backgroundColor, borderRadius: BorderRadius.circular(10)),
-        child: Column (children: <Widget>[
-         
-         Container( child: Text('News',style: TextStyle(fontSize: 20,color: lightGray),textAlign: TextAlign.left,),
-             alignment: Alignment.topLeft,margin: EdgeInsets.all(10),),
-             latestnews()]
+Widget news() => Container(
+      decoration: BoxDecoration(
+          color: backgroundColor, borderRadius: BorderRadius.circular(10)),
+      child: Column(children: <Widget>[
+        Container(
+          child: Text(
+            'News',
+            style: TextStyle(fontSize: 20, color: lightGray),
+            textAlign: TextAlign.left,
+          ),
+          alignment: Alignment.topLeft,
+          margin: EdgeInsets.all(10),
         ),
-        
- );
-
+        latestnews()
+      ]),
+    );
 
 Widget feedlist(ScrollController _scrollController) =>
     BlocBuilder<MarketEventBloc, MarketEventState>(builder: (context, state) {
@@ -109,27 +124,24 @@ Widget feedlist(ScrollController _scrollController) =>
         return BlocBuilder<SubscribeCubit, SubscribeState>(
             builder: (context, state) {
           if (state is SubscriptionDataLoaded) {
-            context 
+            context
                 .read<MarketEventBloc>()
                 .add(GetMarketEventFeed(state.subscriptionId));
-                
-            
-           return ListView.builder(
-                shrinkWrap: true,
-                scrollDirection: Axis.vertical,
-                itemCount: mapMarketEvents.length,
-                controller:  _scrollController,
-                itemBuilder: (context, index) {
-                  MarketEvent marketEvent = mapMarketEvents[index];
-                  String headline = marketEvent.headline;
-                  String text = marketEvent.text;
-                  String imagePath = marketEvent.imagePath;
-                  String createdAt = marketEvent.createdAt; 
-                  return (newsItem(headline, imagePath, createdAt));
-          
-                },
-                );
-                  
+
+            return ListView.builder(
+              shrinkWrap: true,
+              scrollDirection: Axis.vertical,
+              itemCount: mapMarketEvents.length,
+              controller: _scrollController,
+              itemBuilder: (context, index) {
+                MarketEvent marketEvent = mapMarketEvents[index];
+                String headline = marketEvent.headline;
+                String text = marketEvent.text;
+                String imagePath = marketEvent.imagePath;
+                String createdAt = marketEvent.createdAt;
+                return (newsItem(headline, imagePath, createdAt));
+              },
+            );
           } else if (state is SubscriptonDataFailed) {
             logger.i('Stream Failed $state');
             return const Center(
@@ -153,14 +165,14 @@ Widget feedlist(ScrollController _scrollController) =>
         return const Text('Error');
       } else {
         return const Center(
-              child: CircularProgressIndicator(
-                color: secondaryColor,
-              ),
-            );
+          child: CircularProgressIndicator(
+            color: secondaryColor,
+          ),
+        );
       }
     });
 
-    Widget latestnews() =>
+Widget latestnews() =>
     BlocBuilder<MarketEventBloc, MarketEventState>(builder: (context, state) {
       if (state is GetMarketEventSucess) {
         List<MarketEvent> mapMarketEvents = state.marketEventsList.marketEvents;
@@ -171,14 +183,13 @@ Widget feedlist(ScrollController _scrollController) =>
             context
                 .read<MarketEventBloc>()
                 .add(GetMarketEventFeed(state.subscriptionId));
-        
-                
-                  MarketEvent marketEvent = mapMarketEvents[0];
-                  String headline = marketEvent.headline;
-                  String text = marketEvent.text;
-                  String imagePath = marketEvent.imagePath;
-                  String createdAt = marketEvent.createdAt;
-                  return newsItem(headline, imagePath, createdAt);
+
+            MarketEvent marketEvent = mapMarketEvents[0];
+            String headline = marketEvent.headline;
+            String text = marketEvent.text;
+            String imagePath = marketEvent.imagePath;
+            String createdAt = marketEvent.createdAt;
+            return newsItem(headline, imagePath, createdAt);
           } else if (state is SubscriptonDataFailed) {
             logger.i('Stock Prices Stream Failed $state');
             return const Center(
@@ -202,76 +213,61 @@ Widget feedlist(ScrollController _scrollController) =>
         return const Text('Error');
       } else {
         return const Center(
-              child: CircularProgressIndicator(
-                color: secondaryColor,
-              ),
-            );
+          child: CircularProgressIndicator(
+            color: secondaryColor,
+          ),
+        );
       }
     });
 
-Widget newsItem(String text, String imagePath,String createdAt) {
+Widget newsItem(String text, String imagePath, String createdAt) {
   return (Container(
     padding: const EdgeInsets.all(10),
     child: BlocBuilder<MarketEventBloc, MarketEventState>(
-      builder: (context, state) {
-        if(state is SubscriptionToMarketEventSuccess)
-        {
-        return 
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              ClipRRect(
-                  borderRadius: BorderRadius.circular(20),
-                  child: Image(
-                    width: 100,
-                    height: 100,
-                    image: NetworkImage(imagePath),
-                  ),
-                ),
-              
-              Flexible(
-                  child: Text(text,
-                      style:
-                          const TextStyle(color: Colors.white, fontSize: 15)),
-                  fit: FlexFit.loose),
-            ],
-          );
-      
-      }
-      else if(state is SubscriptionToMarketEventFailed)
-      {
-        return const Center(
-              child: Text(
-                'SubscriptionToMarketEventFailed',
+        builder: (context, state) {
+      if (state is SubscriptionToMarketEventSuccess) {
+        return Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child: Image(
+                width: 100,
+                height: 100,
+                image: NetworkImage(imagePath),
               ),
-            );
+            ),
+            Flexible(
+                child: Text(text,
+                    style: const TextStyle(color: Colors.white, fontSize: 15)),
+                fit: FlexFit.loose),
+          ],
+        );
+      } else if (state is SubscriptionToMarketEventFailed) {
+        return const Center(
+          child: Text(
+            'SubscriptionToMarketEventFailed',
+          ),
+        );
+      } else {
+        return Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child: Image(
+                width: 100,
+                height: 100,
+                image: NetworkImage(imagePath),
+              ),
+            ),
+            Flexible(
+                child: Text(text,
+                    style: const TextStyle(color: Colors.white, fontSize: 15)),
+                fit: FlexFit.loose),
+          ],
+        );
       }
-      else{
-          return 
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-             
-              ClipRRect(
-                  borderRadius: BorderRadius.circular(20),
-                  child: Image(
-                    width: 100,
-                    height: 100,
-                    image: NetworkImage(
-                        
-                        imagePath),
-                  ),
-                ),
-              
-              Flexible(
-                  child: Text(text,
-                      style:
-                          const TextStyle(color: Colors.white, fontSize: 15)),
-                  fit: FlexFit.loose),
-            ],
-          );
-      }
-      }
-    ),
+    }),
   ));
 }

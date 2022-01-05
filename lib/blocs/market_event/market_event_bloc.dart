@@ -21,7 +21,7 @@ class MarketEventBloc extends Bloc<MarketEvent_events, MarketEventState> {
           GetMarketEventsRequest(),
           options: sessionOptions(getIt()),
         );
-        
+
         emit(GetMarketEventSucess(marketEventResponse));
       } catch (e) {
         emit(GetMarketEventFailure(e.toString()));
@@ -29,27 +29,27 @@ class MarketEventBloc extends Bloc<MarketEvent_events, MarketEventState> {
     });
 
     on<GetMarketEventFeed>((event, emit) async {
-        try {
-           final marketeventstream =
-             
-              streamClient.getMarketEventUpdates(event.subscriptionId,options: sessionOptions(getIt()));
-          await for (final marketevent in marketeventstream) {
-            emit(SubscriptionToMarketEventSuccess(marketevent));
-          }
-        } catch (e) {
-          logger.e(e);
-          emit(SubscriptionToMarketEventFailed(e.toString()));
+      try {
+        final marketeventstream = streamClient.getMarketEventUpdates(
+            event.subscriptionId,
+            options: sessionOptions(getIt()));
+        await for (final marketevent in marketeventstream) {
+          emit(SubscriptionToMarketEventSuccess(marketevent));
         }
-      });
+      } catch (e) {
+        logger.e(e);
+        emit(SubscriptionToMarketEventFailed(e.toString()));
+      }
+    });
 
-      on<GetMoreMarketEvent>((event, emit) async {
+    on<GetMoreMarketEvent>((event, emit) async {
       try {
         final GetMarketEventsResponse marketEventResponse =
             await actionClient.getMarketEvents(
           GetMarketEventsRequest(lastEventId: event.lasteventid),
           options: sessionOptions(getIt()),
         );
-        
+
         emit(GetMarketEventSucess(marketEventResponse));
       } catch (e) {
         emit(GetMarketEventFailure(e.toString()));
@@ -71,12 +71,9 @@ class MarketEventBloc extends Bloc<MarketEvent_events, MarketEventState> {
     //   page++;
 
     //   final posts = (state as PostsLoading).oldPosts;
-    //   posts.addAll(newPosts);    
+    //   posts.addAll(newPosts);
 
     //   emit(PostsLoaded(posts));
     // });
   }
-  }
-
-  
-
+}

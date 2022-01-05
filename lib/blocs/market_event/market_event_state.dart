@@ -48,6 +48,5 @@ class MarketEventsLoading extends MarketEventState {
   final List<MarketEvent> oldmarketevents;
   final bool isFirstFetch;
 
-  MarketEventsLoading(this.oldmarketevents, {this.isFirstFetch=false});
+  MarketEventsLoading(this.oldmarketevents, {this.isFirstFetch = false});
 }
-
