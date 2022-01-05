@@ -7,6 +7,7 @@ import 'package:dalal_street_client/theme/colors.dart';
 import 'package:dalal_street_client/utils/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_spinbox/flutter_spinbox.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 
@@ -14,6 +15,7 @@ final oCcy = NumberFormat('#,##0.00', 'en_US');
 
 // todo: svg error in mobile loading assets
 // todo: bottom sheet transition animation not working
+// todo: fix text input in mobile
 class ExchangeBottomSheet extends StatefulWidget {
   final Stock company;
   const ExchangeBottomSheet({Key? key, required this.company})
@@ -25,20 +27,6 @@ class ExchangeBottomSheet extends StatefulWidget {
 
 class _ExchangeBottomSheetState extends State<ExchangeBottomSheet>
     with TickerProviderStateMixin {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final _stockInputController = TextEditingController();
-
-  @override
-  void initState() {
-    _stockInputController.text = '1';
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    _stockInputController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +35,6 @@ class _ExchangeBottomSheetState extends State<ExchangeBottomSheet>
     int quantity = 1;
     int totalPrice = widget.company.currentPrice.toInt() * quantity;
     int orderFee = _calculateOrderFee(totalPrice);
-    logger.i('whole page');
     return BlocProvider(
       create: (context) => ExchangeSheetCubit(),
       child: BlocConsumer<ExchangeSheetCubit, ExchangeSheetState>(
@@ -177,8 +164,8 @@ class _ExchangeBottomSheetState extends State<ExchangeBottomSheet>
                                               ),
                                             ),
                                             Container(
-                                              //height: 30,
-                                              // width: 150,
+                                              height: 30,
+                                              width: 150,
                                               padding: EdgeInsets.zero,
                                               decoration: BoxDecoration(
                                                 borderRadius:
@@ -187,151 +174,40 @@ class _ExchangeBottomSheetState extends State<ExchangeBottomSheet>
                                                 color: primaryColor
                                                     .withOpacity(0.2),
                                               ),
-                                              // child: SpinBox(
-                                              //   min: 1,
-                                              //   max: 100,
-                                              //   value: 01,
-                                              //   readOnly: true,
-                                              //   onChanged: (value) {
-                                              //     setBottomSheetState(() {
-                                              //       quantity = value.toInt();
-                                              //       totalPrice = widget.company
-                                              //               .currentPrice
-                                              //               .toInt() *
-                                              //           quantity;
-                                              //       orderFee =
-                                              //           _calculateOrderFee(
-                                              //               totalPrice);
-                                              //     });
-                                              //   },
-                                              //   iconColor:
-                                              //       MaterialStateProperty.all(
-                                              //           primaryColor),
-                                              //   cursorColor: primaryColor,
-                                              //   spacing: 10,
-
-                                              //   decoration:
-                                              //       const InputDecoration(
-                                              //           contentPadding:
-                                              //               EdgeInsets.zero,
-                                              //           border:
-                                              //               InputBorder.none),
-                                              //   textStyle: const TextStyle(
-                                              //     color: primaryColor,
-                                              //     fontSize: 14,
-                                              //   ),
-                                              // ),
-                                              child: Row(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                children: [
-                                                  IconButton(
-                                                      onPressed: () {
-                                                        setBottomSheetState(() {
-                                                          quantity = int.parse(
-                                                                  _stockInputController
-                                                                      .text) -
-                                                              1;
-                                                          _stockInputController
-                                                                  .text =
-                                                              quantity
-                                                                  .toString();
-                                                          totalPrice = widget
-                                                                  .company
-                                                                  .currentPrice
-                                                                  .toInt() *
-                                                              quantity;
-                                                          orderFee =
-                                                              _calculateOrderFee(
-                                                                  totalPrice);
-                                                        });
-                                                      },
-                                                      icon: const Icon(
-                                                        Icons
-                                                            .remove_circle_outline_rounded,
-                                                        color: primaryColor,
-                                                      )),
-                                                  SizedBox(
-                                                    height: 30,
-                                                    width: 70,
-                                                    child: TextFormField(
-                                                      key: _formKey,
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      controller:
-                                                          _stockInputController,
-                                                      keyboardType:
-                                                          const TextInputType
-                                                                  .numberWithOptions(
-                                                              decimal: false,
-                                                              signed: false),
-                                                      // onChanged: (value) =>
-                                                      //     setBottomSheetState(() {
-                                                      //       _stockInputController.text = value;
-                                                      //   quantity =
-                                                      //       int.parse(value);
-                                                      //   totalPrice = widget
-                                                      //           .company
-                                                      //           .currentPrice
-                                                      //           .toInt() *
-                                                      //       quantity;
-                                                      //   orderFee =
-                                                      //       _calculateOrderFee(
-                                                      //           totalPrice);
-                                                      // }),
-                                                      cursorColor: primaryColor,
-                                                      onFieldSubmitted:
-                                                          (value) {
-                                                        setBottomSheetState(() {
-                                                          logger.i(
-                                                              'submitted $value');
-                                                          quantity =
-                                                              int.parse(value);
-                                                          _stockInputController
-                                                                  .text =
-                                                              quantity
-                                                                  .toString();
-
-                                                          totalPrice = widget
-                                                                  .company
-                                                                  .currentPrice
-                                                                  .toInt() *
-                                                              quantity;
-                                                          orderFee =
-                                                              _calculateOrderFee(
-                                                                  totalPrice);
-                                                        });
-                                                      },
-                                                    ),
-                                                  ),
-                                                  IconButton(
-                                                      onPressed: () {
-                                                        setBottomSheetState(() {
-                                                          quantity = int.parse(
-                                                                  _stockInputController
-                                                                      .text) +
-                                                              1;
-                                                          _stockInputController
-                                                                  .text =
-                                                              quantity
-                                                                  .toString();
-                                                          totalPrice = widget
-                                                                  .company
-                                                                  .currentPrice
-                                                                  .toInt() *
-                                                              quantity;
-                                                          orderFee =
-                                                              _calculateOrderFee(
-                                                                  totalPrice);
-                                                        });
-                                                      },
-                                                      icon: const Icon(
-                                                        Icons
-                                                            .add_circle_outline_rounded,
-                                                        color: primaryColor,
-                                                      )),
-                                                ],
+                                              child: SpinBox(
+                                                min: 1,
+                                                max: 100,
+                                                value: 01,
+                                                onChanged: (value) {
+                                                  setBottomSheetState(() {
+                                                    quantity = value.toInt();
+                                                    totalPrice = widget.company
+                                                            .currentPrice
+                                                            .toInt() *
+                                                        quantity;
+                                                    orderFee =
+                                                        _calculateOrderFee(
+                                                            totalPrice);
+                                                  });
+                                                },
+                                                iconColor:
+                                                    MaterialStateProperty.all(
+                                                        primaryColor),
+                                                cursorColor: primaryColor,
+                                                spacing: 10,
+                                                readOnly: true,
+                                                decoration:
+                                                    const InputDecoration(
+                                                        contentPadding:
+                                                            EdgeInsets.zero,
+                                                        border:
+                                                            InputBorder.none),
+                                                textStyle: const TextStyle(
+                                                  color: primaryColor,
+                                                  fontSize: 14,
+                                                ),
                                               ),
+                                              
                                             )
                                           ]),
                                       const SizedBox(

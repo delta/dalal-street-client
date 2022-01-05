@@ -352,6 +352,7 @@ class _ExchangePageState extends State<ExchangePage> {
             borderRadius: BorderRadius.vertical(top: Radius.circular(25.0))),
         backgroundColor: Colors.black,
         context: context,
+        isScrollControlled: true,
         builder: (_) {
           return ExchangeBottomSheet(company: company ?? Stock());
         });
