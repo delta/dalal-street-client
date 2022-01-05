@@ -1,25 +1,53 @@
+import 'dart:html';
+
+import 'package:dalal_street_client/blocs/subscribe/subscribe_cubit.dart';
 import 'package:dalal_street_client/main.dart';
+import 'package:dalal_street_client/proto_build/actions/GetMarketEvents.pb.dart';
+import 'package:dalal_street_client/proto_build/datastreams/MarketDepth.pbjson.dart';
+import 'package:dalal_street_client/proto_build/datastreams/Subscribe.pb.dart';
 import 'package:dalal_street_client/proto_build/models/MarketEvent.pb.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:dalal_street_client/theme/colors.dart';
 import 'package:flutter/material.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../blocs/market_event/market_event_bloc.dart';
 
-// ignore: camel_case_types
-class News_Page extends StatefulWidget {
-  const News_Page({Key? key}) : super(key: key);
+class NewsPage extends StatefulWidget {
+  const NewsPage({Key? key}) : super(key: key);
 
   @override
-  _News_PageState createState() => _News_PageState();
+  _NewsPageState createState() => _NewsPageState();
 }
 
-// ignore: camel_case_types
-class _News_PageState extends State<News_Page> {
+class _NewsPageState extends State<NewsPage> {
+  final ScrollController _scrollController = ScrollController();
   @override
-  initState() {
+ void initState() {
     super.initState();
     context.read<MarketEventBloc>().add(const GetMarketEvent());
+    
+    context.read<SubscribeCubit>().subscribe(DataStreamType.MARKET_EVENTS);
+    _scrollController.addListener(() {
+      if (_scrollController.position.atEdge) {
+        if (_scrollController.position.pixels != 0) {
+          context.read<MarketEventBloc>().add(const GetMoreMarketEvent(10));
+        }
+      }
+     });
+  }
+
+  @override
+  void dispose() {
+    SubscriptionId? _marketEventsSubscriptionId;
+    final state = context.read<SubscribeCubit>().state;
+    _scrollController.dispose();
+    if (state is SubscriptionDataLoaded) {
+      _marketEventsSubscriptionId = state.subscriptionId;
+      context.read<SubscribeCubit>().unsubscribe(_marketEventsSubscriptionId);
+    }
+    super.dispose();
   }
 
   @override
@@ -27,81 +55,223 @@ class _News_PageState extends State<News_Page> {
     return Scaffold(
         body: Container(
             padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-            //  decoration: BoxDecoration(color: backgroundColor,borderRadius: BorderRadius.circular(10)),
-            color: backgroundColor,
-
-            //  child:
-
-            child: Feed()));
+            color: Colors.black,
+            child: SingleChildScrollView (child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[news(),const SizedBox.square(dimension: 20,) ,feed(_scrollController)]
+            ),)));
+            
   }
 }
 
-// ignore: non_constant_identifier_names
-Container Feed() {
-  return Container(
-    // color: ,
-    decoration: BoxDecoration(
-        color: baseColor, borderRadius: BorderRadius.circular(10)),
-
-    child: news_list(),
-  );
+SingleChildScrollView feed(ScrollController _scrollController){
+  return 
+  SingleChildScrollView(
+    child: Column(
+    mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+    children: <Widget>[
+      Container(
+        decoration: BoxDecoration(
+            color:  backgroundColor, borderRadius: BorderRadius.circular(10)),
+        child: Column (children: <Widget>[
+         
+         Container( child: Text('Feed',style: TextStyle(fontSize: 20,color: lightGray ),textAlign: TextAlign.left,),
+             alignment: Alignment.topLeft,margin: EdgeInsets.all(10),),
+          feedlist(_scrollController)
+        ],)
+      ),
+    ],
+  ));
 }
 
-// ignore: non_constant_identifier_names
-BlocBuilder<MarketEventBloc, MarketEventState> news_list() {
-  return BlocBuilder<MarketEventBloc, MarketEventState>(
-      builder: (context, state) {
-    if (state is GetMarketEventSucess) {
-      List<MarketEvent> mapMarketEvents = state.marketEventsList.marketEvents;
-      logger.i(mapMarketEvents.length);
-      return ListView.builder(
-        shrinkWrap: true,
-        scrollDirection: Axis.vertical,
-        itemCount: mapMarketEvents.length,
-        itemBuilder: (context, index) {
-          MarketEvent marketEvent = mapMarketEvents[index];
-          String headline = marketEvent.headline;
-          String text = marketEvent.text;
-          String imagePath = marketEvent.imagePath;
-          return newsItem(headline, text, imagePath);
-        },
-      );
-    } else if (state is GetMarketEventFailure) {
-      return const Text('error');
-    } else {
-      return const Center(
-        child: CircularProgressIndicator(
-          color: secondaryColor,
+Widget news()
+=>Container(
+   decoration: BoxDecoration(
+     color: backgroundColor, borderRadius: BorderRadius.circular(10)),
+        child: Column (children: <Widget>[
+         
+         Container( child: Text('News',style: TextStyle(fontSize: 20,color: lightGray),textAlign: TextAlign.left,),
+             alignment: Alignment.topLeft,margin: EdgeInsets.all(10),),
+             latestnews()]
         ),
-      );
-    }
-  });
-}
+        
+ );
 
-Container newsItem(String headline, String text, String imagePath) {
+
+Widget feedlist(ScrollController _scrollController) =>
+    BlocBuilder<MarketEventBloc, MarketEventState>(builder: (context, state) {
+      // final ScrollController _scrollController = ScrollController();
+      if (state is GetMarketEventSucess) {
+        List<MarketEvent> mapMarketEvents = state.marketEventsList.marketEvents;
+        logger.i(state.marketEventsList.moreExists);
+        return BlocBuilder<SubscribeCubit, SubscribeState>(
+            builder: (context, state) {
+          if (state is SubscriptionDataLoaded) {
+            context 
+                .read<MarketEventBloc>()
+                .add(GetMarketEventFeed(state.subscriptionId));
+                
+            
+           return ListView.builder(
+                shrinkWrap: true,
+                scrollDirection: Axis.vertical,
+                itemCount: mapMarketEvents.length,
+                controller:  _scrollController,
+                itemBuilder: (context, index) {
+                  MarketEvent marketEvent = mapMarketEvents[index];
+                  String headline = marketEvent.headline;
+                  String text = marketEvent.text;
+                  String imagePath = marketEvent.imagePath;
+                  String createdAt = marketEvent.createdAt; 
+                  return (newsItem(headline, imagePath, createdAt));
+          
+                },
+                );
+                  
+          } else if (state is SubscriptonDataFailed) {
+            logger.i('Stream Failed $state');
+            return const Center(
+              child: Text(
+                'Failed to load data \nReason : //',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: secondaryColor,
+                ),
+              ),
+            );
+          } else {
+            return const Center(
+              child: CircularProgressIndicator(
+                color: secondaryColor,
+              ),
+            );
+          }
+        });
+      } else if (state is GetMarketEventFailure) {
+        return const Text('Error');
+      } else {
+        return const Center(
+              child: CircularProgressIndicator(
+                color: secondaryColor,
+              ),
+            );
+      }
+    });
+
+    Widget latestnews() =>
+    BlocBuilder<MarketEventBloc, MarketEventState>(builder: (context, state) {
+      if (state is GetMarketEventSucess) {
+        List<MarketEvent> mapMarketEvents = state.marketEventsList.marketEvents;
+
+        return BlocBuilder<SubscribeCubit, SubscribeState>(
+            builder: (context, state) {
+          if (state is SubscriptionDataLoaded) {
+            context
+                .read<MarketEventBloc>()
+                .add(GetMarketEventFeed(state.subscriptionId));
+        
+                
+                  MarketEvent marketEvent = mapMarketEvents[0];
+                  String headline = marketEvent.headline;
+                  String text = marketEvent.text;
+                  String imagePath = marketEvent.imagePath;
+                  String createdAt = marketEvent.createdAt;
+                  return newsItem(headline, imagePath, createdAt);
+          } else if (state is SubscriptonDataFailed) {
+            logger.i('Stock Prices Stream Failed $state');
+            return const Center(
+              child: Text(
+                'Failed to load data \nReason : //',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: secondaryColor,
+                ),
+              ),
+            );
+          } else {
+            return const Center(
+              child: CircularProgressIndicator(
+                color: secondaryColor,
+              ),
+            );
+          }
+        });
+      } else if (state is GetMarketEventFailure) {
+        return const Text('Error');
+      } else {
+        return const Center(
+              child: CircularProgressIndicator(
+                color: secondaryColor,
+              ),
+            );
+      }
+    });
+
+Widget newsItem(String text, String imagePath,String createdAt) {
   return (Container(
     padding: const EdgeInsets.all(10),
-    child: Column(children: <Widget>[
-      Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Expanded(
-              child: Image.network(
-            imagePath,
-            width: 50,
-            height: 50,
-            fit: BoxFit.fill,
-          )),
-          Flexible(
-              child: Text(headline,
-                  style: const TextStyle(color: Colors.white, fontSize: 15)),
-              fit: FlexFit.loose),
-          //  Text(text,style: TextStyle(color: Color.fromARGB(255, 179, 0, 0),fontSize: 10 )
-          //  ),
-          //  Image.asset(imagePath,width: 100,height: 100,fit: BoxFit.fill,)
-          // Newsimage()
-        ],
-      ),
-    ]),
+    child: BlocBuilder<MarketEventBloc, MarketEventState>(
+      builder: (context, state) {
+        if(state is SubscriptionToMarketEventSuccess)
+        {
+        return 
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: Image(
+                    width: 100,
+                    height: 100,
+                    image: NetworkImage(imagePath),
+                  ),
+                ),
+              
+              Flexible(
+                  child: Text(text,
+                      style:
+                          const TextStyle(color: Colors.white, fontSize: 15)),
+                  fit: FlexFit.loose),
+            ],
+          );
+      
+      }
+      else if(state is SubscriptionToMarketEventFailed)
+      {
+        return const Center(
+              child: Text(
+                'SubscriptionToMarketEventFailed',
+              ),
+            );
+      }
+      else{
+          return 
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+             
+              ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: Image(
+                    width: 100,
+                    height: 100,
+                    image: NetworkImage(
+                        
+                        imagePath),
+                  ),
+                ),
+              
+              Flexible(
+                  child: Text(text,
+                      style:
+                          const TextStyle(color: Colors.white, fontSize: 15)),
+                  fit: FlexFit.loose),
+            ],
+          );
+      }
+      }
+    ),
   ));
 }

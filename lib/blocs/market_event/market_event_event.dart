@@ -9,6 +9,7 @@ abstract class MarketEvent_events extends Equatable {
 
 class GetMarketEvent extends MarketEvent_events {
   const GetMarketEvent();
+  
 }
 
 class GetMarketEventFeed extends MarketEvent_events {
@@ -17,3 +18,10 @@ class GetMarketEventFeed extends MarketEvent_events {
   @override
   List<Object> get props => [subscriptionId];
 }
+
+class GetMoreMarketEvent extends MarketEvent_events {
+  final int lasteventid;
+  const GetMoreMarketEvent(this.lasteventid);
+  
+}
+

@@ -43,6 +43,8 @@ dependencies:
   pin_code_fields: ^7.3.0
   url_launcher: ^6.0.15
   super_tooltip: ^1.0.1
+  infinite_scroll_pagination: ^3.1.0
+  scrollable_positioned_list: ^0.2.3
 
 dev_dependencies:
   flutter_test:
