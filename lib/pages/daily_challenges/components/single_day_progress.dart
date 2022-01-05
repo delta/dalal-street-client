@@ -4,12 +4,10 @@ import 'package:flutter/material.dart';
 
 class SingleDayProgress extends StatelessWidget {
   final List<DailyChallengeInfo> challengeInfos;
-  final double progress;
 
   const SingleDayProgress({
     Key? key,
     required this.challengeInfos,
-    required this.progress,
   }) : super(key: key);
 
   @override
@@ -22,6 +20,7 @@ class SingleDayProgress extends StatelessWidget {
         : 0;
     final totalCash =
         challengeInfos.map((e) => e.challenge.reward).reduce((a, b) => a + b);
+    final progress = tasksDone / totalTasks;
     return SizedBox(
       width: double.infinity,
       child: Card(

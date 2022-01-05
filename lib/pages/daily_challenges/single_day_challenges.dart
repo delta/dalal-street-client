@@ -45,10 +45,7 @@ class _SingleDayChallengesState extends State<SingleDayChallenges>
             children: [
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: SingleDayProgress(
-                  challengeInfos: state.challengeInfos,
-                  progress: 0.69,
-                ),
+                child: SingleDayProgress(challengeInfos: state.challengeInfos),
               ),
               const SizedBox(height: 18),
               Expanded(child: challengesList(state.challengeInfos)),
