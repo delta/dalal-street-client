@@ -1,5 +1,5 @@
 import 'package:dalal_street_client/blocs/exchange/exchange_cubit.dart';
-import 'package:dalal_street_client/components/sheets/exchange_bottom_sheet.dart';
+import 'package:dalal_street_client/pages/stock_exchange/components/exchange_bottom_sheet.dart';
 import 'package:dalal_street_client/config/get_it.dart';
 import 'package:dalal_street_client/streams/global_streams.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
