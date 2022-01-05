@@ -1,51 +1,33 @@
+import 'package:dalal_street_client/blocs/market_depth/market_depth_bloc.dart';
 import 'package:dalal_street_client/blocs/subscribe/subscribe_cubit.dart';
-<<<<<<< HEAD
+import 'package:dalal_street_client/components/buttons/tertiary_button.dart';
 import 'package:dalal_street_client/components/stock_bar.dart';
 import 'package:dalal_street_client/config/get_it.dart';
-=======
 import 'package:dalal_street_client/components/buttons/primary_button.dart';
-<<<<<<< HEAD
 import 'package:dalal_street_client/components/buttons/secondary_button.dart';
-<<<<<<< HEAD
-import 'package:dalal_street_client/config/get_it.dart';
-=======
-import 'package:dalal_street_client/components/buttons/tertiary_button.dart';
+import 'package:dalal_street_client/config/log.dart';
 import 'package:dalal_street_client/constants/constants.dart';
->>>>>>> [feat]: Add Trade Page as a Bottom Sheet
 import 'package:dalal_street_client/constants/icons.dart';
-=======
->>>>>>> feat: place order implementation
-import 'package:dalal_street_client/main.dart';
->>>>>>> fix: merge issue
+import 'package:dalal_street_client/proto_build/datastreams/MarketDepth.pb.dart';
 import 'package:dalal_street_client/proto_build/datastreams/Subscribe.pb.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
 import 'package:dalal_street_client/pages/company_page/components/company_tab_view.dart';
 import 'package:dalal_street_client/pages/company_page/components/company_prices.dart';
 import 'package:dalal_street_client/pages/company_page/components/choose_buy_or_sell_bottom_sheet.dart';
-<<<<<<< HEAD
 import 'package:dalal_street_client/streams/global_streams.dart';
 import 'package:dalal_street_client/theme/colors.dart';
 import 'package:dalal_street_client/utils/responsive.dart';
-=======
-import 'package:dalal_street_client/theme/colors.dart';
-import 'package:dalal_street_client/utils/responsive.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
->>>>>>> fix: merge issue
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_spinbox/flutter_spinbox.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 
 final oCcy = NumberFormat('#,##0.00', 'en_US');
 
 class CompanyPage extends StatefulWidget {
-<<<<<<< HEAD
   final List<int> data;
   const CompanyPage({Key? key, required this.data}) : super(key: key);
-=======
-  final int stockId;
-  const CompanyPage({Key? key, required this.stockId}) : super(key: key);
->>>>>>> fix: merge issue
 
   @override
   State<CompanyPage> createState() => _CompanyPageState();
@@ -59,26 +41,17 @@ class _CompanyPageState extends State<CompanyPage>
   initState() {
     super.initState();
     // Subscribe to the stream of Market Depth Updates
-<<<<<<< HEAD
     context.read<SubscribeCubit>().subscribe(DataStreamType.MARKET_DEPTH,
         dataStreamId: widget.data[0].toString());
-=======
-    context.read<SubscribeCubit>().subscribe(DataStreamType.MARKET_DEPTH);
->>>>>>> fix: merge issue
   }
 
   @override
   // ignore: must_call_super
   Widget build(BuildContext context) {
-<<<<<<< HEAD
     final stockList = getIt<GlobalStreams>().latestStockMap;
     final int stockId = widget.data.first;
     final int cash = widget.data.last;
     Stock company = stockList[stockId]!;
-=======
-    final stockList = getIt<Map<int, Stock>>();
-    Stock company = stockList[widget.stockId]!;
->>>>>>> fix: merge issue
     return SafeArea(
       child: Responsive(
         mobile: Scaffold(
@@ -94,14 +67,9 @@ class _CompanyPageState extends State<CompanyPage>
                         vertical: 10, horizontal: 10),
                     child: Column(
                       children: [
-<<<<<<< HEAD
                         const StockBar(),
                         const SizedBox(
                           height: 5,
-=======
-                        const SizedBox(
-                          height: 20,
->>>>>>> fix: merge issue
                         ),
                         companyPrices(company),
                         const SizedBox(
@@ -121,7 +89,6 @@ class _CompanyPageState extends State<CompanyPage>
                         topLeft: Radius.circular(15),
                       )),
                   alignment: Alignment.bottomCenter,
-<<<<<<< HEAD
                   padding:
                       const EdgeInsets.symmetric(vertical: 10, horizontal: 30),
                   child: Align(
@@ -134,19 +101,6 @@ class _CompanyPageState extends State<CompanyPage>
                         },
                         child: const Text('Place Your Order'),
                       ),
-=======
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  child: Align(
-                    alignment: Alignment.bottomCenter,
-                    child: PrimaryButton(
-                      height: 45,
-                      width: 340,
-                      fontSize: 18,
-                      title: 'Place Order',
-                      onPressed: () {
-                        chooseBuyOrSellBottomSheet(context, company);
-                      },
->>>>>>> fix: merge issue
                     ),
                   ),
                 ),
@@ -158,9 +112,6 @@ class _CompanyPageState extends State<CompanyPage>
     );
   }
 }
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
 
 _tradingBottomSheet(BuildContext context, Stock company, String orderType) {
   int priceChange = (company.currentPrice - company.previousDayClose).toInt();
@@ -210,7 +161,7 @@ _tradingBottomSheet(BuildContext context, Stock company, String orderType) {
                               onTap: () {
                                 Navigator.pop(context);
                               },
-                              child: SvgPicture.asset(AppIcons().crossWhite)),
+                              child: SvgPicture.asset(AppIcons.crossWhite)),
                         ],
                       ),
                       const SizedBox(
@@ -412,7 +363,7 @@ _tradingBottomSheet(BuildContext context, Stock company, String orderType) {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   SvgPicture.asset(
-                                    AppIcons().balance,
+                                    AppIcons.balance,
                                   ),
                                   const Text(
                                     ' Balance :',
@@ -1005,6 +956,3 @@ Widget marketStatusTile(String icon, String name, String value, bool isRed) {
     ),
   );
 }
-=======
->>>>>>> feat: place order implementation
->>>>>>> fix: merge issue
