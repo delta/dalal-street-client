@@ -1,3 +1,4 @@
+import 'package:dalal_street_client/blocs/daily_challenges/challenge_reward.dart/challenge_reward_cubit.dart';
 import 'package:dalal_street_client/pages/daily_challenges/components/challenge_progress.dart';
 import 'package:dalal_street_client/config/get_it.dart';
 import 'package:dalal_street_client/pages/daily_challenges/components/challenge_reward.dart';
@@ -8,6 +9,7 @@ import 'package:dalal_street_client/streams/global_streams.dart';
 import 'package:dalal_street_client/theme/colors.dart';
 import 'package:dalal_street_client/utils/challenge_util.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DailyChallengeItem extends StatelessWidget {
   final int marketDay;
@@ -62,9 +64,12 @@ class DailyChallengeItem extends StatelessWidget {
               ),
               Flexible(
                 flex: 1,
-                child: ChallengeReward(
-                  userState: userState,
-                  challenge: challenge,
+                child: BlocProvider(
+                  create: (_) => ChallengeRewardCubit(userState),
+                  child: ChallengeReward(
+                    userState: userState,
+                    challenge: challenge,
+                  ),
                 ),
               ),
             ],

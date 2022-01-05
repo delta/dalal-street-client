@@ -1,7 +1,9 @@
+import 'package:dalal_street_client/blocs/daily_challenges/challenge_reward.dart/challenge_reward_cubit.dart';
 import 'package:dalal_street_client/proto_build/models/DailyChallenge.pb.dart';
 import 'package:dalal_street_client/proto_build/models/UserState.pb.dart';
 import 'package:dalal_street_client/theme/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ChallengeReward extends StatelessWidget {
   final UserState userState;
@@ -14,15 +16,18 @@ class ChallengeReward extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  build(context) {
-    if (!userState.isCompleted) {
-      return challengeIncomplete();
-    } else if (userState.isCompleted && !userState.isRewardClamied) {
-      return claimReward();
-    } else {
-      return rewardClaimed();
-    }
-  }
+  build(context) => BlocBuilder<ChallengeRewardCubit, ChallengeRewardState>(
+        builder: (context, state) {
+          if (state is ChallengeIncomplete) {
+            return challengeIncomplete();
+          } else if (state is ChallengeComplete) {
+            return claimReward();
+          } else if (state is ChallengeRewardCalimed) {
+            return rewardClaimed();
+          }
+          return const CircularProgressIndicator();
+        },
+      );
 
   Widget challengeIncomplete() => Column(
         children: [
