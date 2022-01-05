@@ -1,10 +1,10 @@
 import 'package:bloc/bloc.dart';
 import 'package:dalal_street_client/blocs/dalal/dalal_bloc.dart';
+import 'package:dalal_street_client/config/log.dart';
 import 'package:dalal_street_client/constants/error_messages.dart';
 import 'package:dalal_street_client/grpc/client.dart';
-import 'package:dalal_street_client/main.dart';
 import 'package:dalal_street_client/pages/auth/login_page.dart';
-import 'package:dalal_street_client/global_streams.dart';
+import 'package:dalal_street_client/streams/global_streams.dart';
 import 'package:dalal_street_client/proto_build/actions/Login.pb.dart';
 import 'package:equatable/equatable.dart';
 
@@ -26,11 +26,13 @@ class LoginCubit extends Cubit<LoginState> {
         emit(LoginFailure(loginResp.statusMessage));
         return;
       }
-      final globalStreams = await subscribeToGlobalStreams(sessionId);
+      final globalStreams = await subscribeToGlobalStreams(
+        loginResp.user,
+        sessionId,
+      );
       emit(LoginSuccess(loginResp));
       dalalBloc.add(DalalLogIn(
         loginResp,
-        globalStreams.stockList,
         globalStreams,
       ));
     } catch (e) {

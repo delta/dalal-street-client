@@ -18,34 +18,37 @@ dependencies:
   # Logging
   logger: ^1.1.0
 
+  # Dependency Injection
+  get_it: ^7.2.0
+
+  # RxDart - For better control over streams (Cuz the default Dart Streams Api sucks)
+  rxdart: ^0.27.3
+
   # gRPC
   grpc: ^3.0.2
   protobuf: ^2.0.0
 
-  # BLoC - Stage Management Library
-  # TODO: update bloc version
-  bloc: ^7.2.1
-  bloc_concurrency: ^0.1.0
-  flutter_bloc: ^7.3.0
+  # Bloc - Stage Management
+  bloc: ^8.0.1
+  bloc_concurrency: ^0.2.0
+  flutter_bloc: ^8.0.0
   # Hydrated Bloc
-  hydrated_bloc: ^7.1.0
+  hydrated_bloc: ^8.0.0
   path_provider: ^2.0.6
 
   # Needed for better state classes in Bloc
   equatable: ^2.0.3
 
-  # Dependency Injection
-  get_it: ^7.2.0
-
   # Form Validation
   reactive_forms: ^10.6.5
 
   # Other
-  pin_code_fields: ^7.3.0
+  fixnum: ^1.0.0
   url_launcher: ^6.0.15
   super_tooltip: ^1.0.1
   flutter_svg: ^1.0.0
   flutter_spinbox: ^0.8.0
+  pin_code_fields: ^7.3.0
 
 dev_dependencies:
   flutter_test:

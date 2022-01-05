@@ -1,9 +1,9 @@
+import 'package:dalal_street_client/config/get_it.dart';
+import 'package:dalal_street_client/config/log.dart';
 import 'package:dalal_street_client/grpc/client.dart';
-import 'package:dalal_street_client/main.dart';
-import 'package:dalal_street_client/global_streams.dart';
+import 'package:dalal_street_client/streams/global_streams.dart';
 import 'package:dalal_street_client/proto_build/actions/Login.pb.dart';
 import 'package:dalal_street_client/proto_build/actions/Logout.pb.dart';
-import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
 import 'package:dalal_street_client/proto_build/models/User.pb.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
@@ -46,11 +46,13 @@ class DalalBloc extends HydratedBloc<DalalEvent, DalalState> {
         if (loginResponse.statusCode != LoginResponse_StatusCode.OK) {
           throw Exception(loginResponse.statusMessage);
         }
-        final globalStreams = await subscribeToGlobalStreams(sessionId);
+        final globalStreams = await subscribeToGlobalStreams(
+          loginResponse.user,
+          sessionId,
+        );
         emit(DalalDataLoaded(
           loginResponse.user,
           loginResponse.sessionId,
-          globalStreams.stockList,
           globalStreams,
         ));
       } on GrpcError catch (e) {
@@ -72,7 +74,6 @@ class DalalBloc extends HydratedBloc<DalalEvent, DalalState> {
     on<DalalLogIn>((event, emit) => emit(DalalDataLoaded(
           event.loginResponse.user,
           event.loginResponse.sessionId,
-          event.companies,
           event.globalStreams,
         )));
 

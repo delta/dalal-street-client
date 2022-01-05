@@ -1,21 +1,25 @@
 // TODO: Need a better and simpler routing strategy
 
+import 'package:dalal_street_client/blocs/auth/forgot_password/forgot_password_cubit.dart';
 import 'package:dalal_street_client/blocs/auth/login/login_cubit.dart';
 import 'package:dalal_street_client/blocs/auth/register/register_cubit.dart';
 import 'package:dalal_street_client/blocs/auth/verify_phone/enter_otp/enter_otp_cubit.dart';
 import 'package:dalal_street_client/blocs/auth/verify_phone/enter_phone/enter_phone_cubit.dart';
 import 'package:dalal_street_client/blocs/companies/companies_bloc.dart';
+import 'package:dalal_street_client/blocs/exchange/exchange_cubit.dart';
+import 'package:dalal_street_client/blocs/subscribe/subscribe_cubit.dart';
 import 'package:dalal_street_client/blocs/daily_challenges/daily_challenges_page_cubit.dart';
 import 'package:dalal_street_client/blocs/market_depth/market_depth_bloc.dart';
 import 'package:dalal_street_client/blocs/stock_prices/stock_prices_bloc.dart';
-import 'package:dalal_street_client/blocs/subscribe/subscribe_cubit.dart';
 import 'package:dalal_street_client/pages/auth/check_mail_page.dart';
+import 'package:dalal_street_client/pages/auth/forgot_password_page.dart';
 import 'package:dalal_street_client/pages/auth/login_page.dart';
 import 'package:dalal_street_client/pages/auth/register_page.dart';
 import 'package:dalal_street_client/pages/auth/verify_phone/enter_otp_page.dart';
 import 'package:dalal_street_client/pages/auth/verify_phone/enter_phone_page.dart';
 import 'package:dalal_street_client/pages/daily_challenges/daily_challenges_page.dart';
 import 'package:dalal_street_client/pages/company_page/company_page.dart';
+import 'package:dalal_street_client/pages/exchange_page.dart';
 import 'package:dalal_street_client/pages/home_page.dart';
 import 'package:dalal_street_client/pages/landing_page.dart';
 import 'package:dalal_street_client/pages/splash_page.dart';
@@ -46,6 +50,11 @@ class RouteGenerator {
         return BlocProvider(
           create: (context) => LoginCubit(context.read()),
           child: LoginPage(),
+        );
+      case '/forgotPassword':
+        return BlocProvider(
+          create: (context) => ForgotPasswordCubit(),
+          child: ForgotPasswordPage(),
         );
       case '/register':
         return BlocProvider(
@@ -89,6 +98,7 @@ class RouteGenerator {
           );
         }
         throw Exception('Invalid user args');
+
       case '/dailyChallenges':
         return BlocProvider(
           create: (context) =>
@@ -114,6 +124,14 @@ class RouteGenerator {
           );
         }
         throw Exception('Invalid company args');
+
+      // Stock Exchange Page
+      case '/exchange':
+        return BlocProvider(
+          create: (context) => ExchangeCubit(),
+          child: const ExchangePage(),
+        );
+
       default:
         throw Exception('Invalid Route');
     }

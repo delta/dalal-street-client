@@ -38,18 +38,16 @@ class DalalDataLoaded extends DalalState {
   final User user;
   // Extra Data
   final String sessionId;
-  final Map<int, Stock> companies;
   final GlobalStreams globalStreams;
 
   const DalalDataLoaded(
     this.user,
     this.sessionId,
-    this.companies,
     this.globalStreams,
   );
 
   @override
-  List<Object> get props => [user, sessionId, companies, globalStreams];
+  List<Object> get props => [user, sessionId, globalStreams];
 }
 
 /// When failure happens in getting user data

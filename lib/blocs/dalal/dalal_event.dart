@@ -24,13 +24,12 @@ class GetUserData extends DalalEvent {
 
 class DalalLogIn extends DalalEvent {
   final LoginResponse loginResponse;
-  final Map<int, Stock> companies;
   final GlobalStreams globalStreams;
 
-  const DalalLogIn(this.loginResponse, this.companies, this.globalStreams);
+  const DalalLogIn(this.loginResponse, this.globalStreams);
 
   @override
-  List<Object> get props => [loginResponse, companies, globalStreams];
+  List<Object> get props => [loginResponse, globalStreams];
 }
 
 class DalalLogOut extends DalalEvent {
