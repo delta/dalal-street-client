@@ -1,6 +1,6 @@
-import 'package:dalal_street_client/pages/homepage/components/news.dart';
-import 'package:dalal_street_client/pages/homepage/components/overview.dart';
-import 'package:dalal_street_client/pages/homepage/components/market_depth.dart';
+import 'package:dalal_street_client/pages/company_page/components/news.dart';
+import 'package:dalal_street_client/pages/company_page/components/overview.dart';
+import 'package:dalal_street_client/pages/company_page/components/market_depth.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
 import 'package:dalal_street_client/theme/colors.dart';
 import 'package:flutter/rendering.dart';

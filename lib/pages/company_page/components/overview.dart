@@ -1,6 +1,6 @@
 import 'package:dalal_street_client/constants/icons.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
-import 'package:dalal_street_client/pages/homepage/components/market_status_tile.dart';
+import 'package:dalal_street_client/pages/company_page/components/market_status_tile.dart';
 import 'package:dalal_street_client/theme/colors.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';

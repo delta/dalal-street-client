@@ -6,8 +6,8 @@ import 'package:dalal_street_client/components/buttons/secondary_button.dart';
 import 'package:dalal_street_client/constants/icons.dart';
 import 'package:dalal_street_client/main.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
-import 'package:dalal_street_client/pages/homepage/components/calculate_order_fee.dart';
-import 'package:dalal_street_client/pages/homepage/components/show_price_window.dart';
+import 'package:dalal_street_client/pages/company_page/components/calculate_order_fee.dart';
+import 'package:dalal_street_client/pages/company_page/components/show_price_window.dart';
 import 'package:dalal_street_client/theme/colors.dart';
 import 'package:dalal_street_client/utils/snackbar.dart';
 import 'package:flutter/rendering.dart';
@@ -333,14 +333,13 @@ void tradingBottomSheet(BuildContext context, Stock company, String orderType) {
                                               SizedBox(
                                                 width: 150,
                                                 child: TextField(
-                                                    decoration:
-                                                        const InputDecoration(
-                                                            border:
-                                                                OutlineInputBorder(),
-                                                            labelText: 'Price',
-                                                            contentPadding:
-                                                                EdgeInsets.all(
-                                                                    8)),
+                                                    decoration: const InputDecoration(
+                                                        border:
+                                                            OutlineInputBorder(),
+                                                        labelText:
+                                                            'Price per stock',
+                                                        contentPadding:
+                                                            EdgeInsets.all(8)),
                                                     onChanged: (value) =>
                                                         totalPrice =
                                                             int.parse(value)),
