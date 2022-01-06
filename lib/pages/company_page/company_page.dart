@@ -49,9 +49,13 @@ class _CompanyPageState extends State<CompanyPage>
   // ignore: must_call_super
   Widget build(BuildContext context) {
     final stockList = getIt<GlobalStreams>().latestStockMap;
+<<<<<<< HEAD
     final int stockId = widget.data.first;
     final int cash = widget.data.last;
     Stock company = stockList[stockId]!;
+=======
+    Stock company = stockList[widget.stockId]!;
+>>>>>>> fix: global streams used, unnecessary bloc removed
     return SafeArea(
       child: Responsive(
         mobile: Scaffold(
