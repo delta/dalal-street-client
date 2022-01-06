@@ -1,10 +1,10 @@
 import 'package:dalal_street_client/blocs/stock_prices/stock_prices_bloc.dart';
 import 'package:dalal_street_client/blocs/subscribe/subscribe_cubit.dart';
 import 'package:dalal_street_client/config/get_it.dart';
-import 'package:dalal_street_client/config/log.dart';
 import 'package:dalal_street_client/proto_build/datastreams/Subscribe.pb.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
 import 'package:dalal_street_client/proto_build/models/User.pb.dart';
+import 'package:dalal_street_client/streams/global_streams.dart';
 import 'package:dalal_street_client/utils/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -168,44 +168,55 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _stockList() {
-    var stockList = getIt<Map<int, Stock>>();
-    return BlocBuilder<SubscribeCubit, SubscribeState>(
-        builder: (context, state) {
-      if (state is SubscriptionDataLoaded) {
-        // Start the stream of Stock Prices
-        context
-            .read<StockPricesBloc>()
-            .add(SubscribeToStockPrices(state.subscriptionId));
-        return ListView.builder(
-          shrinkWrap: true,
-          itemCount: stockList.length,
-          itemBuilder: (context, index) {
-            Stock? company = stockList[index + 1];
-            int currentPrice = company?.currentPrice.toInt() ?? 0;
-            int previousDayPrice = company?.previousDayClose.toInt() ?? 0;
-            var priceChange = (currentPrice - previousDayPrice);
-            return _stockItem(company, index, priceChange, currentPrice);
-          },
-        );
-      } else if (state is SubscriptonDataFailed) {
-        logger.i('Stock Prices Stream Failed $state');
-        return const Center(
-          child: Text(
-            'Failed to load data \nReason : //',
-            style: TextStyle(
-              fontSize: 14,
-              color: secondaryColor,
-            ),
-          ),
-        );
-      } else {
-        return const Center(
-          child: CircularProgressIndicator(
-            color: secondaryColor,
-          ),
-        );
-      }
-    });
+    var stockList = getIt<GlobalStreams>().latestStockMap;
+    return ListView.builder(
+      shrinkWrap: true,
+      itemCount: stockList.length,
+      itemBuilder: (context, index) {
+        Stock? company = stockList[index + 1];
+        int currentPrice = company?.currentPrice.toInt() ?? 0;
+        int previousDayPrice = company?.previousDayClose.toInt() ?? 0;
+        var priceChange = (currentPrice - previousDayPrice);
+        return _stockItem(company, index, priceChange, currentPrice);
+      },
+    );
+    // return BlocBuilder<SubscribeCubit, SubscribeState>(
+    //     builder: (context, state) {
+    //   if (state is SubscriptionDataLoaded) {
+    //     // Start the stream of Stock Prices
+    //     context
+    //         .read<StockPricesBloc>()
+    //         .add(SubscribeToStockPrices(state.subscriptionId));
+    //     return ListView.builder(
+    //       shrinkWrap: true,
+    //       itemCount: stockList.length,
+    //       itemBuilder: (context, index) {
+    //         Stock? company = stockList[index + 1];
+    //         int currentPrice = company?.currentPrice.toInt() ?? 0;
+    //         int previousDayPrice = company?.previousDayClose.toInt() ?? 0;
+    //         var priceChange = (currentPrice - previousDayPrice);
+    //         return _stockItem(company, index, priceChange, currentPrice);
+    //       },
+    //     );
+    //   } else if (state is SubscriptonDataFailed) {
+    //     logger.i('Stock Prices Stream Failed $state');
+    //     return const Center(
+    //       child: Text(
+    //         'Failed to load data \nReason : //',
+    //         style: TextStyle(
+    //           fontSize: 14,
+    //           color: secondaryColor,
+    //         ),
+    //       ),
+    //     );
+    //   } else {
+    //     return const Center(
+    //       child: CircularProgressIndicator(
+    //         color: secondaryColor,
+    //       ),
+    //     );
+    //   }
+    // });
   }
 
   Widget _stockItem(

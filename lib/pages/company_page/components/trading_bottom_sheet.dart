@@ -38,7 +38,6 @@ void tradingBottomSheet(BuildContext context, Stock company, String orderType) {
                     'Order successfully placed with Order ID: ${state.orderId}');
               } else if (state is PlaceOrderFailure) {
                 logger.i('unsuccessful');
-                logger.i(state.statusMessage);
                 Navigator.pop(context);
                 showSnackBar(context, state.statusMessage);
               }
@@ -47,6 +46,8 @@ void tradingBottomSheet(BuildContext context, Stock company, String orderType) {
               if (state is PlaceOrderLoading) {
                 logger.i('loading');
                 return const Center(child: CircularProgressIndicator());
+              } else if (state is PlaceOrderFailure) {
+                logger.i('unsuccessful');
               }
               return BottomSheet(
                 backgroundColor: backgroundColor,
@@ -422,7 +423,7 @@ void tradingBottomSheet(BuildContext context, Stock company, String orderType) {
                                                 Int64(totalPrice),
                                                 Int64(quantity));
                                         logger.i(
-                                            '$quantity, $totalPrice, $priceType.toString()');
+                                            '$isAsk, ${company.id}, ${company.shortName}, $quantity, $totalPrice, $priceType.toString()');
                                       })
                                 ],
                               ),

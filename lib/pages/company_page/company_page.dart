@@ -6,6 +6,7 @@ import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
 import 'package:dalal_street_client/pages/company_page/components/company_tab_view.dart';
 import 'package:dalal_street_client/pages/company_page/components/company_prices.dart';
 import 'package:dalal_street_client/pages/company_page/components/choose_buy_or_sell_bottom_sheet.dart';
+import 'package:dalal_street_client/streams/global_streams.dart';
 import 'package:dalal_street_client/theme/colors.dart';
 import 'package:dalal_street_client/utils/responsive.dart';
 import 'package:flutter/material.dart';
@@ -36,7 +37,7 @@ class _CompanyPageState extends State<CompanyPage>
   @override
   // ignore: must_call_super
   Widget build(BuildContext context) {
-    final stockList = getIt<Map<int, Stock>>();
+    final stockList = getIt<GlobalStreams>().latestStockMap;
     Stock company = stockList[widget.stockId]!;
     return SafeArea(
       child: Responsive(
