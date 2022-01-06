@@ -93,8 +93,7 @@ class DalalApp extends StatelessWidget {
               }
               _navigator.pushNamedAndRemoveUntil('/landing', (route) => false);
             } else if (state is DalalLoginFailed) {
-              // TODO: add retry button
-              showSnackBar(context, failedToReachServer);
+              // Handled in SplashPage
             }
           },
           child: child,
