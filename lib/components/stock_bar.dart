@@ -39,7 +39,7 @@ class StockBarMarquee extends StatelessWidget {
 
     stocks.forEach((i, stock) => {
           stockBarItemList.add(StockBarItem(
-              companyName: stock.fullName,
+              companyName: stock.fullName.toUpperCase(),
               stockId: i,
               previousDayClosePrice: stock.previousDayClose,
               currentPrice: stock.currentPrice))
@@ -48,7 +48,7 @@ class StockBarMarquee extends StatelessWidget {
     return Marquee(
       child: Row(
         children: [
-          const SizedBox(width: 2.0),
+          const SizedBox(width: 20.0),
           ...stockBarItemList,
           const SizedBox(
             width: 2.0,
@@ -84,7 +84,7 @@ class StockBarItem extends StatelessWidget {
           companyName,
           style: const TextStyle(
             fontSize: 13,
-            color: whiteWithOpacity75,
+            color: white,
           ),
         ),
         const SizedBox(
@@ -99,13 +99,19 @@ class StockBarItem extends StatelessWidget {
 
             bool isLowOrHigh = stockPrice > previousDayClosePrice;
 
-            Int64 percentageHighOrLow = previousDayClosePrice == 0
-                ? previousDayClosePrice
-                : (previousDayClosePrice - stockPrice) ~/ previousDayClosePrice;
+            double percentageHighOrLow;
+
+            if (previousDayClosePrice == 0) {
+              percentageHighOrLow = stockPrice.toDouble();
+            } else {
+              percentageHighOrLow =
+                  ((stockPrice.toDouble() - previousDayClosePrice.toDouble()) /
+                      previousDayClosePrice.toDouble());
+            }
 
             return Row(
               children: [
-                Text(oCcy.format(stockPrice).toString(),
+                Text('₹' + oCcy.format(stockPrice).toString(),
                     style: const TextStyle(
                       fontSize: 13,
                       color: whiteWithOpacity50,
@@ -113,12 +119,12 @@ class StockBarItem extends StatelessWidget {
                 const SizedBox(
                   width: 5.0,
                 ),
-                Text('${oCcy.format(percentageHighOrLow).toString()}%',
+                Text('${oCcy.format(percentageHighOrLow.abs()).toString()}%',
                     style: TextStyle(
-                        fontSize: 13,
+                        fontSize: 14,
                         color: isLowOrHigh ? secondaryColor : heartRed)),
                 const SizedBox(
-                  width: 3.0,
+                  width: 1.0,
                 ),
                 isLowOrHigh
                     ? Image.asset('assets/images/trendingUp.png',
