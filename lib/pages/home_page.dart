@@ -97,7 +97,8 @@ class _HomePageState extends State<HomePage> {
           const SizedBox(
             height: 10,
           ),
-          _recentNews()
+          _recentNews(),
+           FlatButton(onPressed: ()=> movetonews(), child: Text('move to news'))
         ],
       ),
     );
@@ -327,4 +328,7 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+  movetonews()
+  {
+  Navigator.of(context).pushNamed('/news_page');  }
 }
