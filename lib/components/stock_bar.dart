@@ -1,29 +1,23 @@
-import 'package:dalal_street_client/blocs/stock_bar/stockbar_cubit.dart';
 import 'package:dalal_street_client/components/marquee.dart';
 import 'package:dalal_street_client/config/get_it.dart';
 import 'package:dalal_street_client/constants/format.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
 import 'package:dalal_street_client/theme/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:dalal_street_client/streams/global_streams.dart';
 
 import 'package:fixnum/fixnum.dart';
-
-import '../global_streams.dart';
 
 class StockBar extends StatelessWidget {
   const StockBar({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => StockbarCubit(),
-      child: Container(
-        child: StockBarMarquee(),
-        color: backgroundColor,
-        height: 30.0,
-        margin: const EdgeInsets.only(bottom: 1.0),
-      ),
+    return Container(
+      child: StockBarMarquee(),
+      color: backgroundColor,
+      height: 30.0,
+      margin: const EdgeInsets.only(bottom: 1.0),
     );
   }
 }
@@ -31,7 +25,7 @@ class StockBar extends StatelessWidget {
 class StockBarMarquee extends StatelessWidget {
   StockBarMarquee({Key? key}) : super(key: key);
 
-  final Map<int, Stock> stocks = getIt<GlobalStreams>().stockList;
+  final Map<int, Stock> stocks = getIt<GlobalStreams>().stockMapStream.value;
 
   @override
   Widget build(BuildContext context) {
@@ -39,10 +33,12 @@ class StockBarMarquee extends StatelessWidget {
 
     stocks.forEach((i, stock) => {
           stockBarItemList.add(StockBarItem(
-              companyName: stock.fullName.toUpperCase(),
-              stockId: i,
-              previousDayClosePrice: stock.previousDayClose,
-              currentPrice: stock.currentPrice))
+            companyName: stock.fullName.toUpperCase(),
+            stockId: i,
+            previousDayClosePrice: stock.previousDayClose,
+            currentPrice: stock.currentPrice,
+            stockPriceStream: _getPerStockStreamMap(i),
+          ))
         });
 
     return Marquee(
@@ -60,6 +56,12 @@ class StockBarMarquee extends StatelessWidget {
       animationDuration: const Duration(milliseconds: 10000),
     );
   }
+
+  Stream<Int64> _getPerStockStreamMap(int stockId) {
+    return getIt<GlobalStreams>()
+        .stockMapStream
+        .map((event) => event[stockId]!.currentPrice);
+  }
 }
 
 class StockBarItem extends StatelessWidget {
@@ -67,13 +69,15 @@ class StockBarItem extends StatelessWidget {
   final String companyName;
   final Int64 previousDayClosePrice;
   final Int64 currentPrice;
+  final Stream<Int64> stockPriceStream;
 
   const StockBarItem(
       {Key? key,
       required this.stockId,
       required this.companyName,
       required this.previousDayClosePrice,
-      required this.currentPrice})
+      required this.currentPrice,
+      required this.stockPriceStream})
       : super(key: key);
 
   @override
@@ -90,12 +94,11 @@ class StockBarItem extends StatelessWidget {
         const SizedBox(
           width: 5.0,
         ),
-        BlocBuilder<StockbarCubit, StockbarState>(
+        StreamBuilder<Int64>(
+          stream: stockPriceStream,
+          initialData: currentPrice,
           builder: (context, state) {
-            Int64 stockPrice = currentPrice;
-            if (state is StockPriceUpdate) {
-              stockPrice = state.stockPrice[stockId]!;
-            }
+            Int64 stockPrice = state.data!;
 
             bool isLowOrHigh = stockPrice > previousDayClosePrice;
 
@@ -137,7 +140,7 @@ class StockBarItem extends StatelessWidget {
               ],
             );
           },
-        ),
+        )
       ],
     );
   }
