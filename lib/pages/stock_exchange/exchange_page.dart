@@ -1,11 +1,9 @@
 import 'package:dalal_street_client/blocs/exchange/exchange_cubit.dart';
-import 'package:dalal_street_client/blocs/exchange/sheet/exchange_sheet_cubit.dart';
+import 'package:dalal_street_client/pages/stock_exchange/components/exchange_bottom_sheet.dart';
 import 'package:dalal_street_client/config/get_it.dart';
 import 'package:dalal_street_client/streams/global_streams.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
-import 'package:dalal_street_client/theme/buttons.dart';
 import 'package:dalal_street_client/theme/colors.dart';
-import 'package:dalal_street_client/utils/snackbar.dart';
 import 'package:fixnum/fixnum.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,7 +11,7 @@ import 'package:intl/intl.dart';
 
 final oCcy = NumberFormat('#,##0.00', 'en_US');
 
-// todo: UI similar to figma mock up
+// todo: navigate to company page on clicking view button
 class ExchangePage extends StatefulWidget {
   const ExchangePage({Key? key}) : super(key: key);
 
@@ -64,24 +62,22 @@ class _ExchangePageState extends State<ExchangePage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
-              'Stock Exchange',
+              'Delta Stock Exchange',
               style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w500,
-                  color: whiteWithOpacity75),
-              textAlign: TextAlign.center,
+                  fontSize: 18, fontWeight: FontWeight.w500, color: lightGray),
+              textAlign: TextAlign.end,
             ),
             const SizedBox(
               height: 20,
             ),
             const Text(
-              'Companies',
+              'Companies in DSE',
               style: TextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.w700,
                 color: white,
               ),
-              textAlign: TextAlign.start,
+              textAlign: TextAlign.end,
             ),
             const SizedBox(
               height: 20,
@@ -91,7 +87,9 @@ class _ExchangePageState extends State<ExchangePage> {
         ),
       );
 
-  Widget _exchangeBody() => ListView.builder(
+  Widget _exchangeBody() => ListView.separated(
+        physics: const BouncingScrollPhysics(),
+        scrollDirection: Axis.vertical,
         shrinkWrap: true,
         itemCount: mapOfStocks.length,
         itemBuilder: (context, index) {
@@ -106,24 +104,32 @@ class _ExchangePageState extends State<ExchangePage> {
             currentPrice,
           );
         },
+        separatorBuilder: (BuildContext context, int index) {
+          return const SizedBox(
+            height: 10,
+          );
+        },
       );
 
   Widget _stockExchangeItem(
     Stock? company,
-    int index,
+    int stockId,
     int priceChange,
     int currentPrice,
   ) =>
       Container(
-        padding: const EdgeInsets.symmetric(vertical: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+        decoration: const BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+          color: baseColor,
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Row(mainAxisAlignment: MainAxisAlignment.start, children: [
               _stockNames(company),
-              _stockGraph(),
               _stockPrices(
-                index,
+                stockId,
                 priceChange,
                 currentPrice,
               ),
@@ -131,26 +137,54 @@ class _ExchangePageState extends State<ExchangePage> {
             const SizedBox(
               height: 10,
             ),
-            _stockExchangeDetails(index, company),
+            _stockExchangeDetails(stockId, company),
             const SizedBox(
               height: 10,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Expanded(
+                SizedBox(
+                  height: 40,
+                  width: 100,
                   child: ElevatedButton(
-                    style: secondaryButtonStyle,
+                    style: ButtonStyle(
+                        shape: MaterialStateProperty.all<OutlinedBorder>(
+                            const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(10.0),
+                          ),
+                        )),
+                        overlayColor: MaterialStateProperty.all(secondaryColor),
+                        backgroundColor: MaterialStateProperty.all(
+                            primaryColor.withOpacity(0.2))),
                     onPressed: () {},
-                    child: const Text('View'),
+                    child: const Text(
+                      'View',
+                      style: TextStyle(color: primaryColor, fontSize: 14),
+                    ),
                   ),
                 ),
                 const SizedBox(width: 20),
-                Expanded(
+                SizedBox(
+                  height: 40,
+                  width: 100,
                   child: ElevatedButton(
-                    onPressed: () => _showModalSheet(
-                        index, company?.fullName ?? 'Airtel', currentPrice),
-                    child: const Text('Buy'),
+                    style: ButtonStyle(
+                        shape: MaterialStateProperty.all<OutlinedBorder>(
+                            const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(10.0),
+                          ),
+                        )),
+                        overlayColor:
+                            MaterialStateProperty.all(secondaryColor)),
+                    onPressed: () => _showModalSheet(stockId,
+                        company?.fullName ?? 'Airtel', currentPrice, company),
+                    child: const Text(
+                      'Buy',
+                      style: TextStyle(fontSize: 14),
+                    ),
                   ),
                 ),
               ],
@@ -179,17 +213,8 @@ class _ExchangePageState extends State<ExchangePage> {
     );
   }
 
-  Widget _stockGraph() {
-    return Expanded(
-      child: Image.network(
-        'https://i.imgur.com/zrmdl8j.png',
-        height: 23,
-      ),
-    );
-  }
-
   Widget _stockPrices(
-    int index,
+    int stockId,
     int priceChange,
     int currentPrice,
   ) =>
@@ -199,11 +224,11 @@ class _ExchangePageState extends State<ExchangePage> {
             return Expanded(
               child: () {
                 int currentStockPrice =
-                    state.exchangeData[index + 1]?.price.toInt() ??
-                        mapOfStocks[index]?.currentPrice.toInt() ??
+                    state.exchangeData[stockId]?.price.toInt() ??
+                        mapOfStocks[stockId]?.currentPrice.toInt() ??
                         0;
 
-                mapOfStocks[index]?.currentPrice = Int64(currentStockPrice);
+                mapOfStocks[stockId]?.currentPrice = Int64(currentStockPrice);
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
@@ -221,9 +246,6 @@ class _ExchangePageState extends State<ExchangePage> {
                         fontSize: 14,
                         color: priceChange > 0 ? secondaryColor : heartRed,
                       ),
-                    ),
-                    const SizedBox(
-                      height: 20,
                     ),
                   ],
                 );
@@ -254,20 +276,20 @@ class _ExchangePageState extends State<ExchangePage> {
       );
 
   Widget _stockExchangeDetails(
-    int index,
+    int stockId,
     Stock? company,
   ) =>
       BlocBuilder<ExchangeCubit, ExchangeState>(
         builder: (context, state) {
           if (state is ExchangeDataLoaded) {
             int stocksInMarket =
-                state.exchangeData[index]?.stocksInMarket.toInt() ??
-                    (mapOfStocks[index]?.stocksInMarket.toInt() ?? 0);
-            mapOfStocks[index]?.stocksInMarket = Int64(stocksInMarket);
+                state.exchangeData[stockId]?.stocksInMarket.toInt() ??
+                    (mapOfStocks[stockId]?.stocksInMarket.toInt() ?? 0);
+            mapOfStocks[stockId]?.stocksInMarket = Int64(stocksInMarket);
             int stocksInExchange =
-                state.exchangeData[index]?.stocksInExchange.toInt() ??
-                    (mapOfStocks[index]?.stocksInExchange.toInt() ?? 0);
-            mapOfStocks[index]?.stocksInExchange = Int64(stocksInExchange);
+                state.exchangeData[stockId]?.stocksInExchange.toInt() ??
+                    (mapOfStocks[stockId]?.stocksInExchange.toInt() ?? 0);
+            mapOfStocks[stockId]?.stocksInExchange = Int64(stocksInExchange);
             return Column(
               children: [
                 Row(
@@ -275,7 +297,10 @@ class _ExchangePageState extends State<ExchangePage> {
                   children: [
                     const Expanded(child: Text('Stocks in Market')),
                     const SizedBox(width: 10),
-                    Text(stocksInMarket.toString())
+                    Text(
+                      stocksInMarket.toString(),
+                      style: const TextStyle(color: bronze),
+                    )
                   ],
                 ),
                 const SizedBox(
@@ -286,7 +311,8 @@ class _ExchangePageState extends State<ExchangePage> {
                   children: [
                     const Expanded(child: Text('Stocks in Exchange')),
                     const SizedBox(width: 10),
-                    Text(stocksInExchange.toString())
+                    Text(stocksInExchange.toString(),
+                        style: const TextStyle(color: gold))
                   ],
                 ),
               ],
@@ -319,110 +345,16 @@ class _ExchangePageState extends State<ExchangePage> {
         },
       );
 
-  // todo: Better UI for the model sheet similar to figma
-  // todo: validations
-  void _showModalSheet(int stockId, String stockName, int currentPrice) {
+  void _showModalSheet(
+      int stockId, String stockName, int currentPrice, Stock? company) {
     showModalBottomSheet(
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(top: Radius.circular(25.0))),
-        backgroundColor: Colors.black38,
+        backgroundColor: Colors.black,
         context: context,
+        isScrollControlled: true,
         builder: (_) {
-          final _controller = TextEditingController();
-          return Padding(
-            child: BlocProvider(
-              create: (context) => ExchangeSheetCubit(),
-              child: BlocConsumer<ExchangeSheetCubit, ExchangeSheetState>(
-                listener: (context, state) {
-                  if (state is ExchangeSheetSuccess) {
-                    showSnackBar(
-                        context, 'Successfully bought $stockName stocks');
-                    Navigator.maybePop(context);
-                  } else if (state is ExchangeSheetFailure) {
-                    showSnackBar(context, state.msg);
-                  }
-                },
-                builder: (context, state) {
-                  if (state is ExchangeSheetLoading) {
-                    return const Center(
-                      child: CircularProgressIndicator(
-                        color: Colors.green,
-                      ),
-                    );
-                  } else if (state is ExchangeSheetFailure) {
-                    return Center(
-                      child: Text(state.msg),
-                    );
-                  }
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        stockName,
-                        style: const TextStyle(
-                          fontSize: 26.0,
-                        ),
-                      ),
-                      Text(
-                        currentPrice.toString(),
-                        style: const TextStyle(
-                          fontSize: 20.0,
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          const Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Text(
-                              'Number of Stocks',
-                              style: TextStyle(
-                                fontSize: 22.0,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 30.0,
-                          ),
-                          Container(
-                            alignment: Alignment.centerRight,
-                            width: 100.0,
-                            padding: const EdgeInsets.all(8.0),
-                            child: TextField(
-                              style: const TextStyle(
-                                  fontSize: 20.0,
-                                  height: 0.25,
-                                  color: Colors.white),
-                              controller: _controller,
-                              keyboardType: TextInputType.number,
-                            ),
-                          )
-                        ],
-                      ),
-                      ElevatedButton(
-                        onPressed: () {
-                          int stockQuantity = int.parse(
-                              _controller.text == '' ? '0' : _controller.text);
-
-                          if (stockQuantity > 0) {
-                            context
-                                .read<ExchangeSheetCubit>()
-                                .buyStocksFromExchange(stockId, stockQuantity);
-                          }
-                          _controller.text = '';
-                        },
-                        child: const Text('Buy Stocks from Exchange'),
-                      )
-                    ],
-                  );
-                },
-              ),
-            ),
-            padding: const EdgeInsets.all(20.0),
-          );
+          return ExchangeBottomSheet(company: company ?? Stock());
         });
   }
 }

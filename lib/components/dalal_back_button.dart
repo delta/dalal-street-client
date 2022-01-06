@@ -13,14 +13,14 @@ class DalalBackButton extends StatelessWidget {
           children: const [
             Icon(
               Icons.arrow_back_rounded,
-              color: lightGrey,
+              color: lightGray,
             ),
             SizedBox(width: 8),
             Text(
               'Back',
               style: TextStyle(
                 fontSize: 18,
-                color: lightGrey,
+                color: lightGray,
                 fontWeight: FontWeight.w400,
               ),
             ),
