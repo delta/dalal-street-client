@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:dalal_street_client/streams/global_streams.dart';
 
 import 'package:fixnum/fixnum.dart';
+import 'package:rxdart/rxdart.dart';
 
 class StockBar extends StatelessWidget {
   const StockBar({Key? key}) : super(key: key);
@@ -26,18 +27,19 @@ class StockBarMarquee extends StatelessWidget {
   StockBarMarquee({Key? key}) : super(key: key);
 
   final Map<int, Stock> stocks = getIt<GlobalStreams>().stockMapStream.value;
+  final stockMapStream = getIt<GlobalStreams>().stockMapStream;
 
   @override
   Widget build(BuildContext context) {
     var stockBarItemList = <StockBarItem>[];
 
-    stocks.forEach((i, stock) => {
+    stocks.forEach((stockId, stock) => {
           stockBarItemList.add(StockBarItem(
             companyName: stock.fullName.toUpperCase(),
-            stockId: i,
+            stockId: stockId,
             previousDayClosePrice: stock.previousDayClose,
             currentPrice: stock.currentPrice,
-            stockPriceStream: _getPerStockStreamMap(i),
+            stockPriceStream: _getStockPriceStream(stockId, stockMapStream),
           ))
         });
 
@@ -57,11 +59,10 @@ class StockBarMarquee extends StatelessWidget {
     );
   }
 
-  Stream<Int64> _getPerStockStreamMap(int stockId) {
-    return getIt<GlobalStreams>()
-        .stockMapStream
-        .map((event) => event[stockId]!.currentPrice);
-  }
+  // returns a stock price stream of a particular stock id
+  static Stream<Int64> _getStockPriceStream(
+          int stockId, ValueStream<Map<int, Stock>> stockMapStream) =>
+      stockMapStream.map((event) => event[stockId]!.currentPrice).distinct();
 }
 
 class StockBarItem extends StatelessWidget {
