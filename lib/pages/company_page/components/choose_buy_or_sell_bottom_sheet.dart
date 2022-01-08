@@ -8,7 +8,7 @@ import 'package:intl/intl.dart';
 
 final oCcy = NumberFormat('#,##0.00', 'en_US');
 
-void chooseBuyOrSellBottomSheet(BuildContext context, Stock company) {
+void chooseBuyOrSellBottomSheet(BuildContext context, Stock company, int cash) {
   int priceChange = (company.currentPrice - company.previousDayClose).toInt();
   showModalBottomSheet(
       backgroundColor: backgroundColor,
@@ -104,7 +104,8 @@ void chooseBuyOrSellBottomSheet(BuildContext context, Stock company) {
                                 fontSize: 18,
                                 onPressed: () {
                                   Navigator.pop(context);
-                                  tradingBottomSheet(context, company, 'Sell');
+                                  tradingBottomSheet(
+                                      context, company, 'Sell', cash);
                                 },
                               ),
                               TertiaryButton(
@@ -114,7 +115,8 @@ void chooseBuyOrSellBottomSheet(BuildContext context, Stock company) {
                                 fontSize: 18,
                                 onPressed: () {
                                   Navigator.pop(context);
-                                  tradingBottomSheet(context, company, 'Buy');
+                                  tradingBottomSheet(
+                                      context, company, 'Buy', cash);
                                 },
                               ),
                             ]),

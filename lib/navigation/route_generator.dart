@@ -19,7 +19,6 @@ import 'package:dalal_street_client/pages/auth/verify_phone/enter_otp_page.dart'
 import 'package:dalal_street_client/pages/auth/verify_phone/enter_phone_page.dart';
 import 'package:dalal_street_client/pages/daily_challenges/daily_challenges_page.dart';
 import 'package:dalal_street_client/pages/company_page/company_page.dart';
-import 'package:dalal_street_client/pages/exchange_page.dart';
 import 'package:dalal_street_client/pages/stock_exchange/exchange_page.dart';
 import 'package:dalal_street_client/pages/home_page.dart';
 import 'package:dalal_street_client/pages/landing_page.dart';
@@ -108,7 +107,7 @@ class RouteGenerator {
         );
       // Company Page
       case '/company':
-        if (args is int) {
+        if (args is List<int>) {
           return MultiBlocProvider(
             providers: [
               BlocProvider(
@@ -121,10 +120,10 @@ class RouteGenerator {
                 create: (context) => SubscribeCubit(),
               ),
             ],
-            child: CompanyPage(stockId: args),
+            child: CompanyPage(data: args),
           );
         }
-        throw Exception('Invalid company args');
+        throw Exception('Invalid company or user args' + args.toString());
 
       // Stock Exchange Page
       case '/exchange':

@@ -24,7 +24,7 @@ Container companyTabView(BuildContext context, Stock company) {
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
-                      color: lightGrey,
+                      color: lightGray,
                     ),
                     textAlign: TextAlign.start,
                   ),
@@ -35,7 +35,7 @@ Container companyTabView(BuildContext context, Stock company) {
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
-                      color: lightGrey,
+                      color: lightGray,
                     ),
                     textAlign: TextAlign.start,
                   ),
@@ -46,7 +46,7 @@ Container companyTabView(BuildContext context, Stock company) {
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
-                      color: lightGrey,
+                      color: lightGray,
                     ),
                     textAlign: TextAlign.start,
                   ),

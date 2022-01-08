@@ -180,50 +180,14 @@ class _HomePageState extends State<HomePage> {
         return _stockItem(company, index, priceChange, currentPrice);
       },
     );
-    // return BlocBuilder<SubscribeCubit, SubscribeState>(
-    //     builder: (context, state) {
-    //   if (state is SubscriptionDataLoaded) {
-    //     // Start the stream of Stock Prices
-    //     context
-    //         .read<StockPricesBloc>()
-    //         .add(SubscribeToStockPrices(state.subscriptionId));
-    //     return ListView.builder(
-    //       shrinkWrap: true,
-    //       itemCount: stockList.length,
-    //       itemBuilder: (context, index) {
-    //         Stock? company = stockList[index + 1];
-    //         int currentPrice = company?.currentPrice.toInt() ?? 0;
-    //         int previousDayPrice = company?.previousDayClose.toInt() ?? 0;
-    //         var priceChange = (currentPrice - previousDayPrice);
-    //         return _stockItem(company, index, priceChange, currentPrice);
-    //       },
-    //     );
-    //   } else if (state is SubscriptonDataFailed) {
-    //     logger.i('Stock Prices Stream Failed $state');
-    //     return const Center(
-    //       child: Text(
-    //         'Failed to load data \nReason : //',
-    //         style: TextStyle(
-    //           fontSize: 14,
-    //           color: secondaryColor,
-    //         ),
-    //       ),
-    //     );
-    //   } else {
-    //     return const Center(
-    //       child: CircularProgressIndicator(
-    //         color: secondaryColor,
-    //       ),
-    //     );
-    //   }
-    // });
   }
 
   Widget _stockItem(
       Stock? company, int index, int priceChange, int currentPrice) {
+    List<int> data = [company!.id, widget.user.cash.toInt()];
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, '/company', arguments: company!.id);
+        Navigator.pushNamed(context, '/company', arguments: data);
       },
       child: Container(
           padding: const EdgeInsets.symmetric(

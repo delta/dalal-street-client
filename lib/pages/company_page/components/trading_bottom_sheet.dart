@@ -18,7 +18,8 @@ import 'package:intl/intl.dart';
 
 final oCcy = NumberFormat('#,##0.00', 'en_US');
 
-void tradingBottomSheet(BuildContext context, Stock company, String orderType) {
+void tradingBottomSheet(
+    BuildContext context, Stock company, String orderType, int cash) {
   int priceChange = (company.currentPrice - company.previousDayClose).toInt();
   int quantity = 1;
   int totalPrice = company.currentPrice.toInt() * quantity;
@@ -298,19 +299,25 @@ void tradingBottomSheet(BuildContext context, Stock company, String orderType) {
                                                 CrossAxisAlignment.end,
                                             children: [
                                               SizedBox(
-                                                width: 150,
-                                                child: TextField(
-                                                    decoration: const InputDecoration(
-                                                        border:
-                                                            OutlineInputBorder(),
-                                                        labelText:
-                                                            'Price per stock',
-                                                        contentPadding:
-                                                            EdgeInsets.all(8)),
-                                                    onChanged: (value) =>
-                                                        totalPrice =
-                                                            int.parse(value)),
-                                              ),
+                                                  width: 150,
+                                                  child: TextField(
+                                                      decoration: const InputDecoration(
+                                                          border:
+                                                              OutlineInputBorder(),
+                                                          labelText:
+                                                              'Price per stock',
+                                                          contentPadding:
+                                                              EdgeInsets.all(
+                                                                  8)),
+                                                      onChanged:
+                                                          (String? value) {
+                                                        if (value != null) {
+                                                          totalPrice =
+                                                              int.parse(value);
+                                                        } else {
+                                                          totalPrice = 0;
+                                                        }
+                                                      })),
                                               Text(
                                                 // orderPriceWindow,
                                                 showPriceWindow(company
@@ -339,9 +346,14 @@ void tradingBottomSheet(BuildContext context, Stock company, String orderType) {
                                                             'Price per stock',
                                                         contentPadding:
                                                             EdgeInsets.all(8)),
-                                                    onChanged: (value) =>
+                                                    onChanged: (String? value) {
+                                                      if (value != null) {
                                                         totalPrice =
-                                                            int.parse(value)),
+                                                            int.parse(value);
+                                                      } else {
+                                                        totalPrice = 0;
+                                                      }
+                                                    }),
                                               ),
                                             ],
                                           )
@@ -394,10 +406,7 @@ void tradingBottomSheet(BuildContext context, Stock company, String orderType) {
                                           ),
                                         ),
                                         Text(
-                                          ' ₹' +
-                                              oCcy
-                                                  .format(company.currentPrice)
-                                                  .toString(),
+                                          ' ₹' + oCcy.format(cash).toString(),
                                           textAlign: TextAlign.center,
                                           style: const TextStyle(
                                             color: Colors.white70,
@@ -414,6 +423,7 @@ void tradingBottomSheet(BuildContext context, Stock company, String orderType) {
                                       fontSize: 18,
                                       title: 'Place Order',
                                       onPressed: () {
+                                        logger.i(cash);
                                         context
                                             .read<PlaceOrderCubit>()
                                             .placeOrder(
@@ -422,6 +432,7 @@ void tradingBottomSheet(BuildContext context, Stock company, String orderType) {
                                                 priceType,
                                                 Int64(totalPrice),
                                                 Int64(quantity));
+                                        logger.i(cash);
                                         logger.i(
                                             '$isAsk, ${company.id}, ${company.shortName}, $quantity, $totalPrice, $priceType.toString()');
                                       })

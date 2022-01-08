@@ -31,7 +31,7 @@ Column overView(Stock company) {
         style: const TextStyle(
           fontSize: 16,
           fontWeight: FontWeight.w500,
-          color: lightGrey,
+          color: lightGray,
         ),
         textAlign: TextAlign.start,
       ),

@@ -49,8 +49,6 @@ dependencies:
   flutter_svg: ^1.0.0
   flutter_spinbox: ^0.8.0
   pin_code_fields: ^7.3.0
-  flutter_svg: ^1.0.0
-  flutter_spinbox: ^0.8.0
 
 dev_dependencies:
   flutter_test:

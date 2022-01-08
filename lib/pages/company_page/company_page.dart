@@ -1,6 +1,7 @@
 import 'package:dalal_street_client/blocs/subscribe/subscribe_cubit.dart';
 import 'package:dalal_street_client/components/buttons/primary_button.dart';
 import 'package:dalal_street_client/config/get_it.dart';
+import 'package:dalal_street_client/config/log.dart';
 import 'package:dalal_street_client/proto_build/datastreams/Subscribe.pb.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
 import 'package:dalal_street_client/pages/company_page/components/company_tab_view.dart';
@@ -16,8 +17,8 @@ import 'package:intl/intl.dart';
 final oCcy = NumberFormat('#,##0.00', 'en_US');
 
 class CompanyPage extends StatefulWidget {
-  final int stockId;
-  const CompanyPage({Key? key, required this.stockId}) : super(key: key);
+  final List<int> data;
+  const CompanyPage({Key? key, required this.data}) : super(key: key);
 
   @override
   State<CompanyPage> createState() => _CompanyPageState();
@@ -38,7 +39,9 @@ class _CompanyPageState extends State<CompanyPage>
   // ignore: must_call_super
   Widget build(BuildContext context) {
     final stockList = getIt<GlobalStreams>().latestStockMap;
-    Stock company = stockList[widget.stockId]!;
+    final int stockId = widget.data.first;
+    final int cash = widget.data.last;
+    Stock company = stockList[stockId]!;
     return SafeArea(
       child: Responsive(
         mobile: Scaffold(
@@ -84,7 +87,7 @@ class _CompanyPageState extends State<CompanyPage>
                       fontSize: 18,
                       title: 'Place Order',
                       onPressed: () {
-                        chooseBuyOrSellBottomSheet(context, company);
+                        chooseBuyOrSellBottomSheet(context, company, cash);
                       },
                     ),
                   ),
