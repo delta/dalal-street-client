@@ -20,9 +20,11 @@ import 'package:dalal_street_client/pages/stock_exchange/exchange_page.dart';
 import 'package:dalal_street_client/pages/home_page.dart';
 import 'package:dalal_street_client/pages/landing_page.dart';
 import 'package:dalal_street_client/pages/splash_page.dart';
+import 'package:dalal_street_client/pages/portfolio_page.dart';
 import 'package:dalal_street_client/proto_build/models/User.pb.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:dalal_street_client/blocs/portfolio/portfolio_cubit.dart';
 
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -76,7 +78,7 @@ class RouteGenerator {
         }
         throw Exception('Invalid phone args');
 
-      // Home Pages
+      //Home Pages
       case '/home':
         if (args is User) {
           return MultiBlocProvider(
@@ -106,7 +108,12 @@ class RouteGenerator {
           create: (context) => ExchangeCubit(),
           child: const ExchangePage(),
         );
-
+      // Portfolio Page
+      case '/portfolio':
+        return BlocProvider(
+          create: (context) => PortfolioCubit(),
+          child: const PortfolioPage(),
+        );
       default:
         throw Exception('Invalid Route');
     }
