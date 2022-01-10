@@ -14,26 +14,21 @@ class PortfolioPage extends StatefulWidget {
   _PortfolioPageState createState() => _PortfolioPageState();
 }
 
-class _PortfolioPageState extends State<PortfolioPage>{
-
+class _PortfolioPageState extends State<PortfolioPage> {
   @override
   void initState() {
     super.initState();
-      context.read<PortfolioCubit>().getPortfolio();
-
+    context.read<PortfolioCubit>().getPortfolio();
   }
 
   @override
   Widget build(BuildContext context) => SafeArea(
-          child: Scaffold(
-          backgroundColor: Colors.black,
-          body: 
-          Responsive(
-            desktop: _desktopPortfolio(),
-            tablet: _tabletPortfolio(),
-            mobile: _mobilePortfolio()
-          )
-        ),
+        child: Scaffold(
+            backgroundColor: Colors.black,
+            body: Responsive(
+                desktop: _desktopPortfolio(),
+                tablet: _tabletPortfolio(),
+                mobile: _mobilePortfolio())),
       );
 
   Center _desktopPortfolio() {
@@ -59,23 +54,23 @@ class _PortfolioPageState extends State<PortfolioPage>{
       ),
     );
   }
+
   SingleChildScrollView _mobilePortfolio() {
     return SingleChildScrollView(
-      child: Stack(children: [
+        child: Stack(
+      children: [
         Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-      child: Column(
-        children: [
-          PortfolioUserWorth(),
-          BlocProvider(
-            create: (context) => PortfolioTransactionsCubit(),
-            child: UserTransactions()
-          )
-        ],
-      ),
-    ),
-      ],) 
-    );
-    
-  }  
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+          child: Column(
+            children: [
+              PortfolioUserWorth(),
+              BlocProvider(
+                  create: (context) => PortfolioTransactionsCubit(),
+                  child: UserTransactions())
+            ],
+          ),
+        ),
+      ],
+    ));
+  }
 }

@@ -15,22 +15,19 @@ part 'portfolio_state.dart';
 class PortfolioCubit extends Cubit<PortfolioState> {
   PortfolioCubit() : super(PortfolioLoading());
 
-Future<void> getPortfolio() async {
-  try{
-    final res = await actionClient.getPortfolio(GetPortfolioRequest(),
-      options: sessionOptions(getIt())
-    );
-    if(res.statusCode==GetPortfolioResponse_StatusCode.OK){
-      emit(UserWorthLoaded(
-        res.user,
-        res.stocksOwned,
-        res.reservedStocksOwned));
-    } else {
-      emit(UserWorthFailure(res.statusMessage));
-    }
-  } catch(e){
-    logger.e(e);
-    emit(const UserWorthFailure(failedToReachServer));
+  Future<void> getPortfolio() async {
+    try {
+      final res = await actionClient.getPortfolio(GetPortfolioRequest(),
+          options: sessionOptions(getIt()));
+      if (res.statusCode == GetPortfolioResponse_StatusCode.OK) {
+        emit(UserWorthLoaded(
+            res.user, res.stocksOwned, res.reservedStocksOwned));
+      } else {
+        emit(UserWorthFailure(res.statusMessage));
+      }
+    } catch (e) {
+      logger.e(e);
+      emit(const UserWorthFailure(failedToReachServer));
     }
   }
 }

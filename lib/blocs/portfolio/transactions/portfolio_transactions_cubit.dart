@@ -8,25 +8,22 @@ import 'package:dalal_street_client/proto_build/actions/GetTransactions.pb.dart'
 import 'package:dalal_street_client/proto_build/models/Transaction.pb.dart';
 import 'package:dalal_street_client/constants/error_messages.dart';
 
-
 part 'portfolio_transactions_state.dart';
 
 class PortfolioTransactionsCubit extends Cubit<PortfolioTransactionsState> {
-   PortfolioTransactionsCubit() : super(PortfolioTransactionsLoading());
+  PortfolioTransactionsCubit() : super(PortfolioTransactionsLoading());
 
-  Future<void> listenToTransactionStream() async{
-    try{
-      final res = await actionClient.getTransactions(
-        GetTransactionsRequest(),
-        options: sessionOptions(getIt())
-      );
+  Future<void> listenToTransactionStream() async {
+    try {
+      final res = await actionClient.getTransactions(GetTransactionsRequest(),
+          options: sessionOptions(getIt()));
 
-      if(res.statusCode==GetTransactionsResponse_StatusCode.OK){
+      if (res.statusCode == GetTransactionsResponse_StatusCode.OK) {
         emit(PortfolioTransactionsLoaded(res.transactions));
       } else {
         emit(PortfolioTransactionsError(res.statusMessage));
       }
-    } catch(e){
+    } catch (e) {
       emit(const PortfolioTransactionsError(failedToReachServer));
     }
   }
