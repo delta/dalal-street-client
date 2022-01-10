@@ -2,7 +2,7 @@ import 'package:fixnum/fixnum.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dalal_street_client/theme/colors.dart';
-import 'package:dalal_street_client/blocs/portfolio/portfolio_cubit.dart';
+import 'package:dalal_street_client/blocs/portfolio/userWorth/portfolio_cubit.dart';
 import 'package:dalal_street_client/config/get_it.dart';
 import 'package:dalal_street_client/global_streams.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
