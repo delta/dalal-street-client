@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:dalal_street_client/config/get_it.dart';
-import 'package:dalal_street_client/global_streams.dart';
+import 'package:dalal_street_client/streams/global_streams.dart';
 import 'package:dalal_street_client/grpc/client.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';

@@ -2,7 +2,7 @@ import 'package:dalal_street_client/theme/colors.dart';
 import 'package:fixnum/fixnum.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
 import 'package:dalal_street_client/config/get_it.dart';
-import 'package:dalal_street_client/global_streams.dart';
+import 'package:dalal_street_client/streams/global_streams.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dalal_street_client/blocs/portfolio/transactions/portfolio_transactions_cubit.dart';
@@ -16,7 +16,7 @@ class UserTransactions extends StatefulWidget {
 }
 
 class _UserTransactionsState extends State<UserTransactions> {
-  Map<int, Stock> mapOfStocks = getIt<GlobalStreams>().stockList;
+  Map<int, Stock> mapOfStocks = getIt<GlobalStreams>().latestStockMap;
   @override
   void initState() {
     super.initState();

@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dalal_street_client/theme/colors.dart';
 import 'package:dalal_street_client/blocs/portfolio/userWorth/portfolio_cubit.dart';
 import 'package:dalal_street_client/config/get_it.dart';
-import 'package:dalal_street_client/global_streams.dart';
+import 'package:dalal_street_client/streams/global_streams.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
 
 class PortfolioUserWorth extends StatefulWidget {
@@ -15,7 +15,7 @@ class PortfolioUserWorth extends StatefulWidget {
 }
 
 class _PortfolioUserWorthState extends State<PortfolioUserWorth> {
-  Map<int, Stock> mapOfStocks = getIt<GlobalStreams>().stockList;
+  Map<int, Stock> mapOfStocks = getIt<GlobalStreams>().latestStockMap;
 
   @override
   void initState() {
