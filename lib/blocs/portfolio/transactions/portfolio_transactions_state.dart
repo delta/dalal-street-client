@@ -11,7 +11,7 @@ abstract class PortfolioTransactionsState extends Equatable {
 class PortfolioTransactionsLoaded extends PortfolioTransactionsState {
   final List transactions;
 
-  PortfolioTransactionsLoaded(this.transactions);
+  const PortfolioTransactionsLoaded(this.transactions);
 
   @override
   List<Object> get props => [transactions];

@@ -63,10 +63,10 @@ class _PortfolioPageState extends State<PortfolioPage> {
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
           child: Column(
             children: [
-              PortfolioUserWorth(),
+              const PortfolioUserWorth(),
               BlocProvider(
                   create: (context) => PortfolioTransactionsCubit(),
-                  child: UserTransactions())
+                  child: const UserTransactions())
             ],
           ),
         ),

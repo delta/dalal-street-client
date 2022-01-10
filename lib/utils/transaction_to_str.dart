@@ -26,6 +26,7 @@ String transactionTypeToStr(TransactionType trType) {
       return 'Reserve';
     case CANCEL_ORDER_TRANSACTION:
       return 'Cancel Order';
+    default:
+      return '';
   }
-  return '';
 }

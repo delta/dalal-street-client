@@ -151,7 +151,7 @@ class _PortfolioUserWorthState extends State<PortfolioUserWorth> {
       });
 
   Widget _holdings(UserWorthLoaded state) {
-    var stockHeld = new Map();
+    var stockHeld = <dynamic,dynamic>{};
 
     Map<int, Int64> stocksReservedMap = state.reservedStocks;
     Map<int, Int64> stocksOwnedMap = state.stocks;
@@ -182,8 +182,8 @@ class _PortfolioUserWorthState extends State<PortfolioUserWorth> {
           });
 
   Widget _eachStock(Int64? owned, Int64? reserved, String name, Int64? price) =>
-      Container(
-        child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+      Wrap(
+        children: [Column(mainAxisAlignment: MainAxisAlignment.start, children: [
           Row(
             children: [
               Padding(
@@ -252,7 +252,7 @@ class _PortfolioUserWorthState extends State<PortfolioUserWorth> {
             ],
           ),
         ]),
-      );
+        ]);
 
   Widget _eachField(String field, String value) {
     return Row(children: [
@@ -265,7 +265,7 @@ class _PortfolioUserWorthState extends State<PortfolioUserWorth> {
       ),
       const Spacer(),
       Container(
-        padding: EdgeInsets.only(right: 25),
+        padding: const EdgeInsets.only(right: 25),
         child: Text(
           value,
           style: const TextStyle(fontSize: 18),
