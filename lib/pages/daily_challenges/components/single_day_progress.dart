@@ -39,11 +39,24 @@ class SingleDayProgress extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('Progress'),
+                  const Text(
+                    'Progress',
+                    style: TextStyle(fontSize: 18),
+                  ),
                   const SizedBox(height: 12),
-                  Text('$tasksDone of $totalTasks completed'),
+                  Text(
+                    '$tasksDone of $totalTasks completed',
+                    style: const TextStyle(color: blurredGray, fontSize: 14),
+                  ),
                   const SizedBox(height: 18),
-                  Text('Reward:\n$cashGained of $totalCash'),
+                  const Text(
+                    'Reward:',
+                    style: TextStyle(color: lightGray, fontSize: 16),
+                  ),
+                  Text(
+                    '$cashGained of $totalCash',
+                    style: const TextStyle(color: lightGray, fontSize: 12),
+                  ),
                 ],
               ),
               Padding(
