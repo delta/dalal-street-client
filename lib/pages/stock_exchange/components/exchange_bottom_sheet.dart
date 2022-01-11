@@ -13,7 +13,6 @@ import 'package:intl/intl.dart';
 final oCcy = NumberFormat('#,##0.00', 'en_US');
 
 // todo: svg error in mobile loading assets
-// todo: bottom sheet transition animation not working
 // todo: fix text input in mobile
 class ExchangeBottomSheet extends StatefulWidget {
   final Stock company;
@@ -61,51 +60,33 @@ class _ExchangeBottomSheetState extends State<ExchangeBottomSheet>
               child: Text(state.msg),
             );
           }
-          return BottomSheet(
-            shape: const RoundedRectangleBorder(
-                borderRadius:
-                    BorderRadius.vertical(top: Radius.circular(25.0))),
-            enableDrag: true,
-            backgroundColor: backgroundColor,
-            animationController: BottomSheet.createAnimationController(this),
-            builder: (context) {
-              return Container(
-                height: 400,
-                width: MediaQuery.of(context).size.width,
-                decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(15),
-                      topRight: Radius.circular(15)),
-                ),
-                child: Padding(
+          return Padding(
+            padding: EdgeInsets.only(
+                top: 10, bottom: MediaQuery.of(context).viewInsets.bottom),
+            child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  _buildPopOver(),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Padding(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 15, vertical: 10),
+                      horizontal: 15,
+                    ),
                     child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          _buildPopOver(),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 15,
-                            ),
-                            child: Column(
-                              children: [
-                                _staticCompanyDetails(),
-                                const SizedBox(
-                                  height: 20,
-                                ),
-                                _dynamicExchangeDetails(),
-                                _buyStocksFooter(context)
-                              ],
-                            ),
-                          )
-                        ])),
-              );
-            },
-            onClosing: () {},
+                      children: [
+                        _staticCompanyDetails(),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        _dynamicExchangeDetails(),
+                        _buyStocksFooter(context)
+                      ],
+                    ),
+                  )
+                ]),
           );
         },
       ),
@@ -216,7 +197,6 @@ class _ExchangeBottomSheetState extends State<ExchangeBottomSheet>
                 iconColor: MaterialStateProperty.all(primaryColor),
                 cursorColor: primaryColor,
                 spacing: 10,
-                readOnly: true,
                 decoration: const InputDecoration(
                     contentPadding: EdgeInsets.zero, border: InputBorder.none),
                 textStyle: const TextStyle(
@@ -325,6 +305,9 @@ class _ExchangeBottomSheetState extends State<ExchangeBottomSheet>
             }
           },
           child: const Text('Buy Stocks from Exchange'),
+        ),
+        const SizedBox(
+          height: 20,
         )
       ],
     );
