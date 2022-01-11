@@ -1,6 +1,7 @@
 import 'package:dalal_street_client/models/daily_challenge_info.dart';
 import 'package:dalal_street_client/theme/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:percent_indicator/percent_indicator.dart';
 
 class SingleDayProgress extends StatelessWidget {
   final List<DailyChallengeInfo> challengeInfos;
@@ -60,16 +61,19 @@ class SingleDayProgress extends StatelessWidget {
                 ],
               ),
               Padding(
-                padding: const EdgeInsets.only(right: 24),
-                child: SizedBox(
-                  width: 80,
-                  height: 80,
-                  // Rounded corners
-                  child: CircularProgressIndicator(
-                    strokeWidth: 8,
-                    backgroundColor: blurredGray,
-                    value: progress,
+                padding: const EdgeInsets.only(right: 10),
+                child: CircularPercentIndicator(
+                  radius: 90,
+                  lineWidth: 8,
+                  animation: true,
+                  percent: progress,
+                  center: Text(
+                    '${(progress * 100).toStringAsFixed(0)}%',
+                    style: const TextStyle(fontSize: 18),
                   ),
+                  circularStrokeCap: CircularStrokeCap.round,
+                  progressColor: Theme.of(context).colorScheme.primary,
+                  backgroundColor: blurredGray,
                 ),
               ),
             ],
