@@ -182,8 +182,8 @@ class _PortfolioUserWorthState extends State<PortfolioUserWorth> {
           });
 
   Widget _eachStock(Int64? owned, Int64? reserved, String name, Int64? price) =>
-      Wrap(
-        children: [Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+      Wrap(children: [
+        Column(mainAxisAlignment: MainAxisAlignment.start, children: [
           Row(
             children: [
               Padding(
@@ -252,7 +252,7 @@ class _PortfolioUserWorthState extends State<PortfolioUserWorth> {
             ],
           ),
         ]),
-        ]);
+      ]);
 
   Widget _eachField(String field, String value) {
     return Row(children: [
