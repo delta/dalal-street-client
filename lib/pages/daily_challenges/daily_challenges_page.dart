@@ -12,28 +12,29 @@ class DailyChallengesPage extends StatelessWidget {
 
   @override
   build(context) => Scaffold(
-        appBar: AppBar(title: const Text('Daily Challenges')),
-        body: Center(
-          child:
-              BlocBuilder<DailyChallengesPageCubit, DailyChallengesPageState>(
-            builder: (context, state) {
-              if (state is DailyChallengesPageFailure) {
-                return FailureMessage(
-                  msg: state.msg,
-                  onClick: () => onRetryClick(context),
-                );
-              }
-              if (state is DailyChallengesPageSuccess) {
-                if (state.isDailyChallengesOpen) {
-                  return _DailyChallengesPageBody(successState: state);
-                } else {
-                  return const Center(
-                    child: Text('Daily Challenges is closed now'),
+        body: SafeArea(
+          child: Center(
+            child:
+                BlocBuilder<DailyChallengesPageCubit, DailyChallengesPageState>(
+              builder: (context, state) {
+                if (state is DailyChallengesPageFailure) {
+                  return FailureMessage(
+                    msg: state.msg,
+                    onClick: () => onRetryClick(context),
                   );
                 }
-              }
-              return const Center(child: CircularProgressIndicator());
-            },
+                if (state is DailyChallengesPageSuccess) {
+                  if (state.isDailyChallengesOpen) {
+                    return _DailyChallengesPageBody(successState: state);
+                  } else {
+                    return const Center(
+                      child: Text('Daily Challenges is closed now'),
+                    );
+                  }
+                }
+                return const Center(child: CircularProgressIndicator());
+              },
+            ),
           ),
         ),
       );
