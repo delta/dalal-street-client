@@ -59,6 +59,7 @@ class _DailyChallengesPageBodyState extends State<_DailyChallengesPageBody>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
+  List<int> get days => 1.to(widget.successState.totalMarketDays);
   int get marketDay => widget.successState.marketDay;
 
   @override
@@ -82,42 +83,39 @@ class _DailyChallengesPageBodyState extends State<_DailyChallengesPageBody>
   }
 
   @override
-  Widget build(BuildContext context) {
-    final days = 1.to(widget.successState.totalMarketDays);
-    return Column(
-      children: [
-        TabBar(
-          controller: _tabController,
-          isScrollable: true,
-          tabs: [
-            for (final day in days)
-              Tab(
-                text: 'Day $day',
-                icon: Icon(
-                  (day <= marketDay) ? Icons.lock_open : Icons.lock,
-                ),
-              )
-          ],
-        ),
-        const SizedBox(height: 16),
-        Expanded(
-          child: TabBarView(
+  build(context) => Column(
+        children: [
+          TabBar(
             controller: _tabController,
-            // Disable Scrolling
-            physics: const NeverScrollableScrollPhysics(),
-            children: [
+            isScrollable: true,
+            tabs: [
               for (final day in days)
-                BlocProvider(
-                  create: (_) => SingleDayChallengesCubit(),
-                  child: SingleDayChallenges(
-                    marketDay: marketDay,
-                    day: day,
+                Tab(
+                  text: 'Day $day',
+                  icon: Icon(
+                    (day <= marketDay) ? Icons.lock_open : Icons.lock,
                   ),
                 )
             ],
           ),
-        ),
-      ],
-    );
-  }
+          const SizedBox(height: 16),
+          Expanded(
+            child: TabBarView(
+              controller: _tabController,
+              // Disable Scrolling
+              physics: const NeverScrollableScrollPhysics(),
+              children: [
+                for (final day in days)
+                  BlocProvider(
+                    create: (_) => SingleDayChallengesCubit(),
+                    child: SingleDayChallenges(
+                      marketDay: marketDay,
+                      day: day,
+                    ),
+                  )
+              ],
+            ),
+          ),
+        ],
+      );
 }

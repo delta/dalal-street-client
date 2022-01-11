@@ -4,6 +4,7 @@ import 'package:dalal_street_client/models/daily_challenge_info.dart';
 import 'package:dalal_street_client/pages/daily_challenges/components/single_day_progress.dart';
 import 'package:dalal_street_client/pages/daily_challenges/components/daily_challenge_item.dart';
 import 'package:dalal_street_client/streams/global_streams.dart';
+import 'package:dalal_street_client/theme/colors.dart';
 import 'package:dalal_street_client/utils/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -44,11 +45,16 @@ class _SingleDayChallengesState extends State<SingleDayChallenges>
           return Column(
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
+                padding: const EdgeInsets.symmetric(horizontal: 12),
                 child: SingleDayProgress(challengeInfos: state.challengeInfos),
               ),
-              const SizedBox(height: 18),
-              Expanded(child: challengesList(state.challengeInfos)),
+              const SizedBox(height: 12),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  child: challengesList(state.challengeInfos),
+                ),
+              ),
             ],
           );
         }
@@ -57,21 +63,42 @@ class _SingleDayChallengesState extends State<SingleDayChallenges>
     );
   }
 
-  Widget challengesList(List<DailyChallengeInfo> challengeInfos) =>
-      ListView.separated(
-        itemCount: challengeInfos.length,
-        itemBuilder: (_, i) => Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: DailyChallengeItem(
-            marketDay: widget.marketDay,
-            challenge: challengeInfos[i].challenge,
-            userState: challengeInfos[i].userState,
-            stock: challengeInfos[i].challenge.hasStockId()
-                ? stocks[challengeInfos[i].challenge.stockId]
-                : null,
+  Widget challengesList(List<DailyChallengeInfo> challengeInfos) => Card(
+        color: background2,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 8),
+              const Padding(
+                padding: EdgeInsets.only(left: 10),
+                child: Text(
+                  'Challenges',
+                  style: TextStyle(fontSize: 18),
+                ),
+              ),
+              const SizedBox(height: 10),
+              Expanded(
+                child: ListView.separated(
+                  itemCount: challengeInfos.length,
+                  itemBuilder: (_, i) => DailyChallengeItem(
+                    marketDay: widget.marketDay,
+                    challenge: challengeInfos[i].challenge,
+                    userState: challengeInfos[i].userState,
+                    stock: challengeInfos[i].challenge.hasStockId()
+                        ? stocks[challengeInfos[i].challenge.stockId]
+                        : null,
+                  ),
+                  separatorBuilder: (_, __) => const SizedBox(height: 10),
+                ),
+              ),
+            ],
           ),
         ),
-        separatorBuilder: (_, __) => const SizedBox(height: 10),
       );
 
   // For preserving state between tab view pages: https://stackoverflow.com/questions/49087703/preserving-state-between-tab-view-pages
