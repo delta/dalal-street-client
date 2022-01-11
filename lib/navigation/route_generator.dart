@@ -16,6 +16,7 @@ import 'package:dalal_street_client/pages/auth/register_page.dart';
 import 'package:dalal_street_client/pages/auth/verify_phone/enter_otp_page.dart';
 import 'package:dalal_street_client/pages/auth/verify_phone/enter_phone_page.dart';
 import 'package:dalal_street_client/pages/daily_challenges/daily_challenges_page.dart';
+import 'package:dalal_street_client/pages/news_page.dart';
 import 'package:dalal_street_client/pages/stock_exchange/exchange_page.dart';
 import 'package:dalal_street_client/pages/home_page.dart';
 import 'package:dalal_street_client/pages/landing_page.dart';
@@ -25,6 +26,8 @@ import 'package:dalal_street_client/proto_build/models/User.pb.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dalal_street_client/blocs/portfolio/userWorth/portfolio_cubit.dart';
+
+import '../blocs/market_events/market_event_bloc.dart';
 
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -78,7 +81,16 @@ class RouteGenerator {
         }
         throw Exception('Invalid phone args');
 
-      //Home Pages
+    
+      case '/news_page':
+        return MultiBlocProvider(providers: [
+          BlocProvider(
+            create: (context) => MarketEventBloc(),
+          ),
+          BlocProvider(create: (context) => SubscribeCubit())
+        ], child: const NewsPage());
+
+      // Home Pages
       case '/home':
         if (args is User) {
           return MultiBlocProvider(
