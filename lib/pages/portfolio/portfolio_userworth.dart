@@ -151,7 +151,7 @@ class _PortfolioUserWorthState extends State<PortfolioUserWorth> {
       });
 
   Widget _holdings(UserWorthLoaded state) {
-    var stockHeld = <dynamic,dynamic>{};
+    var stockHeld = <dynamic, dynamic>{};
 
     Map<int, Int64> stocksReservedMap = state.reservedStocks;
     Map<int, Int64> stocksOwnedMap = state.stocks;
