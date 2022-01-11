@@ -18,11 +18,9 @@ class CompaniesBloc extends Bloc<CompaniesEvent, CompaniesState> {
       try {
         final stockpricesStream =
             streamClient.getStockPricesUpdates(event.subscriptionId);
-        // ignore: avoid_print
-        print(event.subscriptionId);
+        //  print(event.subscriptionId);
         await for (final stockPrices in stockpricesStream) {
-          // ignore: avoid_print
-          print(stockPrices);
+          //  print(stockPrices);
           emit(SubscriptionToStockPricesSuccess(stockPrices));
         }
       } catch (e) {
