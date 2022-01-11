@@ -29,9 +29,9 @@ class ChallengeReward extends StatelessWidget {
           if (state is ChallengeIncomplete) {
             return challengeIncomplete();
           } else if (state is ChallengeComplete) {
-            return claimReward(context);
+            return challengeComplete(context);
           } else if (state is ChallengeRewardCalimed) {
-            return rewardClaimed();
+            return challengeRewardClaimed();
           }
           return const CircularProgressIndicator();
         },
@@ -39,26 +39,52 @@ class ChallengeReward extends StatelessWidget {
 
   Widget challengeIncomplete() => Column(
         children: [
-          Image.asset('assets/images/Coin.png'),
+          Image.asset('assets/images/ChallengeIncomplete.png'),
           const SizedBox(height: 10),
           Text(
             '₹${challenge.reward}',
             style: const TextStyle(color: gold),
-          )
+          ),
         ],
       );
 
-  Widget claimReward(BuildContext context) => SizedBox(
-        width: 80,
-        child: TextButton(
-          onPressed: () => onClaimRewardClick(context),
-          child: const Text('Claim Reward'),
-        ),
+  Widget challengeComplete(BuildContext context) => Column(
+        children: [
+          Image.asset('assets/images/ChallengeComplete.png'),
+          const SizedBox(height: 10),
+          Text(
+            '₹${challenge.reward}',
+            style: const TextStyle(color: gold),
+          ),
+          SizedBox(
+            width: 80,
+            height: 30,
+            child: claimButton(context),
+          ),
+        ],
       );
 
-  Widget rewardClaimed() => Column(
+  // TODO: the sizing is wierd
+  Widget claimButton(context) => ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          primary: gold,
+          onPrimary: baseColor,
+          textStyle: const TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.bold,
+          ),
+          elevation: 0,
+          padding: const EdgeInsets.all(0),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        ),
+        onPressed: () => onClaimRewardClick(context),
+        child: const Text('Claim Reward'),
+      );
+
+  Widget challengeRewardClaimed() => Column(
         children: [
-          Image.asset('assets/images/Coin Done.png'),
+          Image.asset('assets/images/ChallengeRewardClaimed.png'),
           const SizedBox(height: 10),
           Text(
             '₹${challenge.reward}',
