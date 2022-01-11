@@ -1,10 +1,11 @@
 import 'package:bloc/bloc.dart';
+import 'package:dalal_street_client/config/log.dart';
 import 'package:dalal_street_client/grpc/client.dart';
-import 'package:dalal_street_client/main.dart';
 import 'package:dalal_street_client/proto_build/actions/GetMarketEvents.pb.dart';
 import 'package:dalal_street_client/proto_build/datastreams/MarketEvents.pb.dart';
 import 'package:equatable/equatable.dart';
 
+import '../../config/get_it.dart';
 import '../../proto_build/datastreams/Subscribe.pb.dart';
 
 part 'market_event_event.dart';
@@ -53,25 +54,5 @@ class MarketEventBloc extends Bloc<MarketEvent_events, MarketEventState> {
         emit(GetMarketEventFailure(e.toString()));
       }
     });
-    // void LoadMarketEvents() {
-    // if (state is MarketEventsLoading) return;
-
-    // final currentState = state;
-
-    // var oldMarketEvents = <MarketEvent>[];
-    // if (currentState is MarketEventsLoaded) {
-    //   oldMarketEvents= currentState.marketevents;
-    // }
-
-    // emit(MarketEventsLoading(oldMarketEvents, isFirstFetch: page == 1));
-
-    // repository.fetchPosts(page).then((newPosts) {
-    //   page++;
-
-    //   final posts = (state as PostsLoading).oldPosts;
-    //   posts.addAll(newPosts);
-
-    //   emit(PostsLoaded(posts));
-    // });
   }
 }
