@@ -31,6 +31,13 @@ class _ExchangeBottomSheetState extends State<ExchangeBottomSheet> {
   final userInfoStream = getIt<GlobalStreams>().dynamicUserInfoStream;
   Stream<int> get cashStream =>
       userInfoStream.map((userInfo) => userInfo.cash).distinct();
+
+  @override
+  void initState() {
+    super.initState();
+    cashStream.listen((event) {});
+  }
+
   @override
   Widget build(BuildContext context) {
     logger.i('rebuilt');
@@ -289,7 +296,7 @@ class _ExchangeBottomSheetState extends State<ExchangeBottomSheet> {
           ),
           StreamBuilder<int>(
               stream: cashStream,
-              // initialData: userInfoStream.value.cash,
+              initialData: userInfoStream.value.cash,
               builder: (_, snapshot) {
                 if (snapshot.hasError) {
                   logger.e(snapshot.error);
