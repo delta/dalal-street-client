@@ -56,9 +56,9 @@ class _ExchangeBottomSheetState extends State<ExchangeBottomSheet> {
                 color: Colors.green,
               ),
             );
-           }
+          }
           return Padding(
-            padding:  EdgeInsets.only(
+            padding: EdgeInsets.only(
                 top: 10, bottom: MediaQuery.of(context).viewInsets.bottom),
             child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -194,7 +194,6 @@ class _ExchangeBottomSheetState extends State<ExchangeBottomSheet> {
                     orderFee = _calculateOrderFee(totalPrice);
                   });
                 },
-
                 iconColor: MaterialStateProperty.all(primaryColor),
                 cursorColor: primaryColor,
                 spacing: 10,
