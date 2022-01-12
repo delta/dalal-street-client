@@ -64,6 +64,7 @@ dev_dependencies:
 
 flutter:
   assets:
+    - assets/icon/
     - assets/images/
     - assets/tls_keys/dev/server.crt
     - config.json
