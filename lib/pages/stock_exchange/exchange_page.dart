@@ -7,9 +7,6 @@ import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
 import 'package:dalal_street_client/theme/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
-
-final oCcy = NumberFormat('#,##0.00', 'en_US');
 
 // todo: navigate to company page on clicking view button
 class ExchangePage extends StatefulWidget {

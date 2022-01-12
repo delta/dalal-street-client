@@ -1,17 +1,17 @@
 import 'package:dalal_street_client/blocs/exchange/sheet/exchange_sheet_cubit.dart';
+import 'package:dalal_street_client/config/get_it.dart';
 import 'package:dalal_street_client/config/log.dart';
 import 'package:dalal_street_client/constants/constants.dart';
+import 'package:dalal_street_client/constants/format.dart';
 import 'package:dalal_street_client/constants/icons.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
+import 'package:dalal_street_client/streams/global_streams.dart';
 import 'package:dalal_street_client/theme/colors.dart';
 import 'package:dalal_street_client/utils/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinbox/flutter_spinbox.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:intl/intl.dart';
-
-final oCcy = NumberFormat('#,##0.00', 'en_US');
 
 // todo: fix text input in mobile
 class ExchangeBottomSheet extends StatefulWidget {
@@ -28,6 +28,8 @@ class _ExchangeBottomSheetState extends State<ExchangeBottomSheet> {
   static int quantity = 1;
   late int totalPrice;
   late int orderFee;
+  final userInfoStream = getIt<GlobalStreams>().dynamicUserInfoStream;
+  Stream<int> get cashStream => userInfoStream.map((userInfo) => userInfo.cash).distinct();
   @override
   Widget build(BuildContext context) {
     logger.i('rebuilt');
@@ -284,13 +286,23 @@ class _ExchangeBottomSheetState extends State<ExchangeBottomSheet> {
               color: Colors.white70,
             ),
           ),
-          Text(
-            ' ₹' + oCcy.format(widget.company.currentPrice).toString(),
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              color: Colors.white70,
-              fontSize: 14,
-            ),
+          StreamBuilder<int>(
+            stream: cashStream,
+           // initialData: userInfoStream.value.cash,
+            builder: (_, snapshot) {
+              if(snapshot.hasError){
+                logger.e(snapshot.error);
+              }
+              logger.i(snapshot.data);
+              return Text(
+                ' ₹' + oCcy.format(snapshot.data).toString(),
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  color: Colors.white70,
+                  fontSize: 14,
+                ),
+              );
+            }
           ),
         ]),
         const SizedBox(
