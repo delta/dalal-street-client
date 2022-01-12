@@ -29,7 +29,8 @@ class _ExchangeBottomSheetState extends State<ExchangeBottomSheet> {
   late int totalPrice;
   late int orderFee;
   final userInfoStream = getIt<GlobalStreams>().dynamicUserInfoStream;
-  Stream<int> get cashStream => userInfoStream.map((userInfo) => userInfo.cash).distinct();
+  Stream<int> get cashStream =>
+      userInfoStream.map((userInfo) => userInfo.cash).distinct();
   @override
   Widget build(BuildContext context) {
     logger.i('rebuilt');
@@ -287,23 +288,22 @@ class _ExchangeBottomSheetState extends State<ExchangeBottomSheet> {
             ),
           ),
           StreamBuilder<int>(
-            stream: cashStream,
-           // initialData: userInfoStream.value.cash,
-            builder: (_, snapshot) {
-              if(snapshot.hasError){
-                logger.e(snapshot.error);
-              }
-              logger.i(snapshot.data);
-              return Text(
-                ' ₹' + oCcy.format(snapshot.data).toString(),
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  color: Colors.white70,
-                  fontSize: 14,
-                ),
-              );
-            }
-          ),
+              stream: cashStream,
+              // initialData: userInfoStream.value.cash,
+              builder: (_, snapshot) {
+                if (snapshot.hasError) {
+                  logger.e(snapshot.error);
+                }
+                logger.i(snapshot.data);
+                return Text(
+                  ' ₹' + oCcy.format(snapshot.data).toString(),
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    color: Colors.white70,
+                    fontSize: 14,
+                  ),
+                );
+              }),
         ]),
         const SizedBox(
           height: 25,
