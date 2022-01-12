@@ -28,7 +28,7 @@ class _ExchangePageState extends State<ExchangePage> {
   @override
   Widget build(BuildContext context) => SafeArea(
         child: Scaffold(
-          resizeToAvoidBottomInset: true,
+          resizeToAvoidBottomInset: false,
           backgroundColor: Colors.black,
           body: SingleChildScrollView(
             child: Padding(

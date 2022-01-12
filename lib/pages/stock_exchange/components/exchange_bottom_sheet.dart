@@ -25,7 +25,7 @@ class ExchangeBottomSheet extends StatefulWidget {
 
 class _ExchangeBottomSheetState extends State<ExchangeBottomSheet> {
   late int priceChange;
-  static int quantity = 1;
+  late int quantity;
   late int totalPrice;
   late int orderFee;
   final userInfoStream = getIt<GlobalStreams>().dynamicUserInfoStream;
@@ -35,12 +35,12 @@ class _ExchangeBottomSheetState extends State<ExchangeBottomSheet> {
   @override
   void initState() {
     super.initState();
+    quantity=1;
     cashStream.listen((event) {});
   }
 
   @override
   Widget build(BuildContext context) {
-    logger.i('rebuilt');
     priceChange =
         (widget.company.currentPrice - widget.company.previousDayClose).toInt();
     quantity = 1;
@@ -68,8 +68,7 @@ class _ExchangeBottomSheetState extends State<ExchangeBottomSheet> {
             );
           }
           return Padding(
-            padding: EdgeInsets.only(
-                top: 10, bottom: MediaQuery.of(context).viewInsets.bottom),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
             child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -80,7 +79,7 @@ class _ExchangeBottomSheetState extends State<ExchangeBottomSheet> {
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 15,
+                      horizontal: 10,
                     ),
                     child: Column(
                       children: [
@@ -115,7 +114,7 @@ class _ExchangeBottomSheetState extends State<ExchangeBottomSheet> {
           height: 3,
         ),
         Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(10),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
@@ -195,7 +194,7 @@ class _ExchangeBottomSheetState extends State<ExchangeBottomSheet> {
               ),
               child: SpinBox(
                 min: 1,
-                max: 100,
+                max: 20,
                 value: 01,
                 onChanged: (value) {
                   setBottomSheetState(() {
@@ -204,9 +203,11 @@ class _ExchangeBottomSheetState extends State<ExchangeBottomSheet> {
                     orderFee = _calculateOrderFee(totalPrice);
                   });
                 },
+                
+                readOnly: true,
                 iconColor: MaterialStateProperty.all(primaryColor),
                 cursorColor: primaryColor,
-                spacing: 10,
+                spacing: 15,
                 decoration: const InputDecoration(
                     contentPadding: EdgeInsets.zero, border: InputBorder.none),
                 textStyle: const TextStyle(
@@ -298,10 +299,6 @@ class _ExchangeBottomSheetState extends State<ExchangeBottomSheet> {
               stream: cashStream,
               initialData: userInfoStream.value.cash,
               builder: (_, snapshot) {
-                if (snapshot.hasError) {
-                  logger.e(snapshot.error);
-                }
-                logger.i(snapshot.data);
                 return Text(
                   ' ₹' + oCcy.format(snapshot.data).toString(),
                   textAlign: TextAlign.center,
@@ -315,15 +312,18 @@ class _ExchangeBottomSheetState extends State<ExchangeBottomSheet> {
         const SizedBox(
           height: 25,
         ),
-        ElevatedButton(
-          onPressed: () {
-            if (quantity > 0) {
-              context
-                  .read<ExchangeSheetCubit>()
-                  .buyStocksFromExchange(widget.company.id, quantity);
-            }
-          },
-          child: const Text('Buy Stocks from Exchange'),
+        SizedBox(
+          width: double.infinity,
+          child: ElevatedButton(
+            onPressed: () {
+              if (quantity > 0) {
+                context
+                    .read<ExchangeSheetCubit>()
+                    .buyStocksFromExchange(widget.company.id, quantity);
+              }
+            },
+            child: const Text('Buy Stocks from Exchange'),
+          ),
         ),
         const SizedBox(
           height: 10,
