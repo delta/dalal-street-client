@@ -1,6 +1,5 @@
 import 'package:dalal_street_client/blocs/exchange/sheet/exchange_sheet_cubit.dart';
 import 'package:dalal_street_client/config/get_it.dart';
-import 'package:dalal_street_client/config/log.dart';
 import 'package:dalal_street_client/constants/constants.dart';
 import 'package:dalal_street_client/constants/format.dart';
 import 'package:dalal_street_client/constants/icons.dart';
