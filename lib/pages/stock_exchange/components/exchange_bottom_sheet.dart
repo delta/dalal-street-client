@@ -35,7 +35,7 @@ class _ExchangeBottomSheetState extends State<ExchangeBottomSheet> {
   @override
   void initState() {
     super.initState();
-    quantity=1;
+    quantity = 1;
     cashStream.listen((event) {});
   }
 
@@ -203,7 +203,6 @@ class _ExchangeBottomSheetState extends State<ExchangeBottomSheet> {
                     orderFee = _calculateOrderFee(totalPrice);
                   });
                 },
-                
                 readOnly: true,
                 iconColor: MaterialStateProperty.all(primaryColor),
                 cursorColor: primaryColor,
