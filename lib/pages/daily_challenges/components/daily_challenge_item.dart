@@ -96,10 +96,20 @@ class DailyChallengeItem extends StatelessWidget {
     return StreamBuilder<int>(
       stream: progressStream,
       initialData: initialProgress,
-      builder: (_, snapshot) => ChallengeProgress(
-        progress: snapshot.data!,
-        targetValue: challenge.value.toInt(),
-      ),
+      builder: (_, snapshot) {
+        var progress = snapshot.data!;
+        final targetValue = challenge.value.toInt();
+        if (progress > targetValue) {
+          progress = targetValue;
+        }
+        if (progress < 0) {
+          progress = 0;
+        }
+        return ChallengeProgress(
+          progress: progress,
+          targetValue: targetValue,
+        );
+      },
     );
   }
 }
