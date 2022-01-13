@@ -21,7 +21,7 @@ class ChallengeRewardCubit extends Cubit<ChallengeRewardState> {
           } else if (userState.isCompleted && !userState.isRewardClamied) {
             return const ChallengeComplete();
           } else {
-            return ChallengeRewardCalimed(challenge.reward);
+            return ChallengeRewardClaimed(challenge.reward);
           }
         }());
 
@@ -34,7 +34,7 @@ class ChallengeRewardCubit extends Cubit<ChallengeRewardState> {
         options: sessionOptions(getIt()),
       );
       if (resp.statusCode == GetMyRewardResponse_StatusCode.OK) {
-        emit(ChallengeRewardCalimed(resp.reward.toInt()));
+        emit(ChallengeRewardClaimed(resp.reward.toInt()));
       } else {
         emit(ChallengeRewardFailure(resp.statusMessage));
         emit(initialState);

@@ -25,8 +25,8 @@ class ChallengeRewardFailure extends ChallengeRewardState {
   const ChallengeRewardFailure(this.msg);
 }
 
-class ChallengeRewardCalimed extends ChallengeRewardState {
+class ChallengeRewardClaimed extends ChallengeRewardState {
   final int reward;
 
-  const ChallengeRewardCalimed(this.reward);
+  const ChallengeRewardClaimed(this.reward);
 }

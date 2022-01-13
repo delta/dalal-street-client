@@ -21,7 +21,7 @@ class ChallengeReward extends StatelessWidget {
         listener: (context, state) {
           if (state is ChallengeRewardFailure) {
             showSnackBar(context, state.msg);
-          } else if (state is ChallengeRewardCalimed) {
+          } else if (state is ChallengeRewardClaimed) {
             showSnackBar(context, 'Reward of ₹${state.reward} Claimed!');
           }
         },
@@ -30,7 +30,7 @@ class ChallengeReward extends StatelessWidget {
             return challengeIncomplete();
           } else if (state is ChallengeComplete) {
             return challengeComplete(context);
-          } else if (state is ChallengeRewardCalimed) {
+          } else if (state is ChallengeRewardClaimed) {
             return challengeRewardClaimed();
           }
           return const CircularProgressIndicator();
