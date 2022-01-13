@@ -97,7 +97,6 @@ class _HomePageState extends State<HomePage> {
             height: 10,
           ),
           _recentNews(),
-          TextButton(onPressed: ()=>movetonews(context), child: Text('move to news'))
         ],
       ),
     );
@@ -327,8 +326,4 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-}
-
-movetonews(context) {
-  Navigator.of(context).pushNamed('/news');
 }
