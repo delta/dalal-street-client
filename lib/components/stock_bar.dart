@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:dalal_street_client/streams/global_streams.dart';
 import 'package:fixnum/fixnum.dart';
 
-
 class StockBar extends StatelessWidget {
   const StockBar({Key? key}) : super(key: key);
 
@@ -58,7 +57,6 @@ class StockBarMarquee extends StatelessWidget {
       animationDuration: const Duration(milliseconds: 10000),
     );
   }
-
 }
 
 class StockBarItem extends StatelessWidget {
