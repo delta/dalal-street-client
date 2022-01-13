@@ -112,9 +112,7 @@ Widget feedlist(List<MarketEvent> mapMarketEvents,
         return BlocBuilder<SubscribeCubit, SubscribeState>(
             builder: (context, state) {
           if (state is SubscriptionDataLoaded) {
-            context
-                .read<NewsBloc>()
-                .add(GetNewsFeed(state.subscriptionId));
+            context.read<NewsBloc>().add(GetNewsFeed(state.subscriptionId));
 
             return SingleChildScrollView(
                 child: SizedBox(
@@ -173,9 +171,7 @@ Widget latestnews(List<MarketEvent> mapMarketEvents) =>
         return BlocBuilder<SubscribeCubit, SubscribeState>(
             builder: (context, state) {
           if (state is SubscriptionDataLoaded) {
-            context
-                .read<NewsBloc>()
-                .add(GetNewsFeed(state.subscriptionId));
+            context.read<NewsBloc>().add(GetNewsFeed(state.subscriptionId));
 
             MarketEvent marketEvent = mapMarketEvents[0];
             String headline = marketEvent.headline;
@@ -215,8 +211,7 @@ Widget latestnews(List<MarketEvent> mapMarketEvents) =>
 Widget newsItem(String text, String imagePath, String createdAt) {
   return (Container(
     padding: const EdgeInsets.all(10),
-    child: BlocBuilder<NewsBloc, NewsState>(
-        builder: (context, state) {
+    child: BlocBuilder<NewsBloc, NewsState>(builder: (context, state) {
       if (state is SubscriptionToNewsSuccess) {
         return Row(
           crossAxisAlignment: CrossAxisAlignment.start,
