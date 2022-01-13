@@ -29,8 +29,6 @@ import 'package:dalal_street_client/blocs/portfolio/userWorth/portfolio_cubit.da
 
 import '../blocs/news/news_bloc.dart';
 
-
-
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     try {
