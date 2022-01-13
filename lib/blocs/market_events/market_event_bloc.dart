@@ -11,7 +11,7 @@ import '../../proto_build/datastreams/Subscribe.pb.dart';
 part 'market_event_event.dart';
 part 'market_event_state.dart';
 
-class MarketEventBloc extends Bloc<MarketEvent_events, MarketEventState> {
+class MarketEventBloc extends Bloc<MarketEventevents, MarketEventState> {
   MarketEventBloc() : super(MarketEventInitial()) {
     on<GetMarketEvent>((event, emit) async {
       try {

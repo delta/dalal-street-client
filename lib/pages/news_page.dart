@@ -50,27 +50,24 @@ class _NewsPageState extends State<NewsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: Container(
-      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-      color: Colors.black,
-      child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            news(mapMarketEvents),
-            const SizedBox.square(
-              dimension: 20,
-            ),
-            Expanded(
-                child: SingleChildScrollView(
-                    scrollDirection: Axis.vertical,
-                    controller: _scrollController,
-                    child: feed(mapMarketEvents)))
-          ]),
-    ));
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+            color: Colors.black,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                news(mapMarketEvents),
+                const SizedBox.square(
+                  dimension: 20,
+                ),
+                feed(mapMarketEvents, _scrollController),
+              ],
+            )));
   }
 }
 
-Widget feed(List<MarketEvent> mapMarketEvents) {
+Widget feed(
+    List<MarketEvent> mapMarketEvents, ScrollController _scrollController) {
   return Container(
       decoration: BoxDecoration(
           color: backgroundColor, borderRadius: BorderRadius.circular(10)),
@@ -85,7 +82,7 @@ Widget feed(List<MarketEvent> mapMarketEvents) {
             alignment: Alignment.topLeft,
             margin: const EdgeInsets.all(10),
           ),
-          feedlist(mapMarketEvents)
+          feedlist(mapMarketEvents, _scrollController)
         ],
       ));
 }
@@ -107,7 +104,8 @@ Widget news(List<MarketEvent> mapMarketEvents) => Container(
       ]),
     );
 
-Widget feedlist(List<MarketEvent> mapMarketEvents) =>
+Widget feedlist(List<MarketEvent> mapMarketEvents,
+        ScrollController _scrollController) =>
     BlocBuilder<MarketEventBloc, MarketEventState>(builder: (context, state) {
       if (state is GetMarketEventSucess) {
         mapMarketEvents.addAll(state.marketEventsList.marketEvents);
@@ -118,18 +116,23 @@ Widget feedlist(List<MarketEvent> mapMarketEvents) =>
                 .read<MarketEventBloc>()
                 .add(GetMarketEventFeed(state.subscriptionId));
 
-            return ListView.builder(
-              shrinkWrap: true,
-              scrollDirection: Axis.vertical,
-              itemCount: mapMarketEvents.length,
-              itemBuilder: (context, index) {
-                MarketEvent marketEvent = mapMarketEvents[index];
-                String headline = marketEvent.headline;
-                String imagePath = marketEvent.imagePath;
-                String createdAt = marketEvent.createdAt;
-                return (newsItem(headline, imagePath, createdAt));
-              },
-            );
+            return SingleChildScrollView(
+                child: SizedBox(
+              child: ListView.builder(
+                shrinkWrap: true,
+                physics: const ScrollPhysics(),
+                itemCount: mapMarketEvents.length,
+                controller: _scrollController,
+                itemBuilder: (context, index) {
+                  MarketEvent marketEvent = mapMarketEvents[index];
+                  String headline = marketEvent.headline;
+                  String imagePath = marketEvent.imagePath;
+                  String createdAt = marketEvent.createdAt;
+                  return (newsItem(headline, imagePath, createdAt));
+                },
+              ),
+              height: 500,
+            ));
           } else if (state is SubscriptonDataFailed) {
             logger.i('Stream Failed $state');
             return const Center(

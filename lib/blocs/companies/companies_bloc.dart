@@ -7,6 +7,7 @@ import 'package:dalal_street_client/proto_build/datastreams/StockPrices.pb.dart'
 import 'package:dalal_street_client/proto_build/datastreams/Subscribe.pb.dart';
 import 'package:equatable/equatable.dart';
 
+
 part 'companies_event.dart';
 part 'companies_state.dart';
 
@@ -18,9 +19,9 @@ class CompaniesBloc extends Bloc<CompaniesEvent, CompaniesState> {
       try {
         final stockpricesStream =
             streamClient.getStockPricesUpdates(event.subscriptionId);
-        //  print(event.subscriptionId);
+          print(event.subscriptionId);
         await for (final stockPrices in stockpricesStream) {
-          //  print(stockPrices);
+          print(stockPrices);
           emit(SubscriptionToStockPricesSuccess(stockPrices));
         }
       } catch (e) {
