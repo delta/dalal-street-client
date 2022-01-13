@@ -27,7 +27,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dalal_street_client/blocs/portfolio/userWorth/portfolio_cubit.dart';
 
-import '../blocs/market_events/market_event_bloc.dart';
+import '../blocs/news/news_bloc.dart';
+
+
 
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {

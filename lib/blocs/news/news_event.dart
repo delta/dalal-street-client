@@ -1,4 +1,4 @@
-part of 'market_event_bloc.dart';
+part of 'news_bloc.dart';
 
 abstract class NewsEvent extends Equatable {
   const NewsEvent();

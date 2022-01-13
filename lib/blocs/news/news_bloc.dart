@@ -8,8 +8,8 @@ import 'package:equatable/equatable.dart';
 import '../../config/get_it.dart';
 import '../../proto_build/datastreams/Subscribe.pb.dart';
 
-part 'market_event_event.dart';
-part 'market_event_state.dart';
+part 'news_event.dart';
+part 'news_state.dart';
 
 class NewsBloc extends Bloc<NewsEvent, NewsState> {
   NewsBloc() : super(MarketEventInitial()) {
