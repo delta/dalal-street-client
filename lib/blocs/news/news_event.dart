@@ -9,7 +9,6 @@ abstract class NewsEvent extends Equatable {
 class GetNews extends NewsEvent {
   const GetNews();
 }
-
 class GetNewsFeed extends NewsEvent {
   final SubscriptionId subscriptionId;
   const GetNewsFeed(this.subscriptionId);
