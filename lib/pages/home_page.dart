@@ -326,8 +326,4 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-
-  movetonews(context) {
-    Navigator.of(context).pushNamed('/news_page');
-  }
 }
