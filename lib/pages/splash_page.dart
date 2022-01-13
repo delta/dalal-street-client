@@ -30,9 +30,34 @@ class _SplashPageState extends State<SplashPage> {
                     ?.copyWith(color: Theme.of(context).colorScheme.primary),
               ),
               const SizedBox(height: 80),
-              const CircularProgressIndicator(),
+              BlocBuilder<DalalBloc, DalalState>(
+                builder: (context, state) {
+                  if (state is DalalLoginFailed) {
+                    return retry(state.sessionId);
+                  }
+                  return const CircularProgressIndicator();
+                },
+              ),
             ],
           ),
         ),
       );
+
+  Widget retry(String sessionId) => Column(
+        children: [
+          const Text('Failed to reach server'),
+          const SizedBox(height: 20),
+          SizedBox(
+            width: 100,
+            height: 50,
+            child: OutlinedButton(
+              onPressed: () => onRetryClick(sessionId),
+              child: const Text('Retry'),
+            ),
+          ),
+        ],
+      );
+
+  void onRetryClick(String sessionId) =>
+      context.read<DalalBloc>().add(GetUserData(sessionId));
 }
