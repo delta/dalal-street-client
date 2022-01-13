@@ -11,9 +11,9 @@ import '../../proto_build/datastreams/Subscribe.pb.dart';
 part 'market_event_event.dart';
 part 'market_event_state.dart';
 
-class MarketEventBloc extends Bloc<MarketEventEvents, MarketEventState> {
-  MarketEventBloc() : super(MarketEventInitial()) {
-    on<GetMarketEvent>((event, emit) async {
+class NewsBloc extends Bloc<NewsEvent, NewsState> {
+  NewsBloc() : super(MarketEventInitial()) {
+    on<GetNews>((event, emit) async {
       try {
         final GetMarketEventsResponse marketEventResponse =
             await actionClient.getMarketEvents(
@@ -27,7 +27,7 @@ class MarketEventBloc extends Bloc<MarketEventEvents, MarketEventState> {
       }
     });
 
-    on<GetMarketEventFeed>((event, emit) async {
+    on<GetNewsFeed>((event, emit) async {
       try {
         final marketeventstream = streamClient.getMarketEventUpdates(
             event.subscriptionId,
@@ -41,7 +41,7 @@ class MarketEventBloc extends Bloc<MarketEventEvents, MarketEventState> {
       }
     });
 
-    on<GetMoreMarketEvent>((event, emit) async {
+    on<GetMoreNews>((event, emit) async {
       try {
         final GetMarketEventsResponse marketEventResponse =
             await actionClient.getMarketEvents(

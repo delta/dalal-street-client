@@ -1,23 +1,22 @@
 part of 'market_event_bloc.dart';
 
-abstract class MarketEventEvents extends Equatable {
-  const MarketEventEvents();
+abstract class NewsEvent extends Equatable {
+  const NewsEvent();
   @override
   List<Object> get props => [];
 }
 
-class GetMarketEvent extends MarketEventEvents {
-  const GetMarketEvent();
+class GetNews extends NewsEvent {
+  const GetNews();
 }
-
-class GetMarketEventFeed extends MarketEventEvents {
+class GetNewsFeed extends NewsEvent {
   final SubscriptionId subscriptionId;
-  const GetMarketEventFeed(this.subscriptionId);
+  const GetNewsFeed(this.subscriptionId);
   @override
   List<Object> get props => [subscriptionId];
 }
 
-class GetMoreMarketEvent extends MarketEventEvents {
+class GetMoreNews extends NewsEvent {
   final int lasteventid;
-  const GetMoreMarketEvent(this.lasteventid);
+  const GetMoreNews(this.lasteventid);
 }

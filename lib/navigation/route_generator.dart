@@ -81,11 +81,10 @@ class RouteGenerator {
         }
         throw Exception('Invalid phone args');
 
-    
-      case '/news_page':
+      case '/news':
         return MultiBlocProvider(providers: [
           BlocProvider(
-            create: (context) => MarketEventBloc(),
+            create: (context) => NewsBloc(),
           ),
           BlocProvider(create: (context) => SubscribeCubit())
         ], child: const NewsPage());

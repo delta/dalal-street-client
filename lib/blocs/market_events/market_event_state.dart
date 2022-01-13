@@ -1,28 +1,28 @@
 part of 'market_event_bloc.dart';
 
-abstract class MarketEventState extends Equatable {
-  const MarketEventState();
+abstract class NewsState extends Equatable {
+  const NewsState();
   @override
   List<Object> get props => [];
 }
 
-class MarketEventInitial extends MarketEventState {}
+class MarketEventInitial extends NewsState {}
 
-class GetMarketEventSucess extends MarketEventState {
+class GetMarketEventSucess extends NewsState {
   final GetMarketEventsResponse marketEventsList;
   const GetMarketEventSucess(this.marketEventsList);
   @override
   List<Object> get props => [marketEventsList];
 }
 
-class GetMarketEventFailure extends MarketEventState {
+class GetMarketEventFailure extends NewsState {
   final String error;
   const GetMarketEventFailure(this.error);
   @override
   List<Object> get props => [error];
 }
 
-class SubscriptionToMarketEventSuccess extends MarketEventState {
+class SubscriptionToMarketEventSuccess extends NewsState {
   final MarketEventUpdate news;
   const SubscriptionToMarketEventSuccess(this.news);
 
@@ -30,7 +30,7 @@ class SubscriptionToMarketEventSuccess extends MarketEventState {
   List<Object> get props => [news];
 }
 
-class SubscriptionToMarketEventFailed extends MarketEventState {
+class SubscriptionToMarketEventFailed extends NewsState {
   final String subscriptionId;
   const SubscriptionToMarketEventFailed(this.subscriptionId);
 

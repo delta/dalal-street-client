@@ -21,13 +21,13 @@ class _NewsPageState extends State<NewsPage> {
   @override
   void initState() {
     super.initState();
-    context.read<MarketEventBloc>().add(const GetMarketEvent());
+    context.read<NewsBloc>().add(const GetNews());
 
     context.read<SubscribeCubit>().subscribe(DataStreamType.MARKET_EVENTS);
     _scrollController.addListener(() {
       if (_scrollController.position.atEdge) {
         if (_scrollController.position.pixels != 0) {
-          context.read<MarketEventBloc>().add(GetMoreMarketEvent(10 * i));
+          context.read<NewsBloc>().add(GetMoreNews(10 * i));
           i++;
         }
       }
@@ -106,15 +106,15 @@ Widget news(List<MarketEvent> mapMarketEvents) => Container(
 
 Widget feedlist(List<MarketEvent> mapMarketEvents,
         ScrollController _scrollController) =>
-    BlocBuilder<MarketEventBloc, MarketEventState>(builder: (context, state) {
+    BlocBuilder<NewsBloc, NewsState>(builder: (context, state) {
       if (state is GetMarketEventSucess) {
         mapMarketEvents.addAll(state.marketEventsList.marketEvents);
         return BlocBuilder<SubscribeCubit, SubscribeState>(
             builder: (context, state) {
           if (state is SubscriptionDataLoaded) {
             context
-                .read<MarketEventBloc>()
-                .add(GetMarketEventFeed(state.subscriptionId));
+                .read<NewsBloc>()
+                .add(GetNewsFeed(state.subscriptionId));
 
             return SingleChildScrollView(
                 child: SizedBox(
@@ -164,7 +164,7 @@ Widget feedlist(List<MarketEvent> mapMarketEvents,
     });
 
 Widget latestnews(List<MarketEvent> mapMarketEvents) =>
-    BlocBuilder<MarketEventBloc, MarketEventState>(builder: (context, state) {
+    BlocBuilder<NewsBloc, NewsState>(builder: (context, state) {
       if (state is GetMarketEventSucess) {
         if (mapMarketEvents.isEmpty) {
           mapMarketEvents.addAll(state.marketEventsList.marketEvents);
@@ -174,8 +174,8 @@ Widget latestnews(List<MarketEvent> mapMarketEvents) =>
             builder: (context, state) {
           if (state is SubscriptionDataLoaded) {
             context
-                .read<MarketEventBloc>()
-                .add(GetMarketEventFeed(state.subscriptionId));
+                .read<NewsBloc>()
+                .add(GetNewsFeed(state.subscriptionId));
 
             MarketEvent marketEvent = mapMarketEvents[0];
             String headline = marketEvent.headline;
@@ -215,7 +215,7 @@ Widget latestnews(List<MarketEvent> mapMarketEvents) =>
 Widget newsItem(String text, String imagePath, String createdAt) {
   return (Container(
     padding: const EdgeInsets.all(10),
-    child: BlocBuilder<MarketEventBloc, MarketEventState>(
+    child: BlocBuilder<NewsBloc, NewsState>(
         builder: (context, state) {
       if (state is SubscriptionToMarketEventSuccess) {
         return Row(
