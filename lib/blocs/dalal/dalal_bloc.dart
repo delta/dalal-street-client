@@ -37,6 +37,7 @@ class DalalBloc extends HydratedBloc<DalalEvent, DalalState> {
 
     on<GetUserData>((event, emit) async {
       final sessionId = event.sessionId;
+      emit(const DalalDataLoading());
       try {
         final loginResponse = await actionClient.login(
           LoginRequest(),
@@ -62,10 +63,12 @@ class DalalBloc extends HydratedBloc<DalalEvent, DalalState> {
           logger.i('Logged out becuase of invalid sessionId');
           emit(const DalalLoggedOut(fromSplash: true));
         } else {
+          await Future.delayed(const Duration(milliseconds: 200));
           emit(DalalLoginFailed(sessionId));
         }
       } catch (e) {
         logger.e(e);
+        await Future.delayed(const Duration(milliseconds: 200));
         emit(DalalLoginFailed(sessionId));
       }
     });

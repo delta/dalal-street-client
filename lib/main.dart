@@ -1,6 +1,5 @@
 import 'package:dalal_street_client/blocs/dalal/dalal_bloc.dart';
 import 'package:dalal_street_client/config/config.dart';
-import 'package:dalal_street_client/constants/error_messages.dart';
 import 'package:dalal_street_client/grpc/client.dart';
 import 'package:dalal_street_client/navigation/route_generator.dart';
 import 'package:dalal_street_client/theme/theme.dart';
@@ -93,8 +92,7 @@ class DalalApp extends StatelessWidget {
               }
               _navigator.pushNamedAndRemoveUntil('/landing', (route) => false);
             } else if (state is DalalLoginFailed) {
-              // TODO: add retry button
-              showSnackBar(context, failedToReachServer);
+              // Handled in SplashPage
             }
           },
           child: child,

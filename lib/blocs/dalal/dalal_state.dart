@@ -31,6 +31,10 @@ class DalalLoggedIn extends DalalState {
   List<Object> get props => [sessionId];
 }
 
+class DalalDataLoading extends DalalState {
+  const DalalDataLoading();
+}
+
 /// User is logged in(user is currently using the app)
 ///
 /// Show home page
