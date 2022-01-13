@@ -56,7 +56,10 @@ class DailyChallengeItem extends StatelessWidget {
                   children: [
                     Text(challenge.title),
                     const SizedBox(height: 10),
-                    Text(challenge.description(stock)),
+                    Text(
+                      challenge.description(stock),
+                      style: const TextStyle(color: silver),
+                    ),
                     const SizedBox(height: 25),
                     _challengeProgress(),
                   ],
