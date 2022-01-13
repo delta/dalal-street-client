@@ -5,6 +5,7 @@ import 'package:dalal_street_client/constants/format.dart';
 import 'package:dalal_street_client/constants/icons.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
 import 'package:dalal_street_client/streams/global_streams.dart';
+import 'package:dalal_street_client/streams/transformations.dart';
 import 'package:dalal_street_client/theme/colors.dart';
 import 'package:dalal_street_client/utils/snackbar.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +13,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinbox/flutter_spinbox.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-// todo: fix text input in mobile
+// todo: fix text input in mobile in future if flutter fixes it in its update
 class ExchangeBottomSheet extends StatefulWidget {
   final Stock company;
   const ExchangeBottomSheet({Key? key, required this.company})
@@ -28,8 +29,7 @@ class _ExchangeBottomSheetState extends State<ExchangeBottomSheet> {
   late int totalPrice;
   late int orderFee;
   final userInfoStream = getIt<GlobalStreams>().dynamicUserInfoStream;
-  Stream<int> get cashStream =>
-      userInfoStream.map((userInfo) => userInfo.cash).distinct();
+  Stream<int> get cashStream => getCashStream(userInfoStream);
 
   @override
   void initState() {

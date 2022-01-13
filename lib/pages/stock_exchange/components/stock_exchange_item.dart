@@ -4,6 +4,7 @@ import 'package:dalal_street_client/constants/format.dart';
 import 'package:dalal_street_client/pages/stock_exchange/components/exchange_bottom_sheet.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
 import 'package:dalal_street_client/streams/global_streams.dart';
+import 'package:dalal_street_client/streams/transformations.dart';
 import 'package:dalal_street_client/theme/colors.dart';
 import 'package:fixnum/fixnum.dart';
 import 'package:flutter/material.dart';
@@ -12,14 +13,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class StockExchangeItem extends StatefulWidget {
   final Stock company;
   final int stockId;
-  final int priceChange;
   final int currentPrice;
 
   const StockExchangeItem(
       {Key? key,
       required this.company,
       required this.stockId,
-      required this.priceChange,
       required this.currentPrice})
       : super(key: key);
 
@@ -29,8 +28,10 @@ class StockExchangeItem extends StatefulWidget {
 
 class _StockExchangeItemState extends State<StockExchangeItem> {
   Map<int, Stock> mapOfStocks = getIt<GlobalStreams>().latestStockMap;
+  final stockMapStream = getIt<GlobalStreams>().stockMapStream;
   @override
   Widget build(BuildContext context) {
+    int previousDayClose = widget.company.previousDayClose.toInt();
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
       decoration: const BoxDecoration(
@@ -44,7 +45,7 @@ class _StockExchangeItemState extends State<StockExchangeItem> {
             _stockNames(widget.company),
             _stockPrices(
               widget.stockId,
-              widget.priceChange,
+              previousDayClose,
               widget.currentPrice,
             ),
           ]),
@@ -132,59 +133,31 @@ class _StockExchangeItemState extends State<StockExchangeItem> {
 
   Widget _stockPrices(
     int stockId,
-    int priceChange,
+    int previousDayClose,
     int currentPrice,
   ) =>
-      BlocBuilder<ExchangeCubit, ExchangeState>(
-        builder: (context, state) {
-          if (state is ExchangeDataLoaded) {
-            return Expanded(
-              child: () {
-                int currentStockPrice =
-                    state.exchangeData[stockId]?.price.toInt() ??
-                        mapOfStocks[stockId]?.currentPrice.toInt() ??
-                        0;
-
-                mapOfStocks[stockId]?.currentPrice = Int64(currentStockPrice);
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Text(
-                      oCcy.format(currentStockPrice).toString(),
-                      style: const TextStyle(
-                        fontSize: 18,
-                      ),
-                    ),
-                    Text(
-                      priceChange >= 0
-                          ? '+' + oCcy.format(priceChange).toString()
-                          : oCcy.format(priceChange).toString(),
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: priceChange > 0 ? secondaryColor : heartRed,
-                      ),
-                    ),
-                  ],
-                );
-              }(),
-            );
-          }
+      StreamBuilder<Int64>(
+        stream: getStockPriceStream(stockId, stockMapStream),
+        initialData: Int64(currentPrice),
+        builder: (_, snapshot) {
+          int stockPrice = snapshot.data!.toInt();
+          int updatedPriceChange = stockPrice - previousDayClose;
           return Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text(
-                oCcy.format(currentPrice).toString(),
+                oCcy.format(stockPrice).toString(),
                 style: const TextStyle(
                   fontSize: 18,
                 ),
               ),
               Text(
-                priceChange >= 0
-                    ? '+' + oCcy.format(priceChange).toString()
-                    : oCcy.format(priceChange).toString(),
+                updatedPriceChange >= 0
+                    ? '+' + oCcy.format(updatedPriceChange).toString()
+                    : oCcy.format(updatedPriceChange).toString(),
                 style: TextStyle(
                   fontSize: 14,
-                  color: priceChange > 0 ? secondaryColor : heartRed,
+                  color: updatedPriceChange > 0 ? secondaryColor : heartRed,
                 ),
               ),
             ],

@@ -94,12 +94,9 @@ class _ExchangePageState extends State<ExchangePage> {
         itemBuilder: (context, index) {
           Stock? company = mapOfStocks[index + 1];
           int currentPrice = mapOfStocks[index + 1]?.currentPrice.toInt() ?? 0;
-          int previousDayPrice = company?.previousDayClose.toInt() ?? 0;
-          var priceChange = (currentPrice - previousDayPrice);
           return StockExchangeItem(
               company: company ?? Stock(),
               stockId: index + 1,
-              priceChange: priceChange,
               currentPrice: currentPrice);
         },
         separatorBuilder: (BuildContext context, int index) {
