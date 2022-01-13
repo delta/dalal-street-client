@@ -1,24 +1,23 @@
 part of 'market_event_bloc.dart';
 
-// ignore: camel_case_types
-abstract class MarketEventevents extends Equatable {
-  const MarketEventevents();
+abstract class MarketEventEvents extends Equatable {
+  const MarketEventEvents();
   @override
   List<Object> get props => [];
 }
 
-class GetMarketEvent extends MarketEventevents {
+class GetMarketEvent extends MarketEventEvents {
   const GetMarketEvent();
 }
 
-class GetMarketEventFeed extends MarketEventevents {
+class GetMarketEventFeed extends MarketEventEvents {
   final SubscriptionId subscriptionId;
   const GetMarketEventFeed(this.subscriptionId);
   @override
   List<Object> get props => [subscriptionId];
 }
 
-class GetMoreMarketEvent extends MarketEventevents {
+class GetMoreMarketEvent extends MarketEventEvents {
   final int lasteventid;
   const GetMoreMarketEvent(this.lasteventid);
 }
