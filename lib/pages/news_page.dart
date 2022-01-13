@@ -107,7 +107,7 @@ Widget news(List<MarketEvent> mapMarketEvents) => Container(
 Widget feedlist(List<MarketEvent> mapMarketEvents,
         ScrollController _scrollController) =>
     BlocBuilder<NewsBloc, NewsState>(builder: (context, state) {
-      if (state is GetMarketEventSucess) {
+      if (state is GetNewsSucess) {
         mapMarketEvents.addAll(state.marketEventsList.marketEvents);
         return BlocBuilder<SubscribeCubit, SubscribeState>(
             builder: (context, state) {
@@ -152,7 +152,7 @@ Widget feedlist(List<MarketEvent> mapMarketEvents,
             );
           }
         });
-      } else if (state is GetMarketEventFailure) {
+      } else if (state is GetNewsFailure) {
         return const Text('Error');
       } else {
         return const Center(
@@ -165,7 +165,7 @@ Widget feedlist(List<MarketEvent> mapMarketEvents,
 
 Widget latestnews(List<MarketEvent> mapMarketEvents) =>
     BlocBuilder<NewsBloc, NewsState>(builder: (context, state) {
-      if (state is GetMarketEventSucess) {
+      if (state is GetNewsSucess) {
         if (mapMarketEvents.isEmpty) {
           mapMarketEvents.addAll(state.marketEventsList.marketEvents);
         }
@@ -201,7 +201,7 @@ Widget latestnews(List<MarketEvent> mapMarketEvents) =>
             );
           }
         });
-      } else if (state is GetMarketEventFailure) {
+      } else if (state is GetNewsFailure) {
         return const Text('Error');
       } else {
         return const Center(
@@ -217,7 +217,7 @@ Widget newsItem(String text, String imagePath, String createdAt) {
     padding: const EdgeInsets.all(10),
     child: BlocBuilder<NewsBloc, NewsState>(
         builder: (context, state) {
-      if (state is SubscriptionToMarketEventSuccess) {
+      if (state is SubscriptionToNewsSuccess) {
         return Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -235,7 +235,7 @@ Widget newsItem(String text, String imagePath, String createdAt) {
                 fit: FlexFit.loose),
           ],
         );
-      } else if (state is SubscriptionToMarketEventFailed) {
+      } else if (state is SubscriptionToNewsFailed) {
         return const Center(
           child: Text(
             'Subscription To Market Event Failed',

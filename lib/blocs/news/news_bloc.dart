@@ -12,7 +12,7 @@ part 'news_event.dart';
 part 'news_state.dart';
 
 class NewsBloc extends Bloc<NewsEvent, NewsState> {
-  NewsBloc() : super(MarketEventInitial()) {
+  NewsBloc() : super(NewsInitial()) {
     on<GetNews>((event, emit) async {
       try {
         final GetMarketEventsResponse marketEventResponse =
@@ -21,9 +21,9 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
           options: sessionOptions(getIt()),
         );
 
-        emit(GetMarketEventSucess(marketEventResponse));
+        emit(GetNewsSucess(marketEventResponse));
       } catch (e) {
-        emit(GetMarketEventFailure(e.toString()));
+        emit(GetNewsFailure(e.toString()));
       }
     });
 
@@ -33,11 +33,11 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
             event.subscriptionId,
             options: sessionOptions(getIt()));
         await for (final marketevent in marketeventstream) {
-          emit(SubscriptionToMarketEventSuccess(marketevent));
+          emit(SubscriptionToNewsSuccess(marketevent));
         }
       } catch (e) {
         logger.e(e);
-        emit(SubscriptionToMarketEventFailed(e.toString()));
+        emit(SubscriptionToNewsFailed(e.toString()));
       }
     });
 
@@ -49,9 +49,9 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
           options: sessionOptions(getIt()),
         );
 
-        emit(GetMarketEventSucess(marketEventResponse));
+        emit(GetNewsSucess(marketEventResponse));
       } catch (e) {
-        emit(GetMarketEventFailure(e.toString()));
+        emit(GetNewsFailure(e.toString()));
       }
     });
   }

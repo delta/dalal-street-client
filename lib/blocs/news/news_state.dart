@@ -6,33 +6,33 @@ abstract class NewsState extends Equatable {
   List<Object> get props => [];
 }
 
-class MarketEventInitial extends NewsState {}
+class NewsInitial extends NewsState {}
 
-class GetMarketEventSucess extends NewsState {
+class GetNewsSucess extends NewsState {
   final GetMarketEventsResponse marketEventsList;
-  const GetMarketEventSucess(this.marketEventsList);
+  const GetNewsSucess(this.marketEventsList);
   @override
   List<Object> get props => [marketEventsList];
 }
 
-class GetMarketEventFailure extends NewsState {
+class GetNewsFailure extends NewsState {
   final String error;
-  const GetMarketEventFailure(this.error);
+  const GetNewsFailure(this.error);
   @override
   List<Object> get props => [error];
 }
 
-class SubscriptionToMarketEventSuccess extends NewsState {
+class SubscriptionToNewsSuccess extends NewsState {
   final MarketEventUpdate news;
-  const SubscriptionToMarketEventSuccess(this.news);
+  const SubscriptionToNewsSuccess(this.news);
 
   @override
   List<Object> get props => [news];
 }
 
-class SubscriptionToMarketEventFailed extends NewsState {
+class SubscriptionToNewsFailed extends NewsState {
   final String subscriptionId;
-  const SubscriptionToMarketEventFailed(this.subscriptionId);
+  const SubscriptionToNewsFailed(this.subscriptionId);
 
   @override
   List<Object> get props => [subscriptionId];
