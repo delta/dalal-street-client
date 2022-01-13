@@ -44,6 +44,7 @@ dependencies:
 
   # Other
   fixnum: ^1.0.0
+  intl: ^0.17.0
   url_launcher: ^6.0.15
   super_tooltip: ^1.0.1
   pin_code_fields: ^7.3.0

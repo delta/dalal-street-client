@@ -6,6 +6,7 @@ import 'package:dalal_street_client/theme/colors.dart';
 import 'package:dalal_street_client/utils/range.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 
 // TODO: Disable swiping until this is resolved properly: https://github.com/flutter/flutter/issues/31206
 class DailyChallengesPage extends StatelessWidget {
@@ -60,9 +61,16 @@ class _DailyChallengesPageBody extends StatefulWidget {
 class _DailyChallengesPageBodyState extends State<_DailyChallengesPageBody>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  late String selectedDate;
 
   List<int> get days => 1.to(widget.successState.totalMarketDays);
   int get marketDay => widget.successState.marketDay;
+
+  String dateForIndex(int tabIndex) {
+    final diff = marketDay - (tabIndex + 1);
+    final date = DateTime.now().subtract(Duration(days: diff));
+    return DateFormat('dd MMM, yyyy').format(date);
+  }
 
   @override
   void initState() {
@@ -74,8 +82,10 @@ class _DailyChallengesPageBodyState extends State<_DailyChallengesPageBody>
         int index = _tabController.previousIndex;
         setState(() => _tabController.index = index);
       }
+      setState(() => selectedDate = dateForIndex(_tabController.index));
     });
     _tabController.index = marketDay - 1;
+    selectedDate = dateForIndex(_tabController.index);
   }
 
   @override
@@ -118,35 +128,41 @@ class _DailyChallengesPageBodyState extends State<_DailyChallengesPageBody>
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
         ),
-        child: Padding(
-          padding: const EdgeInsets.all(10),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 10),
-              const Padding(
-                padding: EdgeInsets.only(left: 10),
-                child: Text(
-                  'Daily Challenges',
-                  style: TextStyle(fontSize: 18),
-                ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 20),
+            const Padding(
+              padding: EdgeInsets.only(left: 20),
+              child: Text(
+                'Daily Challenges',
+                style: TextStyle(fontSize: 18),
               ),
-              const SizedBox(height: 10),
-              TabBar(
-                controller: _tabController,
-                isScrollable: true,
-                tabs: [
-                  for (final day in days)
-                    Tab(
-                      text: 'Day $day',
-                      icon: Icon(
-                        (day <= marketDay) ? Icons.lock_open : Icons.lock,
-                      ),
-                    )
-                ],
+            ),
+            const SizedBox(height: 10),
+            Padding(
+              padding: const EdgeInsets.only(left: 20),
+              child: Text(
+                selectedDate,
+                style: const TextStyle(color: lightGray, fontSize: 16),
               ),
-            ],
-          ),
+            ),
+            const SizedBox(height: 20),
+            TabBar(
+              controller: _tabController,
+              isScrollable: true,
+              tabs: [
+                for (final day in days)
+                  Tab(
+                    text: 'Day $day',
+                    icon: Icon(
+                      (day <= marketDay) ? Icons.lock_open : Icons.lock,
+                    ),
+                  )
+              ],
+            ),
+            const SizedBox(height: 10),
+          ],
         ),
       );
 }
