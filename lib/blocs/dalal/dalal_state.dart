@@ -8,8 +8,6 @@ abstract class DalalState extends Equatable {
 }
 
 /// User is logged out
-///
-/// Show Login Page
 class DalalLoggedOut extends DalalState {
   final bool fromSplash;
 
@@ -20,8 +18,6 @@ class DalalLoggedOut extends DalalState {
 }
 
 /// User is logged in but User data needs to fetched(already authenticated, just opened the app)
-///
-/// Show splash page and fetch user data, then go to home page
 class DalalLoggedIn extends DalalState {
   final String sessionId;
 
@@ -31,10 +27,13 @@ class DalalLoggedIn extends DalalState {
   List<Object> get props => [sessionId];
 }
 
+/// Fetching user data with sessionId
 class DalalDataLoading extends DalalState {
+  // TODO: keep sessionId in this state too
   const DalalDataLoading();
 }
 
+/// User is logged in but verifiction is not done
 class DalalVerificationPending extends DalalState {
   final String sessionId;
 
@@ -45,8 +44,6 @@ class DalalVerificationPending extends DalalState {
 }
 
 /// User is logged in and verified
-///
-/// Show home page
 class DalalDataLoaded extends DalalState {
   final User user;
   final String sessionId;
@@ -62,9 +59,7 @@ class DalalDataLoaded extends DalalState {
   List<Object> get props => [user, sessionId, globalStreams];
 }
 
-/// When failure happens in getting user data
-///
-/// Stays in splash page. Shows snackbar with retry button
+/// Failure happened when getting user data
 class DalalLoginFailed extends DalalState {
   final String sessionId;
 

@@ -41,7 +41,6 @@ void main() async {
   );
 }
 
-// TODO: Fix getIt bug when registering
 // TODO: add proper validationMessages in all ReactiveForms
 // TODO: add metadata in all forms to facilitate Autofill
 // TODO: do that thing where if we hit enter while filling a form the focus will shift to the next textfield, and submits the form on hitting enter in the last field. Don't know what it's called

@@ -7,7 +7,7 @@ abstract class DalalEvent extends Equatable {
   List<Object> get props => [];
 }
 
-/// Should be called at splash screen if sessionId is present
+/// Check if a sessionId is stored in local and redirect accordingly
 class CheckUser extends DalalEvent {
   const CheckUser();
 }
@@ -22,6 +22,7 @@ class GetUserData extends DalalEvent {
   List<Object> get props => [sessionId];
 }
 
+/// User has logged in by entering creds. Check verification and redirect accordingly
 class DalalCheckVerification extends DalalEvent {
   final User user;
   final String sessionId;
@@ -32,6 +33,7 @@ class DalalCheckVerification extends DalalEvent {
   List<Object> get props => [user, sessionId];
 }
 
+/// Logout the user
 class DalalLogOut extends DalalEvent {
   const DalalLogOut();
 }
