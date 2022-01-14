@@ -29,8 +29,12 @@ class DalalLoggedIn extends DalalState {
 
 /// Fetching user data with sessionId
 class DalalDataLoading extends DalalState {
-  // TODO: keep sessionId in this state too
-  const DalalDataLoading();
+  final String sessionId;
+
+  const DalalDataLoading(this.sessionId);
+
+  @override
+  List<Object> get props => [sessionId];
 }
 
 /// User is logged in but verifiction is not done

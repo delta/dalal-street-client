@@ -37,7 +37,7 @@ class DalalBloc extends HydratedBloc<DalalEvent, DalalState> {
 
     on<GetUserData>((event, emit) async {
       final sessionId = event.sessionId;
-      emit(const DalalDataLoading());
+      emit(DalalDataLoading(sessionId));
       try {
         final loginResponse = await actionClient.login(
           LoginRequest(),
@@ -126,6 +126,8 @@ class DalalBloc extends HydratedBloc<DalalEvent, DalalState> {
     } else if (state is DalalVerificationPending) {
       return {'sessionId': state.sessionId};
     } else if (state is DalalLoggedIn) {
+      return {'sessionId': state.sessionId};
+    } else if (state is DalalDataLoading) {
       return {'sessionId': state.sessionId};
     } else if (state is DalalLoginFailed) {
       return {'sessionId': state.sessionId};
