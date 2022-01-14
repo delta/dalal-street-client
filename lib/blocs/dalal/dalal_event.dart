@@ -22,14 +22,14 @@ class GetUserData extends DalalEvent {
   List<Object> get props => [sessionId];
 }
 
-class DalalLogIn extends DalalEvent {
-  final LoginResponse loginResponse;
-  final GlobalStreams globalStreams;
+class DalalCheckVerification extends DalalEvent {
+  final User user;
+  final String sessionId;
 
-  const DalalLogIn(this.loginResponse, this.globalStreams);
+  const DalalCheckVerification(this.user, this.sessionId);
 
   @override
-  List<Object> get props => [loginResponse, globalStreams];
+  List<Object> get props => [user, sessionId];
 }
 
 class DalalLogOut extends DalalEvent {

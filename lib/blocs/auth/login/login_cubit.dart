@@ -4,7 +4,6 @@ import 'package:dalal_street_client/config/log.dart';
 import 'package:dalal_street_client/constants/error_messages.dart';
 import 'package:dalal_street_client/grpc/client.dart';
 import 'package:dalal_street_client/pages/auth/login_page.dart';
-import 'package:dalal_street_client/streams/global_streams.dart';
 import 'package:dalal_street_client/proto_build/actions/Login.pb.dart';
 import 'package:equatable/equatable.dart';
 
@@ -21,17 +20,15 @@ class LoginCubit extends Cubit<LoginState> {
     try {
       final loginResp = await actionClient
           .login(LoginRequest(email: email, password: password));
-      final sessionId = loginResp.sessionId;
       if (loginResp.statusCode != LoginResponse_StatusCode.OK) {
         emit(LoginFailure(loginResp.statusMessage));
         return;
       }
-      final globalStreams = await subscribeToGlobalStreams(
-        loginResp.user,
-        sessionId,
-      );
       emit(LoginSuccess(loginResp));
-      dalalBloc.add(DalalLogIn(loginResp, globalStreams));
+      dalalBloc.add(DalalCheckVerification(
+        loginResp.user,
+        loginResp.sessionId,
+      ));
     } catch (e) {
       // Inavlid session id error not possible because this is first time login
       // No need to check for grpc error code 16

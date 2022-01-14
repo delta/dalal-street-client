@@ -47,6 +47,10 @@ class DalalBloc extends HydratedBloc<DalalEvent, DalalState> {
         if (loginResponse.statusCode != LoginResponse_StatusCode.OK) {
           throw Exception(loginResponse.statusMessage);
         }
+        if (!loginResponse.user.isPhoneVerified) {
+          emit(DalalVerificationPending(sessionId));
+          return;
+        }
         final globalStreams = await subscribeToGlobalStreams(
           loginResponse.user,
           sessionId,
@@ -73,12 +77,17 @@ class DalalBloc extends HydratedBloc<DalalEvent, DalalState> {
       }
     });
 
-    // TODO: DalalLogIn event and DalalDataLoaded state has the exact same data. Maybe some refactoring can be done?
-    on<DalalLogIn>((event, emit) => emit(DalalDataLoaded(
-          event.loginResponse.user,
-          event.loginResponse.sessionId,
-          event.globalStreams,
-        )));
+    on<DalalCheckVerification>((event, emit) async {
+      if (event.user.isPhoneVerified) {
+        emit(DalalDataLoaded(
+          event.user,
+          event.sessionId,
+          await subscribeToGlobalStreams(event.user, event.sessionId),
+        ));
+      } else {
+        emit(DalalVerificationPending(event.sessionId));
+      }
+    });
 
     on<DalalLogOut>((event, emit) {
       try {
@@ -113,6 +122,8 @@ class DalalBloc extends HydratedBloc<DalalEvent, DalalState> {
   @override
   Map<String, dynamic>? toJson(DalalState state) {
     if (state is DalalDataLoaded) {
+      return {'sessionId': state.sessionId};
+    } else if (state is DalalVerificationPending) {
       return {'sessionId': state.sessionId};
     } else if (state is DalalLoggedIn) {
       return {'sessionId': state.sessionId};

@@ -35,12 +35,20 @@ class DalalDataLoading extends DalalState {
   const DalalDataLoading();
 }
 
-/// User is logged in(user is currently using the app)
+class DalalVerificationPending extends DalalState {
+  final String sessionId;
+
+  const DalalVerificationPending(this.sessionId);
+
+  @override
+  List<Object> get props => [sessionId];
+}
+
+/// User is logged in and verified
 ///
 /// Show home page
 class DalalDataLoaded extends DalalState {
   final User user;
-  // Extra Data
   final String sessionId;
   final GlobalStreams globalStreams;
 

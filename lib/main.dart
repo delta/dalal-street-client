@@ -69,18 +69,18 @@ class DalalApp extends StatelessWidget {
               getIt.registerSingleton(state.globalStreams);
 
               logger.i('user logged in');
-              if (state.user.isPhoneVerified) {
-                //showSnackBar(context, 'Welcome ${state.user.name}');
-                _navigator.pushNamedAndRemoveUntil(
-                  '/home',
-                  (route) => false,
-                  arguments: state.user,
-                );
-              } else {
-                showSnackBar(context, 'Verify your phone to continue');
-                _navigator.pushNamedAndRemoveUntil(
-                    '/enterPhone', (route) => false);
-              }
+              _navigator.pushNamedAndRemoveUntil(
+                '/home',
+                (route) => false,
+                arguments: state.user,
+              );
+            } else if (state is DalalVerificationPending) {
+              // Register sessionId
+              getIt.registerSingleton(state.sessionId);
+
+              showSnackBar(context, 'Verify your phone to continue');
+              _navigator.pushNamedAndRemoveUntil(
+                  '/enterPhone', (route) => false);
             } else if (state is DalalLoggedOut) {
               // Unregister everything
               getIt.reset();
