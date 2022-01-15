@@ -8,8 +8,6 @@ abstract class DalalState extends Equatable {
 }
 
 /// User is logged out
-///
-/// Show Login Page
 class DalalLoggedOut extends DalalState {
   final bool fromSplash;
 
@@ -20,8 +18,6 @@ class DalalLoggedOut extends DalalState {
 }
 
 /// User is logged in but User data needs to fetched(already authenticated, just opened the app)
-///
-/// Show splash page and fetch user data, then go to home page
 class DalalLoggedIn extends DalalState {
   final String sessionId;
 
@@ -31,16 +27,29 @@ class DalalLoggedIn extends DalalState {
   List<Object> get props => [sessionId];
 }
 
+/// Fetching user data with sessionId
 class DalalDataLoading extends DalalState {
-  const DalalDataLoading();
+  final String sessionId;
+
+  const DalalDataLoading(this.sessionId);
+
+  @override
+  List<Object> get props => [sessionId];
 }
 
-/// User is logged in(user is currently using the app)
-///
-/// Show home page
+/// User is logged in but verifiction is not done
+class DalalVerificationPending extends DalalState {
+  final String sessionId;
+
+  const DalalVerificationPending(this.sessionId);
+
+  @override
+  List<Object> get props => [sessionId];
+}
+
+/// User is logged in and verified
 class DalalDataLoaded extends DalalState {
   final User user;
-  // Extra Data
   final String sessionId;
   final GlobalStreams globalStreams;
 
@@ -54,9 +63,7 @@ class DalalDataLoaded extends DalalState {
   List<Object> get props => [user, sessionId, globalStreams];
 }
 
-/// When failure happens in getting user data
-///
-/// Stays in splash page. Shows snackbar with retry button
+/// Failure happened when getting user data
 class DalalLoginFailed extends DalalState {
   final String sessionId;
 
