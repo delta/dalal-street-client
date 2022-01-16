@@ -15,14 +15,14 @@ class NewsPage extends StatefulWidget {
 }
 
 class _NewsPageState extends State<NewsPage> {
-  int i = 1;
+  
   final ScrollController _scrollController = ScrollController();
   List<MarketEvent> mapMarketEvents = [];
   @override
   void initState() {
+    int i = 1;
     super.initState();
     context.read<NewsBloc>().add(const GetNews());
-
     context.read<SubscribeCubit>().subscribe(DataStreamType.MARKET_EVENTS);
     _scrollController.addListener(() {
       if (_scrollController.position.atEdge) {
@@ -56,56 +56,16 @@ class _NewsPageState extends State<NewsPage> {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                news(mapMarketEvents),
+                news(),
                 const SizedBox.square(
                   dimension: 20,
                 ),
-                feed(mapMarketEvents, _scrollController),
+                feed(),
+                
               ],
             )));
   }
-}
-
-Widget feed(
-    List<MarketEvent> mapMarketEvents, ScrollController _scrollController) {
-  return Container(
-      decoration: BoxDecoration(
-          color: backgroundColor, borderRadius: BorderRadius.circular(10)),
-      child: Column(
-        children: <Widget>[
-          Container(
-            child: const Text(
-              'Feed',
-              style: TextStyle(fontSize: 20, color: lightGray),
-              textAlign: TextAlign.left,
-            ),
-            alignment: Alignment.topLeft,
-            margin: const EdgeInsets.all(10),
-          ),
-          feedlist(mapMarketEvents, _scrollController)
-        ],
-      ));
-}
-
-Widget news(List<MarketEvent> mapMarketEvents) => Container(
-      decoration: BoxDecoration(
-          color: backgroundColor, borderRadius: BorderRadius.circular(10)),
-      child: Column(children: <Widget>[
-        Container(
-          child: const Text(
-            'News',
-            style: TextStyle(fontSize: 20, color: lightGray),
-            textAlign: TextAlign.left,
-          ),
-          alignment: Alignment.topLeft,
-          margin: const EdgeInsets.all(10),
-        ),
-        latestnews(mapMarketEvents)
-      ]),
-    );
-
-Widget feedlist(List<MarketEvent> mapMarketEvents,
-        ScrollController _scrollController) =>
+  Widget feedlist() =>
     BlocBuilder<NewsBloc, NewsState>(builder: (context, state) {
       if (state is GetNewsSucess) {
         mapMarketEvents.addAll(state.marketEventsList.marketEvents);
@@ -126,11 +86,14 @@ Widget feedlist(List<MarketEvent> mapMarketEvents,
                   String headline = marketEvent.headline;
                   String imagePath = marketEvent.imagePath;
                   String createdAt = marketEvent.createdAt;
-                  return (newsItem(headline, imagePath, createdAt));
+                  String text = marketEvent.text;
+                  return GestureDetector(
+                  child: newsItem(headline, imagePath, createdAt,false),      
+                  onTap: () => newsItem(text, imagePath, createdAt,true),
+                  );
                 },
-              ),
-              height: 500,
-            ));
+            ),
+             height: MediaQuery.of(context).size.height * 0.5));
           } else if (state is SubscriptonDataFailed) {
             logger.i('Stream Failed $state');
             return const Center(
@@ -161,6 +124,57 @@ Widget feedlist(List<MarketEvent> mapMarketEvents,
       }
     });
 
+    Widget feed() {
+  return Container(
+      decoration: BoxDecoration(
+          color: background2, borderRadius: BorderRadius.circular(10)),
+      child: Column(
+        children: <Widget>[
+          Container(
+            child: const Text(
+              'Feed',
+              style: TextStyle(fontSize: 18,
+                fontWeight: FontWeight.w500,
+                color: whiteWithOpacity75),
+              textAlign: TextAlign.left,
+            ),
+            alignment: Alignment.topLeft,
+            margin: const EdgeInsets.all(10),
+          ),
+          feedlist()
+        ],
+      ));
+}
+Widget news() => Container(
+      decoration: BoxDecoration(
+          color: background2, borderRadius: BorderRadius.circular(10)),
+      child: Column(
+        children: <Widget>[
+        Container(
+          child: const Text(
+            'News',
+            style: TextStyle(fontSize: 18,
+                fontWeight: FontWeight.w500,
+                color: whiteWithOpacity75),
+            textAlign: TextAlign.left,
+          ),
+          alignment: Alignment.topLeft,
+          margin: const EdgeInsets.all(10),
+        ),
+        SizedBox(
+          child:
+        latestnews(mapMarketEvents),
+        height: MediaQuery.of(context).size.height * 0.3),
+       
+      ]),
+    );
+  onNewsClicked(index,text,imagePath) 
+{
+ logger.i('clicked+$index');
+//  newsItem(text, imagePath,'yo',true);
+
+}
+
 Widget latestnews(List<MarketEvent> mapMarketEvents) =>
     BlocBuilder<NewsBloc, NewsState>(builder: (context, state) {
       if (state is GetNewsSucess) {
@@ -177,7 +191,7 @@ Widget latestnews(List<MarketEvent> mapMarketEvents) =>
             String headline = marketEvent.headline;
             String imagePath = marketEvent.imagePath;
             String createdAt = marketEvent.createdAt;
-            return newsItem(headline, imagePath, createdAt);
+            return newsItem(headline, imagePath, createdAt,true);
           } else if (state is SubscriptonDataFailed) {
             logger.i('Market Event Stream Failed $state');
             return const Center(
@@ -208,11 +222,14 @@ Widget latestnews(List<MarketEvent> mapMarketEvents) =>
       }
     });
 
-Widget newsItem(String text, String imagePath, String createdAt) {
-  return (Container(
+Widget newsItem(String text, String imagePath, String createdAt, bool islatest) {
+  return (
+    Container(
     padding: const EdgeInsets.all(10),
     child: BlocBuilder<NewsBloc, NewsState>(builder: (context, state) {
       if (state is SubscriptionToNewsSuccess) {
+        if(!islatest)
+        {
         return Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -225,11 +242,34 @@ Widget newsItem(String text, String imagePath, String createdAt) {
               ),
             ),
             Flexible(
-                child: Text(text,
+                child: Text(text+createdAt,
                     style: const TextStyle(color: Colors.white, fontSize: 15)),
                 fit: FlexFit.loose),
           ],
         );
+        }
+        else{
+          return 
+          Column(mainAxisAlignment: MainAxisAlignment.start,
+
+          children: <Widget>[
+            Flexible(
+                child: Text(text+createdAt,
+                    style: const TextStyle(color: Colors.white, fontSize: 15)),
+                fit: FlexFit.loose),
+                const SizedBox.square(dimension: 20,),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child:Image(
+                image: NetworkImage(imagePath),
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height*0.2,
+                ),
+              )
+              ]
+              );
+        }
+      
       } else if (state is SubscriptionToNewsFailed) {
         return const Center(
           child: Text(
@@ -237,6 +277,8 @@ Widget newsItem(String text, String imagePath, String createdAt) {
           ),
         );
       } else {
+         if(!islatest)
+        {
         return Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -254,7 +296,39 @@ Widget newsItem(String text, String imagePath, String createdAt) {
                 fit: FlexFit.loose),
           ],
         );
+        }
+        else{
+          return
+          Column(mainAxisAlignment: MainAxisAlignment.start,
+
+          children: <Widget>[
+            Flexible(
+                child: Text(text,
+                    style: const TextStyle(color: Colors.white, fontSize: 15)),
+                fit: FlexFit.loose),
+                const SizedBox.square(dimension: 20,),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child:Image(
+                image: NetworkImage(imagePath),
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height*0.2,
+                ),
+              )
+              ]
+              );
+        }
       }
     }),
-  ));
+  )
+  );
 }
+}
+
+
+
+
+
+
+
+
