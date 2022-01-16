@@ -10,10 +10,7 @@ part 'send_dividends_state.dart';
 class SendDividendsCubit extends Cubit<SendDividendsState> {
   SendDividendsCubit() : super(SendDividendsInitial());
 
-  Future<void> sendDividends(
-    final stockId,
-    final dividendAmount,
-  ) async {
+  Future<void> sendDividends(final stockId, final dividendAmount) async {
     emit(const SendDividendsLoading());
     try {
       final resp = await actionClient.sendDividends(
