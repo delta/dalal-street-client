@@ -4,7 +4,7 @@ import 'package:dalal_street_client/grpc/client.dart';
 import 'package:dalal_street_client/proto_build/actions/SendNotifications.pb.dart';
 import 'package:equatable/equatable.dart';
 
-import '../../../main.dart';
+import '../../main.dart';
 
 part 'send_notifications_state.dart';
 
