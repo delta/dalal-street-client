@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:dalal_street_client/config/get_it.dart';
 import 'package:dalal_street_client/config/log.dart';
+import 'package:dalal_street_client/constants/error_messages.dart';
 import 'package:dalal_street_client/grpc/client.dart';
 import 'package:dalal_street_client/proto_build/actions/GetStockHistory.pb.dart';
 import 'package:dalal_street_client/proto_build/actions/GetStockHistory.pbenum.dart';
@@ -34,7 +35,7 @@ class StockHistoryCubit extends Cubit<StockHistoryState> {
       emit(StockHistorySuccess(response.stockHistoryMap));
     } catch (e) {
       logger.e('error $e fetching stock history');
-      emit(const StockHistoryError('error connecting with server'));
+      emit(const StockHistoryError(failedToReachServer));
     }
   }
 }

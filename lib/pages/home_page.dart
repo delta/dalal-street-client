@@ -1,3 +1,4 @@
+import 'package:dalal_street_client/components/graph/line_area.dart';
 import 'package:dalal_street_client/config/get_it.dart';
 import 'package:dalal_street_client/constants/format.dart';
 import 'package:dalal_street_client/streams/transformations.dart';
@@ -80,6 +81,10 @@ class _HomePageState extends State<HomePage>
             height: 10,
           ),
           _recentNews(),
+          const SizedBox(
+            child: LineAreaGraph(stockId: 2),
+            height: 50,
+          ),
         ],
       ),
     );
