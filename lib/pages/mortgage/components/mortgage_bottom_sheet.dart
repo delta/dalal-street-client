@@ -34,7 +34,7 @@ class _MortgageBottomSheetState extends State<MortgageBottomSheet> {
     totalPrice = mortgagePrice * quantity;
     return BlocProvider(
       create: (context) => MortgageSheetCubit(),
-      child: BlocConsumer <MortgageSheetCubit,MortgageSheetState>(
+      child: BlocConsumer<MortgageSheetCubit, MortgageSheetState>(
         listener: (context, state) {
           if (state is MortgageSheetSuccess) {
             showSnackBar(context,

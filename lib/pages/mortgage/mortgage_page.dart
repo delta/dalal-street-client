@@ -5,7 +5,7 @@ import 'package:dalal_street_client/streams/global_streams.dart';
 import 'package:flutter/material.dart';
 
 class MortgagePage extends StatefulWidget {
-  const MortgagePage({ Key? key }) : super(key: key);
+  const MortgagePage({Key? key}) : super(key: key);
 
   @override
   _MortgagePageState createState() => _MortgagePageState();
@@ -18,11 +18,10 @@ class _MortgagePageState extends State<MortgagePage> {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
       child: _mortgageBody(),
-      
     );
   }
 
-Widget  _mortgageBody()=> ListView.separated(
+  Widget _mortgageBody() => ListView.separated(
         physics: const BouncingScrollPhysics(),
         scrollDirection: Axis.vertical,
         shrinkWrap: true,
@@ -30,7 +29,10 @@ Widget  _mortgageBody()=> ListView.separated(
         itemBuilder: (context, index) {
           Stock? company = mapOfStocks[index + 1];
           int currentPrice = mapOfStocks[index + 1]?.currentPrice.toInt() ?? 0;
-          return MortgageStockItem(company: company ?? Stock(),stockId: index+1,currentPrice: currentPrice);
+          return MortgageStockItem(
+              company: company ?? Stock(),
+              stockId: index + 1,
+              currentPrice: currentPrice);
         },
         separatorBuilder: (BuildContext context, int index) {
           return const SizedBox(

@@ -4,7 +4,7 @@ import 'package:dalal_street_client/theme/colors.dart';
 import 'package:flutter/material.dart';
 
 class MortgageHome extends StatefulWidget {
-  const MortgageHome({ Key? key }) : super(key: key);
+  const MortgageHome({Key? key}) : super(key: key);
 
   @override
   _MortgageHomeState createState() => _MortgageHomeState();
@@ -18,16 +18,18 @@ class _MortgageHomeState extends State<MortgageHome> {
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-              child: Column(
-                children: [
-                  const SizedBox(height: 20,),
-                  const StockBar(),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  _mortgageTabView(context),
-                ],
+          child: Column(
+            children: [
+              const SizedBox(
+                height: 20,
               ),
+              const StockBar(),
+              const SizedBox(
+                height: 10,
+              ),
+              _mortgageTabView(context),
+            ],
+          ),
         ),
       ),
     );
@@ -69,7 +71,6 @@ Widget _mortgageTabView(BuildContext context) {
                     textAlign: TextAlign.start,
                   ),
                 ),
-                
               ],
               indicatorColor: lightGray,
               indicatorPadding: EdgeInsets.symmetric(horizontal: 20),
@@ -78,7 +79,7 @@ Widget _mortgageTabView(BuildContext context) {
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
               height: MediaQuery.of(context).size.height * 0.8,
               child: const TabBarView(
-                  physics:  BouncingScrollPhysics(
+                  physics: BouncingScrollPhysics(
                       parent: AlwaysScrollableScrollPhysics()),
                   children: [MortgagePage(), MortgagePage()]),
             )
