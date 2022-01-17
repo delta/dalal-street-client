@@ -2,12 +2,11 @@ import 'package:dalal_street_client/components/marquee.dart';
 import 'package:dalal_street_client/config/get_it.dart';
 import 'package:dalal_street_client/constants/format.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
+import 'package:dalal_street_client/streams/transformations.dart';
 import 'package:dalal_street_client/theme/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:dalal_street_client/streams/global_streams.dart';
-
 import 'package:fixnum/fixnum.dart';
-import 'package:rxdart/rxdart.dart';
 
 class StockBar extends StatelessWidget {
   const StockBar({Key? key}) : super(key: key);
@@ -39,7 +38,7 @@ class StockBarMarquee extends StatelessWidget {
             stockId: stockId,
             previousDayClosePrice: stock.previousDayClose,
             currentPrice: stock.currentPrice,
-            stockPriceStream: _getStockPriceStream(stockId, stockMapStream),
+            stockPriceStream: getStockPriceStream(stockId, stockMapStream),
           ))
         });
 
@@ -58,11 +57,6 @@ class StockBarMarquee extends StatelessWidget {
       animationDuration: const Duration(milliseconds: 30000),
     );
   }
-
-  // returns a stock price stream of a particular stock id
-  static Stream<Int64> _getStockPriceStream(
-          int stockId, ValueStream<Map<int, Stock>> stockMapStream) =>
-      stockMapStream.map((event) => event[stockId]!.currentPrice).distinct();
 }
 
 class StockBarItem extends StatelessWidget {

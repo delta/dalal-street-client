@@ -1,20 +1,19 @@
 import 'package:dalal_street_client/blocs/exchange/sheet/exchange_sheet_cubit.dart';
+import 'package:dalal_street_client/config/get_it.dart';
 import 'package:dalal_street_client/constants/constants.dart';
+import 'package:dalal_street_client/constants/format.dart';
 import 'package:dalal_street_client/constants/icons.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
+import 'package:dalal_street_client/streams/global_streams.dart';
+import 'package:dalal_street_client/streams/transformations.dart';
 import 'package:dalal_street_client/theme/colors.dart';
 import 'package:dalal_street_client/utils/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinbox/flutter_spinbox.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:intl/intl.dart';
 
-final oCcy = NumberFormat('#,##0.00', 'en_US');
-
-// todo: svg error in mobile loading assets
-// todo: bottom sheet transition animation not working
-// todo: fix text input in mobile
+// todo: fix text input in mobile in future if flutter fixes it in its update
 class ExchangeBottomSheet extends StatefulWidget {
   final Stock company;
   const ExchangeBottomSheet({Key? key, required this.company})
@@ -24,12 +23,21 @@ class ExchangeBottomSheet extends StatefulWidget {
   _ExchangeBottomSheetState createState() => _ExchangeBottomSheetState();
 }
 
-class _ExchangeBottomSheetState extends State<ExchangeBottomSheet>
-    with TickerProviderStateMixin {
+class _ExchangeBottomSheetState extends State<ExchangeBottomSheet> {
   late int priceChange;
-  int quantity = 1;
+  late int quantity;
   late int totalPrice;
   late int orderFee;
+  final userInfoStream = getIt<GlobalStreams>().dynamicUserInfoStream;
+  Stream<int> get cashStream => getCashStream(userInfoStream);
+
+  @override
+  void initState() {
+    super.initState();
+    quantity = 1;
+    cashStream.listen((event) {});
+  }
+
   @override
   Widget build(BuildContext context) {
     priceChange =
@@ -47,6 +55,7 @@ class _ExchangeBottomSheetState extends State<ExchangeBottomSheet>
             Navigator.maybePop(context);
           } else if (state is ExchangeSheetFailure) {
             showSnackBar(context, state.msg);
+            Navigator.maybePop(context);
           }
         },
         builder: (context, state) {
@@ -56,56 +65,33 @@ class _ExchangeBottomSheetState extends State<ExchangeBottomSheet>
                 color: Colors.green,
               ),
             );
-          } else if (state is ExchangeSheetFailure) {
-            return Center(
-              child: Text(state.msg),
-            );
           }
-          return BottomSheet(
-            shape: const RoundedRectangleBorder(
-                borderRadius:
-                    BorderRadius.vertical(top: Radius.circular(25.0))),
-            enableDrag: true,
-            backgroundColor: backgroundColor,
-            animationController: BottomSheet.createAnimationController(this),
-            builder: (context) {
-              return Container(
-                height: 400,
-                width: MediaQuery.of(context).size.width,
-                decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(15),
-                      topRight: Radius.circular(15)),
-                ),
-                child: Padding(
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+            child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  _buildPopOver(),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Padding(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 15, vertical: 10),
+                      horizontal: 10,
+                    ),
                     child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          _buildPopOver(),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 15,
-                            ),
-                            child: Column(
-                              children: [
-                                _staticCompanyDetails(),
-                                const SizedBox(
-                                  height: 20,
-                                ),
-                                _dynamicExchangeDetails(),
-                                _buyStocksFooter(context)
-                              ],
-                            ),
-                          )
-                        ])),
-              );
-            },
-            onClosing: () {},
+                      children: [
+                        _staticCompanyDetails(),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        _dynamicExchangeDetails(),
+                        _buyStocksFooter(context)
+                      ],
+                    ),
+                  )
+                ]),
           );
         },
       ),
@@ -126,15 +112,18 @@ class _ExchangeBottomSheetState extends State<ExchangeBottomSheet>
         const SizedBox(
           height: 3,
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            InkWell(
-                onTap: () {
-                  Navigator.pop(context);
-                },
-                child: SvgPicture.asset(AppIcons().crossWhite)),
-          ],
+        Padding(
+          padding: const EdgeInsets.all(10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              InkWell(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: SvgPicture.asset(AppIcons().crossWhite)),
+            ],
+          ),
         ),
       ],
     );
@@ -204,7 +193,7 @@ class _ExchangeBottomSheetState extends State<ExchangeBottomSheet>
               ),
               child: SpinBox(
                 min: 1,
-                max: 100,
+                max: 20,
                 value: 01,
                 onChanged: (value) {
                   setBottomSheetState(() {
@@ -213,10 +202,10 @@ class _ExchangeBottomSheetState extends State<ExchangeBottomSheet>
                     orderFee = _calculateOrderFee(totalPrice);
                   });
                 },
+                readOnly: true,
                 iconColor: MaterialStateProperty.all(primaryColor),
                 cursorColor: primaryColor,
-                spacing: 10,
-                readOnly: true,
+                spacing: 15,
                 decoration: const InputDecoration(
                     contentPadding: EdgeInsets.zero, border: InputBorder.none),
                 textStyle: const TextStyle(
@@ -304,27 +293,38 @@ class _ExchangeBottomSheetState extends State<ExchangeBottomSheet>
               color: Colors.white70,
             ),
           ),
-          Text(
-            ' ₹' + oCcy.format(widget.company.currentPrice).toString(),
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              color: Colors.white70,
-              fontSize: 14,
-            ),
-          ),
+          StreamBuilder<int>(
+              stream: cashStream,
+              initialData: userInfoStream.value.cash,
+              builder: (_, snapshot) {
+                return Text(
+                  ' ₹' + oCcy.format(snapshot.data).toString(),
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    color: Colors.white70,
+                    fontSize: 14,
+                  ),
+                );
+              }),
         ]),
         const SizedBox(
           height: 25,
         ),
-        ElevatedButton(
-          onPressed: () {
-            if (quantity > 0) {
-              context
-                  .read<ExchangeSheetCubit>()
-                  .buyStocksFromExchange(widget.company.id, quantity);
-            }
-          },
-          child: const Text('Buy Stocks from Exchange'),
+        SizedBox(
+          width: double.infinity,
+          child: ElevatedButton(
+            onPressed: () {
+              if (quantity > 0) {
+                context
+                    .read<ExchangeSheetCubit>()
+                    .buyStocksFromExchange(widget.company.id, quantity);
+              }
+            },
+            child: const Text('Buy Stocks from Exchange'),
+          ),
+        ),
+        const SizedBox(
+          height: 10,
         )
       ],
     );

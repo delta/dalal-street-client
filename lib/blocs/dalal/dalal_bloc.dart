@@ -37,6 +37,7 @@ class DalalBloc extends HydratedBloc<DalalEvent, DalalState> {
 
     on<GetUserData>((event, emit) async {
       final sessionId = event.sessionId;
+      emit(DalalDataLoading(sessionId));
       try {
         final loginResponse = await actionClient.login(
           LoginRequest(),
@@ -45,6 +46,10 @@ class DalalBloc extends HydratedBloc<DalalEvent, DalalState> {
         // Internal Error. User should be given option to try again
         if (loginResponse.statusCode != LoginResponse_StatusCode.OK) {
           throw Exception(loginResponse.statusMessage);
+        }
+        if (!loginResponse.user.isPhoneVerified) {
+          emit(DalalVerificationPending(sessionId));
+          return;
         }
         final globalStreams = await subscribeToGlobalStreams(
           loginResponse.user,
@@ -62,20 +67,27 @@ class DalalBloc extends HydratedBloc<DalalEvent, DalalState> {
           logger.i('Logged out becuase of invalid sessionId');
           emit(const DalalLoggedOut(fromSplash: true));
         } else {
+          await Future.delayed(const Duration(milliseconds: 200));
           emit(DalalLoginFailed(sessionId));
         }
       } catch (e) {
         logger.e(e);
+        await Future.delayed(const Duration(milliseconds: 200));
         emit(DalalLoginFailed(sessionId));
       }
     });
 
-    // TODO: DalalLogIn event and DalalDataLoaded state has the exact same data. Maybe some refactoring can be done?
-    on<DalalLogIn>((event, emit) => emit(DalalDataLoaded(
-          event.loginResponse.user,
-          event.loginResponse.sessionId,
-          event.globalStreams,
-        )));
+    on<DalalCheckVerification>((event, emit) async {
+      if (event.user.isPhoneVerified) {
+        emit(DalalDataLoaded(
+          event.user,
+          event.sessionId,
+          await subscribeToGlobalStreams(event.user, event.sessionId),
+        ));
+      } else {
+        emit(DalalVerificationPending(event.sessionId));
+      }
+    });
 
     on<DalalLogOut>((event, emit) {
       try {
@@ -111,7 +123,11 @@ class DalalBloc extends HydratedBloc<DalalEvent, DalalState> {
   Map<String, dynamic>? toJson(DalalState state) {
     if (state is DalalDataLoaded) {
       return {'sessionId': state.sessionId};
+    } else if (state is DalalVerificationPending) {
+      return {'sessionId': state.sessionId};
     } else if (state is DalalLoggedIn) {
+      return {'sessionId': state.sessionId};
+    } else if (state is DalalDataLoading) {
       return {'sessionId': state.sessionId};
     } else if (state is DalalLoginFailed) {
       return {'sessionId': state.sessionId};

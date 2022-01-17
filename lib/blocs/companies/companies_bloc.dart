@@ -13,8 +13,21 @@ class CompaniesBloc extends Bloc<CompaniesEvent, CompaniesState> {
   CompaniesBloc() : super(CompaniesInitial()) {
     on<GetStockById>((event, emit) async {
       try {
-        final company = await actionClient.getCompanyProfile(
-          GetCompanyProfileRequest(stockId: event.stockId),
+        final stockpricesStream =
+            streamClient.getStockPricesUpdates(event.subscriptionId);
+        await for (final stockPrices in stockpricesStream) {
+          emit(SubscriptionToStockPricesSuccess(stockPrices));
+        }
+      } catch (e) {
+        logger.e(e);
+        emit(SubscriptionToStockPricesFailed(e.toString()));
+      }
+    });
+
+    on<GetStockList>((event, emit) async {
+      try {
+        final stockList = await actionClient.getStockList(
+          GetStockListRequest(),
           options: sessionOptions(getIt()),
         );
         emit(GetCompanyByIdSuccess(company));
