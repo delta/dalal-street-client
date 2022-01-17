@@ -54,8 +54,8 @@ class StockBarMarquee extends StatelessWidget {
         ],
       ),
       pauseDuration: const Duration(milliseconds: 0),
-      backDuration: const Duration(milliseconds: 10000),
-      animationDuration: const Duration(milliseconds: 10000),
+      backDuration: const Duration(milliseconds: 30000),
+      animationDuration: const Duration(milliseconds: 30000),
     );
   }
 

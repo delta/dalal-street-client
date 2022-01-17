@@ -1,17 +1,14 @@
-import 'package:dalal_street_client/blocs/stock_prices/stock_prices_bloc.dart';
-import 'package:dalal_street_client/blocs/subscribe/subscribe_cubit.dart';
 import 'package:dalal_street_client/config/get_it.dart';
 import 'package:dalal_street_client/components/stock_bar.dart';
-import 'package:dalal_street_client/config/log.dart';
 import 'package:dalal_street_client/constants/format.dart';
-import 'package:dalal_street_client/proto_build/datastreams/Subscribe.pb.dart';
+import 'package:fixnum/fixnum.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
 import 'package:dalal_street_client/proto_build/models/User.pb.dart';
 import 'package:dalal_street_client/streams/global_streams.dart';
 import 'package:dalal_street_client/utils/responsive.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dalal_street_client/theme/colors.dart';
+import 'package:rxdart/rxdart.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key, required this.user}) : super(key: key);
@@ -23,25 +20,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  // Unsubscribe to the streams when the widget is disposed
-  @override
-  void dispose() {
-    SubscriptionId? _stockPricesSubscriptionId;
-    final state = context.read<SubscribeCubit>().state;
-    if (state is SubscriptionDataLoaded) {
-      _stockPricesSubscriptionId = state.subscriptionId;
-      context.read<SubscribeCubit>().unsubscribe(_stockPricesSubscriptionId);
-    }
-    super.dispose();
-  }
-
-  @override
-  initState() {
-    super.initState();
-    // Subscribe to the stream of Stock Prices
-    context.read<SubscribeCubit>().subscribe(DataStreamType.STOCK_PRICES);
-    // TODO : Subscribe to the stream of News and Prices Graph
-  }
+  final Map<int, Stock> stocks = getIt<GlobalStreams>().stockMapStream.value;
+  final stockMapStream = getIt<GlobalStreams>().stockMapStream;
 
   @override
   Widget build(context) {
@@ -169,50 +149,43 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _stockList() {
-    var stockList = getIt<GlobalStreams>().latestStockMap;
     return ListView.builder(
       shrinkWrap: true,
-      itemCount: stockList.length,
+      itemCount: stocks.length,
       itemBuilder: (context, index) {
-        Stock? company = stockList[index + 1];
-        int currentPrice = company?.currentPrice.toInt() ?? 0;
-        int previousDayPrice = company?.previousDayClose.toInt() ?? 0;
-        var priceChange = (currentPrice - previousDayPrice);
-        return _stockItem(company, index, priceChange, currentPrice);
+        Stock stock = stocks[index + 1] ?? Stock();
+        return StockItem(
+            stock: stock,
+            stockPriceStream: _getStockPriceStream(stock.id, stockMapStream));
       },
     );
   }
 
-  Widget _stockItem(
-      Stock? company, int index, int priceChange, int currentPrice) {
-    List<int> data = [company!.id, widget.user.cash.toInt()];
-    return GestureDetector(
-      onTap: () {
-        Navigator.pushNamed(context, '/company', arguments: data);
-      },
-      child: Container(
-          padding: const EdgeInsets.symmetric(
-            vertical: 10,
-          ),
-          child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-            _stockNames(company),
-            _stockGraph(),
-            _stockPrices(index, priceChange, currentPrice),
-          ])),
-    );
-  }
+// returns a stock price stream of a particular stock id
+  static Stream<Int64> _getStockPriceStream(
+          int stockId, ValueStream<Map<int, Stock>> stockMapStream) =>
+      stockMapStream.map((event) => event[stockId]!.currentPrice).distinct();
+}
 
-  Expanded _stockNames(Stock? company) {
+class StockItem extends StatelessWidget {
+  final Stock stock;
+  final Stream<Int64> stockPriceStream;
+
+  const StockItem(
+      {Key? key, required this.stock, required this.stockPriceStream})
+      : super(key: key);
+
+  Expanded _stockNames(Stock company) {
     return Expanded(
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Text(
-          company?.shortName ?? 'Airtel',
+          company.shortName,
           style: const TextStyle(
             fontSize: 18,
           ),
         ),
         Text(
-          company?.fullName ?? 'Airtel Pvt Ltd',
+          company.fullName,
           style: const TextStyle(
             fontSize: 14,
             color: whiteWithOpacity50,
@@ -231,66 +204,59 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Expanded _stockPrices(int index, int priceChange, int currentPrice) {
-    return Expanded(
-      child: BlocBuilder<StockPricesBloc, StockPricesState>(
-        builder: (context, state) {
-          if (state is SubscriptionToStockPricesSuccess) {
-            var currentStockPrice = state.stockPrices.prices[index];
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Text(
-                  oCcy.format(currentStockPrice).toString(),
-                  style: const TextStyle(
-                    fontSize: 18,
-                  ),
-                ),
-                Text(
-                  priceChange >= 0
-                      ? '+' + oCcy.format(priceChange).toString()
-                      : oCcy.format(priceChange).toString(),
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: priceChange > 0 ? secondaryColor : heartRed,
-                  ),
-                ),
-              ],
-            );
-          } else if (state is SubscriptionToStockPricesFailed) {
-            return const Center(
-              child: Text(
-                'Failed to load data \nReason : //',
-                style: TextStyle(
-                  fontSize: 14,
-                  color: secondaryColor,
-                ),
-              ),
-            );
-          } else {
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Text(
-                  oCcy.format(currentPrice).toString(),
-                  style: const TextStyle(
-                    fontSize: 18,
-                  ),
-                ),
-                Text(
-                  priceChange >= 0
-                      ? '+' + oCcy.format(priceChange).toString()
-                      : oCcy.format(priceChange).toString(),
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: priceChange > 0 ? secondaryColor : heartRed,
-                  ),
-                ),
-              ],
-            );
-          }
-        },
-      ),
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.pushNamed(context, '/company', arguments: stock);
+      },
+      child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+          child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+            _stockNames(stock),
+            _stockGraph(),
+            StreamBuilder<Int64>(
+              stream: stockPriceStream,
+              initialData: stock.currentPrice,
+              builder: (context, state) {
+                Int64 stockPrice = state.data!;
+
+                bool isLowOrHigh = stockPrice > stock.previousDayClose;
+
+                double percentageHighOrLow;
+
+                if (stock.previousDayClose == 0) {
+                  percentageHighOrLow = stockPrice.toDouble();
+                } else {
+                  percentageHighOrLow = ((stockPrice.toDouble() -
+                          stock.previousDayClose.toDouble()) /
+                      stock.previousDayClose.toDouble());
+                }
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text(
+                      '₹' + oCcy.format(stockPrice).toString(),
+                      style: const TextStyle(
+                        fontSize: 18,
+                      ),
+                    ),
+                    Text(
+                      isLowOrHigh
+                          ? '+' +
+                              oCcy.format(percentageHighOrLow).toString() +
+                              '%'
+                          : oCcy.format(percentageHighOrLow).toString() + '%',
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: isLowOrHigh ? secondaryColor : heartRed,
+                      ),
+                    ),
+                  ],
+                );
+              },
+            )
+          ])),
     );
   }
 }
