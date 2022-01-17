@@ -48,7 +48,7 @@ class EnterOtpCubit extends Cubit<OtpState> {
       if (resp.statusCode == VerifyOTPResponse_StatusCode.OK) {
         emit(const OtpSuccess());
         // sessionId will be registered again in the root BlocListener
-        getIt.unregister<String>();
+        getIt.reset();
         dalalBloc.add(GetUserData(sessionId));
       } else {
         emit(OtpFailure(resp.statusMessage));
