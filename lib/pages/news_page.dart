@@ -1,6 +1,7 @@
 import 'package:dalal_street_client/blocs/news/news_bloc.dart';
 import 'package:dalal_street_client/blocs/subscribe/subscribe_cubit.dart';
 import 'package:dalal_street_client/config/log.dart';
+import 'package:dalal_street_client/pages/newsdetail_page.dart';
 import 'package:dalal_street_client/proto_build/datastreams/Subscribe.pb.dart';
 import 'package:dalal_street_client/proto_build/models/MarketEvent.pb.dart';
 import 'package:dalal_street_client/theme/colors.dart';
@@ -75,7 +76,7 @@ class _NewsPageState extends State<NewsPage> {
 
               return SingleChildScrollView(
                   child: SizedBox(
-                      child: ListView.builder(
+                      child: ListView.separated(
                         shrinkWrap: true,
                         physics: const ScrollPhysics(),
                         itemCount: mapMarketEvents.length,
@@ -87,11 +88,21 @@ class _NewsPageState extends State<NewsPage> {
                           String createdAt = marketEvent.createdAt;
                           String text = marketEvent.text;
                           return GestureDetector(
-                            child:
-                                newsItem(headline, imagePath, createdAt, false),
-                            onTap: () =>
-                                newsItem(text, imagePath, createdAt, true),
-                          );
+                              child: newsItem(
+                                  headline, imagePath, createdAt, false),
+                              onTap: () => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => NewsDetail(
+                                      index: index,
+                                      text:text,
+                                      imagePath:imagePath,
+                                      headline:headline
+                                    ),
+                                  )));
+                        },
+                        separatorBuilder: (context, index) {
+                          return const Divider();
                         },
                       ),
                       height: MediaQuery.of(context).size.height * 0.5));
@@ -169,11 +180,6 @@ class _NewsPageState extends State<NewsPage> {
               height: MediaQuery.of(context).size.height * 0.3),
         ]),
       );
-  onNewsClicked(index, text, imagePath) {
-    logger.i('clicked+$index');
-//  newsItem(text, imagePath,'yo',true);
-  }
-
   Widget latestnews(List<MarketEvent> mapMarketEvents) =>
       BlocBuilder<NewsBloc, NewsState>(builder: (context, state) {
         if (state is GetNewsSucess) {
@@ -226,10 +232,24 @@ class _NewsPageState extends State<NewsPage> {
     return (Container(
       padding: const EdgeInsets.all(10),
       child: BlocBuilder<NewsBloc, NewsState>(builder: (context, state) {
+        String dur;
+        DateTime dt1 = DateTime.parse(createdAt);
+        DateTime dt2 = DateTime.now();
+        Duration diff = dt2.difference(dt1);
+        if (diff.inDays == 0) {
+          if (diff.inHours == 0) {
+            dur = diff.inMinutes.toString() + ' minutes ago';
+          } else {
+            dur = diff.inHours.toString() + ' hour ago';
+          }
+        } else {
+          dur = diff.inDays.toString() + ' day ago';
+        }
         if (state is SubscriptionToNewsSuccess) {
           if (!islatest) {
             return Row(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
                 ClipRRect(
                   borderRadius: BorderRadius.circular(20),
@@ -239,22 +259,57 @@ class _NewsPageState extends State<NewsPage> {
                     image: NetworkImage(imagePath),
                   ),
                 ),
-                Flexible(
-                    child: Text(text + createdAt,
-                        style:
-                            const TextStyle(color: Colors.white, fontSize: 15)),
-                    fit: FlexFit.loose),
+                Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      SizedBox(
+                        width: (MediaQuery.of(context).size.width - 100) * 0.8,
+                        child: Flexible(
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                            child: Text(text,
+                                style: const TextStyle(
+                                    color: Colors.white, fontSize: 15)),
+                          ),
+                          fit: FlexFit.loose,
+                        ),
+                      ),
+                      const SizedBox.square(
+                        dimension: 5,
+                      ),
+                      Padding(
+                          padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                          child: Text(dur,
+                              style: const TextStyle(
+                                  color: lightGray, fontSize: 12)))
+                    ]),
               ],
             );
           } else {
             return Column(
                 mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Flexible(
-                      child: Text(text + createdAt,
-                          style: const TextStyle(
-                              color: Colors.white, fontSize: 15)),
-                      fit: FlexFit.loose),
+                  Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.8,
+                          child: Flexible(
+                              child: Text(text,
+                                  style: const TextStyle(
+                                      color: Colors.white, fontSize: 15)),
+                              fit: FlexFit.loose),
+                        ),
+                        const SizedBox.square(
+                          dimension: 5,
+                        ),
+                        Text(dur,
+                            style: const TextStyle(
+                                color: lightGray, fontSize: 12)),
+                      ]),
                   const SizedBox.square(
                     dimension: 20,
                   ),
@@ -263,7 +318,7 @@ class _NewsPageState extends State<NewsPage> {
                     child: Image(
                       image: NetworkImage(imagePath),
                       width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height * 0.2,
+                      height: MediaQuery.of(context).size.height * 0.15,
                     ),
                   )
                 ]);
@@ -278,6 +333,7 @@ class _NewsPageState extends State<NewsPage> {
           if (!islatest) {
             return Row(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
                 ClipRRect(
                   borderRadius: BorderRadius.circular(20),
@@ -287,22 +343,57 @@ class _NewsPageState extends State<NewsPage> {
                     image: NetworkImage(imagePath),
                   ),
                 ),
-                Flexible(
-                    child: Text(text,
-                        style:
-                            const TextStyle(color: Colors.white, fontSize: 15)),
-                    fit: FlexFit.loose),
+                Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      SizedBox(
+                        width: (MediaQuery.of(context).size.width - 100) * 0.8,
+                        child: Flexible(
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                            child: Text(text,
+                                style: const TextStyle(
+                                    color: Colors.white, fontSize: 15)),
+                          ),
+                          fit: FlexFit.loose,
+                        ),
+                      ),
+                      const SizedBox.square(
+                        dimension: 5,
+                      ),
+                      Padding(
+                          padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                          child: Text(dur,
+                              style: const TextStyle(
+                                  color: lightGray, fontSize: 12))),
+                    ]),
               ],
             );
           } else {
             return Column(
                 mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Flexible(
-                      child: Text(text,
-                          style: const TextStyle(
-                              color: Colors.white, fontSize: 15)),
-                      fit: FlexFit.loose),
+                  Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.8,
+                          child: Flexible(
+                              child: Text(text,
+                                  style: const TextStyle(
+                                      color: Colors.white, fontSize: 15)),
+                              fit: FlexFit.loose),
+                        ),
+                        const SizedBox.square(
+                          dimension: 5,
+                        ),
+                        Text(dur,
+                            style: const TextStyle(
+                                color: lightGray, fontSize: 12)),
+                      ]),
                   const SizedBox.square(
                     dimension: 20,
                   ),
@@ -311,7 +402,7 @@ class _NewsPageState extends State<NewsPage> {
                     child: Image(
                       image: NetworkImage(imagePath),
                       width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height * 0.2,
+                      height: MediaQuery.of(context).size.height * 0.15,
                     ),
                   )
                 ]);
