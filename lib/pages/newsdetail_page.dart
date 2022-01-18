@@ -25,21 +25,20 @@ class NewsDetail extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Padding(padding: const EdgeInsets.fromLTRB(5,40, 5, 10),
-           child: SizedBox(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height * 0.15,
-              child: Flexible(
-                child: 
-                     Text(
+            Padding(
+                padding: const EdgeInsets.fromLTRB(5, 40, 5, 10),
+                child: SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height * 0.15,
+                  child: Flexible(
+                    child: Text(
                       headline,
                       style: const TextStyle(fontSize: 20),
                     ),
                     // ),
-                fit: FlexFit.loose,
-              ),
-            )
-            ),
+                    fit: FlexFit.loose,
+                  ),
+                )),
             ClipRRect(
               borderRadius: BorderRadius.circular(20),
               child: Image(
