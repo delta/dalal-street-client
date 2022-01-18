@@ -94,11 +94,10 @@ class _NewsPageState extends State<NewsPage> {
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) => NewsDetail(
-                                      index: index,
-                                      text:text,
-                                      imagePath:imagePath,
-                                      headline:headline
-                                    ),
+                                        index: index,
+                                        text: text,
+                                        imagePath: imagePath,
+                                        headline: headline),
                                   )));
                         },
                         separatorBuilder: (context, index) {
