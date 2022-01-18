@@ -255,6 +255,7 @@ class _NewsPageState extends State<NewsPage> {
                   child: Image(
                     width: 100,
                     height: 100,
+                    fit: BoxFit.fill,
                     image: NetworkImage(imagePath),
                   ),
                 ),
@@ -318,6 +319,7 @@ class _NewsPageState extends State<NewsPage> {
                       image: NetworkImage(imagePath),
                       width: MediaQuery.of(context).size.width,
                       height: MediaQuery.of(context).size.height * 0.15,
+                      fit: BoxFit.fill,
                     ),
                   )
                 ]);
@@ -339,6 +341,7 @@ class _NewsPageState extends State<NewsPage> {
                   child: Image(
                     width: 100,
                     height: 100,
+                    fit: BoxFit.fill,
                     image: NetworkImage(imagePath),
                   ),
                 ),
@@ -402,6 +405,7 @@ class _NewsPageState extends State<NewsPage> {
                       image: NetworkImage(imagePath),
                       width: MediaQuery.of(context).size.width,
                       height: MediaQuery.of(context).size.height * 0.15,
+                      fit: BoxFit.fill,
                     ),
                   )
                 ]);
