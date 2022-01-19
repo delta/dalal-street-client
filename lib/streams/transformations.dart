@@ -13,8 +13,8 @@ Stream<Int64> getStockPriceStream(
     stockMapStream.map((event) => event[stockId]!.currentPrice).distinct();
 
 // returns a stream of stockOwnedMap
-Stream<int> getStockOwnedMapStream(
+Stream<int> getStocksOwnedStream(
         int stockId, ValueStream<DynamicUserInfo> userInfoStream) =>
     userInfoStream
-        .map((userInfo) => userInfo.stocksOwnedMap[stockId]!)
+        .map((userInfo) => userInfo.stocksOwnedMap[stockId] ?? 0)
         .distinct();

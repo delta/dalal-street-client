@@ -19,6 +19,8 @@ class _MortgageHomeState extends State<MortgageHome> {
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(
                 height: 20,
@@ -26,6 +28,18 @@ class _MortgageHomeState extends State<MortgageHome> {
               const StockBar(),
               const SizedBox(
                 height: 10,
+              ),
+              const Padding(
+                padding:  EdgeInsets.all(8.0),
+                child:  Text(
+                'Mortgage/Retrieve',
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.w700,
+                  color: white,
+                ),
+                textAlign: TextAlign.end,
+            ),
               ),
               _mortgageTabView(context),
             ],
