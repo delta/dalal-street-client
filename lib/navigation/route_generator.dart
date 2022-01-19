@@ -5,7 +5,6 @@ import 'package:dalal_street_client/blocs/auth/login/login_cubit.dart';
 import 'package:dalal_street_client/blocs/auth/register/register_cubit.dart';
 import 'package:dalal_street_client/blocs/auth/verify_phone/enter_otp/enter_otp_cubit.dart';
 import 'package:dalal_street_client/blocs/auth/verify_phone/enter_phone/enter_phone_cubit.dart';
-import 'package:dalal_street_client/blocs/companies/companies_bloc.dart';
 import 'package:dalal_street_client/blocs/exchange/exchange_cubit.dart';
 import 'package:dalal_street_client/blocs/subscribe/subscribe_cubit.dart';
 import 'package:dalal_street_client/blocs/daily_challenges/daily_challenges_page_cubit.dart';
@@ -17,6 +16,7 @@ import 'package:dalal_street_client/pages/auth/login_page.dart';
 import 'package:dalal_street_client/pages/auth/register_page.dart';
 import 'package:dalal_street_client/pages/auth/verify_phone/enter_otp_page.dart';
 import 'package:dalal_street_client/pages/auth/verify_phone/enter_phone_page.dart';
+import 'package:dalal_street_client/pages/company_page/company_page.dart';
 import 'package:dalal_street_client/pages/daily_challenges/daily_challenges_page.dart';
 import 'package:dalal_street_client/pages/news_page.dart';
 import 'package:dalal_street_client/pages/stock_exchange/exchange_page.dart';
@@ -97,9 +97,6 @@ class RouteGenerator {
           return MultiBlocProvider(
             providers: [
               BlocProvider(
-                create: (context) => CompaniesBloc(),
-              ),
-              BlocProvider(
                 create: (context) => StockPricesBloc(),
               ),
               BlocProvider(
@@ -122,9 +119,6 @@ class RouteGenerator {
         if (args is List<int>) {
           return MultiBlocProvider(
             providers: [
-              BlocProvider(
-                create: (context) => CompaniesBloc(),
-              ),
               BlocProvider(
                 create: (context) => MarketDepthBloc(),
               ),

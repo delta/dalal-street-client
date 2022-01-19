@@ -1,6 +1,7 @@
 import 'package:dalal_street_client/config/get_it.dart';
 import 'package:dalal_street_client/components/stock_bar.dart';
 import 'package:dalal_street_client/constants/format.dart';
+import 'package:dalal_street_client/streams/transformations.dart';
 import 'package:fixnum/fixnum.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
 import 'package:dalal_street_client/proto_build/models/User.pb.dart';
@@ -8,7 +9,6 @@ import 'package:dalal_street_client/streams/global_streams.dart';
 import 'package:dalal_street_client/utils/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:dalal_street_client/theme/colors.dart';
-import 'package:rxdart/rxdart.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key, required this.user}) : super(key: key);
@@ -156,15 +156,10 @@ class _HomePageState extends State<HomePage> {
         Stock stock = stocks[index + 1] ?? Stock();
         return StockItem(
             stock: stock,
-            stockPriceStream: _getStockPriceStream(stock.id, stockMapStream));
+            stockPriceStream: getStockPriceStream(stock.id, stockMapStream));
       },
     );
   }
-
-// returns a stock price stream of a particular stock id
-  static Stream<Int64> _getStockPriceStream(
-          int stockId, ValueStream<Map<int, Stock>> stockMapStream) =>
-      stockMapStream.map((event) => event[stockId]!.currentPrice).distinct();
 }
 
 class StockItem extends StatelessWidget {
@@ -174,6 +169,24 @@ class StockItem extends StatelessWidget {
   const StockItem(
       {Key? key, required this.stock, required this.stockPriceStream})
       : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    int cash = getIt<GlobalStreams>().dynamicUserInfoStream.value.cash;
+    List<int> data = [stock.id, cash];
+    return GestureDetector(
+      onTap: () {
+        Navigator.pushNamed(context, '/company', arguments: data);
+      },
+      child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+          child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+            _stockNames(stock),
+            _stockGraph(),
+            _stockPrices(),
+          ])),
+    );
+  }
 
   Expanded _stockNames(Stock company) {
     return Expanded(
@@ -204,59 +217,45 @@ class StockItem extends StatelessWidget {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.pushNamed(context, '/company', arguments: stock);
+  StreamBuilder<Int64> _stockPrices() {
+    return StreamBuilder<Int64>(
+      stream: stockPriceStream,
+      initialData: stock.currentPrice,
+      builder: (context, state) {
+        Int64 stockPrice = state.data!;
+
+        bool isLowOrHigh = stockPrice > stock.previousDayClose;
+
+        double percentageHighOrLow;
+
+        if (stock.previousDayClose == 0) {
+          percentageHighOrLow = stockPrice.toDouble();
+        } else {
+          percentageHighOrLow =
+              ((stockPrice.toDouble() - stock.previousDayClose.toDouble()) /
+                  stock.previousDayClose.toDouble());
+        }
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Text(
+              '₹' + oCcy.format(stockPrice).toString(),
+              style: const TextStyle(
+                fontSize: 18,
+              ),
+            ),
+            Text(
+              isLowOrHigh
+                  ? '+' + oCcy.format(percentageHighOrLow).toString() + '%'
+                  : oCcy.format(percentageHighOrLow).toString() + '%',
+              style: TextStyle(
+                fontSize: 14,
+                color: isLowOrHigh ? secondaryColor : heartRed,
+              ),
+            ),
+          ],
+        );
       },
-      child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-          child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-            _stockNames(stock),
-            _stockGraph(),
-            StreamBuilder<Int64>(
-              stream: stockPriceStream,
-              initialData: stock.currentPrice,
-              builder: (context, state) {
-                Int64 stockPrice = state.data!;
-
-                bool isLowOrHigh = stockPrice > stock.previousDayClose;
-
-                double percentageHighOrLow;
-
-                if (stock.previousDayClose == 0) {
-                  percentageHighOrLow = stockPrice.toDouble();
-                } else {
-                  percentageHighOrLow = ((stockPrice.toDouble() -
-                          stock.previousDayClose.toDouble()) /
-                      stock.previousDayClose.toDouble());
-                }
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Text(
-                      '₹' + oCcy.format(stockPrice).toString(),
-                      style: const TextStyle(
-                        fontSize: 18,
-                      ),
-                    ),
-                    Text(
-                      isLowOrHigh
-                          ? '+' +
-                              oCcy.format(percentageHighOrLow).toString() +
-                              '%'
-                          : oCcy.format(percentageHighOrLow).toString() + '%',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: isLowOrHigh ? secondaryColor : heartRed,
-                      ),
-                    ),
-                  ],
-                );
-              },
-            )
-          ])),
     );
   }
 }
