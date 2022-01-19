@@ -30,16 +30,16 @@ class _MortgageHomeState extends State<MortgageHome> {
                 height: 10,
               ),
               const Padding(
-                padding:  EdgeInsets.all(8.0),
-                child:  Text(
-                'Mortgage/Retrieve',
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.w700,
-                  color: white,
+                padding: EdgeInsets.all(8.0),
+                child: Text(
+                  'Mortgage/Retrieve',
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.w700,
+                    color: white,
+                  ),
+                  textAlign: TextAlign.end,
                 ),
-                textAlign: TextAlign.end,
-            ),
               ),
               _mortgageTabView(context),
             ],

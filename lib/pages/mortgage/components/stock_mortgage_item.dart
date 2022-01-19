@@ -169,7 +169,7 @@ class _MortgageStockItemState extends State<MortgageStockItem> {
             const Expanded(child: Text('Stocks Owned')),
             const SizedBox(width: 10),
             StreamBuilder<int>(
-                stream: getStockOwnedMapStream(stockId, userInfoStream),
+                stream: getStocksOwnedStream(stockId, userInfoStream),
                 initialData: userInfoStream.value.stocksOwnedMap[stockId],
                 builder: (_, snapshot) {
                   return Text(
