@@ -1,5 +1,3 @@
-
-
 import 'package:bloc/bloc.dart';
 
 import 'package:dalal_street_client/config/log.dart';
