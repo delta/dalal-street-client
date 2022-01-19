@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:dalal_street_client/blocs/referral/referral_cubit.dart';
 import 'package:dalal_street_client/config/log.dart';
 import 'package:flutter/material.dart';
