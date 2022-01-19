@@ -9,14 +9,12 @@ abstract class ReferralState extends Equatable {
 
 class ReferralInitial extends ReferralState {}
 
-class ReferralSuccess extends ReferralState
-{
-  final String referralcode ;
+class ReferralSuccess extends ReferralState {
+  final String referralcode;
   const ReferralSuccess(this.referralcode);
 }
 
-class ReferralFailed extends ReferralState
-{
+class ReferralFailed extends ReferralState {
   final String msg;
   const ReferralFailed(this.msg);
 }

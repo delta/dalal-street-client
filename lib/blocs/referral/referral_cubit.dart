@@ -11,29 +11,23 @@ import 'package:equatable/equatable.dart';
 part 'referral_state.dart';
 
 class ReferralCubit extends Cubit<ReferralState> {
-    // final DalalBloc dalalBloc;
+  // final DalalBloc dalalBloc;
 
   // LoginCubit(this.dalalBloc) : super(LoginInitial());
   ReferralCubit() : super(ReferralInitial());
-  Future <void> referralCode() async
-  {
+  Future<void> referralCode() async {
     // emit(ReferralInitial());
-    try
-    {
-      final referralResp = await actionClient.getReferralCode(GetReferralCodeRequest());
-      if(referralResp.statusCode!=GetReferralCodeResponse_StatusCode.OK)
-      {
+    try {
+      final referralResp =
+          await actionClient.getReferralCode(GetReferralCodeRequest());
+      if (referralResp.statusCode != GetReferralCodeResponse_StatusCode.OK) {
         emit(ReferralFailed(referralResp.statusMessage));
         // return;
-        
-      }
-      else
-      {
+
+      } else {
         emit(ReferralSuccess(referralResp.referralCode));
       }
-    }
-    catch(e)
-    {
+    } catch (e) {
       logger.e(e);
       emit(const ReferralFailed(failedToReachServer));
     }
