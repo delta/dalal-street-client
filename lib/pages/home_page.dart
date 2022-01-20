@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:dalal_street_client/config/get_it.dart';
 import 'package:dalal_street_client/constants/format.dart';
 import 'package:dalal_street_client/streams/transformations.dart';
