@@ -16,13 +16,12 @@ class NewsPage extends StatefulWidget {
 }
 
 class _NewsPageState extends State<NewsPage> {
-  int i=1;
+  int i = 1;
   final ScrollController _scrollController = ScrollController();
   List<MarketEvent> mapMarketEvents = [];
-  List<MarketEvent> mapMarketEventsCopy=[];
+  List<MarketEvent> mapMarketEventsCopy = [];
   @override
   void initState() {
-    
     super.initState();
     context.read<NewsBloc>().add(const GetNews());
     context.read<SubscribeCubit>().subscribe(DataStreamType.MARKET_EVENTS);
@@ -51,34 +50,32 @@ class _NewsPageState extends State<NewsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: 
-        SafeArea(
-          child: Container(
-            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-            color: Colors.black,
-            child: SingleChildScrollView(child: 
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                news(),
-                const SizedBox.square(
-                  dimension: 20,
-                ),
-                feed(),
-              ],
-            )))
-    )
-    );
+        body: SafeArea(
+            child: Container(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                color: Colors.black,
+                child: SingleChildScrollView(
+                    child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    news(),
+                    const SizedBox.square(
+                      dimension: 20,
+                    ),
+                    feed(),
+                  ],
+                )))));
   }
+
   Widget feedlist() =>
       BlocBuilder<NewsBloc, NewsState>(builder: (context, state) {
         if (state is GetNewsSucess) {
           mapMarketEvents.addAll(state.marketEventsList.marketEvents);
           mapMarketEventsCopy.addAll(mapMarketEvents);
-          if(i==1)
-          {
-          mapMarketEventsCopy.remove(mapMarketEvents[0]);
+          if (i == 1) {
+            mapMarketEventsCopy.remove(mapMarketEvents[0]);
           }
           return BlocBuilder<SubscribeCubit, SubscribeState>(
               builder: (context, state) {
@@ -107,7 +104,8 @@ class _NewsPageState extends State<NewsPage> {
                                   MaterialPageRoute(
                                     builder: (context) => NewsDetail(
                                         text: text,
-                                        imagePath: 'https://upload.wikimedia.org/wikipedia/commons/3/37/Cryptocurrency_Mining_Farm.jpg',
+                                        imagePath:
+                                            'https://upload.wikimedia.org/wikipedia/commons/3/37/Cryptocurrency_Mining_Farm.jpg',
                                         headline: headline,
                                         dur: dur),
                                   )));
@@ -205,23 +203,24 @@ class _NewsPageState extends State<NewsPage> {
 
               MarketEvent marketEvent = mapMarketEvents[0];
               String headline = marketEvent.headline;
-              String imagePath = 'https://upload.wikimedia.org/wikipedia/commons/3/37/Cryptocurrency_Mining_Farm.jpg';
+              String imagePath =
+                  'https://upload.wikimedia.org/wikipedia/commons/3/37/Cryptocurrency_Mining_Farm.jpg';
               String createdAt = marketEvent.createdAt;
               String text = marketEvent.text;
               String dur = getdur(createdAt);
-              return 
-              GestureDetector(
-                child: newsItem(headline, imagePath, createdAt, true),
-                onTap: () => Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => NewsDetail(
-                                        text: text,
-                                        imagePath: 'https://upload.wikimedia.org/wikipedia/commons/3/37/Cryptocurrency_Mining_Farm.jpg',
-                                        headline: headline,
-                                        dur: dur,),
-                                  )));
-                      
+              return GestureDetector(
+                  child: newsItem(headline, imagePath, createdAt, true),
+                  onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => NewsDetail(
+                          text: text,
+                          imagePath:
+                              'https://upload.wikimedia.org/wikipedia/commons/3/37/Cryptocurrency_Mining_Farm.jpg',
+                          headline: headline,
+                          dur: dur,
+                        ),
+                      )));
             } else if (state is SubscriptonDataFailed) {
               logger.i('Market Event Stream Failed $state');
               return const Center(
@@ -270,7 +269,8 @@ class _NewsPageState extends State<NewsPage> {
                     width: 100,
                     height: 100,
                     fit: BoxFit.cover,
-                    image: NetworkImage('https://upload.wikimedia.org/wikipedia/commons/3/37/Cryptocurrency_Mining_Farm.jpg'),
+                    image: NetworkImage(
+                        'https://upload.wikimedia.org/wikipedia/commons/3/37/Cryptocurrency_Mining_Farm.jpg'),
                   ),
                 ),
                 Column(
@@ -330,7 +330,8 @@ class _NewsPageState extends State<NewsPage> {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(20),
                     child: Image(
-                      image: NetworkImage('https://upload.wikimedia.org/wikipedia/commons/3/37/Cryptocurrency_Mining_Farm.jpg'),
+                      image: NetworkImage(
+                          'https://upload.wikimedia.org/wikipedia/commons/3/37/Cryptocurrency_Mining_Farm.jpg'),
                       width: MediaQuery.of(context).size.width,
                       height: MediaQuery.of(context).size.height * 0.25,
                       fit: BoxFit.cover,
@@ -356,7 +357,8 @@ class _NewsPageState extends State<NewsPage> {
                     width: 100,
                     height: 100,
                     fit: BoxFit.cover,
-                    image: NetworkImage('https://upload.wikimedia.org/wikipedia/commons/3/37/Cryptocurrency_Mining_Farm.jpg'),
+                    image: NetworkImage(
+                        'https://upload.wikimedia.org/wikipedia/commons/3/37/Cryptocurrency_Mining_Farm.jpg'),
                   ),
                 ),
                 Column(
@@ -416,7 +418,8 @@ class _NewsPageState extends State<NewsPage> {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(20),
                     child: Image(
-                      image: NetworkImage('https://upload.wikimedia.org/wikipedia/commons/3/37/Cryptocurrency_Mining_Farm.jpg'),
+                      image: NetworkImage(
+                          'https://upload.wikimedia.org/wikipedia/commons/3/37/Cryptocurrency_Mining_Farm.jpg'),
                       width: MediaQuery.of(context).size.width,
                       height: MediaQuery.of(context).size.height * 0.25,
                       fit: BoxFit.cover,
@@ -430,18 +433,17 @@ class _NewsPageState extends State<NewsPage> {
   }
 
   String getdur(String createdAt) {
-        DateTime dt1 = DateTime.parse(createdAt);
-        DateTime dt2 = DateTime.now();
-        Duration diff = dt2.difference(dt1);
-        if (diff.inDays == 0) {
-          if (diff.inHours == 0) {
-            return(diff.inMinutes.toString() + ' minutes ago');
-          } else {
-            return(diff.inHours.toString() + ' hour ago');
-          }
-        } else {
-          return(diff.inDays.toString() + ' day ago');
-        }
-        
+    DateTime dt1 = DateTime.parse(createdAt);
+    DateTime dt2 = DateTime.now();
+    Duration diff = dt2.difference(dt1);
+    if (diff.inDays == 0) {
+      if (diff.inHours == 0) {
+        return (diff.inMinutes.toString() + ' minutes ago');
+      } else {
+        return (diff.inHours.toString() + ' hour ago');
+      }
+    } else {
+      return (diff.inDays.toString() + ' day ago');
+    }
   }
 }
