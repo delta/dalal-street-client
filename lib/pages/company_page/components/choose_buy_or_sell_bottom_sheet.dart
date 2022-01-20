@@ -11,7 +11,7 @@ final oCcy = NumberFormat('#,##0.00', 'en_US');
 void chooseBuyOrSellBottomSheet(BuildContext context, Stock company, int cash) {
   int priceChange = (company.currentPrice - company.previousDayClose).toInt();
   showModalBottomSheet(
-      backgroundColor: backgroundColor,
+      backgroundColor: background2,
       isScrollControlled: true,
       context: context,
       builder: (ctx) {

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:dalal_street_client/config/get_it.dart';
 import 'package:dalal_street_client/components/stock_bar.dart';
 import 'package:dalal_street_client/constants/format.dart';
@@ -84,9 +86,10 @@ class _HomePageState extends State<HomePage> {
 
   Container _recentNews() {
     return Container(
+        width: double.infinity,
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
         decoration: BoxDecoration(
-          color: backgroundColor,
+          color: background2,
           borderRadius: BorderRadius.circular(10),
         ),
         child: Column(
@@ -112,7 +115,7 @@ class _HomePageState extends State<HomePage> {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
       decoration: BoxDecoration(
-        color: backgroundColor,
+        color: background2,
         borderRadius: BorderRadius.circular(10),
       ),
       child: Column(
@@ -211,51 +214,53 @@ class StockItem extends StatelessWidget {
   Expanded _stockGraph() {
     return Expanded(
       child: Image.network(
-        'https://i.imgur.com/zrmdl8j.png',
+        'https://i.imgur.com/lOQyGGe.png',
         height: 23,
       ),
     );
   }
 
-  StreamBuilder<Int64> _stockPrices() {
-    return StreamBuilder<Int64>(
-      stream: stockPriceStream,
-      initialData: stock.currentPrice,
-      builder: (context, state) {
-        Int64 stockPrice = state.data!;
+  Widget _stockPrices() {
+    return Expanded(
+      child: StreamBuilder<Int64>(
+        stream: stockPriceStream,
+        initialData: stock.currentPrice,
+        builder: (context, state) {
+          Int64 stockPrice = state.data!;
 
-        bool isLowOrHigh = stockPrice > stock.previousDayClose;
+          bool isLowOrHigh = stockPrice > stock.previousDayClose;
 
-        double percentageHighOrLow;
+          double percentageHighOrLow;
 
-        if (stock.previousDayClose == 0) {
-          percentageHighOrLow = stockPrice.toDouble();
-        } else {
-          percentageHighOrLow =
-              ((stockPrice.toDouble() - stock.previousDayClose.toDouble()) /
-                  stock.previousDayClose.toDouble());
-        }
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            Text(
-              '₹' + oCcy.format(stockPrice).toString(),
-              style: const TextStyle(
-                fontSize: 18,
+          if (stock.previousDayClose == 0) {
+            percentageHighOrLow = stockPrice.toDouble();
+          } else {
+            percentageHighOrLow =
+                ((stockPrice.toDouble() - stock.previousDayClose.toDouble()) /
+                    stock.previousDayClose.toDouble());
+          }
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(
+                '₹' + oCcy.format(stockPrice).toString(),
+                style: const TextStyle(
+                  fontSize: 18,
+                ),
               ),
-            ),
-            Text(
-              isLowOrHigh
-                  ? '+' + oCcy.format(percentageHighOrLow).toString() + '%'
-                  : oCcy.format(percentageHighOrLow).toString() + '%',
-              style: TextStyle(
-                fontSize: 14,
-                color: isLowOrHigh ? secondaryColor : heartRed,
+              Text(
+                isLowOrHigh
+                    ? '+' + oCcy.format(percentageHighOrLow).toString() + '%'
+                    : oCcy.format(percentageHighOrLow).toString() + '%',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: isLowOrHigh ? secondaryColor : heartRed,
+                ),
               ),
-            ),
-          ],
-        );
-      },
+            ],
+          );
+        },
+      ),
     );
   }
 }

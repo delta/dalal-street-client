@@ -5,7 +5,7 @@ Container news() {
   return Container(
     padding: const EdgeInsets.symmetric(vertical: 10),
     decoration: BoxDecoration(
-      color: backgroundColor,
+      color: background2,
       borderRadius: BorderRadius.circular(10),
     ),
     child: Text(

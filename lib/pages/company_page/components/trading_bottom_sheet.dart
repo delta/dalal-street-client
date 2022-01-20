@@ -53,7 +53,7 @@ void tradingBottomSheet(
                 logger.i('unsuccessful');
               }
               return BottomSheet(
-                backgroundColor: backgroundColor,
+                backgroundColor: background2,
                 builder: (context) {
                   List<String> priceTypeMap = [
                     'Limit',
@@ -190,12 +190,13 @@ void tradingBottomSheet(
                                             color: Colors.white70,
                                           ),
                                         ),
-                                        SizedBox(
-                                          width: 150,
+                                        Container(
                                           height: 30,
+                                          width: 150,
+                                          padding: EdgeInsets.zero,
                                           child: SpinBox(
                                             min: 1,
-                                            max: 100,
+                                            max: 20,
                                             value: 01,
                                             onChanged: (value) {
                                               setBottomSheetState(() {
@@ -209,11 +210,19 @@ void tradingBottomSheet(
                                                     totalPrice);
                                               });
                                             },
-                                            cursorColor: primaryColor,
-                                            textAlign: TextAlign.center,
+                                            readOnly: true,
                                             iconColor:
                                                 MaterialStateProperty.all(
                                                     primaryColor),
+                                            cursorColor: primaryColor,
+                                            spacing: 15,
+                                            decoration: const InputDecoration(
+                                                contentPadding: EdgeInsets.zero,
+                                                border: InputBorder.none),
+                                            textStyle: const TextStyle(
+                                              color: primaryColor,
+                                              fontSize: 18,
+                                            ),
                                           ),
                                         )
                                       ]),
@@ -228,47 +237,56 @@ void tradingBottomSheet(
                                           spacing: 15,
                                           children: [
                                             const Text(
-                                              'Price',
+                                              'Price ',
                                               style: TextStyle(
                                                 fontSize: 18,
                                                 color: Colors.white70,
                                               ),
                                             ),
-                                            DropdownButton(
-                                              value: selectedPriceType,
-                                              onChanged: (newValue) {
-                                                setBottomSheetState(() {
-                                                  selectedPriceType =
-                                                      newValue.toString();
-                                                  logger.i(selectedPriceType);
-                                                  if (selectedPriceType ==
-                                                      'Market') {
-                                                    priceType =
-                                                        OrderType.MARKET;
-                                                  } else if (selectedPriceType ==
-                                                      'Limit') {
-                                                    priceType = OrderType.LIMIT;
-                                                  } else if (selectedPriceType ==
-                                                      'Stop Loss') {
-                                                    priceType =
-                                                        OrderType.STOPLOSS;
-                                                  }
-                                                  logger
-                                                      .i(priceType.toString());
-                                                });
-                                              },
-                                              items: priceTypeMap.map((type) {
-                                                return DropdownMenuItem(
-                                                  child: Text(
-                                                    type,
-                                                    style: const TextStyle(
-                                                        fontSize: 18,
-                                                        color:
-                                                            whiteWithOpacity75),
-                                                  ),
-                                                  value: type,
-                                                );
-                                              }).toList(),
+                                            SizedBox(
+                                              width: 80,
+                                              child:
+                                                  DropdownButtonHideUnderline(
+                                                child: DropdownButton(
+                                                  isExpanded: true,
+                                                  value: selectedPriceType,
+                                                  onChanged: (newValue) {
+                                                    setBottomSheetState(() {
+                                                      selectedPriceType =
+                                                          newValue.toString();
+                                                      logger
+                                                          .i(selectedPriceType);
+                                                      if (selectedPriceType ==
+                                                          'Market') {
+                                                        priceType =
+                                                            OrderType.MARKET;
+                                                      } else if (selectedPriceType ==
+                                                          'Limit') {
+                                                        priceType =
+                                                            OrderType.LIMIT;
+                                                      } else if (selectedPriceType ==
+                                                          'Stop Loss') {
+                                                        priceType =
+                                                            OrderType.STOPLOSS;
+                                                      }
+                                                      logger.i(
+                                                          priceType.toString());
+                                                    });
+                                                  },
+                                                  items:
+                                                      priceTypeMap.map((type) {
+                                                    return DropdownMenuItem(
+                                                      child: Text(
+                                                        type,
+                                                        style: const TextStyle(
+                                                            fontSize: 14,
+                                                            color: gold),
+                                                      ),
+                                                      value: type,
+                                                    );
+                                                  }).toList(),
+                                                ),
+                                              ),
                                             ),
                                           ],
                                         ),
@@ -305,6 +323,10 @@ void tradingBottomSheet(
                                                                 OutlineInputBorder(),
                                                             labelText:
                                                                 'Price per stock',
+                                                            labelStyle:
+                                                                TextStyle(
+                                                                    fontSize:
+                                                                        14),
                                                             contentPadding:
                                                                 EdgeInsets.all(
                                                                     8),

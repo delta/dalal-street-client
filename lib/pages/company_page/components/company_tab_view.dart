@@ -7,9 +7,9 @@ import 'package:flutter/material.dart';
 
 Container companyTabView(BuildContext context, Stock company) {
   return Container(
-      padding: const EdgeInsets.symmetric(vertical: 10),
+      padding: const EdgeInsets.symmetric(vertical: 5),
       decoration: BoxDecoration(
-        color: backgroundColor,
+        color: background2,
         borderRadius: BorderRadius.circular(10),
       ),
       child: DefaultTabController(
@@ -22,7 +22,7 @@ Container companyTabView(BuildContext context, Stock company) {
                   child: Text(
                     'Overview',
                     style: TextStyle(
-                      fontSize: 16,
+                      fontSize: 14,
                       fontWeight: FontWeight.w500,
                       color: lightGray,
                     ),
@@ -33,7 +33,7 @@ Container companyTabView(BuildContext context, Stock company) {
                   child: Text(
                     'Market Depth',
                     style: TextStyle(
-                      fontSize: 16,
+                      fontSize: 14,
                       fontWeight: FontWeight.w500,
                       color: lightGray,
                     ),
@@ -44,7 +44,7 @@ Container companyTabView(BuildContext context, Stock company) {
                   child: Text(
                     'News',
                     style: TextStyle(
-                      fontSize: 16,
+                      fontSize: 14,
                       fontWeight: FontWeight.w500,
                       color: lightGray,
                     ),
