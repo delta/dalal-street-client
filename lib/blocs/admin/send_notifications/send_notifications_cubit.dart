@@ -1,10 +1,9 @@
 import 'package:bloc/bloc.dart';
 import 'package:dalal_street_client/constants/error_messages.dart';
 import 'package:dalal_street_client/grpc/client.dart';
+import 'package:dalal_street_client/main.dart';
 import 'package:dalal_street_client/proto_build/actions/SendNotifications.pb.dart';
 import 'package:equatable/equatable.dart';
-
-import '../../main.dart';
 
 part 'send_notifications_state.dart';
 
@@ -20,7 +19,9 @@ class SendNotificationsCubit extends Cubit<SendNotificationsState> {
     try {
       final resp = await actionClient.sendNotifications(
           SendNotificationsRequest(
-              userId: userID, text: text, isGlobal: isGlobal));
+              userId: userID, text: text, isGlobal: isGlobal),
+          options: sessionOptions(getIt()));
+
       if (resp.statusCode == SendNotificationsResponse_StatusCode.OK) {
         emit(SendNotificationsSuccess(userID, text, isGlobal));
       } else {
@@ -28,8 +29,9 @@ class SendNotificationsCubit extends Cubit<SendNotificationsState> {
         emit(SendNotificationsInitial());
       }
     } catch (e) {
-      logger.e(e);
       emit(const SendNotificationsFailure(failedToReachServer));
     }
   }
+
+  void add(SendNotificationsCubit sendNotificationsCubit) {}
 }
