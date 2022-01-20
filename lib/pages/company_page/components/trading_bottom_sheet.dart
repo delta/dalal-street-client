@@ -1,4 +1,5 @@
 import 'package:dalal_street_client/config/log.dart';
+import 'package:dalal_street_client/constants/constants.dart';
 import 'package:dalal_street_client/proto_build/models/OrderType.pb.dart';
 import 'package:fixnum/fixnum.dart';
 import 'package:dalal_street_client/blocs/place_order/place_order_cubit.dart';
@@ -24,6 +25,7 @@ void tradingBottomSheet(
   int quantity = 1;
   int totalPrice = company.currentPrice.toInt() * quantity;
   int orderFee = calculateOrderFee(totalPrice);
+  String error = 'false';
   showModalBottomSheet(
       isScrollControlled: true,
       context: context,
@@ -57,7 +59,6 @@ void tradingBottomSheet(
                     'Limit',
                     'Market',
                     'Stop Loss',
-                    'Stop Loss Active'
                   ];
                   priceChange =
                       (company.currentPrice - company.previousDayClose).toInt();
@@ -108,7 +109,7 @@ void tradingBottomSheet(
                               ],
                             ),
                             const SizedBox(
-                              height: 20,
+                              height: 15,
                             ),
                             Padding(
                               padding: const EdgeInsets.symmetric(
@@ -176,7 +177,7 @@ void tradingBottomSheet(
                                     ],
                                   ),
                                   const SizedBox(
-                                    height: 20,
+                                    height: 15,
                                   ),
                                   Row(
                                       mainAxisAlignment:
@@ -217,7 +218,7 @@ void tradingBottomSheet(
                                         )
                                       ]),
                                   const SizedBox(
-                                    height: 30,
+                                    height: 25,
                                   ),
                                   Row(
                                       mainAxisAlignment:
@@ -251,9 +252,6 @@ void tradingBottomSheet(
                                                       'Stop Loss') {
                                                     priceType =
                                                         OrderType.STOPLOSS;
-                                                  } else {
-                                                    priceType = OrderType
-                                                        .STOPLOSSACTIVE;
                                                   }
                                                   logger
                                                       .i(priceType.toString());
@@ -300,24 +298,62 @@ void tradingBottomSheet(
                                             children: [
                                               SizedBox(
                                                   width: 150,
-                                                  child: TextField(
-                                                      decoration: const InputDecoration(
-                                                          border:
-                                                              OutlineInputBorder(),
-                                                          labelText:
-                                                              'Price per stock',
-                                                          contentPadding:
-                                                              EdgeInsets.all(
-                                                                  8)),
-                                                      onChanged:
-                                                          (String? value) {
-                                                        if (value != null) {
-                                                          totalPrice =
-                                                              int.parse(value);
-                                                        } else {
-                                                          totalPrice = 0;
-                                                        }
-                                                      })),
+                                                  child: TextFormField(
+                                                    decoration:
+                                                        const InputDecoration(
+                                                            border:
+                                                                OutlineInputBorder(),
+                                                            labelText:
+                                                                'Price per stock',
+                                                            contentPadding:
+                                                                EdgeInsets.all(
+                                                                    8),
+                                                            errorStyle:
+                                                                TextStyle(
+                                                              fontSize: 11.0,
+                                                              color: bronze,
+                                                            )),
+                                                    onChanged: (String? value) {
+                                                      if (value != null) {
+                                                        totalPrice =
+                                                            int.parse(value);
+                                                      } else {
+                                                        totalPrice = 0;
+                                                      }
+                                                    },
+                                                    autovalidateMode:
+                                                        AutovalidateMode
+                                                            .onUserInteraction,
+                                                    validator: (text) {
+                                                      if (text == null ||
+                                                          text.isEmpty) {
+                                                        return 'Can\'t be empty';
+                                                      }
+                                                      if (int.parse(text)
+                                                                  .toDouble() <
+                                                              company.currentPrice
+                                                                      .toDouble() *
+                                                                  (1 -
+                                                                      ORDER_PRICE_WINDOW
+                                                                              .toDouble() /
+                                                                          100) ||
+                                                          int.parse(text)
+                                                                  .toDouble() >
+                                                              company.currentPrice
+                                                                      .toDouble() *
+                                                                  (1 +
+                                                                      ORDER_PRICE_WINDOW
+                                                                              .toDouble() /
+                                                                          100)) {
+                                                        error = 'true';
+                                                        return 'Out of range';
+                                                      }
+                                                      {
+                                                        error = 'false';
+                                                        return null;
+                                                      }
+                                                    },
+                                                  )),
                                               Text(
                                                 // orderPriceWindow,
                                                 showPriceWindow(company
@@ -337,7 +373,7 @@ void tradingBottomSheet(
                                                 CrossAxisAlignment.end,
                                             children: [
                                               SizedBox(
-                                                width: 150,
+                                                width: 200,
                                                 child: TextField(
                                                     decoration: const InputDecoration(
                                                         border:
@@ -345,7 +381,9 @@ void tradingBottomSheet(
                                                         labelText:
                                                             'Price per stock',
                                                         contentPadding:
-                                                            EdgeInsets.all(8)),
+                                                            EdgeInsets.all(8),
+                                                        labelStyle: TextStyle(
+                                                            fontSize: 11.0)),
                                                     onChanged: (String? value) {
                                                       if (value != null) {
                                                         totalPrice =
@@ -415,7 +453,7 @@ void tradingBottomSheet(
                                         ),
                                       ]),
                                   const SizedBox(
-                                    height: 25,
+                                    height: 15,
                                   ),
                                   PrimaryButton(
                                       height: 45,
@@ -423,18 +461,22 @@ void tradingBottomSheet(
                                       fontSize: 18,
                                       title: 'Place Order',
                                       onPressed: () {
-                                        logger.i(cash);
-                                        context
-                                            .read<PlaceOrderCubit>()
-                                            .placeOrder(
-                                                isAsk,
-                                                company.id,
-                                                priceType,
-                                                Int64(totalPrice),
-                                                Int64(quantity));
-                                        logger.i(cash);
-                                        logger.i(
-                                            '$isAsk, ${company.id}, ${company.shortName}, $quantity, $totalPrice, $priceType.toString()');
+                                        error == 'true'
+                                            ? null
+                                            : [
+                                                logger.i(cash),
+                                                context
+                                                    .read<PlaceOrderCubit>()
+                                                    .placeOrder(
+                                                        isAsk,
+                                                        company.id,
+                                                        priceType,
+                                                        Int64(totalPrice),
+                                                        Int64(quantity)),
+                                                logger.i(cash),
+                                                logger.i(
+                                                    '$isAsk, ${company.id}, ${company.shortName}, $quantity, $totalPrice, $priceType.toString()'),
+                                              ];
                                       })
                                 ],
                               ),
