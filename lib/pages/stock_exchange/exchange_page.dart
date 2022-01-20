@@ -29,7 +29,7 @@ class _ExchangePageState extends State<ExchangePage> {
   Widget build(BuildContext context) => SafeArea(
         child: Scaffold(
           resizeToAvoidBottomInset: false,
-          backgroundColor: Colors.black,
+          backgroundColor: backgroundColor,
           body: SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
