@@ -9,6 +9,7 @@ class ReferralPage extends StatefulWidget {
   final User user;
 
   @override
+  // ignore: no_logic_in_create_state
   _ReferralPageState createState() => _ReferralPageState(user.email);
 }
 
@@ -32,9 +33,9 @@ class _ReferralPageState extends State<ReferralPage> {
 Widget referralcode() {
   return BlocBuilder<ReferralBloc, ReferralState>(builder: (context, state) {
     if (state is ReferralSuccess) {
-      return Text('${state.referralCode}');
+      return Text(state.referralCode);
     } else if (state is ReferralFailed) {
-      return Text('${state.msg}');
+      return Text(state.msg);
     } else {
       return const Center(
           child: CircularProgressIndicator(color: secondaryColor));
