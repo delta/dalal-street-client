@@ -80,8 +80,6 @@ class _HomePageState extends State<HomePage>
             height: 10,
           ),
           _recentNews(),
-          TextButton(
-              onPressed: () => movetonews(context), child: Text('movetonews'))
         ],
       ),
     );
@@ -265,8 +263,4 @@ class StockItem extends StatelessWidget {
       ),
     );
   }
-}
-
-movetonews(BuildContext context) {
-  Navigator.of(context).pushNamed('/news');
 }
