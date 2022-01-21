@@ -72,7 +72,7 @@ class _HomePageState extends State<HomePage> {
         children: [
           const StockBar(),
           const SizedBox(
-            height: 10,
+            height: 5,
           ),
           _companies(),
           const SizedBox(

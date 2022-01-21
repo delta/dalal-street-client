@@ -240,7 +240,7 @@ class _StockExchangeItemState extends State<StockExchangeItem> {
     showModalBottomSheet(
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(top: Radius.circular(25.0))),
-        backgroundColor: backgroundColor,
+        backgroundColor: background2,
         context: context,
         isScrollControlled: true,
         builder: (_) {

@@ -9,7 +9,6 @@ import 'package:dalal_street_client/blocs/exchange/exchange_cubit.dart';
 import 'package:dalal_street_client/blocs/subscribe/subscribe_cubit.dart';
 import 'package:dalal_street_client/blocs/daily_challenges/daily_challenges_page_cubit.dart';
 import 'package:dalal_street_client/blocs/market_depth/market_depth_bloc.dart';
-import 'package:dalal_street_client/blocs/stock_prices/stock_prices_bloc.dart';
 import 'package:dalal_street_client/pages/auth/check_mail_page.dart';
 import 'package:dalal_street_client/pages/auth/forgot_password_page.dart';
 import 'package:dalal_street_client/pages/auth/login_page.dart';
@@ -94,17 +93,7 @@ class RouteGenerator {
       // Home Pages
       case '/home':
         if (args is User) {
-          return MultiBlocProvider(
-            providers: [
-              BlocProvider(
-                create: (context) => StockPricesBloc(),
-              ),
-              BlocProvider(
-                create: (context) => SubscribeCubit(),
-              ),
-            ],
-            child: HomePage(user: args),
-          );
+          return HomePage(user: args);
         }
         throw Exception('Invalid user args');
 

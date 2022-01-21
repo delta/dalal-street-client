@@ -1,5 +1,6 @@
 import 'package:dalal_street_client/blocs/subscribe/subscribe_cubit.dart';
 import 'package:dalal_street_client/components/buttons/primary_button.dart';
+import 'package:dalal_street_client/components/stock_bar.dart';
 import 'package:dalal_street_client/config/get_it.dart';
 import 'package:dalal_street_client/proto_build/datastreams/Subscribe.pb.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
@@ -56,8 +57,9 @@ class _CompanyPageState extends State<CompanyPage>
                         vertical: 10, horizontal: 10),
                     child: Column(
                       children: [
+                        const StockBar(),
                         const SizedBox(
-                          height: 20,
+                          height: 5,
                         ),
                         companyPrices(company),
                         const SizedBox(
@@ -77,17 +79,18 @@ class _CompanyPageState extends State<CompanyPage>
                         topLeft: Radius.circular(15),
                       )),
                   alignment: Alignment.bottomCenter,
-                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 40),
                   child: Align(
                     alignment: Alignment.bottomCenter,
-                    child: PrimaryButton(
-                      height: 45,
-                      width: 340,
-                      fontSize: 18,
-                      title: 'Place Order',
-                      onPressed: () {
-                        chooseBuyOrSellBottomSheet(context, company, cash);
-                      },
+                    child: SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          chooseBuyOrSellBottomSheet(context, company, cash);
+                        },
+                        child: const Text('Place Order'),
+                      ),
                     ),
                   ),
                 ),

@@ -121,7 +121,7 @@ class _ExchangeBottomSheetState extends State<ExchangeBottomSheet> {
                   onTap: () {
                     Navigator.pop(context);
                   },
-                  child: SvgPicture.asset(AppIcons().crossWhite)),
+                  child: SvgPicture.asset(AppIcons.crossWhite)),
             ],
           ),
         ),
@@ -284,7 +284,7 @@ class _ExchangeBottomSheetState extends State<ExchangeBottomSheet> {
       children: [
         Row(mainAxisAlignment: MainAxisAlignment.start, children: [
           SvgPicture.asset(
-            AppIcons().balance,
+            AppIcons.balance,
           ),
           const Text(
             ' Balance :',
