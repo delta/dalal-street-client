@@ -1,21 +1,20 @@
-import 'package:dalal_street_client/blocs/exchange/exchange_cubit.dart';
 import 'package:dalal_street_client/config/get_it.dart';
+import 'package:dalal_street_client/constants/constants.dart';
 import 'package:dalal_street_client/constants/format.dart';
-import 'package:dalal_street_client/pages/stock_exchange/components/exchange_bottom_sheet.dart';
+import 'package:dalal_street_client/pages/mortgage/components/mortgage_bottom_sheet.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
 import 'package:dalal_street_client/streams/global_streams.dart';
 import 'package:dalal_street_client/streams/transformations.dart';
 import 'package:dalal_street_client/theme/colors.dart';
 import 'package:fixnum/fixnum.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
-class StockExchangeItem extends StatefulWidget {
+class MortgageStockItem extends StatefulWidget {
   final Stock company;
   final int stockId;
   final int currentPrice;
 
-  const StockExchangeItem(
+  const MortgageStockItem(
       {Key? key,
       required this.company,
       required this.stockId,
@@ -23,12 +22,12 @@ class StockExchangeItem extends StatefulWidget {
       : super(key: key);
 
   @override
-  _StockExchangeItemState createState() => _StockExchangeItemState();
+  _MortgageStockItemState createState() => _MortgageStockItemState();
 }
 
-class _StockExchangeItemState extends State<StockExchangeItem> {
-  Map<int, Stock> mapOfStocks = getIt<GlobalStreams>().latestStockMap;
+class _MortgageStockItemState extends State<MortgageStockItem> {
   final stockMapStream = getIt<GlobalStreams>().stockMapStream;
+  final userInfoStream = getIt<GlobalStreams>().dynamicUserInfoStream;
   @override
   Widget build(BuildContext context) {
     int previousDayClose = widget.company.previousDayClose.toInt();
@@ -52,7 +51,7 @@ class _StockExchangeItemState extends State<StockExchangeItem> {
           const SizedBox(
             height: 10,
           ),
-          _stockExchangeDetails(widget.stockId, widget.company),
+          _stockMortgageDetails(widget.stockId, widget.currentPrice),
           const SizedBox(
             height: 10,
           ),
@@ -95,7 +94,7 @@ class _StockExchangeItemState extends State<StockExchangeItem> {
                       overlayColor: MaterialStateProperty.all(secondaryColor)),
                   onPressed: () => _showModalSheet(widget.company),
                   child: const Text(
-                    'Buy',
+                    'Mortgage',
                     style: TextStyle(fontSize: 14),
                   ),
                 ),
@@ -142,7 +141,7 @@ class _StockExchangeItemState extends State<StockExchangeItem> {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text(
-                oCcy.format(stockPrice).toString(),
+                '₹' + oCcy.format(stockPrice).toString(),
                 style: const TextStyle(
                   fontSize: 18,
                 ),
@@ -161,75 +160,56 @@ class _StockExchangeItemState extends State<StockExchangeItem> {
         },
       );
 
-  Widget _stockExchangeDetails(
-    int stockId,
-    Stock? company,
-  ) =>
-      BlocBuilder<ExchangeCubit, ExchangeState>(
-        builder: (context, state) {
-          if (state is ExchangeDataLoaded) {
-            int stocksInMarket =
-                state.exchangeData[stockId]?.stocksInMarket.toInt() ??
-                    (mapOfStocks[stockId]?.stocksInMarket.toInt() ?? 0);
-            mapOfStocks[stockId]?.stocksInMarket = Int64(stocksInMarket);
-            int stocksInExchange =
-                state.exchangeData[stockId]?.stocksInExchange.toInt() ??
-                    (mapOfStocks[stockId]?.stocksInExchange.toInt() ?? 0);
-            mapOfStocks[stockId]?.stocksInExchange = Int64(stocksInExchange);
-            return Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Expanded(child: Text('Stocks in Market')),
-                    const SizedBox(width: 10),
-                    Text(
-                      stocksInMarket.toString(),
-                      style: const TextStyle(color: bronze),
-                    )
-                  ],
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Expanded(child: Text('Stocks in Exchange')),
-                    const SizedBox(width: 10),
-                    Text(stocksInExchange.toString(),
-                        style: const TextStyle(color: gold))
-                  ],
-                ),
-              ],
-            );
-          }
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Expanded(child: Text('Stocks in Market')),
-                  const SizedBox(width: 10),
-                  Text(company?.stocksInMarket.toString() ?? '0')
-                ],
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Expanded(child: Text('Stocks in Exchange')),
-                  const SizedBox(width: 10),
-                  Text(company?.stocksInExchange.toString() ?? '0')
-                ],
-              )
-            ],
-          );
-        },
-      );
+  Widget _stockMortgageDetails(int stockId, int currentPrice) {
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Expanded(child: Text('Stocks Owned')),
+            const SizedBox(width: 10),
+            StreamBuilder<int>(
+                stream: getStocksOwnedStream(stockId, userInfoStream),
+                initialData: userInfoStream.value.stocksOwnedMap[stockId],
+                builder: (_, snapshot) {
+                  return Text(
+                    snapshot.data!.toString(),
+                  );
+                })
+          ],
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Expanded(child: Text('Deposit rate(%)')),
+            const SizedBox(width: 10),
+            Text(((MORTGAGE_DEPOSIT_RATE * 100).toInt()).toString()),
+          ],
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Expanded(child: Text('Amount per Stock(₹)')),
+            const SizedBox(width: 10),
+            StreamBuilder<Int64>(
+                stream: getStockPriceStream(stockId, stockMapStream),
+                initialData: Int64(currentPrice),
+                builder: (_, snapshot) {
+                  int stockPrice = snapshot.data!.toInt();
+                  double amount = (stockPrice * MORTGAGE_DEPOSIT_RATE);
+                  return Text(amount.toStringAsFixed(2));
+                })
+          ],
+        )
+      ],
+    );
+  }
 
   void _showModalSheet(Stock? company) {
     showModalBottomSheet(
@@ -239,7 +219,7 @@ class _StockExchangeItemState extends State<StockExchangeItem> {
         context: context,
         isScrollControlled: true,
         builder: (_) {
-          return ExchangeBottomSheet(company: company ?? Stock());
+          return MortgageBottomSheet(company: company ?? Stock());
         });
   }
 }

@@ -17,6 +17,7 @@ import 'package:dalal_street_client/pages/auth/verify_phone/enter_otp_page.dart'
 import 'package:dalal_street_client/pages/auth/verify_phone/enter_phone_page.dart';
 import 'package:dalal_street_client/pages/company_page/company_page.dart';
 import 'package:dalal_street_client/pages/daily_challenges/daily_challenges_page.dart';
+import 'package:dalal_street_client/pages/mortgage/mortgage_home.dart';
 import 'package:dalal_street_client/pages/news_page.dart';
 import 'package:dalal_street_client/pages/stock_exchange/exchange_page.dart';
 import 'package:dalal_street_client/pages/home_page.dart';
@@ -132,6 +133,9 @@ class RouteGenerator {
           create: (context) => PortfolioCubit(),
           child: const PortfolioPage(),
         );
+      // Mortgage page
+      case '/mortgage':
+        return const MortgageHome();
       default:
         throw Exception('Invalid Route');
     }
