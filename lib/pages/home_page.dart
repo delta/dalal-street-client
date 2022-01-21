@@ -17,10 +17,13 @@ class HomePage extends StatefulWidget {
   final User user;
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<HomePage> createState() => _HomePageState(user);
 }
 
 class _HomePageState extends State<HomePage> {
+  final User user;
+  _HomePageState(this.user);
+
   // Unsubscribe to the streams when the widget is disposed
   @override
   void dispose() {
@@ -98,7 +101,7 @@ class _HomePageState extends State<HomePage> {
           ),
           _recentNews(),
           TextButton(
-              onPressed: () => movetoreferral(context),
+              onPressed: () => movetoreferral(context,user),
               child: const Text('move to referral'))
         ],
       ),
@@ -331,6 +334,6 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-movetoreferral(context) {
-  Navigator.of(context).pushNamed('/referral');
+movetoreferral(context, User user) {
+  Navigator.of(context).pushNamed('/referral',arguments:user);
 }
