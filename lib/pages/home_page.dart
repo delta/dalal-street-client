@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:dalal_street_client/config/get_it.dart';
 import 'package:dalal_street_client/components/stock_bar.dart';
 import 'package:dalal_street_client/constants/format.dart';
