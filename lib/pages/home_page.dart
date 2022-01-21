@@ -97,7 +97,9 @@ class _HomePageState extends State<HomePage> {
             height: 10,
           ),
           _recentNews(),
-          TextButton(onPressed: ()=>movetoreferral(context), child: const Text('move to referral'))
+          TextButton(
+              onPressed: () => movetoreferral(context),
+              child: const Text('move to referral'))
         ],
       ),
     );
@@ -330,5 +332,5 @@ class _HomePageState extends State<HomePage> {
 }
 
 movetoreferral(context) {
-   Navigator.of(context).pushNamed('/referral');
+  Navigator.of(context).pushNamed('/referral');
 }

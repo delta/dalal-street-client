@@ -55,14 +55,13 @@ class RouteGenerator {
           child: LoginPage(),
         );
       case '/referral':
-      if(args is User)
-      {
-        return BlocProvider(
-          create: (context) => ReferralBloc(),
-          child:  ReferralPage(user:args),
-        );
-      }
-      throw Exception('Invalid user args');
+        if (args is User) {
+          return BlocProvider(
+            create: (context) => ReferralBloc(),
+            child: ReferralPage(user: args),
+          );
+        }
+        throw Exception('Invalid user args');
 
       case '/forgotPassword':
         return BlocProvider(

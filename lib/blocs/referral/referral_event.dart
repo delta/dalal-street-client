@@ -6,11 +6,10 @@ abstract class ReferralEvent extends Equatable {
   @override
   List<Object> get props => [];
 }
-class GetReferralCode extends ReferralEvent
-{
+
+class GetReferralCode extends ReferralEvent {
   final String email;
   const GetReferralCode(this.email);
-   @override
+  @override
   List<Object> get props => [email];
-
 }

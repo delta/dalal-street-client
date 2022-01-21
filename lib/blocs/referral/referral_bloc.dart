@@ -9,15 +9,16 @@ part 'referral_state.dart';
 
 class ReferralBloc extends Bloc<ReferralEvent, ReferralState> {
   ReferralBloc() : super(ReferralInitial()) {
-    on<GetReferralCode>((event, emit)async {
-      try
-      { 
-         final GetReferralCodeResponse getReferralCodeResponse = await 
-         actionClient.getReferralCode(GetReferralCodeRequest(email: event.email,),options: sessionOptions(getIt()));
-         emit(ReferralSuccess(getReferralCodeResponse.referralCode));
-      }
-      catch(e)
-      {
+    on<GetReferralCode>((event, emit) async {
+      try {
+        final GetReferralCodeResponse getReferralCodeResponse =
+            await actionClient.getReferralCode(
+                GetReferralCodeRequest(
+                  email: event.email,
+                ),
+                options: sessionOptions(getIt()));
+        emit(ReferralSuccess(getReferralCodeResponse.referralCode));
+      } catch (e) {
         ReferralFailed(e.toString());
       }
     });
