@@ -80,7 +80,7 @@ class _CompanyPageState extends State<CompanyPage>
                       )),
                   alignment: Alignment.bottomCenter,
                   padding:
-                      const EdgeInsets.symmetric(vertical: 10, horizontal: 40),
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 30),
                   child: Align(
                     alignment: Alignment.bottomCenter,
                     child: SizedBox(
@@ -89,7 +89,7 @@ class _CompanyPageState extends State<CompanyPage>
                         onPressed: () {
                           chooseBuyOrSellBottomSheet(context, company, cash);
                         },
-                        child: const Text('Place Order'),
+                        child: const Text('Place Your Order'),
                       ),
                     ),
                   ),
