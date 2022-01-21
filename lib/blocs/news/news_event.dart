@@ -20,4 +20,6 @@ class GetNewsFeed extends NewsEvent {
 class GetMoreNews extends NewsEvent {
   final int lasteventid;
   const GetMoreNews(this.lasteventid);
+    @override
+  List<Object> get props => [lasteventid];
 }
