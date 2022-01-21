@@ -46,7 +46,7 @@ class NewsDetail extends StatelessWidget {
               borderRadius: BorderRadius.circular(20),
               child: Image(
                 image: NetworkImage(imagePath),
-                fit: BoxFit.cover,
+                fit: BoxFit.contain,
                 width: MediaQuery.of(context).size.width * 0.9,
                 height: MediaQuery.of(context).size.height * 0.2,
               ),

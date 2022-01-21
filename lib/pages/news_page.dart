@@ -56,17 +56,18 @@ class _NewsPageState extends State<NewsPage> {
                     const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                 color: Colors.black,
                 child: SingleChildScrollView(
+                    controller: _scrollController,
                     child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    news(),
-                    const SizedBox.square(
-                      dimension: 20,
-                    ),
-                    feed(),
-                  ],
-                )))));
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        news(),
+                        const SizedBox.square(
+                          dimension: 20,
+                        ),
+                        feed(),
+                      ],
+                    )))));
   }
 
   Widget feedlist() =>
@@ -82,39 +83,33 @@ class _NewsPageState extends State<NewsPage> {
             if (state is SubscriptionDataLoaded) {
               context.read<NewsBloc>().add(GetNewsFeed(state.subscriptionId));
 
-              return SingleChildScrollView(
-                  child: SizedBox(
-                      child: ListView.separated(
-                        shrinkWrap: true,
-                        physics: const ScrollPhysics(),
-                        itemCount: mapMarketEventsCopy.length,
-                        controller: _scrollController,
-                        itemBuilder: (context, index) {
-                          MarketEvent marketEvent = mapMarketEventsCopy[index];
-                          String headline = marketEvent.headline;
-                          String imagePath = marketEvent.imagePath;
-                          String createdAt = marketEvent.createdAt;
-                          String text = marketEvent.text;
-                          String dur = getdur(createdAt);
-                          return GestureDetector(
-                              child: newsItem(
-                                  headline, imagePath, createdAt, false),
-                              onTap: () => Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => NewsDetail(
-                                        text: text,
-                                        imagePath:
-                                            'https://upload.wikimedia.org/wikipedia/commons/3/37/Cryptocurrency_Mining_Farm.jpg',
-                                        headline: headline,
-                                        dur: dur),
-                                  )));
-                        },
-                        separatorBuilder: (context, index) {
-                          return const Divider();
-                        },
-                      ),
-                      height: MediaQuery.of(context).size.height * 0.6));
+              return ListView.separated(
+                shrinkWrap: true,
+                physics: const ScrollPhysics(),
+                itemCount: mapMarketEventsCopy.length,
+                itemBuilder: (context, index) {
+                  MarketEvent marketEvent = mapMarketEventsCopy[index];
+                  String headline = marketEvent.headline;
+                  String imagePath = marketEvent.imagePath;
+                  String createdAt = marketEvent.createdAt;
+                  String text = marketEvent.text;
+                  String dur = getdur(createdAt);
+                  return GestureDetector(
+                      child: newsItem(headline, imagePath, createdAt, false),
+                      onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => NewsDetail(
+                                text: text,
+                                imagePath: imagePath,
+                                headline: headline,
+                                dur: dur),
+                          )));
+                },
+                separatorBuilder: (context, index) {
+                  return const Divider();
+                },
+              );
             } else if (state is SubscriptonDataFailed) {
               logger.i('Stream Failed $state');
               return const Center(
@@ -203,8 +198,7 @@ class _NewsPageState extends State<NewsPage> {
 
               MarketEvent marketEvent = mapMarketEvents[0];
               String headline = marketEvent.headline;
-              String imagePath =
-                  'https://upload.wikimedia.org/wikipedia/commons/3/37/Cryptocurrency_Mining_Farm.jpg';
+              String imagePath = marketEvent.imagePath;
               String createdAt = marketEvent.createdAt;
               String text = marketEvent.text;
               String dur = getdur(createdAt);
@@ -215,8 +209,7 @@ class _NewsPageState extends State<NewsPage> {
                       MaterialPageRoute(
                         builder: (context) => NewsDetail(
                           text: text,
-                          imagePath:
-                              'https://upload.wikimedia.org/wikipedia/commons/3/37/Cryptocurrency_Mining_Farm.jpg',
+                          imagePath: imagePath,
                           headline: headline,
                           dur: dur,
                         ),
@@ -268,9 +261,8 @@ class _NewsPageState extends State<NewsPage> {
                   child: Image(
                     width: 100,
                     height: 100,
-                    fit: BoxFit.cover,
-                    image: NetworkImage(
-                        'https://upload.wikimedia.org/wikipedia/commons/3/37/Cryptocurrency_Mining_Farm.jpg'),
+                    fit: BoxFit.contain,
+                    image: NetworkImage(imagePath),
                   ),
                 ),
                 Column(
@@ -330,11 +322,10 @@ class _NewsPageState extends State<NewsPage> {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(20),
                     child: Image(
-                      image: NetworkImage(
-                          'https://upload.wikimedia.org/wikipedia/commons/3/37/Cryptocurrency_Mining_Farm.jpg'),
+                      image: NetworkImage(imagePath),
                       width: MediaQuery.of(context).size.width,
                       height: MediaQuery.of(context).size.height * 0.25,
-                      fit: BoxFit.cover,
+                      fit: BoxFit.contain,
                     ),
                   )
                 ]);
@@ -356,9 +347,8 @@ class _NewsPageState extends State<NewsPage> {
                   child: Image(
                     width: 100,
                     height: 100,
-                    fit: BoxFit.cover,
-                    image: NetworkImage(
-                        'https://upload.wikimedia.org/wikipedia/commons/3/37/Cryptocurrency_Mining_Farm.jpg'),
+                    fit: BoxFit.contain,
+                    image: NetworkImage(imagePath),
                   ),
                 ),
                 Column(
@@ -418,11 +408,10 @@ class _NewsPageState extends State<NewsPage> {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(20),
                     child: Image(
-                      image: NetworkImage(
-                          'https://upload.wikimedia.org/wikipedia/commons/3/37/Cryptocurrency_Mining_Farm.jpg'),
+                      image: NetworkImage(imagePath),
                       width: MediaQuery.of(context).size.width,
                       height: MediaQuery.of(context).size.height * 0.25,
-                      fit: BoxFit.cover,
+                      fit: BoxFit.contain,
                     ),
                   )
                 ]);
