@@ -81,10 +81,6 @@ class _HomePageState extends State<HomePage>
             height: 10,
           ),
           _recentNews(),
-          const SizedBox(
-            child: LineAreaGraph(stockId: 2),
-            height: 50,
-          ),
         ],
       ),
     );
@@ -217,10 +213,11 @@ class StockItem extends StatelessWidget {
   }
 
   Expanded _stockGraph() {
-    return Expanded(
-      child: Image.network(
-        'https://i.imgur.com/lOQyGGe.png',
-        height: 23,
+    return const Expanded(
+      child: SizedBox(
+        child: LineAreaGraph(stockId: 1),
+        height: 50,
+        width: 10,
       ),
     );
   }
