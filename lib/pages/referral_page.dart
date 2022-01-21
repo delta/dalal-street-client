@@ -1,4 +1,3 @@
-import 'package:clipboard/clipboard.dart';
 import 'package:dalal_street_client/blocs/referral/referral_bloc.dart';
 import 'package:dalal_street_client/proto_build/models/User.pb.dart';
 import 'package:dalal_street_client/theme/colors.dart';
@@ -80,16 +79,18 @@ Widget referralcode() {
               SizedBox(
                 width: 300,
                 child: ElevatedButton(
-                  onPressed: () =>ShowReferralCode(state.referralCode),
+                  onPressed: () => ShowReferralCode(state.referralCode),
                   child: const Expanded(
                       child: Text('Generate Referral Code',
                           style: TextStyle(
                               fontSize: 18, fontWeight: FontWeight.bold))),
                 ),
               ),
-             const Padding(padding: EdgeInsets.fromLTRB(0,40,0,10),
-              child: Text('How it works ?',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold))),
+              const Padding(
+                  padding: EdgeInsets.fromLTRB(0, 40, 0, 10),
+                  child: Text('How it works ?',
+                      style: TextStyle(
+                          fontSize: 18, fontWeight: FontWeight.bold))),
               const Flexible(
                   child: Text(
                 'Refer your friends to Dalal Street, and if they sign up, both of you will get a cash reward.',
@@ -110,8 +111,4 @@ Widget referralcode() {
   });
 }
 
-Widget ShowReferralCode(String referralCode) {
-
-
-  
-}
+Widget ShowReferralCode(String referralCode) {}
