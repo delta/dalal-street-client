@@ -24,7 +24,7 @@ Column overView(Stock company) {
         textAlign: TextAlign.start,
       ),
       const SizedBox(
-        height: 5,
+        height: 10,
       ),
       Text(
         company.description.toString(),
@@ -46,6 +46,9 @@ Column overView(Stock company) {
           color: lightGray,
         ),
         textAlign: TextAlign.start,
+      ),
+      const SizedBox(
+        height: 10,
       ),
       marketStatusTile(AppIcons().currentPrice, 'Current Price',
           oCcy.format(company.currentPrice).toString(), false),

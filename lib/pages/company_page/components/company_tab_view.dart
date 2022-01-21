@@ -56,7 +56,7 @@ Container companyTabView(BuildContext context, Stock company) {
               indicatorPadding: EdgeInsets.symmetric(horizontal: 20),
             ),
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
               height: MediaQuery.of(context).size.height * 0.8,
               child: TabBarView(
                   physics: const BouncingScrollPhysics(
