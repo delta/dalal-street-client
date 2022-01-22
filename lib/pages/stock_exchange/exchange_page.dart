@@ -1,5 +1,4 @@
 import 'package:dalal_street_client/blocs/exchange/exchange_cubit.dart';
-import 'package:dalal_street_client/components/stock_bar.dart';
 import 'package:dalal_street_client/config/get_it.dart';
 import 'package:dalal_street_client/pages/stock_exchange/components/stock_exchange_item.dart';
 import 'package:dalal_street_client/streams/global_streams.dart';
@@ -41,7 +40,6 @@ class _ExchangePageState extends State<ExchangePage>
             padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
             child: Column(
               children: [
-                const StockBar(),
                 const SizedBox(
                   height: 10,
                 ),
