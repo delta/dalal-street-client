@@ -1,4 +1,9 @@
+// import 'dart:js';
+
+import 'dart:developer';
+
 import 'package:dalal_street_client/blocs/referral/referral_bloc.dart';
+import 'package:dalal_street_client/config/log.dart';
 import 'package:dalal_street_client/proto_build/models/User.pb.dart';
 import 'package:dalal_street_client/theme/colors.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +19,8 @@ class ReferralPage extends StatefulWidget {
 }
 
 class _ReferralPageState extends State<ReferralPage> {
+  bool removebutton = false;
+
   final String email;
   _ReferralPageState(this.email);
 
@@ -28,7 +35,6 @@ class _ReferralPageState extends State<ReferralPage> {
   Widget build(BuildContext context) {
     return Scaffold(body: Center(child: referralcode()));
   }
-}
 
 Widget referralcode() {
   return BlocBuilder<ReferralBloc, ReferralState>(builder: (context, state) {
@@ -79,11 +85,12 @@ Widget referralcode() {
               SizedBox(
                 width: 300,
                 child: ElevatedButton(
-                  onPressed: () => ShowReferralCode(state.referralCode),
-                  child: const Expanded(
-                      child: Text('Generate Referral Code',
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold))),
+                  onPressed: () {
+                    setState(() {
+                      removebutton = true;
+                    });
+                  },
+                  child: buttonWidget(state.referralCode),
                 ),
               ),
               const Padding(
@@ -111,4 +118,20 @@ Widget referralcode() {
   });
 }
 
-Widget ShowReferralCode(String referralCode) {}
+
+  Widget buttonWidget(String referralCode) {
+    if(removebutton)
+    {
+      return Text(referralCode);
+        
+    }
+    else
+    {
+     return const Expanded(
+                      child: Text('Generate Referral Code',
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold)));
+    }
+
+  }
+}
