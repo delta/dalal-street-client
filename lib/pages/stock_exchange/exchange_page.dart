@@ -16,8 +16,12 @@ class ExchangePage extends StatefulWidget {
   _ExchangePageState createState() => _ExchangePageState();
 }
 
-class _ExchangePageState extends State<ExchangePage> {
+class _ExchangePageState extends State<ExchangePage>
+    with AutomaticKeepAliveClientMixin {
   Map<int, Stock> mapOfStocks = getIt<GlobalStreams>().latestStockMap;
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   void initState() {
@@ -26,29 +30,32 @@ class _ExchangePageState extends State<ExchangePage> {
   }
 
   @override
-  Widget build(BuildContext context) => SafeArea(
-        child: Scaffold(
-          resizeToAvoidBottomInset: false,
-          backgroundColor: backgroundColor,
-          body: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-              child: Column(
-                children: [
-                  const StockBar(),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  _companiesExchange(),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                ],
-              ),
+  Widget build(BuildContext context) {
+    super.build(context);
+    return SafeArea(
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        backgroundColor: backgroundColor,
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+            child: Column(
+              children: [
+                const StockBar(),
+                const SizedBox(
+                  height: 10,
+                ),
+                _companiesExchange(),
+                const SizedBox(
+                  height: 10,
+                ),
+              ],
             ),
           ),
         ),
-      );
+      ),
+    );
+  }
 
   Container _companiesExchange() => Container(
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),

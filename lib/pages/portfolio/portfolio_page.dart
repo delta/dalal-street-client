@@ -14,7 +14,11 @@ class PortfolioPage extends StatefulWidget {
   _PortfolioPageState createState() => _PortfolioPageState();
 }
 
-class _PortfolioPageState extends State<PortfolioPage> {
+class _PortfolioPageState extends State<PortfolioPage>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
   @override
   void initState() {
     super.initState();
@@ -22,14 +26,17 @@ class _PortfolioPageState extends State<PortfolioPage> {
   }
 
   @override
-  Widget build(BuildContext context) => SafeArea(
-        child: Scaffold(
-            backgroundColor: Colors.black,
-            body: Responsive(
-                desktop: _desktopPortfolio(),
-                tablet: _tabletPortfolio(),
-                mobile: _mobilePortfolio())),
-      );
+  Widget build(BuildContext context) {
+    super.build(context);
+    return SafeArea(
+      child: Scaffold(
+          backgroundColor: Colors.black,
+          body: Responsive(
+              desktop: _desktopPortfolio(),
+              tablet: _tabletPortfolio(),
+              mobile: _mobilePortfolio())),
+    );
+  }
 
   Center _desktopPortfolio() {
     return const Center(

@@ -19,12 +19,17 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage>
+    with AutomaticKeepAliveClientMixin {
   final Map<int, Stock> stocks = getIt<GlobalStreams>().stockMapStream.value;
   final stockMapStream = getIt<GlobalStreams>().stockMapStream;
 
   @override
+  bool get wantKeepAlive => true;
+
+  @override
   Widget build(context) {
+    super.build(context);
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.black,
