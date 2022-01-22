@@ -6,12 +6,14 @@ class DalalHomeNavBar extends StatefulWidget {
   final Map<String, String> menu;
   final void Function(int index) onItemSelect;
   final void Function(int index) onItemReselect;
+  final void Function() onMoreClick;
 
   const DalalHomeNavBar({
     Key? key,
     required this.menu,
     required this.onItemSelect,
     required this.onItemReselect,
+    required this.onMoreClick,
   }) : super(key: key);
 
   @override
@@ -44,6 +46,11 @@ class _DalalHomeNavBarState extends State<DalalHomeNavBar> {
         type: BottomNavigationBarType.fixed,
         items: _menuItems,
         onTap: (value) {
+          // Don't select the item when more is clicked
+          if (value == _menuItems.length - 1) {
+            widget.onMoreClick();
+            return;
+          }
           if (value != currentIndex) {
             widget.onItemSelect(value);
             setState(() => currentIndex = value);

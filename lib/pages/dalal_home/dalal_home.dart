@@ -2,11 +2,13 @@ import 'package:dalal_street_client/blocs/exchange/exchange_cubit.dart';
 import 'package:dalal_street_client/blocs/portfolio/userWorth/portfolio_cubit.dart';
 import 'package:dalal_street_client/components/stock_bar.dart';
 import 'package:dalal_street_client/config/log.dart';
+import 'package:dalal_street_client/pages/dalal_home/dalal_home_bottom_sheet.dart';
 import 'package:dalal_street_client/pages/dalal_home/dalal_home_nav_bar.dart';
 import 'package:dalal_street_client/pages/home_page.dart';
 import 'package:dalal_street_client/pages/portfolio/portfolio_page.dart';
 import 'package:dalal_street_client/pages/stock_exchange/exchange_page.dart';
 import 'package:dalal_street_client/proto_build/models/User.pb.dart';
+import 'package:dalal_street_client/theme/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -53,7 +55,6 @@ class _DalalHomeState extends State<DalalHome> {
           child: const ExchangePage(),
         ),
         const Center(child: Text('Leaderboard tbd')),
-        const Center(child: Text('Bottom sheet tbd')),
       ];
 
   @override
@@ -69,7 +70,17 @@ class _DalalHomeState extends State<DalalHome> {
             menu: _bottomMenu,
             onItemSelect: (index) => _pageController.jumpToPage(index),
             onItemReselect: (index) => logger.d('$index reselected'),
+            onMoreClick: _showHomeBottomSheet,
           ),
         ),
+      );
+
+  void _showHomeBottomSheet() => showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        backgroundColor: background2,
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(25.0))),
+        builder: (_) => const DalalHomeBottomSheet(),
       );
 }
