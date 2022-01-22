@@ -150,15 +150,14 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _stockList() {
-    return ListView.builder(
+    List<Widget> stockItems = stocks.entries
+        .map((entry) => StockItem(
+            stock: entry.value,
+            stockPriceStream: getStockPriceStream(entry.key, stockMapStream)))
+        .toList();
+    return ListView(
       shrinkWrap: true,
-      itemCount: stocks.length,
-      itemBuilder: (context, index) {
-        Stock stock = stocks[index + 1] ?? Stock();
-        return StockItem(
-            stock: stock,
-            stockPriceStream: getStockPriceStream(stock.id, stockMapStream));
-      },
+      children: stockItems,
     );
   }
 }
