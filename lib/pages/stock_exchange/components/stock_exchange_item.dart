@@ -41,7 +41,7 @@ class _StockExchangeItemState extends State<StockExchangeItem> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             _stockNames(widget.company),
             _stockPrices(
               widget.stockId,
@@ -181,10 +181,9 @@ class _StockExchangeItemState extends State<StockExchangeItem> {
             return Column(
               children: [
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Expanded(child: Text('Stocks in Market')),
-                    const SizedBox(width: 10),
+                    const Text('Stocks in Market'),
                     Text(
                       stocksInMarket.toString(),
                       style: const TextStyle(color: bronze),
@@ -195,10 +194,9 @@ class _StockExchangeItemState extends State<StockExchangeItem> {
                   height: 10,
                 ),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Expanded(child: Text('Stocks in Exchange')),
-                    const SizedBox(width: 10),
+                    const Text('Stocks in Exchange'),
                     Text(stocksInExchange.toString(),
                         style: const TextStyle(color: gold))
                   ],
@@ -210,10 +208,9 @@ class _StockExchangeItemState extends State<StockExchangeItem> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Expanded(child: Text('Stocks in Market')),
-                  const SizedBox(width: 10),
+                  const Text('Stocks in Market'),
                   Text(company?.stocksInMarket.toString() ?? '0')
                 ],
               ),
@@ -221,10 +218,9 @@ class _StockExchangeItemState extends State<StockExchangeItem> {
                 height: 10,
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Expanded(child: Text('Stocks in Exchange')),
-                  const SizedBox(width: 10),
+                  const Text('Stocks in Exchange'),
                   Text(company?.stocksInExchange.toString() ?? '0')
                 ],
               )
