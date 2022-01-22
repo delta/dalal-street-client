@@ -22,16 +22,16 @@ class DalalHomeNavBar extends StatefulWidget {
 
 class _DalalHomeNavBarState extends State<DalalHomeNavBar> {
   List<BottomNavigationBarItem> get _menuItems => widget.menu
-      .map((key, value) => MapEntry(
-          key,
+      .map((label, asset) => MapEntry(
+          label,
           BottomNavigationBarItem(
             icon: SvgPicture.asset(
-              value,
-              color: (key == widget.menu.keys.toList()[currentIndex])
+              asset,
+              color: (label == widget.menu.keys.toList()[currentIndex])
                   ? primaryColor
                   : null,
             ),
-            label: key,
+            label: label,
           )))
       .values
       .toList();

@@ -30,6 +30,16 @@ class _DalalHomeState extends State<DalalHome> {
     'More': 'assets/icon/hamburger.svg',
   };
 
+  final _sheetMenu = {
+    'News': 'assets/icon/news.svg',
+    'Mortgage': 'assets/icon/mortgage.svg',
+    'Daily Challenges': 'assets/icon/daily-challenges.svg',
+    'Open Orders': 'assets/icon/open-orders.svg',
+    'Refer and Earn': 'assets/icon/refer-and-earn.svg',
+    'Media Partners': 'assets/icon/mobile-ad.svg',
+    'Notifications': 'assets/icon/notification-bell.svg',
+  };
+
   late PageController _pageController;
 
   @override
@@ -80,7 +90,7 @@ class _DalalHomeState extends State<DalalHome> {
         isScrollControlled: true,
         backgroundColor: background2,
         shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.vertical(top: Radius.circular(25.0))),
-        builder: (_) => const DalalHomeBottomSheet(),
+            borderRadius: BorderRadius.vertical(top: Radius.circular(10))),
+        builder: (_) => DalalHomeBottomSheet(items: _sheetMenu),
       );
 }
