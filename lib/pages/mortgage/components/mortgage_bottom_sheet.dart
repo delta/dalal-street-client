@@ -124,7 +124,7 @@ class _MortgageBottomSheetState extends State<MortgageBottomSheet> {
                   onTap: () {
                     Navigator.pop(context);
                   },
-                  child: SvgPicture.asset(AppIcons().crossWhite)),
+                  child: SvgPicture.asset(AppIcons.crossWhite)),
             ],
           ),
         ),

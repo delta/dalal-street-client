@@ -1,14 +1,13 @@
-import 'package:dalal_street_client/blocs/companies/companies_bloc.dart';
-import 'package:dalal_street_client/blocs/subscribe/subscribe_cubit.dart';
+import 'package:dalal_street_client/config/get_it.dart';
 import 'package:dalal_street_client/components/stock_bar.dart';
-import 'package:dalal_street_client/config/log.dart';
 import 'package:dalal_street_client/constants/format.dart';
-import 'package:dalal_street_client/proto_build/datastreams/Subscribe.pb.dart';
+import 'package:dalal_street_client/streams/transformations.dart';
+import 'package:fixnum/fixnum.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
 import 'package:dalal_street_client/proto_build/models/User.pb.dart';
+import 'package:dalal_street_client/streams/global_streams.dart';
 import 'package:dalal_street_client/utils/responsive.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dalal_street_client/theme/colors.dart';
 
 class HomePage extends StatefulWidget {
@@ -21,27 +20,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  // Unsubscribe to the streams when the widget is disposed
-  @override
-  void dispose() {
-    SubscriptionId? _stockPricesSubscriptionId;
-    final state = context.read<SubscribeCubit>().state;
-    if (state is SubscriptionDataLoaded) {
-      _stockPricesSubscriptionId = state.subscriptionId;
-      context.read<SubscribeCubit>().unsubscribe(_stockPricesSubscriptionId);
-    }
-    super.dispose();
-  }
-
-  @override
-  initState() {
-    super.initState();
-    // Get List of Stocks
-    context.read<CompaniesBloc>().add(const GetStockList());
-    // Subscribe to the stream of Stock Prices
-    context.read<SubscribeCubit>().subscribe(DataStreamType.STOCK_PRICES);
-    // TODO : Subscribe to the stream of News and Prices Graph
-  }
+  final Map<int, Stock> stocks = getIt<GlobalStreams>().stockMapStream.value;
+  final stockMapStream = getIt<GlobalStreams>().stockMapStream;
 
   @override
   Widget build(context) {
@@ -90,7 +70,7 @@ class _HomePageState extends State<HomePage> {
         children: [
           const StockBar(),
           const SizedBox(
-            height: 10,
+            height: 5,
           ),
           _companies(),
           const SizedBox(
@@ -104,9 +84,10 @@ class _HomePageState extends State<HomePage> {
 
   Container _recentNews() {
     return Container(
+        width: double.infinity,
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
         decoration: BoxDecoration(
-          color: backgroundColor,
+          color: background2,
           borderRadius: BorderRadius.circular(10),
         ),
         child: Column(
@@ -132,7 +113,7 @@ class _HomePageState extends State<HomePage> {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
       decoration: BoxDecoration(
-        color: backgroundColor,
+        color: background2,
         borderRadius: BorderRadius.circular(10),
       ),
       child: Column(
@@ -168,84 +149,57 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  BlocBuilder<CompaniesBloc, CompaniesState> _stockList() {
-    return BlocBuilder<CompaniesBloc, CompaniesState>(
-      builder: (context, state) {
-        if (state is GetCompaniesSuccess) {
-          var mapOfStocks = state.stockList.stockList;
-          logger.i(state.stockList.stockList.length);
-          return BlocBuilder<SubscribeCubit, SubscribeState>(
-              builder: (context, state) {
-            if (state is SubscriptionDataLoaded) {
-              // Start the stream of Stock Prices
-              context
-                  .read<CompaniesBloc>()
-                  .add(SubscribeToStockPrices(state.subscriptionId));
-              return ListView.builder(
-                shrinkWrap: true,
-                itemCount: mapOfStocks.length,
-                itemBuilder: (context, index) {
-                  Stock? company = mapOfStocks[index];
-                  int currentPrice = company?.currentPrice.toInt() ?? 0;
-                  int previousDayPrice = company?.previousDayClose.toInt() ?? 0;
-                  var priceChange = (currentPrice - previousDayPrice);
-                  return _stockItem(company, index, priceChange, currentPrice);
-                },
-              );
-            } else if (state is SubscriptonDataFailed) {
-              logger.i('Stock Prices Stream Failed $state');
-              return const Center(
-                child: Text(
-                  'Failed to load data \nReason : //',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: secondaryColor,
-                  ),
-                ),
-              );
-            } else {
-              return const Center(
-                child: CircularProgressIndicator(
-                  color: secondaryColor,
-                ),
-              );
-            }
-          });
-        } else {
-          return const Center(
-            child: CircularProgressIndicator(
-              color: secondaryColor,
-            ),
-          );
-        }
+  Widget _stockList() {
+    return ListView.builder(
+      shrinkWrap: true,
+      itemCount: stocks.length,
+      itemBuilder: (context, index) {
+        Stock stock = stocks[index + 1] ?? Stock();
+        return StockItem(
+            stock: stock,
+            stockPriceStream: getStockPriceStream(stock.id, stockMapStream));
       },
     );
   }
+}
 
-  Container _stockItem(
-      Stock? company, int index, int priceChange, int currentPrice) {
-    return Container(
-        padding: const EdgeInsets.symmetric(
-          vertical: 10,
-        ),
-        child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-          _stockNames(company),
-          _stockGraph(),
-          _stockPrices(index, priceChange, currentPrice),
-        ]));
+class StockItem extends StatelessWidget {
+  final Stock stock;
+  final Stream<Int64> stockPriceStream;
+
+  const StockItem(
+      {Key? key, required this.stock, required this.stockPriceStream})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    int cash = getIt<GlobalStreams>().dynamicUserInfoStream.value.cash;
+    List<int> data = [stock.id, cash];
+    return GestureDetector(
+      onTap: () {
+        Navigator.pushNamed(context, '/company', arguments: data);
+      },
+      child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+          child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+            _stockNames(stock),
+            _stockGraph(),
+            _stockPrices(),
+          ])),
+    );
   }
 
-  Expanded _stockNames(Stock? company) {
+  Expanded _stockNames(Stock company) {
     return Expanded(
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Text(
-          company?.shortName ?? 'Airtel',
+          company.shortName,
           style: const TextStyle(
             fontSize: 18,
           ),
         ),
         Text(
-          company?.fullName ?? 'Airtel Pvt Ltd',
+          company.fullName,
           style: const TextStyle(
             fontSize: 14,
             color: whiteWithOpacity50,
@@ -258,70 +212,51 @@ class _HomePageState extends State<HomePage> {
   Expanded _stockGraph() {
     return Expanded(
       child: Image.network(
-        'https://i.imgur.com/zrmdl8j.png',
+        'https://i.imgur.com/lOQyGGe.png',
         height: 23,
       ),
     );
   }
 
-  Expanded _stockPrices(int index, int priceChange, int currentPrice) {
+  Widget _stockPrices() {
     return Expanded(
-      child: BlocBuilder<CompaniesBloc, CompaniesState>(
+      child: StreamBuilder<Int64>(
+        stream: stockPriceStream,
+        initialData: stock.currentPrice,
         builder: (context, state) {
-          if (state is SubscriptionToStockPricesSuccess) {
-            var currentStockPrice = state.stockPrices.prices[index];
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Text(
-                  oCcy.format(currentStockPrice).toString(),
-                  style: const TextStyle(
-                    fontSize: 18,
-                  ),
-                ),
-                Text(
-                  priceChange >= 0
-                      ? '+' + oCcy.format(priceChange).toString()
-                      : oCcy.format(priceChange).toString(),
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: priceChange > 0 ? secondaryColor : heartRed,
-                  ),
-                ),
-              ],
-            );
-          } else if (state is SubscriptionToStockPricesFailed) {
-            return const Center(
-              child: Text(
-                'Failed to load data \nReason : //',
-                style: TextStyle(
-                  fontSize: 14,
-                  color: secondaryColor,
+          Int64 stockPrice = state.data!;
+
+          bool isLowOrHigh = stockPrice > stock.previousDayClose;
+
+          double percentageHighOrLow;
+
+          if (stock.previousDayClose == 0) {
+            percentageHighOrLow = stockPrice.toDouble();
+          } else {
+            percentageHighOrLow =
+                ((stockPrice.toDouble() - stock.previousDayClose.toDouble()) /
+                    stock.previousDayClose.toDouble());
+          }
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(
+                '₹' + oCcy.format(stockPrice).toString(),
+                style: const TextStyle(
+                  fontSize: 18,
                 ),
               ),
-            );
-          } else {
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Text(
-                  oCcy.format(currentPrice).toString(),
-                  style: const TextStyle(
-                    fontSize: 18,
-                  ),
+              Text(
+                isLowOrHigh
+                    ? '+' + oCcy.format(percentageHighOrLow).toString() + '%'
+                    : oCcy.format(percentageHighOrLow).toString() + '%',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: isLowOrHigh ? secondaryColor : heartRed,
                 ),
-                Text(
-                  priceChange >= 0
-                      ? '+' + oCcy.format(priceChange).toString()
-                      : oCcy.format(priceChange).toString(),
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: priceChange > 0 ? secondaryColor : heartRed,
-                  ),
-                ),
-              ],
-            );
-          }
+              ),
+            ],
+          );
         },
       ),
     );

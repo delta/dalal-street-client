@@ -47,9 +47,9 @@ dependencies:
   intl: ^0.17.0
   url_launcher: ^6.0.15
   super_tooltip: ^1.0.1
-  pin_code_fields: ^7.3.0
   flutter_svg: ^1.0.0
   flutter_spinbox: ^0.8.0
+  pin_code_fields: ^7.3.0
   percent_indicator: ^3.4.0
 
 dev_dependencies:

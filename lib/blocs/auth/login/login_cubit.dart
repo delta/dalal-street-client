@@ -25,6 +25,7 @@ class LoginCubit extends Cubit<LoginState> {
         return;
       }
       emit(LoginSuccess(loginResp));
+
       dalalBloc.add(DalalCheckVerification(
         loginResp.user,
         loginResp.sessionId,

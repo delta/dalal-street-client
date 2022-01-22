@@ -15,8 +15,8 @@ class StockBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: StockBarMarquee(),
-      color: backgroundColor,
-      height: 30.0,
+      color: background2,
+      height: 32.0,
       margin: const EdgeInsets.only(bottom: 1.0),
     );
   }
@@ -53,8 +53,8 @@ class StockBarMarquee extends StatelessWidget {
         ],
       ),
       pauseDuration: const Duration(milliseconds: 0),
-      backDuration: const Duration(milliseconds: 10000),
-      animationDuration: const Duration(milliseconds: 10000),
+      backDuration: const Duration(milliseconds: 30000),
+      animationDuration: const Duration(milliseconds: 30000),
     );
   }
 }
