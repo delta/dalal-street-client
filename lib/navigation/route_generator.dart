@@ -94,7 +94,7 @@ class RouteGenerator {
       // Home Pages
       case '/home':
         if (args is User) {
-          return DalalHome();
+          return DalalHome(user: args);
         }
         throw Exception('Invalid user args');
 

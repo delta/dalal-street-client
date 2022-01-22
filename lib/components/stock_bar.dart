@@ -22,7 +22,7 @@ class StockBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => const Size(double.infinity, 20);
+  Size get preferredSize => const Size(double.infinity, 30);
 }
 
 class StockBarMarquee extends StatelessWidget {
