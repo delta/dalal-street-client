@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:dalal_street_client/streams/global_streams.dart';
 import 'package:fixnum/fixnum.dart';
 
-class StockBar extends StatelessWidget {
+class StockBar extends StatelessWidget implements PreferredSizeWidget {
   const StockBar({Key? key}) : super(key: key);
 
   @override
@@ -20,6 +20,9 @@ class StockBar extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 1.0),
     );
   }
+
+  @override
+  Size get preferredSize => const Size(double.infinity, 20);
 }
 
 class StockBarMarquee extends StatelessWidget {
