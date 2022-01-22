@@ -5,17 +5,31 @@ import 'package:flutter_svg/flutter_svg.dart';
 class DalalHomeBottomSheet extends StatelessWidget {
   /// A map of labels and asset paths
   final Map<String, String> items;
+  final void Function(int index) onItemClick;
 
-  const DalalHomeBottomSheet({Key? key, required this.items}) : super(key: key);
+  const DalalHomeBottomSheet({
+    Key? key,
+    required this.items,
+    required this.onItemClick,
+  }) : super(key: key);
 
   List<Widget> get _sheetItems => items
-      .map((label, asset) => MapEntry(
+      .map(
+        (label, asset) => MapEntry(
           label,
-          HomeSheetItem(
-            icon: SvgPicture.asset(asset),
-            label: label,
-            onClick: () {},
-          )))
+          Builder(
+            builder: (context) => HomeSheetItem(
+              icon: SvgPicture.asset(asset),
+              label: label,
+              onClick: () {
+                // Close bottom sheet
+                Navigator.pop(context);
+                onItemClick(items.keys.toList().indexOf(label));
+              },
+            ),
+          ),
+        ),
+      )
       .values
       .toList();
 

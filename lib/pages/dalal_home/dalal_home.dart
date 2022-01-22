@@ -67,6 +67,16 @@ class _DalalHomeState extends State<DalalHome> {
         const Center(child: Text('Leaderboard tbd')),
       ];
 
+  List<String> get _sheetPageRoutes => [
+        '/news',
+        '/mortgage',
+        '/dailyChallenges',
+        '/openOrders',
+        '/referAndEarn',
+        '/mediaPartners',
+        '/notifications'
+      ];
+
   @override
   build(context) => SafeArea(
         child: Scaffold(
@@ -91,6 +101,10 @@ class _DalalHomeState extends State<DalalHome> {
         backgroundColor: background2,
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(top: Radius.circular(10))),
-        builder: (_) => DalalHomeBottomSheet(items: _sheetMenu),
+        builder: (_) => DalalHomeBottomSheet(
+          items: _sheetMenu,
+          onItemClick: (index) =>
+              Navigator.of(context).pushNamed(_sheetPageRoutes[index]),
+        ),
       );
 }
