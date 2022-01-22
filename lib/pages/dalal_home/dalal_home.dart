@@ -1,4 +1,5 @@
 import 'package:dalal_street_client/components/stock_bar.dart';
+import 'package:dalal_street_client/config/log.dart';
 import 'package:dalal_street_client/pages/dalal_home/dalal_home_nav_bar.dart';
 import 'package:flutter/material.dart';
 
@@ -17,7 +18,15 @@ class DalalHome extends StatelessWidget {
   build(context) => SafeArea(
         child: Scaffold(
           appBar: const StockBar(),
-          bottomNavigationBar: DalalHomeNavBar(menu: _bottomMenu),
+          bottomNavigationBar: DalalHomeNavBar(
+            menu: _bottomMenu,
+            onItemSelect: (index) {
+              logger.d('$index selected');
+            },
+            onItemReselect: (index) {
+              logger.d('$index reselected');
+            },
+          ),
         ),
       );
 }

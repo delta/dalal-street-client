@@ -4,8 +4,15 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 class DalalHomeNavBar extends StatefulWidget {
   final Map<String, String> menu;
+  final void Function(int index) onItemSelect;
+  final void Function(int index) onItemReselect;
 
-  const DalalHomeNavBar({Key? key, required this.menu}) : super(key: key);
+  const DalalHomeNavBar({
+    Key? key,
+    required this.menu,
+    required this.onItemSelect,
+    required this.onItemReselect,
+  }) : super(key: key);
 
   @override
   _DalalHomeNavBarState createState() => _DalalHomeNavBarState();
@@ -18,19 +25,31 @@ class _DalalHomeNavBarState extends State<DalalHomeNavBar> {
           BottomNavigationBarItem(
             icon: SvgPicture.asset(
               value,
-              color: (key == 'Home') ? primaryColor : null,
+              color: (key == widget.menu.keys.toList()[currentIndex])
+                  ? primaryColor
+                  : null,
             ),
             label: key,
           )))
       .values
       .toList();
 
+  int currentIndex = 0;
+
   @override
   build(context) => BottomNavigationBar(
-        currentIndex: 0,
+        currentIndex: currentIndex,
         fixedColor: primaryColor,
         backgroundColor: background2,
         type: BottomNavigationBarType.fixed,
         items: _menuItems,
+        onTap: (value) {
+          if (value != currentIndex) {
+            widget.onItemSelect(value);
+            setState(() => currentIndex = value);
+          } else {
+            widget.onItemReselect(value);
+          }
+        },
       );
 }
