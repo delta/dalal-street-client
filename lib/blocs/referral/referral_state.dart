@@ -22,7 +22,7 @@ class ReferralFailed extends ReferralState {
   @override
   List<Object> get props => [msg];
 }
-class RemoveButtonSucess extends ReferralState
-{
+
+class RemoveButtonSucess extends ReferralState {
   const RemoveButtonSucess();
 }

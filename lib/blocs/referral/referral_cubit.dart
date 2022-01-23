@@ -6,37 +6,18 @@ import 'package:equatable/equatable.dart';
 part 'referral_state.dart';
 
 class ReferralCubit extends Cubit<ReferralState> {
-  ReferralCubit() : super(ReferralInitial()) {}
-    Future<void>getreferralcode(String email) async {
-     try {
-        final GetReferralCodeResponse getReferralCodeResponse =
-            await actionClient.getReferralCode(
-                GetReferralCodeRequest(
-                  email: email,
-                ),
-                options: sessionOptions(getIt()));
-        emit(ReferralSuccess(getReferralCodeResponse.referralCode));
-      } catch (e) {
-        emit(ReferralFailed(e.toString()));
-      }
+  ReferralCubit() : super(ReferralInitial());
+  Future<void> getreferralcode(String email) async {
+    try {
+      final GetReferralCodeResponse getReferralCodeResponse =
+          await actionClient.getReferralCode(
+              GetReferralCodeRequest(
+                email: email,
+              ),
+              options: sessionOptions(getIt()));
+      emit(ReferralSuccess(getReferralCodeResponse.referralCode));
+    } catch (e) {
+      emit(ReferralFailed(e.toString()));
     }
-    
-    // on<GetReferralCode>((event, emit) async {
-    //   try {
-    //     final GetReferralCodeResponse getReferralCodeResponse =
-    //         await actionClient.getReferralCode(
-    //             GetReferralCodeRequest(
-    //               email: event.email,
-    //             ),
-    //             options: sessionOptions(getIt()));
-    //     emit(ReferralSuccess(getReferralCodeResponse.referralCode));
-    //   } catch (e) {
-    //     emit(ReferralFailed(e.toString()));
-    //   }
-    // });
-  Future<void> removebutton() async {
-
-   emit(const RemoveButtonSucess());
   }
-
 }
