@@ -1,9 +1,5 @@
-// import 'dart:js';
-
-import 'dart:developer';
-
+import 'package:clipboard/clipboard.dart';
 import 'package:dalal_street_client/blocs/referral/referral_bloc.dart';
-import 'package:dalal_street_client/config/log.dart';
 import 'package:dalal_street_client/proto_build/models/User.pb.dart';
 import 'package:dalal_street_client/theme/colors.dart';
 import 'package:flutter/material.dart';
@@ -14,13 +10,11 @@ class ReferralPage extends StatefulWidget {
   final User user;
 
   @override
-  // ignore: no_logic_in_create_state
   _ReferralPageState createState() => _ReferralPageState(user.email);
 }
 
 class _ReferralPageState extends State<ReferralPage> {
   bool removebutton = false;
-
   final String email;
   _ReferralPageState(this.email);
 
@@ -45,18 +39,6 @@ class _ReferralPageState extends State<ReferralPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                // Text(
-                //   state.referralCode,
-                //   style: const TextStyle(color: Colors.white, fontSize: 15),
-                // ),
-                // IconButton(
-                //   icon: const Icon(Icons.content_copy),
-                //   onPressed: () async {
-                //     await FlutterClipboard.copy(state.referralCode);
-                //     Scaffold.of(context).showSnackBar(
-                //       const SnackBar(content: Text('✓   Copied to Clipboard')),
-                //     );}
-                //     ),
                 Stack(children: <Widget>[
                   Positioned(
                     child: Image.asset('assets/images/Background.png'),
@@ -75,7 +57,7 @@ class _ReferralPageState extends State<ReferralPage> {
                           TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                     )),
                 const Padding(
-                    padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                    padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
                     child: Flexible(
                         child: Text(
                       'Refer your friends to earn a cash reward',
@@ -83,17 +65,7 @@ class _ReferralPageState extends State<ReferralPage> {
                       style: TextStyle(fontSize: 18),
                     ))),
                 const SizedBox(height: 50),
-                SizedBox(
-                  width: 300,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      setState(() {
-                        removebutton = true;
-                      });
-                    },
-                    child: buttonWidget(state.referralCode),
-                  ),
-                ),
+                buttonWidget(state.referralCode, context),
                 const Padding(
                     padding: EdgeInsets.fromLTRB(0, 40, 0, 10),
                     child: Text('How it works ?',
@@ -119,13 +91,61 @@ class _ReferralPageState extends State<ReferralPage> {
     });
   }
 
-  Widget buttonWidget(String referralCode) {
+  Widget buttonWidget(String referralCode, context) {
     if (removebutton) {
-      return Text(referralCode);
+      return SizedBox(
+          width: 300,
+          height: 120,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              const Padding(
+                  padding: EdgeInsets.all(10),
+                  child: Text(
+                    'Your referral code is',
+                    style: TextStyle(fontSize: 18, color: Colors.white),
+                  )),
+              GestureDetector(
+                  child: Stack(
+                      alignment: AlignmentDirectional.center,
+                      children: <Widget>[
+                        Positioned(
+                            child: Image.asset(
+                          'assets/images/Rectangle 23.png',
+                          width: 300,
+                          fit: BoxFit.fitWidth,
+                        )),
+                        Positioned(
+                            child: Text(
+                          referralCode,
+                          style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500,
+                              color: primaryColor),
+                        ))
+                      ]),
+                  onTap: () async {
+                    await FlutterClipboard.copy(referralCode);
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text('✓   Copied to Clipboard')));
+                  }),
+            ],
+          ));
     } else {
-      return const Expanded(
-          child: Text('Generate Referral Code',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)));
+      return SizedBox(
+        width: 300,
+        child: ElevatedButton(
+          onPressed: () {
+            setState(() {
+              removebutton = true;
+            });
+          },
+          child: const Expanded(
+              child: Text('Generate Referral Code',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold))),
+        ),
+      );
     }
   }
 }

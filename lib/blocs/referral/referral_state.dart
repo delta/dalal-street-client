@@ -22,7 +22,3 @@ class ReferralFailed extends ReferralState {
   @override
   List<Object> get props => [msg];
 }
-
-class ShowReferralCodeState extends ReferralState {
-  const ShowReferralCodeState();
-}
