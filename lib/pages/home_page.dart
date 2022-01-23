@@ -17,13 +17,10 @@ class HomePage extends StatefulWidget {
   final User user;
 
   @override
-  State<HomePage> createState() => _HomePageState(user);
+  State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  final User user;
-  _HomePageState(this.user);
-
   // Unsubscribe to the streams when the widget is disposed
   @override
   void dispose() {
@@ -330,4 +327,3 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
-
