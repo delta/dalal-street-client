@@ -1,7 +1,9 @@
 class AppIcons {
-  static String currentPrice = 'assets/icon/currentprice.svg';
-  static String alltimeHigh = 'assets/icon/alltimehigh.svg';
-  static String dayHigh = 'assets/icon/dayhigh.svg';
-  static String crossWhite = 'assets/icon/cross_white.svg';
-  static String balance = 'assets/icon/balance.svg';
+  static const String _iconsDir = 'assets/icon/';
+
+  static const String currentPrice = _iconsDir + 'currentprice.svg';
+  static const String alltimeHigh = _iconsDir +'alltimehigh.svg';
+  static const String dayHigh = _iconsDir +'dayhigh.svg';
+  static const String crossWhite = _iconsDir +'cross_white.svg';
+  static const String balance = _iconsDir +'balance.svg';
 }
