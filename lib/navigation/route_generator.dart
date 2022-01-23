@@ -5,7 +5,7 @@ import 'package:dalal_street_client/blocs/auth/verify_phone/enter_otp/enter_otp_
 import 'package:dalal_street_client/blocs/auth/verify_phone/enter_phone/enter_phone_cubit.dart';
 import 'package:dalal_street_client/blocs/companies/companies_bloc.dart';
 import 'package:dalal_street_client/blocs/exchange/exchange_cubit.dart';
-import 'package:dalal_street_client/blocs/referral/referral_bloc.dart';
+import 'package:dalal_street_client/blocs/referral/referral_cubit.dart';
 import 'package:dalal_street_client/blocs/subscribe/subscribe_cubit.dart';
 import 'package:dalal_street_client/blocs/daily_challenges/daily_challenges_page_cubit.dart';
 import 'package:dalal_street_client/pages/auth/check_mail_page.dart';
@@ -57,7 +57,7 @@ class RouteGenerator {
       case '/referral':
         if (args is User) {
           return BlocProvider(
-            create: (context) => ReferralBloc(),
+            create: (context) => ReferralCubit(),
             child: ReferralPage(user: args),
           );
         }

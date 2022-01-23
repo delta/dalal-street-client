@@ -1,4 +1,4 @@
-part of 'referral_bloc.dart';
+part of 'referral_cubit.dart';
 
 abstract class ReferralState extends Equatable {
   const ReferralState();
@@ -21,4 +21,8 @@ class ReferralFailed extends ReferralState {
   const ReferralFailed(this.msg);
   @override
   List<Object> get props => [msg];
+}
+class RemoveButtonSucess extends ReferralState
+{
+  const RemoveButtonSucess();
 }
