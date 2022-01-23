@@ -23,8 +23,10 @@ class SetGivesDividendsFailure extends SetGivesDividendsState {
 }
 
 class SetGivesDividendsSuccess extends SetGivesDividendsState {
-  final stockID;
-  final bool givesDividends;
+  final String msg;
 
-  const SetGivesDividendsSuccess(this.stockID, this.givesDividends);
+  const SetGivesDividendsSuccess(this.msg);
+
+  @override
+  List<Object> get props => [msg];
 }

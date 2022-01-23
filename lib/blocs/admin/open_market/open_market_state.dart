@@ -23,7 +23,10 @@ class OpenMarketFailure extends OpenMarketState {
 }
 
 class OpenMarketSuccess extends OpenMarketState {
-  final bool update_day_high_and_low;
+  final String msg;
 
-  const OpenMarketSuccess(this.update_day_high_and_low);
+  const OpenMarketSuccess(this.msg);
+
+  @override
+  List<Object> get props => [msg];
 }

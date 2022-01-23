@@ -23,8 +23,10 @@ class AddStocksToExchangeFailure extends AddStocksToExchangeState {
 }
 
 class AddStocksToExchangeSuccess extends AddStocksToExchangeState {
-  final int stockID;
-  final int newStocks;
+  final String msg;
 
-  const AddStocksToExchangeSuccess(this.stockID, this.newStocks);
+  const AddStocksToExchangeSuccess(this.msg);
+
+  @override
+  List<Object> get props => [msg];
 }

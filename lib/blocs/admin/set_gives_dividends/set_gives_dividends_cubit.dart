@@ -18,12 +18,12 @@ class SetGivesDividendsCubit extends Cubit<SetGivesDividendsState> {
     try {
       final resp = await actionClient.setGivesDividends(
           SetGivesDividendsRequest(
-              stockId: stockId, givesDividends: givesDividends));
+              stockId: stockId, givesDividends: givesDividends),
+          options: sessionOptions(getIt()));
       if (resp.statusCode == SetGivesDividendsResponse_StatusCode.OK) {
-        emit(SetGivesDividendsSuccess(stockId, givesDividends));
+        emit(SetGivesDividendsSuccess(resp.statusMessage));
       } else {
         emit(SetGivesDividendsFailure(resp.statusMessage));
-        emit(SetGivesDividendsInitial());
       }
     } catch (e) {
       logger.e(e);

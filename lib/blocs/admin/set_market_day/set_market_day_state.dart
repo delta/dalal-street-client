@@ -23,7 +23,10 @@ class SetMarketDayFailure extends SetMarketDayState {
 }
 
 class SetMarketDaySuccess extends SetMarketDayState {
-  final market_day;
+  final String msg;
 
-  const SetMarketDaySuccess(this.market_day);
+  const SetMarketDaySuccess(this.msg);
+
+  @override
+  List<Object> get props => [msg];
 }

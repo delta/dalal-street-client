@@ -10,16 +10,16 @@ part 'unblock_user_state.dart';
 class UnblockUserCubit extends Cubit<UnblockUserState> {
   UnblockUserCubit() : super(UnblockUserInitial());
 
-  Future<void> unblockUser(final userID, final penalty) async {
+  Future<void> unblockUser(final userID) async {
     emit(const UnblockUserLoading());
     try {
-      final resp =
-          await actionClient.unBlockUser(UnblockUserRequest(userId: userID));
+      final resp = await actionClient.unBlockUser(
+          UnblockUserRequest(userId: userID),
+          options: sessionOptions(getIt()));
       if (resp.statusCode == UnblockUserResponse_StatusCode.OK) {
-        emit(UnblockUserSuccess(userID));
+        emit(UnblockUserSuccess(resp.statusMessage));
       } else {
         emit(UnblockUserFailure(resp.statusMessage));
-        emit(UnblockUserInitial());
       }
     } catch (e) {
       logger.e(e);

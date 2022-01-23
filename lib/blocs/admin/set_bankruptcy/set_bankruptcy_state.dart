@@ -23,8 +23,10 @@ class SetBankruptcyFailure extends SetBankruptcyState {
 }
 
 class SetBankruptcySuccess extends SetBankruptcyState {
-  final bool is_bankrupt;
-  final int stockID;
+  final String msg;
 
-  const SetBankruptcySuccess(this.is_bankrupt, this.stockID);
+  const SetBankruptcySuccess(this.msg);
+
+  @override
+  List<Object> get props => [msg];
 }

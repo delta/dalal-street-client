@@ -17,12 +17,12 @@ class AddStocksToExchangeCubit extends Cubit<AddStocksToExchangeState> {
     emit(const AddStocksToExchangeLoading());
     try {
       final resp = await actionClient.addStocksToExchange(
-          AddStocksToExchangeRequest(stockId: stockId, newStocks: newStocks));
+          AddStocksToExchangeRequest(stockId: stockId, newStocks: newStocks),
+          options: sessionOptions(getIt()));
       if (resp.statusCode == AddStocksToExchangeResponse_StatusCode.OK) {
-        emit(AddStocksToExchangeSuccess(stockId, newStocks));
+        emit(AddStocksToExchangeSuccess(resp.statusMessage));
       } else {
         emit(AddStocksToExchangeFailure(resp.statusMessage));
-        emit(AddStocksToExchangeInitial());
       }
     } catch (e) {
       logger.e(e);

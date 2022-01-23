@@ -16,15 +16,16 @@ class UpdateStockPriceCubit extends Cubit<UpdateStockPriceState> {
   ) async {
     emit(const UpdateStockPriceLoading());
     try {
-      final resp = await actionClient.updateStockPrice(UpdateStockPriceRequest(
-        stockId: stockId,
-        newPrice: newPrice,
-      ));
+      final resp = await actionClient.updateStockPrice(
+          UpdateStockPriceRequest(
+            stockId: stockId,
+            newPrice: newPrice,
+          ),
+          options: sessionOptions(getIt()));
       if (resp.statusCode == UpdateStockPriceResponse_StatusCode.OK) {
-        emit(UpdateStockPriceSuccess(stockId, newPrice));
+        emit(UpdateStockPriceSuccess(resp.statusMessage));
       } else {
         emit(UpdateStockPriceFailure(resp.statusMessage));
-        emit(UpdateStockPriceInitial());
       }
     } catch (e) {
       logger.e(e);

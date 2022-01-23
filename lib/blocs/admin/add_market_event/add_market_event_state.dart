@@ -23,12 +23,10 @@ class AddMarketEventFailure extends AddMarketEventState {
 }
 
 class AddMarketEventSuccess extends AddMarketEventState {
-  final int stockID;
-  final String headline;
-  final String text;
-  final String imageURL;
-  final bool is_global;
+  final String msg;
 
-  const AddMarketEventSuccess(
-      this.stockID, this.headline, this.text, this.imageURL, this.is_global);
+  const AddMarketEventSuccess(this.msg);
+
+  @override
+  List<Object> get props => [msg];
 }

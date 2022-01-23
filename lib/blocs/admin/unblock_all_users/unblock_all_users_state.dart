@@ -23,5 +23,10 @@ class UnblockAllUsersFailure extends UnblockAllUsersState {
 }
 
 class UnblockAllUsersSuccess extends UnblockAllUsersState {
-  const UnblockAllUsersSuccess();
+  final String msg;
+
+  const UnblockAllUsersSuccess(this.msg);
+
+  @override
+  List<Object> get props => [msg];
 }

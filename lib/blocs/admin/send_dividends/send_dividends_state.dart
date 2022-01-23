@@ -23,8 +23,10 @@ class SendDividendsFailure extends SendDividendsState {
 }
 
 class SendDividendsSuccess extends SendDividendsState {
-  final stockID;
-  final dividend_amount;
+  final String msg;
 
-  const SendDividendsSuccess(this.stockID, this.dividend_amount);
+  const SendDividendsSuccess(this.msg);
+
+  @override
+  List<Object> get props => [msg];
 }

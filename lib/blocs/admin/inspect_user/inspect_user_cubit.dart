@@ -14,13 +14,14 @@ class InspectUserCubit extends Cubit<InspectUserState> {
       final userID, final transactionType, final day) async {
     emit(const InspectUserLoading());
     try {
-      final resp = await actionClient.inspectUser(InspectUserRequest(
-          userId: userID, transactionType: transactionType, day: day));
+      final resp = await actionClient.inspectUser(
+          InspectUserRequest(
+              userId: userID, transactionType: transactionType, day: day),
+          options: sessionOptions(getIt()));
       if (resp.statusCode == InspectUserResponse_StatusCode.OK) {
-        emit(InspectUserSuccess(userID, transactionType, day));
+        emit(InspectUserSuccess(resp.statusMessage));
       } else {
         emit(InspectUserFailure(resp.statusMessage));
-        emit(InspectUserInitial());
       }
     } catch (e) {
       logger.e(e);

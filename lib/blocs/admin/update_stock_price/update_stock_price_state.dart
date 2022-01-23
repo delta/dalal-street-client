@@ -23,8 +23,10 @@ class UpdateStockPriceFailure extends UpdateStockPriceState {
 }
 
 class UpdateStockPriceSuccess extends UpdateStockPriceState {
-  final stockID;
-  final new_price;
+  final String msg;
 
-  const UpdateStockPriceSuccess(this.stockID, this.new_price);
+  const UpdateStockPriceSuccess(this.msg);
+
+  @override
+  List<Object> get props => [msg];
 }

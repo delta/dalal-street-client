@@ -14,18 +14,18 @@ class AddMarketEventCubit extends Cubit<AddMarketEventState> {
       final imageURL, final bool is_global) async {
     emit(const AddMarketEventLoading());
     try {
-      final resp = await actionClient.addMarketEvent(AddMarketEventRequest(
-          stockId: stockId,
-          headline: headline,
-          text: text,
-          imageUrl: imageURL,
-          isGlobal: is_global));
+      final resp = await actionClient.addMarketEvent(
+          AddMarketEventRequest(
+              stockId: stockId,
+              headline: headline,
+              text: text,
+              imageUrl: imageURL,
+              isGlobal: is_global),
+          options: sessionOptions(getIt()));
       if (resp.statusCode == AddMarketEventResponse_StatusCode.OK) {
-        emit(AddMarketEventSuccess(
-            stockId, headline, text, imageURL, is_global));
+        emit(AddMarketEventSuccess(resp.statusMessage));
       } else {
         emit(AddMarketEventFailure(resp.statusMessage));
-        emit(AddMarketEventInitial());
       }
     } catch (e) {
       logger.e(e);
