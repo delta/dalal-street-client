@@ -10,6 +10,7 @@ class ReferralPage extends StatefulWidget {
   final User user;
 
   @override
+  // ignore: no_logic_in_create_state
   _ReferralPageState createState() => _ReferralPageState(user.email);
 }
 
