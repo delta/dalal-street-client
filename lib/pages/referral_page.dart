@@ -5,26 +5,21 @@ import 'package:dalal_street_client/theme/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class ReferralPage extends StatefulWidget {
-  const ReferralPage({Key? key, required this.user}) : super(key: key);
+class ReferralPage extends StatelessWidget {
+  const ReferralPage({
+    Key? key,
+    required this.user,
+  }) : super(key: key);
   final User user;
-
-  @override
-  // ignore: no_logic_in_create_state
-  _ReferralPageState createState() => _ReferralPageState(user.email);
-}
-
-class _ReferralPageState extends State<ReferralPage> {
   static const bool showbutton = true;
-  final String email;
-  _ReferralPageState(this.email);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(body: Center(
       child:
           BlocBuilder<ReferralCubit, ReferralState>(builder: (context, state) {
         if (state is ReferralSuccess) {
-          return referralPageUi(!showbutton, state.referralCode);
+          return referralPageUi(!showbutton, state.referralCode, context);
         } else if (state is ReferralFailed) {
           return Center(
               child: Column(
@@ -37,7 +32,7 @@ class _ReferralPageState extends State<ReferralPage> {
                 height: 50,
                 child: OutlinedButton(
                   onPressed: () {
-                    context.read<ReferralCubit>().getreferralcode(email);
+                    context.read<ReferralCubit>().getReferralcode(user.email);
                   },
                   child: const Text('Retry'),
                 ),
@@ -45,13 +40,14 @@ class _ReferralPageState extends State<ReferralPage> {
             ],
           ));
         } else {
-          return referralPageUi(showbutton, null);
+          return referralPageUi(showbutton, null, context);
         }
       }),
     ));
   }
 
-  Widget referralPageUi(bool showbutton, String? referralcode) {
+  Widget referralPageUi(
+      bool showbutton, String? referralcode, BuildContext context) {
     return SafeArea(
         child: Center(
       child: Column(
@@ -83,7 +79,7 @@ class _ReferralPageState extends State<ReferralPage> {
                   style: TextStyle(fontSize: 18),
                 ))),
             const SizedBox(height: 50),
-            buttonWidget(showbutton, referralcode),
+            buttonWidget(showbutton, referralcode, context),
             const Padding(
                 padding: EdgeInsets.fromLTRB(0, 40, 0, 10),
                 child: Text('How it works ?',
@@ -102,7 +98,8 @@ class _ReferralPageState extends State<ReferralPage> {
     ));
   }
 
-  Widget buttonWidget(bool showbutton, String? referralcode) {
+  Widget buttonWidget(
+      bool showbutton, String? referralcode, BuildContext context) {
     if (!showbutton) {
       return SizedBox(
           width: 300,
@@ -148,7 +145,7 @@ class _ReferralPageState extends State<ReferralPage> {
         width: 300,
         child: ElevatedButton(
             onPressed: () {
-              context.read<ReferralCubit>().getreferralcode(email);
+              context.read<ReferralCubit>().getReferralcode(user.email);
             },
             child: const Expanded(
                 child: Text('Generate Referral Code',

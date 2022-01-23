@@ -7,7 +7,7 @@ part 'referral_state.dart';
 
 class ReferralCubit extends Cubit<ReferralState> {
   ReferralCubit() : super(ReferralInitial());
-  Future<void> getreferralcode(String email) async {
+  Future<void> getReferralcode(String email) async {
     try {
       final GetReferralCodeResponse getReferralCodeResponse =
           await actionClient.getReferralCode(
