@@ -40,7 +40,7 @@ class _MortgageStockItemState extends State<MortgageStockItem> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             _stockNames(widget.company),
             _stockPrices(
               widget.stockId,
@@ -131,46 +131,47 @@ class _MortgageStockItemState extends State<MortgageStockItem> {
     int previousDayClose,
     int currentPrice,
   ) =>
-      StreamBuilder<Int64>(
-        stream: getStockPriceStream(stockId, stockMapStream),
-        initialData: Int64(currentPrice),
-        builder: (_, snapshot) {
-          int stockPrice = snapshot.data!.toInt();
-          int updatedPriceChange = stockPrice - previousDayClose;
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Text(
-                '₹' + oCcy.format(stockPrice).toString(),
-                style: const TextStyle(
-                  fontSize: 18,
+      Expanded(
+        child: StreamBuilder<Int64>(
+          stream: getStockPriceStream(stockId, stockMapStream),
+          initialData: Int64(currentPrice),
+          builder: (_, snapshot) {
+            int stockPrice = snapshot.data!.toInt();
+            int updatedPriceChange = stockPrice - previousDayClose;
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(
+                  '₹' + oCcy.format(stockPrice).toString(),
+                  style: const TextStyle(
+                    fontSize: 18,
+                  ),
                 ),
-              ),
-              Text(
-                updatedPriceChange >= 0
-                    ? '+' + oCcy.format(updatedPriceChange).toString()
-                    : oCcy.format(updatedPriceChange).toString(),
-                style: TextStyle(
-                  fontSize: 14,
-                  color: updatedPriceChange > 0 ? secondaryColor : heartRed,
+                Text(
+                  updatedPriceChange >= 0
+                      ? '+' + oCcy.format(updatedPriceChange).toString()
+                      : oCcy.format(updatedPriceChange).toString(),
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: updatedPriceChange > 0 ? secondaryColor : heartRed,
+                  ),
                 ),
-              ),
-            ],
-          );
-        },
+              ],
+            );
+          },
+        ),
       );
 
   Widget _stockMortgageDetails(int stockId, int currentPrice) {
     return Column(
       children: [
         Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Expanded(child: Text('Stocks Owned')),
-            const SizedBox(width: 10),
+            const Text('Stocks Owned'),
             StreamBuilder<int>(
                 stream: getStocksOwnedStream(stockId, userInfoStream),
-                initialData: userInfoStream.value.stocksOwnedMap[stockId],
+                initialData: userInfoStream.value.stocksOwnedMap[stockId] ?? 0,
                 builder: (_, snapshot) {
                   return Text(
                     snapshot.data!.toString(),
@@ -182,10 +183,9 @@ class _MortgageStockItemState extends State<MortgageStockItem> {
           height: 10,
         ),
         Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Expanded(child: Text('Deposit rate(%)')),
-            const SizedBox(width: 10),
+            const Text('Deposit rate(%)'),
             Text(((MORTGAGE_DEPOSIT_RATE * 100).toInt()).toString()),
           ],
         ),
@@ -193,10 +193,9 @@ class _MortgageStockItemState extends State<MortgageStockItem> {
           height: 10,
         ),
         Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Expanded(child: Text('Amount per Stock(₹)')),
-            const SizedBox(width: 10),
+            const Text('Amount per Stock(₹)'),
             StreamBuilder<Int64>(
                 stream: getStockPriceStream(stockId, stockMapStream),
                 initialData: Int64(currentPrice),

@@ -9,6 +9,7 @@ import 'package:dalal_street_client/blocs/exchange/exchange_cubit.dart';
 import 'package:dalal_street_client/blocs/subscribe/subscribe_cubit.dart';
 import 'package:dalal_street_client/blocs/daily_challenges/daily_challenges_page_cubit.dart';
 import 'package:dalal_street_client/blocs/market_depth/market_depth_bloc.dart';
+import 'package:dalal_street_client/pages/dalal_home/dalal_home.dart';
 import 'package:dalal_street_client/pages/auth/check_mail_page.dart';
 import 'package:dalal_street_client/pages/auth/forgot_password_page.dart';
 import 'package:dalal_street_client/pages/auth/login_page.dart';
@@ -20,7 +21,6 @@ import 'package:dalal_street_client/pages/daily_challenges/daily_challenges_page
 import 'package:dalal_street_client/pages/mortgage/mortgage_home.dart';
 import 'package:dalal_street_client/pages/news_page.dart';
 import 'package:dalal_street_client/pages/stock_exchange/exchange_page.dart';
-import 'package:dalal_street_client/pages/home_page.dart';
 import 'package:dalal_street_client/pages/landing_page.dart';
 import 'package:dalal_street_client/pages/splash_page.dart';
 import 'package:dalal_street_client/pages/portfolio/portfolio_page.dart';
@@ -94,7 +94,7 @@ class RouteGenerator {
       // Home Pages
       case '/home':
         if (args is User) {
-          return HomePage(user: args);
+          return DalalHome(user: args);
         }
         throw Exception('Invalid user args');
 

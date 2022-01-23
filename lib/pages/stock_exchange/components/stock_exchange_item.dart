@@ -41,7 +41,7 @@ class _StockExchangeItemState extends State<StockExchangeItem> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             _stockNames(widget.company),
             _stockPrices(
               widget.stockId,
@@ -132,33 +132,35 @@ class _StockExchangeItemState extends State<StockExchangeItem> {
     int previousDayClose,
     int currentPrice,
   ) =>
-      StreamBuilder<Int64>(
-        stream: getStockPriceStream(stockId, stockMapStream),
-        initialData: Int64(currentPrice),
-        builder: (_, snapshot) {
-          int stockPrice = snapshot.data!.toInt();
-          int updatedPriceChange = stockPrice - previousDayClose;
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Text(
-                oCcy.format(stockPrice).toString(),
-                style: const TextStyle(
-                  fontSize: 18,
+      Expanded(
+        child: StreamBuilder<Int64>(
+          stream: getStockPriceStream(stockId, stockMapStream),
+          initialData: Int64(currentPrice),
+          builder: (_, snapshot) {
+            int stockPrice = snapshot.data!.toInt();
+            int updatedPriceChange = stockPrice - previousDayClose;
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(
+                  oCcy.format(stockPrice).toString(),
+                  style: const TextStyle(
+                    fontSize: 18,
+                  ),
                 ),
-              ),
-              Text(
-                updatedPriceChange >= 0
-                    ? '+' + oCcy.format(updatedPriceChange).toString()
-                    : oCcy.format(updatedPriceChange).toString(),
-                style: TextStyle(
-                  fontSize: 14,
-                  color: updatedPriceChange > 0 ? secondaryColor : heartRed,
+                Text(
+                  updatedPriceChange >= 0
+                      ? '+' + oCcy.format(updatedPriceChange).toString()
+                      : oCcy.format(updatedPriceChange).toString(),
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: updatedPriceChange > 0 ? secondaryColor : heartRed,
+                  ),
                 ),
-              ),
-            ],
-          );
-        },
+              ],
+            );
+          },
+        ),
       );
 
   Widget _stockExchangeDetails(
@@ -179,10 +181,9 @@ class _StockExchangeItemState extends State<StockExchangeItem> {
             return Column(
               children: [
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Expanded(child: Text('Stocks in Market')),
-                    const SizedBox(width: 10),
+                    const Text('Stocks in Market'),
                     Text(
                       stocksInMarket.toString(),
                       style: const TextStyle(color: bronze),
@@ -193,10 +194,9 @@ class _StockExchangeItemState extends State<StockExchangeItem> {
                   height: 10,
                 ),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Expanded(child: Text('Stocks in Exchange')),
-                    const SizedBox(width: 10),
+                    const Text('Stocks in Exchange'),
                     Text(stocksInExchange.toString(),
                         style: const TextStyle(color: gold))
                   ],
@@ -208,10 +208,9 @@ class _StockExchangeItemState extends State<StockExchangeItem> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Expanded(child: Text('Stocks in Market')),
-                  const SizedBox(width: 10),
+                  const Text('Stocks in Market'),
                   Text(company?.stocksInMarket.toString() ?? '0')
                 ],
               ),
@@ -219,10 +218,9 @@ class _StockExchangeItemState extends State<StockExchangeItem> {
                 height: 10,
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Expanded(child: Text('Stocks in Exchange')),
-                  const SizedBox(width: 10),
+                  const Text('Stocks in Exchange'),
                   Text(company?.stocksInExchange.toString() ?? '0')
                 ],
               )
