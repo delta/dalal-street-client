@@ -11,10 +11,14 @@ class SubscribeCubit extends Cubit<SubscribeState> {
   SubscribeCubit() : super(SubscribeInitial());
 
 // Bloc which will subscribe to given DataStream and emit subscription ID
-  Future<void> subscribe(DataStreamType dataStreamType) async {
+// datastreamId takes in stockId, and it must be passed
+// for [StockHistoryUpdates] and [MarketDepthUpdates] stream
+  Future<void> subscribe(DataStreamType dataStreamType,
+      {String dataStreamId = '0'}) async {
     try {
       final subscribeResponse = await streamClient.subscribe(
-          SubscribeRequest(dataStreamType: dataStreamType),
+          SubscribeRequest(
+              dataStreamType: dataStreamType, dataStreamId: dataStreamId),
           options: sessionOptions(getIt<String>()));
 
       if (subscribeResponse.statusCode == SubscribeResponse_StatusCode.OK) {
