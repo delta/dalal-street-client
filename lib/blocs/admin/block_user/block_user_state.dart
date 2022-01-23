@@ -23,7 +23,10 @@ class BlockUserFailure extends BlockUserState {
 }
 
 class BlockUserSuccess extends BlockUserState {
-  final user_id;
-  final penalty;
-  const BlockUserSuccess(this.user_id, this.penalty);
+  final String msg;
+
+  const BlockUserSuccess(this.msg);
+
+  @override
+  List<Object> get props => [msg];
 }

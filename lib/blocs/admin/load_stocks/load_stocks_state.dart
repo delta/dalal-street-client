@@ -23,5 +23,10 @@ class LoadStocksFailure extends LoadStocksState {
 }
 
 class LoadStocksSuccess extends LoadStocksState {
-  const LoadStocksSuccess();
+  final String msg;
+
+  const LoadStocksSuccess(this.msg);
+
+  @override
+  List<Object> get props => [msg];
 }

@@ -16,9 +16,10 @@ class CloseMarketCubit extends Cubit<CloseMarketState> {
     emit(const CloseMarketLoading());
     try {
       final resp = await actionClient.closeMarket(
-          CloseMarketRequest(updatePrevDayClose: updatePrevDayClose));
+          CloseMarketRequest(updatePrevDayClose: updatePrevDayClose),
+          options: sessionOptions(getIt()));
       if (resp.statusCode == CloseMarketResponse_StatusCode.OK) {
-        emit(CloseMarketSuccess(updatePrevDayClose));
+        emit(CloseMarketSuccess(resp.statusMessage));
       } else {
         emit(CloseMarketFailure(resp.statusMessage));
         emit(CloseMarketInitial());

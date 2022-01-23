@@ -23,20 +23,10 @@ class AddDailyChallengeFailure extends AddDailyChallengeState {
 }
 
 class AddDailyChallengeSuccess extends AddDailyChallengeState {
-  final market_day;
-  final stockID;
-  final reward;
-  final value;
-  challengeType(
-    final cash,
-    final netWorth,
-    final stockWorth,
-    final specificStock,
-  );
+  final String msg;
 
-  const AddDailyChallengeSuccess(
-      this.market_day, this.stockID, this.reward, this.value, challengeType);
+  const AddDailyChallengeSuccess(this.msg);
 
   @override
-  noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
+  List<Object> get props => [msg];
 }

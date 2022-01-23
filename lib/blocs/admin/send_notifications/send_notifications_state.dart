@@ -23,9 +23,10 @@ class SendNotificationsFailure extends SendNotificationsState {
 }
 
 class SendNotificationsSuccess extends SendNotificationsState {
-  final int user_id;
-  final String text;
-  final bool isGlobal;
+  final String msg;
 
-  const SendNotificationsSuccess(this.user_id, this.text, this.isGlobal);
+  const SendNotificationsSuccess(this.msg);
+
+  @override
+  List<Object> get props => [msg];
 }

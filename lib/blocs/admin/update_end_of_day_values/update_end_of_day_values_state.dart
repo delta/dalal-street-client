@@ -23,5 +23,10 @@ class UpdateEndOfDayValuesFailure extends UpdateEndOfDayValuesState {
 }
 
 class UpdateEndOfDayValuesSuccess extends UpdateEndOfDayValuesState {
-  const UpdateEndOfDayValuesSuccess();
+  final String msg;
+
+  const UpdateEndOfDayValuesSuccess(this.msg);
+
+  @override
+  List<Object> get props => [msg];
 }

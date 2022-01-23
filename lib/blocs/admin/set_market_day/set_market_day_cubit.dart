@@ -10,16 +10,16 @@ part 'set_market_day_state.dart';
 class SetMarketDayCubit extends Cubit<SetMarketDayState> {
   SetMarketDayCubit() : super(SetMarketDayInitial());
 
-  Future<void> setMarketDay(final market_day) async {
+  Future<void> setMarketDay(final marketDay) async {
     emit(const SetMarketDayLoading());
     try {
-      final resp = await actionClient
-          .setMarketDay(SetMarketDayRequest(marketDay: market_day));
+      final resp = await actionClient.setMarketDay(
+          SetMarketDayRequest(marketDay: marketDay),
+          options: sessionOptions(getIt()));
       if (resp.statusCode == SetMarketDayResponse_StatusCode.OK) {
-        emit(SetMarketDaySuccess(market_day));
+        emit(SetMarketDaySuccess(resp.statusMessage));
       } else {
         emit(SetMarketDayFailure(resp.statusMessage));
-        emit(SetMarketDayInitial());
       }
     } catch (e) {
       logger.e(e);

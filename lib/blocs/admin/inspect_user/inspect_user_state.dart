@@ -23,8 +23,8 @@ class InspectUserFailure extends InspectUserState {
 }
 
 class InspectUserSuccess extends InspectUserState {
-  final user_id;
-  final transactionType;
-  final day;
-  const InspectUserSuccess(this.user_id, this.transactionType, this.day);
+  final String msg;
+  const InspectUserSuccess(this.msg);
+  @override
+  List<Object> get props => [msg];
 }

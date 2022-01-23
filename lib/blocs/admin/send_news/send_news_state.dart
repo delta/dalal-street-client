@@ -23,7 +23,7 @@ class SendNewsFailure extends SendNewsState {
 }
 
 class SendNewsSuccess extends SendNewsState {
-  final String news;
+  final String msg;
 
-  const SendNewsSuccess(this.news);
+  const SendNewsSuccess(this.msg);
 }

@@ -11,23 +11,22 @@ part 'add_daily_challenge_state.dart';
 class AddDailyChallengeCubit extends Cubit<AddDailyChallengeState> {
   AddDailyChallengeCubit() : super(AddDailyChallengeInitial());
 
-  Future<void> addDailyChallenge(final market_day, final stockID, final reward,
-      final value, ChallengeType) async {
+  Future<void> addDailyChallenge(final marketDay, final stockID, final reward,
+      final value, final challengeType) async {
     emit(const AddDailyChallengeLoading());
     try {
       final resp = await actionClient.addDailyChallenge(
           AddDailyChallengeRequest(
-              marketDay: market_day,
+              marketDay: marketDay,
               stockId: stockID,
               reward: reward,
               value: value,
-              challengeType: ChallengeType));
+              challengeType: challengeType),
+          options: sessionOptions(getIt()));
       if (resp.statusCode == AddDailyChallengeResponse_StatusCode.OK) {
-        emit(AddDailyChallengeSuccess(
-            market_day, value, reward, stockID, ChallengeType));
+        emit(AddDailyChallengeSuccess(resp.statusMessage));
       } else {
         emit(AddDailyChallengeFailure(resp.statusMessage));
-        emit(AddDailyChallengeInitial());
       }
     } catch (e) {
       logger.e(e);

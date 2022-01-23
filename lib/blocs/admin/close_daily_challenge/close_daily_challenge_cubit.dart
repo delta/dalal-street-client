@@ -13,13 +13,13 @@ class CloseDailyChallengeCubit extends Cubit<CloseDailyChallengeState> {
   Future<void> closeDailyChallenges() async {
     emit(const CloseDailyChallengeLoading());
     try {
-      final resp =
-          await actionClient.closeDailyChallenge(CloseDailyChallengeRequest());
+      final resp = await actionClient.closeDailyChallenge(
+          CloseDailyChallengeRequest(),
+          options: sessionOptions(getIt()));
       if (resp.statusCode == CloseDailyChallengeResponse_StatusCode.OK) {
-        emit(const CloseDailyChallengeSuccess());
+        emit(CloseDailyChallengeSuccess(resp.statusMessage));
       } else {
         emit(CloseDailyChallengeFailure(resp.statusMessage));
-        emit(CloseDailyChallengeInitial());
       }
     } catch (e) {
       logger.e(e);

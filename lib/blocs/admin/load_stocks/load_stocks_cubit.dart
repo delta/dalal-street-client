@@ -13,12 +13,12 @@ class LoadStocksCubit extends Cubit<LoadStocksState> {
   Future<void> loadStocks() async {
     emit(const LoadStocksLoading());
     try {
-      final resp = await actionClient.loadStocks(LoadStocksRequest());
+      final resp = await actionClient.loadStocks(LoadStocksRequest(),
+          options: sessionOptions(getIt()));
       if (resp.statusCode == LoadStocksResponse_StatusCode.OK) {
-        emit(const LoadStocksSuccess());
+        emit(LoadStocksSuccess(resp.statusMessage));
       } else {
         emit(LoadStocksFailure(resp.statusMessage));
-        emit(LoadStocksInitial());
       }
     } catch (e) {
       logger.e(e);

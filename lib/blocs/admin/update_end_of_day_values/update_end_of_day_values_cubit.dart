@@ -13,13 +13,13 @@ class UpdateEndOfDayValuesCubit extends Cubit<UpdateEndOfDayValuesState> {
   Future<void> updateEndOfDaysValues() async {
     emit(const UpdateEndOfDayValuesLoading());
     try {
-      final resp = await actionClient
-          .updateEndOfDayValues(UpdateEndOfDayValuesRequest());
+      final resp = await actionClient.updateEndOfDayValues(
+          UpdateEndOfDayValuesRequest(),
+          options: sessionOptions(getIt()));
       if (resp.statusCode == UpdateEndOfDayValuesResponse_StatusCode.OK) {
-        emit(const UpdateEndOfDayValuesSuccess());
+        emit(UpdateEndOfDayValuesSuccess(resp.statusMessage));
       } else {
         emit(UpdateEndOfDayValuesFailure(resp.statusMessage));
-        emit(UpdateEndOfDayValuesInitial());
       }
     } catch (e) {
       logger.e(e);

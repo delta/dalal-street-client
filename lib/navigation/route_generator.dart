@@ -1,8 +1,25 @@
 // TODO: Need a better and simpler routing strategy
 
-import 'package:dalal_street_client/blocs/admin/send_notifications/send_notifications_cubit.dart';
-import 'package:dalal_street_client/blocs/auth/login/login_cubit.dart';
+import 'package:dalal_street_client/blocs/admin/add_daily_challenge/add_daily_challenge_cubit.dart';
+import 'package:dalal_street_client/blocs/admin/add_market_event/add_market_event_cubit.dart';
+import 'package:dalal_street_client/blocs/admin/add_stocks_to_exchange/add_stocks_to_exchange_cubit.dart';
+import 'package:dalal_street_client/blocs/admin/block_user/block_user_cubit.dart';
+import 'package:dalal_street_client/blocs/admin/close_daily_challenge/close_daily_challenge_cubit.dart';
+import 'package:dalal_street_client/blocs/admin/close_market/close_market_cubit.dart';
+import 'package:dalal_street_client/blocs/admin/inspect_user/inspect_user_cubit.dart';
+import 'package:dalal_street_client/blocs/admin/load_stocks/load_stocks_cubit.dart';
+import 'package:dalal_street_client/blocs/admin/open_daily_challenge/open_daily_challenge_cubit.dart';
+import 'package:dalal_street_client/blocs/admin/open_market/open_market_cubit.dart';
 import 'package:dalal_street_client/blocs/admin/send_dividends/send_dividends_cubit.dart';
+import 'package:dalal_street_client/blocs/admin/send_notifications/send_notifications_cubit.dart';
+import 'package:dalal_street_client/blocs/admin/set_bankruptcy/set_bankruptcy_cubit.dart';
+import 'package:dalal_street_client/blocs/admin/set_gives_dividends/set_gives_dividends_cubit.dart';
+import 'package:dalal_street_client/blocs/admin/set_market_day/set_market_day_cubit.dart';
+import 'package:dalal_street_client/blocs/admin/unblock_all_users/unblock_all_users_cubit.dart';
+import 'package:dalal_street_client/blocs/admin/unblock_user/unblock_user_cubit.dart';
+import 'package:dalal_street_client/blocs/admin/update_end_of_day_values/update_end_of_day_values_cubit.dart';
+import 'package:dalal_street_client/blocs/admin/update_stock_price/update_stock_price_cubit.dart';
+import 'package:dalal_street_client/blocs/auth/login/login_cubit.dart';
 import 'package:dalal_street_client/pages/admin_page.dart';
 import 'package:dalal_street_client/blocs/admin/send_news/send_news_cubit.dart';
 import 'package:dalal_street_client/blocs/auth/register/register_cubit.dart';
@@ -49,6 +66,60 @@ class RouteGenerator {
             ),
             BlocProvider(
               create: (context) => SendNotificationsCubit(),
+            ),
+            BlocProvider(
+              create: (context) => BlockUserCubit(),
+            ),
+            BlocProvider(
+              create: (context) => SendDividendsCubit(),
+            ),
+            BlocProvider(
+              create: (context) => OpenMarketCubit(),
+            ),
+            BlocProvider(
+              create: (context) => CloseMarketCubit(),
+            ),
+            BlocProvider(
+              create: (context) => UpdateEndOfDayValuesCubit(),
+            ),
+            BlocProvider(
+              create: (context) => LoadStocksCubit(),
+            ),
+            BlocProvider(
+              create: (context) => AddStocksToExchangeCubit(),
+            ),
+            BlocProvider(
+              create: (context) => UpdateStockPriceCubit(),
+            ),
+            BlocProvider(
+              create: (context) => AddMarketEventCubit(),
+            ),
+            BlocProvider(
+              create: (context) => SetGivesDividendsCubit(),
+            ),
+            BlocProvider(
+              create: (context) => SetBankruptcyCubit(),
+            ),
+            BlocProvider(
+              create: (context) => SetMarketDayCubit(),
+            ),
+            BlocProvider(
+              create: (context) => InspectUserCubit(),
+            ),
+            BlocProvider(
+              create: (context) => UnblockUserCubit(),
+            ),
+            BlocProvider(
+              create: (context) => UnblockAllUsersCubit(),
+            ),
+            BlocProvider(
+              create: (context) => OpenDailyChallengeCubit(),
+            ),
+            BlocProvider(
+              create: (context) => CloseDailyChallengeCubit(),
+            ),
+            BlocProvider(
+              create: (context) => AddDailyChallengeCubit(),
             ),
           ],
           child: const AdminPage(),

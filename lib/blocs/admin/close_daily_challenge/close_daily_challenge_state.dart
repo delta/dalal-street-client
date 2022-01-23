@@ -23,5 +23,9 @@ class CloseDailyChallengeFailure extends CloseDailyChallengeState {
 }
 
 class CloseDailyChallengeSuccess extends CloseDailyChallengeState {
-  const CloseDailyChallengeSuccess();
+  final String msg;
+
+  const CloseDailyChallengeSuccess(this.msg);
+  @override
+  List<Object> get props => [msg];
 }

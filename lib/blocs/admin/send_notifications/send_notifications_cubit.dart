@@ -10,7 +10,7 @@ part 'send_notifications_state.dart';
 class SendNotificationsCubit extends Cubit<SendNotificationsState> {
   SendNotificationsCubit() : super(SendNotificationsInitial());
 
-  Future<void> sendNotifs(
+  Future<void> sendNotifications(
     final userID,
     final String text,
     final bool isGlobal,
@@ -23,7 +23,7 @@ class SendNotificationsCubit extends Cubit<SendNotificationsState> {
           options: sessionOptions(getIt()));
 
       if (resp.statusCode == SendNotificationsResponse_StatusCode.OK) {
-        emit(SendNotificationsSuccess(userID, text, isGlobal));
+        emit(SendNotificationsSuccess(resp.statusMessage));
       } else {
         emit(SendNotificationsFailure(resp.statusMessage));
         emit(SendNotificationsInitial());

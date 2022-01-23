@@ -21,7 +21,7 @@ class SendNewsCubit extends Cubit<SendNewsState> {
           ),
           options: sessionOptions(getIt()));
       if (resp.statusCode == SendNewsResponse_StatusCode.OK) {
-        emit(SendNewsSuccess(news));
+        emit(SendNewsSuccess(resp.statusMessage));
       } else {
         emit(SendNewsFailure(resp.statusMessage));
         emit(SendNewsInitial());

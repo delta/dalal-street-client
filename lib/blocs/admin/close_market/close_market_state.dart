@@ -23,7 +23,10 @@ class CloseMarketFailure extends CloseMarketState {
 }
 
 class CloseMarketSuccess extends CloseMarketState {
-  final bool update_prev_day_close;
+  final String msg;
 
-  const CloseMarketSuccess(this.update_prev_day_close);
+  const CloseMarketSuccess(this.msg);
+
+  @override
+  List<Object> get props => [msg];
 }

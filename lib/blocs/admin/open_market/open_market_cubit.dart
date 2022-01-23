@@ -13,13 +13,14 @@ class OpenMarketCubit extends Cubit<OpenMarketState> {
   Future<void> openMarket(final bool dayHighAndLow) async {
     emit(const OpenMarketLoading());
     try {
-      final resp = await actionClient
-          .openMarket(OpenMarketRequest(updateDayHighAndLow: dayHighAndLow));
+      final resp = await actionClient.openMarket(
+          OpenMarketRequest(updateDayHighAndLow: dayHighAndLow),
+          options: sessionOptions(getIt()));
+
       if (resp.statusCode == OpenMarketResponse_StatusCode.OK) {
-        emit(OpenMarketSuccess(dayHighAndLow));
+        emit(OpenMarketSuccess(resp.statusMessage));
       } else {
         emit(OpenMarketFailure(resp.statusMessage));
-        emit(OpenMarketInitial());
       }
     } catch (e) {
       logger.e(e);

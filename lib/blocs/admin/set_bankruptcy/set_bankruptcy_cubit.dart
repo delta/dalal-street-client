@@ -14,12 +14,12 @@ class SetBankruptcyCubit extends Cubit<SetBankruptcyState> {
     emit(const SetBankruptcyLoading());
     try {
       final resp = await actionClient.setBankruptcy(
-          SetBankruptcyRequest(stockId: stockID, isBankrupt: isBankrupt));
+          SetBankruptcyRequest(stockId: stockID, isBankrupt: isBankrupt),
+          options: sessionOptions(getIt()));
       if (resp.statusCode == SetBankruptcyResponse_StatusCode.OK) {
-        emit(SetBankruptcySuccess(stockID, isBankrupt));
+        emit(SetBankruptcySuccess(resp.statusMessage));
       } else {
         emit(SetBankruptcyFailure(resp.statusMessage));
-        emit(SetBankruptcyInitial());
       }
     } catch (e) {
       logger.e(e);
