@@ -2,6 +2,7 @@ import 'package:dalal_street_client/blocs/exchange/exchange_cubit.dart';
 import 'package:dalal_street_client/blocs/portfolio/userWorth/portfolio_cubit.dart';
 import 'package:dalal_street_client/components/stock_bar.dart';
 import 'package:dalal_street_client/config/log.dart';
+import 'package:dalal_street_client/constants/icons.dart';
 import 'package:dalal_street_client/pages/dalal_home/dalal_home_bottom_sheet.dart';
 import 'package:dalal_street_client/pages/dalal_home/dalal_home_nav_bar.dart';
 import 'package:dalal_street_client/pages/home_page.dart';
@@ -23,21 +24,21 @@ class DalalHome extends StatefulWidget {
 
 class _DalalHomeState extends State<DalalHome> {
   final _bottomMenu = {
-    'Home': 'assets/icon/home.svg',
-    'Portfolio': 'assets/icon/portfolio.svg',
-    'DSE': 'assets/icon/rupee.svg',
-    'Leaderboard': 'assets/icon/trophy.svg',
-    'More': 'assets/icon/hamburger.svg',
+    'Home': AppIcons.home,
+    'Portfolio': AppIcons.portfolio,
+    'DSE': AppIcons.rupee,
+    'Leaderboard': AppIcons.trophy,
+    'More': AppIcons.hamburger,
   };
 
   final _sheetMenu = {
-    'News': 'assets/icon/news.svg',
-    'Mortgage': 'assets/icon/mortgage.svg',
-    'Daily Challenges': 'assets/icon/daily-challenges.svg',
-    'Open Orders': 'assets/icon/open-orders.svg',
-    'Refer and Earn': 'assets/icon/refer-and-earn.svg',
-    'Media Partners': 'assets/icon/mobile-ad.svg',
-    'Notifications': 'assets/icon/notification-bell.svg',
+    'News': AppIcons.news,
+    'Mortgage': AppIcons.mortgage,
+    'Daily Challenges': AppIcons.dailyChallenges,
+    'Open Orders': AppIcons.openOrders,
+    'Refer and Earn': AppIcons.referAndEarn,
+    'Media Partners': AppIcons.mobileAd,
+    'Notifications': AppIcons.notificationBell,
   };
 
   late PageController _pageController;
