@@ -111,7 +111,6 @@ class RegisterPage extends StatelessWidget {
             const SizedBox(height: 20),
             ReactiveTextField(
               formControlName: 'referralCode',
-              // TODO: prefixIcon
               decoration: InputDecoration(
                 labelText: 'Referral Code',
                 suffixIcon: Builder(

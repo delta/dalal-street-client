@@ -11,7 +11,7 @@ class AddMarketEventCubit extends Cubit<AddMarketEventState> {
   AddMarketEventCubit() : super(AddMarketEventInitial());
 
   Future<void> addMarketEvent(final stockId, final headline, final text,
-      final imageURL, final bool is_global) async {
+      final imageURL, final bool isGlobal) async {
     emit(const AddMarketEventLoading());
     try {
       final resp = await actionClient.addMarketEvent(
@@ -20,7 +20,7 @@ class AddMarketEventCubit extends Cubit<AddMarketEventState> {
               headline: headline,
               text: text,
               imageUrl: imageURL,
-              isGlobal: is_global),
+              isGlobal: isGlobal),
           options: sessionOptions(getIt()));
       if (resp.statusCode == AddMarketEventResponse_StatusCode.OK) {
         emit(AddMarketEventSuccess(resp.statusMessage));
