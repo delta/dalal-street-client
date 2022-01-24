@@ -112,6 +112,7 @@ class UserInfoGenerator {
           // TODO: show snackbar message whenever isBlocked changes
           final blockState = gameState.userBlockState;
           final newCash = blockState.cash.toInt();
+          // ignore: unused_local_variable
           final penalty = newCash - dynamicUserInfo.cash;
           dynamicUserInfo = DynamicUserInfo(
             newCash,
