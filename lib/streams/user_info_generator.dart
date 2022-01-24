@@ -30,7 +30,6 @@ class UserInfoGenerator {
     this.stockPricesStream,
     this.gameStateStream,
   ) {
-    // TODO: use getters, setters or copy function in DynamicUserInfo to reduce code
     _listenToTransactions();
     _listenToPrices();
     _listenToGameState();
@@ -92,16 +91,7 @@ class UserInfoGenerator {
 
   void _listenToPrices() => stockPricesStream.listen((newUpdate) {
         final newTotalWorth = dynamicUserInfo.newTotalWorth(newUpdate.prices);
-        dynamicUserInfo = DynamicUserInfo(
-          dynamicUserInfo.cash,
-          dynamicUserInfo.reservedCash,
-          dynamicUserInfo.stocksOwnedMap,
-          dynamicUserInfo.stocksReservedMap,
-          dynamicUserInfo.stockWorth,
-          dynamicUserInfo.reservedStocksWorth,
-          newTotalWorth,
-          dynamicUserInfo.isBlocked,
-        );
+        dynamicUserInfo = dynamicUserInfo.clone(newTotalWorth: newTotalWorth);
         _controller.add(dynamicUserInfo);
       });
 
@@ -114,18 +104,13 @@ class UserInfoGenerator {
           final newCash = blockState.cash.toInt();
           // ignore: unused_local_variable
           final penalty = newCash - dynamicUserInfo.cash;
-          dynamicUserInfo = DynamicUserInfo(
-            newCash,
-            dynamicUserInfo.reservedCash,
-            dynamicUserInfo.stocksOwnedMap,
-            dynamicUserInfo.stocksReservedMap,
-            dynamicUserInfo.stockWorth,
-            dynamicUserInfo.reservedStocksWorth,
-            dynamicUserInfo.newTotalWorth(
+          dynamicUserInfo.clone(
+            newCash: newCash,
+            newTotalWorth: dynamicUserInfo.newTotalWorth(
               stockMapStream.value.toPricesMap(),
               newCash: newCash,
             ),
-            blockState.isBlocked,
+            newIsBlocked: blockState.isBlocked,
           );
         } else if (type == GameStateUpdateType.UserReferredCreditUpdate ||
             type == GameStateUpdateType.UserRewardCreditUpdate) {
@@ -133,18 +118,12 @@ class UserInfoGenerator {
                   ? gameState.userReferredCredit.cash
                   : gameState.userRewardCredit.cash)
               .toInt();
-          dynamicUserInfo = DynamicUserInfo(
-            newCash,
-            dynamicUserInfo.reservedCash,
-            dynamicUserInfo.stocksOwnedMap,
-            dynamicUserInfo.stocksReservedMap,
-            dynamicUserInfo.stockWorth,
-            dynamicUserInfo.reservedStocksWorth,
-            dynamicUserInfo.newTotalWorth(
+          dynamicUserInfo = dynamicUserInfo.clone(
+            newCash: newCash,
+            newTotalWorth: dynamicUserInfo.newTotalWorth(
               stockMapStream.value.toPricesMap(),
               newCash: newCash,
             ),
-            dynamicUserInfo.isBlocked,
           );
         }
         _controller.add(dynamicUserInfo);

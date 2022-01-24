@@ -46,6 +46,27 @@ class DynamicUserInfo extends Equatable {
           stocks.toPricesMap(),
         );
 
+  DynamicUserInfo clone({
+    int? newCash,
+    int? newReservedCash,
+    Map<int, int>? newStocksOwnedMap,
+    Map<int, int>? newStocksReservedMap,
+    int? newStockWorth,
+    int? newReservedStockWorth,
+    int? newTotalWorth,
+    bool? newIsBlocked,
+  }) =>
+      DynamicUserInfo(
+        newCash ?? cash,
+        newReservedCash ?? reservedCash,
+        newStocksOwnedMap ?? stocksOwnedMap,
+        newStocksReservedMap ?? stocksReservedMap,
+        newStockWorth ?? stockWorth,
+        newReservedStockWorth ?? reservedStocksWorth,
+        newTotalWorth ?? totalWorth,
+        newIsBlocked ?? isBlocked,
+      );
+
   int newTotalWorth(Map<int, Int64> stockPrices, {int? newCash}) =>
       calculateTotalWorth(
         newCash ?? cash,
