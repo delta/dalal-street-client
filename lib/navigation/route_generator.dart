@@ -1,11 +1,10 @@
-// TODO: Need a better and simpler routing strategy
-
 import 'package:dalal_street_client/blocs/auth/forgot_password/forgot_password_cubit.dart';
 import 'package:dalal_street_client/blocs/auth/login/login_cubit.dart';
 import 'package:dalal_street_client/blocs/auth/register/register_cubit.dart';
 import 'package:dalal_street_client/blocs/auth/verify_phone/enter_otp/enter_otp_cubit.dart';
 import 'package:dalal_street_client/blocs/auth/verify_phone/enter_phone/enter_phone_cubit.dart';
 import 'package:dalal_street_client/blocs/exchange/exchange_cubit.dart';
+import 'package:dalal_street_client/blocs/referral/referral_cubit.dart';
 import 'package:dalal_street_client/blocs/subscribe/subscribe_cubit.dart';
 import 'package:dalal_street_client/blocs/daily_challenges/daily_challenges_page_cubit.dart';
 import 'package:dalal_street_client/blocs/market_depth/market_depth_bloc.dart';
@@ -20,6 +19,7 @@ import 'package:dalal_street_client/pages/company_page/company_page.dart';
 import 'package:dalal_street_client/pages/daily_challenges/daily_challenges_page.dart';
 import 'package:dalal_street_client/pages/mortgage/mortgage_home.dart';
 import 'package:dalal_street_client/pages/news_page.dart';
+import 'package:dalal_street_client/pages/referral_page.dart';
 import 'package:dalal_street_client/pages/stock_exchange/exchange_page.dart';
 import 'package:dalal_street_client/pages/landing_page.dart';
 import 'package:dalal_street_client/pages/splash_page.dart';
@@ -55,6 +55,15 @@ class RouteGenerator {
           create: (context) => LoginCubit(context.read()),
           child: LoginPage(),
         );
+      case '/referral':
+        if (args is User) {
+          return BlocProvider(
+            create: (context) => ReferralCubit(),
+            child: ReferralPage(user: args),
+          );
+        }
+        throw Exception('Invalid user args');
+
       case '/forgotPassword':
         return BlocProvider(
           create: (context) => ForgotPasswordCubit(),
