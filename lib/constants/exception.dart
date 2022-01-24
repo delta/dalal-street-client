@@ -1,3 +1,6 @@
+// Stream Exceptions
 final invalidDataStreamIdException = Exception('Invalid data stream id');
-final internalServerException = Exception('Internal server error');
+
+// Other Exceptions
 final failedToReachServerException = Exception('Unable reach the server');
+final internalServerException = Exception('Internal server error');
