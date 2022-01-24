@@ -146,7 +146,7 @@ class _AdminPageState extends State<AdminPage> {
     );
   }
 
-  Center _desktopBody() {
+  /*Center _desktopBody() {
     return const Center(
       child: Text(
         'Web UI will design soon :)',
@@ -157,6 +157,7 @@ class _AdminPageState extends State<AdminPage> {
       ),
     );
   }
+  
 
   Center _tabletBody() {
     return const Center(
@@ -169,6 +170,7 @@ class _AdminPageState extends State<AdminPage> {
       ),
     );
   }
+  */
 
   Padding _mobileBody() {
     return Padding(
@@ -521,7 +523,7 @@ class _AdminPageState extends State<AdminPage> {
     int marketDay = 0;
     int stockId = 0;
     int reward = 0;
-    Int64 Value = Int64(0);
+    Int64 values = Int64(0);
     ChallengeType.Cash;
     ChallengeType.NetWorth;
     ChallengeType.SpecificStock;
@@ -712,10 +714,10 @@ class _AdminPageState extends State<AdminPage> {
                   onChanged: (String? value) {
                     if (value != null) {
                       error = false;
-                      Value = Int64(int.parse(value));
+                      values = Int64(int.parse(value));
                     } else {
                       error = true;
-                      Value = Int64(0);
+                      values = Int64(0);
                     }
                   },
                   autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -747,7 +749,7 @@ class _AdminPageState extends State<AdminPage> {
                                   ChallengeType.StockWorth,
                                   ChallengeType.SpecificStock
                                 },
-                                Value,
+                                values,
                                 stockId,
                                 reward);
                   },
