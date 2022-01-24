@@ -33,11 +33,19 @@ class UserInfoGenerator {
     _listenToGameState();
   }
 
+  /// The [StreamController] used to generate a stream of [DynamicUserInfo]
+  final _controller = StreamController<DynamicUserInfo>();
+
+  /// A Read-only stream of [DynamicUserInfo]
+  Stream<DynamicUserInfo> get stream => _controller.stream;
+
+  /// Updates [dynamicUserInfo] and adds it to [_controller]
   void updateUserInfo(DynamicUserInfo newInfo) {
     dynamicUserInfo = newInfo;
     _controller.add(dynamicUserInfo);
   }
 
+  /// Updates [dynamicUserInfo] for every new [TransactionUpdate]
   void _listenToTransactions() => transactionStream.listen((newUpdate) {
         // New transaction
         final transaction = newUpdate.transaction;
@@ -91,11 +99,13 @@ class UserInfoGenerator {
         ));
       });
 
+  /// Updates [dynamicUserInfo] for every new [StockPricesUpdate]
   void _listenToPrices() => stockPricesStream.listen((newUpdate) {
         final newTotalWorth = dynamicUserInfo.newTotalWorth(newUpdate.prices);
         updateUserInfo(dynamicUserInfo.clone(newTotalWorth: newTotalWorth));
       });
 
+  /// Updates [dynamicUserInfo] for every new [GameStateUpdate]
   void _listenToGameState() => gameStateStream.listen((newUpdate) {
         final gameState = newUpdate.gameState;
         final type = gameState.type;
@@ -128,10 +138,4 @@ class UserInfoGenerator {
           ));
         }
       });
-
-  /// The [StreamController] used to modify the stream of [DynamicUserInfo]
-  final _controller = StreamController<DynamicUserInfo>();
-
-  /// Read-only stream of [DynamicUserInfo]
-  Stream<DynamicUserInfo> get stream => _controller.stream;
 }
