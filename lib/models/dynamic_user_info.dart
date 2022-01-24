@@ -15,6 +15,8 @@ class DynamicUserInfo extends Equatable {
   final int stockWorth;
   final int reservedStocksWorth;
   final int totalWorth;
+  // Other info
+  final bool isBlocked;
 
   const DynamicUserInfo(
     this.cash,
@@ -24,6 +26,7 @@ class DynamicUserInfo extends Equatable {
     this.stockWorth,
     this.reservedStocksWorth,
     this.totalWorth,
+    this.isBlocked,
   );
 
   DynamicUserInfo.from(
@@ -31,6 +34,7 @@ class DynamicUserInfo extends Equatable {
     this.reservedCash,
     this.stocksOwnedMap,
     this.stocksReservedMap,
+    this.isBlocked,
     Map<int, Stock> stocks,
   )   : stockWorth = calculateStockWorth(stocksOwnedMap, stocks),
         reservedStocksWorth = calculateStockWorth(stocksReservedMap, stocks),
@@ -60,6 +64,7 @@ class DynamicUserInfo extends Equatable {
         stockWorth,
         reservedStocksWorth,
         totalWorth,
+        isBlocked,
       ];
 }
 

@@ -171,6 +171,7 @@ Future<GlobalStreams> subscribeToGlobalStreams(
     user.reservedCash.toInt(),
     portfolioResponse.stocksOwned.toIntMap(),
     portfolioResponse.reservedStocksOwned.toIntMap(),
+    user.isBlocked,
     initialStocks,
   );
   final userGenerator = UserInfoGenerator(

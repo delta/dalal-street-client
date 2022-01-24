@@ -85,6 +85,7 @@ class UserInfoGenerator {
           stockWorth,
           reservedStockWorth,
           totalWorth,
+          dynamicUserInfo.isBlocked,
         );
         _controller.add(dynamicUserInfo);
       });
@@ -99,6 +100,7 @@ class UserInfoGenerator {
           dynamicUserInfo.stockWorth,
           dynamicUserInfo.reservedStocksWorth,
           newTotalWorth,
+          dynamicUserInfo.isBlocked,
         );
         _controller.add(dynamicUserInfo);
       });
@@ -107,7 +109,23 @@ class UserInfoGenerator {
         final gameState = newUpdate.gameState;
         final type = gameState.type;
         if (type == GameStateUpdateType.UserBlockStateUpdate) {
-          // TODO: complete this
+          // TODO: show snackbar message whenever isBlocked changes
+          final blockState = gameState.userBlockState;
+          final newCash = blockState.cash.toInt();
+          final penalty = newCash - dynamicUserInfo.cash;
+          dynamicUserInfo = DynamicUserInfo(
+            newCash,
+            dynamicUserInfo.reservedCash,
+            dynamicUserInfo.stocksOwnedMap,
+            dynamicUserInfo.stocksReservedMap,
+            dynamicUserInfo.stockWorth,
+            dynamicUserInfo.reservedStocksWorth,
+            dynamicUserInfo.newTotalWorth(
+              stockMapStream.value.toPricesMap(),
+              newCash: newCash,
+            ),
+            blockState.isBlocked,
+          );
         } else if (type == GameStateUpdateType.UserReferredCreditUpdate ||
             type == GameStateUpdateType.UserRewardCreditUpdate) {
           final newCash = (gameState.hasUserReferredCredit()
@@ -125,6 +143,7 @@ class UserInfoGenerator {
               stockMapStream.value.toPricesMap(),
               newCash: newCash,
             ),
+            dynamicUserInfo.isBlocked,
           );
         }
         _controller.add(dynamicUserInfo);
