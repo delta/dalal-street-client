@@ -19,7 +19,6 @@ import 'package:dalal_street_client/blocs/admin/unblock_user/unblock_user_cubit.
 import 'package:dalal_street_client/blocs/admin/update_end_of_day_values/update_end_of_day_values_cubit.dart';
 import 'package:dalal_street_client/blocs/admin/update_stock_price/update_stock_price_cubit.dart';
 import 'package:dalal_street_client/config/log.dart';
-import 'package:dalal_street_client/main.dart';
 import 'package:dalal_street_client/proto_build/actions/AddDailyChallenge.pb.dart';
 import 'package:dalal_street_client/utils/responsive.dart';
 import 'package:dalal_street_client/utils/snackbar.dart';
