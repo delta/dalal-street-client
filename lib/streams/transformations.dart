@@ -21,4 +21,6 @@ Stream<Int64> getStockPriceStream(
   int stockId,
   ValueStream<Map<int, Stock>> stockMapStream,
 ) =>
-    stockMapStream.map((event) => event[stockId]!.currentPrice).distinct();
+    stockMapStream
+        .map((stocks) => stocks[stockId]?.currentPrice ?? Int64(0))
+        .distinct();
