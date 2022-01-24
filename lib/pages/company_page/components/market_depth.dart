@@ -120,6 +120,17 @@ List<DataRow> buildRowsOfMarketDepth(
     bidDepthArray.add(MarketOrders(element.key, element.value));
   }
 
+  askDepthArray.sort((a, b) {
+    return (a.price - b.price).toInt();
+  });
+
+  bidDepthArray.sort((a, b) {
+    if (a.price == 0) return -1;
+    if (b.price == 0) return 1;
+
+    return (a.price - b.price).toInt();
+  });
+
   for (int i = 0; i < marketDepthRows; i++) {
     String askPrice =
         i < askDepthArray.length ? askDepthArray[i].price.toString() : '';
