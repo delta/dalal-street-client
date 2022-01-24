@@ -133,7 +133,7 @@ class _MortgageStockItemState extends State<MortgageStockItem> {
   ) =>
       Expanded(
         child: StreamBuilder<Int64>(
-          stream: getStockPriceStream(stockId, stockMapStream),
+          stream: stockMapStream.priceStream(stockId),
           initialData: Int64(currentPrice),
           builder: (_, snapshot) {
             int stockPrice = snapshot.data!.toInt();
@@ -170,7 +170,7 @@ class _MortgageStockItemState extends State<MortgageStockItem> {
           children: [
             const Text('Stocks Owned'),
             StreamBuilder<int>(
-                stream: getStocksOwnedStream(stockId, userInfoStream),
+                stream: userInfoStream.stocksOwnedStream(stockId),
                 initialData: userInfoStream.value.stocksOwnedMap[stockId] ?? 0,
                 builder: (_, snapshot) {
                   return Text(
@@ -197,7 +197,7 @@ class _MortgageStockItemState extends State<MortgageStockItem> {
           children: [
             const Text('Amount per Stock(₹)'),
             StreamBuilder<Int64>(
-                stream: getStockPriceStream(stockId, stockMapStream),
+                stream: stockMapStream.priceStream(stockId),
                 initialData: Int64(currentPrice),
                 builder: (_, snapshot) {
                   int stockPrice = snapshot.data!.toInt();

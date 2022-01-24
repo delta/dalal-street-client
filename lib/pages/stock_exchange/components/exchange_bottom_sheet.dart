@@ -29,7 +29,7 @@ class _ExchangeBottomSheetState extends State<ExchangeBottomSheet> {
   late int totalPrice;
   late int orderFee;
   final userInfoStream = getIt<GlobalStreams>().dynamicUserInfoStream;
-  Stream<int> get cashStream => getCashStream(userInfoStream);
+  Stream<int> get cashStream => userInfoStream.cashStream();
 
   @override
   void initState() {

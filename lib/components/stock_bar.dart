@@ -41,7 +41,7 @@ class StockBarMarquee extends StatelessWidget {
             stockId: stockId,
             previousDayClosePrice: stock.previousDayClose,
             currentPrice: stock.currentPrice,
-            stockPriceStream: getStockPriceStream(stockId, stockMapStream),
+            stockPriceStream: stockMapStream.priceStream(stockId),
           ))
         });
 
