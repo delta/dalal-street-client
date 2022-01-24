@@ -11,8 +11,6 @@ import 'package:rxdart/streams.dart';
 
 /// Generate a stream of [DynamicUserInfo] using [transactionStream], [stockPricesStream]
 class UserInfoGenerator {
-  // TODO: make this private
-  // TODO: use setter method to avoid calling _controller.add multiple times
   DynamicUserInfo dynamicUserInfo;
 
   // Updates all fields in DynamicUserInfo
@@ -33,6 +31,11 @@ class UserInfoGenerator {
     _listenToTransactions();
     _listenToPrices();
     _listenToGameState();
+  }
+
+  void updateUserInfo(DynamicUserInfo newInfo) {
+    dynamicUserInfo = newInfo;
+    _controller.add(dynamicUserInfo);
   }
 
   void _listenToTransactions() => transactionStream.listen((newUpdate) {
@@ -76,7 +79,7 @@ class UserInfoGenerator {
         totalWorth = calculateTotalWorth(cash, reservedCash, stocksOwnedMap,
             stocksReservedMap, stocks.toPricesMap());
 
-        dynamicUserInfo = DynamicUserInfo(
+        updateUserInfo(DynamicUserInfo(
           cash,
           reservedCash,
           stocksOwnedMap,
@@ -85,14 +88,12 @@ class UserInfoGenerator {
           reservedStockWorth,
           totalWorth,
           dynamicUserInfo.isBlocked,
-        );
-        _controller.add(dynamicUserInfo);
+        ));
       });
 
   void _listenToPrices() => stockPricesStream.listen((newUpdate) {
         final newTotalWorth = dynamicUserInfo.newTotalWorth(newUpdate.prices);
-        dynamicUserInfo = dynamicUserInfo.clone(newTotalWorth: newTotalWorth);
-        _controller.add(dynamicUserInfo);
+        updateUserInfo(dynamicUserInfo.clone(newTotalWorth: newTotalWorth));
       });
 
   void _listenToGameState() => gameStateStream.listen((newUpdate) {
@@ -104,29 +105,28 @@ class UserInfoGenerator {
           final newCash = blockState.cash.toInt();
           // ignore: unused_local_variable
           final penalty = newCash - dynamicUserInfo.cash;
-          dynamicUserInfo.clone(
+          updateUserInfo(dynamicUserInfo.clone(
             newCash: newCash,
             newTotalWorth: dynamicUserInfo.newTotalWorth(
               stockMapStream.value.toPricesMap(),
               newCash: newCash,
             ),
             newIsBlocked: blockState.isBlocked,
-          );
+          ));
         } else if (type == GameStateUpdateType.UserReferredCreditUpdate ||
             type == GameStateUpdateType.UserRewardCreditUpdate) {
           final newCash = (gameState.hasUserReferredCredit()
                   ? gameState.userReferredCredit.cash
                   : gameState.userRewardCredit.cash)
               .toInt();
-          dynamicUserInfo = dynamicUserInfo.clone(
+          updateUserInfo(dynamicUserInfo.clone(
             newCash: newCash,
             newTotalWorth: dynamicUserInfo.newTotalWorth(
               stockMapStream.value.toPricesMap(),
               newCash: newCash,
             ),
-          );
+          ));
         }
-        _controller.add(dynamicUserInfo);
       });
 
   /// The [StreamController] used to modify the stream of [DynamicUserInfo]
