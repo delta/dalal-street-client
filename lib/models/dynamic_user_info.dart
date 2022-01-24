@@ -42,8 +42,9 @@ class DynamicUserInfo extends Equatable {
           stocks.toPricesMap(),
         );
 
-  int newTotalWorth(Map<int, Int64> stockPrices) => calculateTotalWorth(
-        cash,
+  int newTotalWorth(Map<int, Int64> stockPrices, {int? newCash}) =>
+      calculateTotalWorth(
+        newCash ?? cash,
         reservedCash,
         stocksOwnedMap,
         stocksReservedMap,

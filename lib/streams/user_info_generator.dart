@@ -1,14 +1,18 @@
 import 'dart:async';
 
 import 'package:dalal_street_client/models/dynamic_user_info.dart';
+import 'package:dalal_street_client/proto_build/datastreams/GameState.pb.dart';
 import 'package:dalal_street_client/proto_build/datastreams/StockPrices.pb.dart';
 import 'package:dalal_street_client/proto_build/datastreams/Transactions.pb.dart';
+import 'package:dalal_street_client/proto_build/models/GameState.pb.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
 import 'package:dalal_street_client/utils/convert.dart';
 import 'package:rxdart/streams.dart';
 
-/// To generate stream of [DynamicUserInfo] using [transactionStream], [stockPricesStream]
+/// Generate a stream of [DynamicUserInfo] using [transactionStream], [stockPricesStream]
 class UserInfoGenerator {
+  // TODO: make this private
+  // TODO: use setter method to avoid calling _controller.add multiple times
   DynamicUserInfo dynamicUserInfo;
 
   // Updates all fields in DynamicUserInfo
@@ -16,16 +20,20 @@ class UserInfoGenerator {
   final ValueStream<Map<int, Stock>> stockMapStream;
   // Updates only totalWorth
   final Stream<StockPricesUpdate> stockPricesStream;
+  // Updates cash, totalWorth and isBlocked
+  final Stream<GameStateUpdate> gameStateStream;
 
   UserInfoGenerator(
     this.dynamicUserInfo,
     this.transactionStream,
     this.stockMapStream,
     this.stockPricesStream,
+    this.gameStateStream,
   ) {
     // TODO: use getters, setters or copy function in DynamicUserInfo to reduce code
     _listenToTransactions();
     _listenToPrices();
+    _listenToGameState();
   }
 
   void _listenToTransactions() => transactionStream.listen((newUpdate) {
@@ -92,6 +100,33 @@ class UserInfoGenerator {
           dynamicUserInfo.reservedStocksWorth,
           newTotalWorth,
         );
+        _controller.add(dynamicUserInfo);
+      });
+
+  void _listenToGameState() => gameStateStream.listen((newUpdate) {
+        final gameState = newUpdate.gameState;
+        final type = gameState.type;
+        if (type == GameStateUpdateType.UserBlockStateUpdate) {
+          // TODO: complete this
+        } else if (type == GameStateUpdateType.UserReferredCreditUpdate ||
+            type == GameStateUpdateType.UserRewardCreditUpdate) {
+          final newCash = (gameState.hasUserReferredCredit()
+                  ? gameState.userReferredCredit.cash
+                  : gameState.userRewardCredit.cash)
+              .toInt();
+          dynamicUserInfo = DynamicUserInfo(
+            newCash,
+            dynamicUserInfo.reservedCash,
+            dynamicUserInfo.stocksOwnedMap,
+            dynamicUserInfo.stocksReservedMap,
+            dynamicUserInfo.stockWorth,
+            dynamicUserInfo.reservedStocksWorth,
+            dynamicUserInfo.newTotalWorth(
+              stockMapStream.value.toPricesMap(),
+              newCash: newCash,
+            ),
+          );
+        }
         _controller.add(dynamicUserInfo);
       });
 

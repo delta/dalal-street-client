@@ -173,8 +173,13 @@ Future<GlobalStreams> subscribeToGlobalStreams(
     portfolioResponse.reservedStocksOwned.toIntMap(),
     initialStocks,
   );
-  final userGenerator = UserInfoGenerator(initialUserInfo, transactionStream,
-      stockMapStream, stockPricesStream.skip(1));
+  final userGenerator = UserInfoGenerator(
+    initialUserInfo,
+    transactionStream,
+    stockMapStream,
+    stockPricesStream.skip(1),
+    gameStateStream,
+  );
   final dynamicUserInfoStream =
       userGenerator.stream.shareValueSeeded(initialUserInfo);
 
