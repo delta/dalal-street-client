@@ -124,10 +124,11 @@ class RouteGenerator {
 
       case '/news':
         return MultiBlocProvider(providers: [
-          BlocProvider(
-            create: (context) => NewsBloc()),
+          BlocProvider(create: (context) => NewsBloc()),
           BlocProvider(create: (context) => SubscribeCubit()),
-          BlocProvider(create: (context) => NewsSubscriptionCubit(),)
+          BlocProvider(
+            create: (context) => NewsSubscriptionCubit(),
+          )
         ], child: const NewsPage());
 
       // Home Pages

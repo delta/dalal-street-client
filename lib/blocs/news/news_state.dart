@@ -21,6 +21,7 @@ class GetNewsFailure extends NewsState {
   @override
   List<Object> get props => [error];
 }
+
 class GetMoreNewsSucess extends NewsState {
   final GetMarketEventsResponse marketEventsList;
   const GetMoreNewsSucess(this.marketEventsList);

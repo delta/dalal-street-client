@@ -72,44 +72,40 @@ class _NewsPageState extends State<NewsPage> {
   Widget feedlist() =>
       BlocBuilder<NewsBloc, NewsState>(builder: (context, state) {
         if (state is GetNewsSucess) {
-          if(state.marketEventsList.moreExists)
-          {
-            
-          mapMarketEvents.addAll(state.marketEventsList.marketEvents);
+          if (state.marketEventsList.moreExists) {
+            mapMarketEvents.addAll(state.marketEventsList.marketEvents);
           }
           logger.i(state.marketEventsList.moreExists);
-              return ListView.separated(
-                shrinkWrap: true,
-                physics: const ScrollPhysics(),
-                itemCount: mapMarketEvents.length,
-                itemBuilder: (context, index) {
-                  MarketEvent marketEvent = mapMarketEvents[index];
-                  String headline = marketEvent.headline;
-                  String imagePath = marketEvent.imagePath;
-                  String createdAt = marketEvent.createdAt;
-                  String text = marketEvent.text;
-                  String dur = getdur(createdAt);
-                  return GestureDetector(
-                      child: newsItem(headline, imagePath, createdAt, false),
-                      onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => NewsDetail(
-                                text: text,
-                                imagePath: imagePath,
-                                headline: headline,
-                                dur: dur),
-                          )));
-                },
-                separatorBuilder: (context, index) {
-                  return const Divider();
-                },
-              );         
-        }
-        else if (state is GetNewsFailure) {
+          return ListView.separated(
+            shrinkWrap: true,
+            physics: const ScrollPhysics(),
+            itemCount: mapMarketEvents.length,
+            itemBuilder: (context, index) {
+              MarketEvent marketEvent = mapMarketEvents[index];
+              String headline = marketEvent.headline;
+              String imagePath = marketEvent.imagePath;
+              String createdAt = marketEvent.createdAt;
+              String text = marketEvent.text;
+              String dur = getdur(createdAt);
+              return GestureDetector(
+                  child: newsItem(headline, imagePath, createdAt, false),
+                  onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => NewsDetail(
+                            text: text,
+                            imagePath: imagePath,
+                            headline: headline,
+                            dur: dur),
+                      )));
+            },
+            separatorBuilder: (context, index) {
+              return const Divider();
+            },
+          );
+        } else if (state is GetNewsFailure) {
           return const Text('Error');
-        }
-        else {
+        } else {
           return const Center(
             child: CircularProgressIndicator(
               color: secondaryColor,

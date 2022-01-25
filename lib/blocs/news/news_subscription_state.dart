@@ -8,6 +8,7 @@ abstract class NewsSubscriptionState extends Equatable {
 }
 
 class NewsSubscriptionInitial extends NewsSubscriptionState {}
+
 class SubscriptionToNewsSuccess extends NewsSubscriptionState {
   final MarketEventUpdate news;
   const SubscriptionToNewsSuccess(this.news);

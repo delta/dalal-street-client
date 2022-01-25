@@ -1,4 +1,3 @@
-
 import 'package:bloc/bloc.dart';
 import 'package:dalal_street_client/config/get_it.dart';
 import 'package:dalal_street_client/config/log.dart';
@@ -11,18 +10,17 @@ part 'news_subscription_state.dart';
 
 class NewsSubscriptionCubit extends Cubit<NewsSubscriptionState> {
   NewsSubscriptionCubit() : super(NewsSubscriptionInitial());
-    Future <void> GetNewsFeed(SubscriptionId subscriptionId) async
-    {
-      try {
-        final marketeventstream = streamClient.getMarketEventUpdates(
-            subscriptionId,
-            options: sessionOptions(getIt()));
-        await for (final marketevent in marketeventstream) {
-          emit(SubscriptionToNewsSuccess(marketevent));
-        }
-      } catch (e) {
-        logger.e(e);
-        emit(SubscriptionToNewsFailed(e.toString()));
+  Future<void> GetNewsFeed(SubscriptionId subscriptionId) async {
+    try {
+      final marketeventstream = streamClient.getMarketEventUpdates(
+          subscriptionId,
+          options: sessionOptions(getIt()));
+      await for (final marketevent in marketeventstream) {
+        emit(SubscriptionToNewsSuccess(marketevent));
       }
+    } catch (e) {
+      logger.e(e);
+      emit(SubscriptionToNewsFailed(e.toString()));
     }
+  }
 }
