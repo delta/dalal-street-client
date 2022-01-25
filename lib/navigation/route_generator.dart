@@ -19,7 +19,7 @@ import 'package:dalal_street_client/blocs/admin/unblock_user/unblock_user_cubit.
 import 'package:dalal_street_client/blocs/admin/update_end_of_day_values/update_end_of_day_values_cubit.dart';
 import 'package:dalal_street_client/blocs/admin/update_stock_price/update_stock_price_cubit.dart';
 import 'package:dalal_street_client/blocs/auth/login/login_cubit.dart';
-import 'package:dalal_street_client/pages/admin_page.dart';
+import 'package:dalal_street_client/pages/admin_page/admin_page.dart';
 import 'package:dalal_street_client/blocs/admin/send_news/send_news_cubit.dart';
 import 'package:dalal_street_client/blocs/auth/register/register_cubit.dart';
 import 'package:dalal_street_client/blocs/auth/verify_phone/enter_otp/enter_otp_cubit.dart';
