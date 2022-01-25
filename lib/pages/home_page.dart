@@ -166,6 +166,10 @@ class _HomePageState extends State<HomePage>
       children: stockItems,
     );
   }
+
+ movetonews(BuildContext context) {
+    Navigator.of(context).pushNamed('/news');
+  }
 }
 
 class StockItem extends StatelessWidget {
@@ -265,9 +269,5 @@ class StockItem extends StatelessWidget {
         },
       ),
     );
-  }
-
-  movetonews(BuildContext context) {
-    Navigator.of(context).pushNamed('/news');
   }
 }
