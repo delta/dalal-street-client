@@ -21,19 +21,16 @@ class GetNewsFailure extends NewsState {
   @override
   List<Object> get props => [error];
 }
-
-class SubscriptionToNewsSuccess extends NewsState {
-  final MarketEventUpdate news;
-  const SubscriptionToNewsSuccess(this.news);
-
+class GetMoreNewsSucess extends NewsState {
+  final GetMarketEventsResponse marketEventsList;
+  const GetMoreNewsSucess(this.marketEventsList);
   @override
-  List<Object> get props => [news];
+  List<Object> get props => [marketEventsList];
 }
 
-class SubscriptionToNewsFailed extends NewsState {
-  final String subscriptionId;
-  const SubscriptionToNewsFailed(this.subscriptionId);
-
+class GetMoreNewsFailure extends NewsState {
+  final String error;
+  const GetMoreNewsFailure(this.error);
   @override
-  List<Object> get props => [subscriptionId];
+  List<Object> get props => [error];
 }
