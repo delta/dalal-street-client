@@ -219,7 +219,7 @@ class _NewsPageState extends State<NewsPage> {
       });
 
   void subscribetonews(SubscriptionId subscriptionId) {
-    context.read<NewsSubscriptionCubit>().GetNewsFeed(subscriptionId);
+    context.read<NewsSubscriptionCubit>().getNewsFeed(subscriptionId);
   }
 
   Widget newsItem(

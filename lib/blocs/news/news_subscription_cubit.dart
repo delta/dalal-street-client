@@ -10,7 +10,7 @@ part 'news_subscription_state.dart';
 
 class NewsSubscriptionCubit extends Cubit<NewsSubscriptionState> {
   NewsSubscriptionCubit() : super(NewsSubscriptionInitial());
-  Future<void> GetNewsFeed(SubscriptionId subscriptionId) async {
+  Future<void> getNewsFeed(SubscriptionId subscriptionId) async {
     try {
       final marketeventstream = streamClient.getMarketEventUpdates(
           subscriptionId,
