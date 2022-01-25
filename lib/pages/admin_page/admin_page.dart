@@ -20,6 +20,7 @@ import 'package:dalal_street_client/blocs/admin/update_end_of_day_values/update_
 import 'package:dalal_street_client/blocs/admin/update_stock_price/update_stock_price_cubit.dart';
 import 'package:dalal_street_client/config/log.dart';
 import 'package:dalal_street_client/pages/admin_page/components/tab_one.dart';
+import 'package:dalal_street_client/pages/admin_page/components/tab_two.dart';
 import 'package:dalal_street_client/proto_build/actions/AddDailyChallenge.pb.dart';
 import 'package:dalal_street_client/utils/responsive.dart';
 import 'package:dalal_street_client/utils/snackbar.dart';
@@ -228,107 +229,7 @@ class _AdminPageState extends State<AdminPage> {
       } else if (state is BlockUserFailure) {
         logger.i('unsuccessful');
       }
-      return Container(
-          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-          decoration: BoxDecoration(
-            color: backgroundColor,
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  'Block User',
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.w700,
-                    color: white,
-                  ),
-                  textAlign: TextAlign.start,
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                TextFormField(
-                  decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'User Id',
-                      labelStyle: TextStyle(fontSize: 14),
-                      contentPadding: EdgeInsets.all(8),
-                      errorStyle: TextStyle(
-                        fontSize: 11.0,
-                        color: bronze,
-                      )),
-                  onChanged: (String? value) {
-                    if (value != null) {
-                      error = false;
-                      userId = int.parse(value);
-                    } else {
-                      error = true;
-                      userId = 0;
-                    }
-                  },
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  validator: (text) {
-                    if (text == null || text.isEmpty) {
-                      error = true;
-                      return 'Can\'t be empty';
-                    }
-                    {
-                      error = false;
-                      return null;
-                    }
-                  },
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                TextFormField(
-                  decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'Penalty',
-                      labelStyle: TextStyle(fontSize: 14),
-                      contentPadding: EdgeInsets.all(8),
-                      errorStyle: TextStyle(
-                        fontSize: 11.0,
-                        color: bronze,
-                      )),
-                  onChanged: (String? value) {
-                    if (value != null) {
-                      error = false;
-                      penalty = Int64(int.parse(value));
-                    } else {
-                      error = true;
-                      penalty = Int64(0);
-                    }
-                  },
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  validator: (text) {
-                    if (text == null || text.isEmpty) {
-                      error = true;
-                      return 'Can\'t be empty';
-                    }
-                    {
-                      error = false;
-                      return null;
-                    }
-                  },
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    error == true
-                        ? null
-                        : context
-                            .read<BlockUserCubit>()
-                            .blockUser(userId, penalty);
-                  },
-                  child: const Text('Block User'),
-                )
-              ]));
+      return blockUserUI(context, userId, penalty, error);
     });
   }
 
@@ -351,81 +252,7 @@ class _AdminPageState extends State<AdminPage> {
       } else if (state is OpenMarketFailure) {
         logger.i('unsuccessful');
       }
-      return Container(
-          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-          decoration: BoxDecoration(
-            color: backgroundColor,
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  'Open Market',
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.w700,
-                    color: white,
-                  ),
-                  textAlign: TextAlign.start,
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                TextFormField(
-                  decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'Update High and Low Values ',
-                      labelStyle: TextStyle(fontSize: 14),
-                      contentPadding: EdgeInsets.all(8),
-                      errorStyle: TextStyle(
-                        fontSize: 11.0,
-                        color: bronze,
-                      )),
-                  onChanged: (String? value) {
-                    if (value == 'true') {
-                      error = false;
-                      updateDayHighAndLow = true;
-                    } else if (value == 'false') {
-                      error = false;
-                      updateDayHighAndLow = false;
-                    } else {
-                      error = true;
-                    }
-                  },
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  validator: (text) {
-                    if (text == null || text.isEmpty) {
-                      error = true;
-                      return 'Can\'t be empty';
-                    } else if (text != 'true' && text != 'false') {
-                      error = true;
-                      return 'Can only be true or false';
-                    }
-                    {
-                      error = false;
-                      return null;
-                    }
-                  },
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    error == true
-                        ? null
-                        : context
-                            .read<OpenMarketCubit>()
-                            .openMarket(updateDayHighAndLow);
-                  },
-                  child: const Text('Open Market'),
-                )
-              ]));
+      return openMarketUI(context, updateDayHighAndLow, error);
     });
   }
 
@@ -1174,124 +1001,7 @@ class _AdminPageState extends State<AdminPage> {
       } else if (state is InspectUserFailure) {
         logger.i('unsuccessful');
       }
-      return Container(
-          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-          decoration: BoxDecoration(
-            color: backgroundColor,
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  'Inspect User',
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.w700,
-                    color: white,
-                  ),
-                  textAlign: TextAlign.start,
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                TextFormField(
-                  decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'User Id ',
-                      labelStyle: TextStyle(fontSize: 14),
-                      contentPadding: EdgeInsets.all(8),
-                      errorStyle: TextStyle(
-                        fontSize: 11.0,
-                        color: bronze,
-                      )),
-                  onChanged: (String? value) {
-                    if (value != null) {
-                      error = false;
-                      userId = int.parse(value);
-                    } else {
-                      error = false;
-                      userId = 0;
-                    }
-                  },
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                TextFormField(
-                  decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'Day',
-                      labelStyle: TextStyle(fontSize: 14),
-                      contentPadding: EdgeInsets.all(8),
-                      errorStyle: TextStyle(
-                        fontSize: 11.0,
-                        color: bronze,
-                      )),
-                  onChanged: (String? value) {
-                    if (value != null) {
-                      error = false;
-                      day = int.parse(value);
-                    } else {
-                      error = false;
-                      day = 0;
-                    }
-                  },
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                TextFormField(
-                  decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'Transaction Type? ',
-                      labelStyle: TextStyle(fontSize: 14),
-                      contentPadding: EdgeInsets.all(8),
-                      errorStyle: TextStyle(
-                        fontSize: 11.0,
-                        color: bronze,
-                      )),
-                  onChanged: (String? value) {
-                    if (value == 'true') {
-                      error = false;
-                      transactionType = true;
-                    } else if (value == 'false') {
-                      error = false;
-                      transactionType = false;
-                    } else {
-                      error = true;
-                    }
-                  },
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  validator: (text) {
-                    if (text == null || text.isEmpty) {
-                      error = true;
-                      return 'Can\'t be empty';
-                    } else if (text != 'true' && text != 'false') {
-                      error = true;
-                      return 'Can only be true or false';
-                    }
-                    {
-                      error = false;
-                      return null;
-                    }
-                  },
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    error == true
-                        ? null
-                        : context
-                            .read<InspectUserCubit>()
-                            .inspectUser(userId, transactionType, day);
-                  },
-                  child: const Text('Set Gives Dividends'),
-                )
-              ]));
+      return inspectUserUI(context, userId, day, transactionType, error);
     });
   }
 
@@ -1314,60 +1024,7 @@ class _AdminPageState extends State<AdminPage> {
       } else if (state is UnblockUserFailure) {
         logger.i('unsuccessful');
       }
-      return Container(
-          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-          decoration: BoxDecoration(
-            color: backgroundColor,
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  'Unblock User',
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.w700,
-                    color: white,
-                  ),
-                  textAlign: TextAlign.start,
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                TextFormField(
-                  decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'User ID ',
-                      labelStyle: TextStyle(fontSize: 14),
-                      contentPadding: EdgeInsets.all(8),
-                      errorStyle: TextStyle(
-                        fontSize: 11.0,
-                        color: bronze,
-                      )),
-                  onChanged: (String? value) {
-                    if (value != null) {
-                      error = false;
-                      userId = int.parse(value);
-                    } else {
-                      error = false;
-                      userId = 0;
-                    }
-                  },
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    error == true
-                        ? null
-                        : context.read<UnblockUserCubit>().unblockUser(userId);
-                  },
-                  child: const Text('Set Gives Dividends'),
-                )
-              ]));
+      return unblockUserUI(context, userId, error);
     });
   }
 
@@ -1440,78 +1097,7 @@ class _AdminPageState extends State<AdminPage> {
       } else if (state is CloseMarketFailure) {
         logger.i('unsuccessful');
       }
-      return Container(
-          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-          decoration: BoxDecoration(
-            color: backgroundColor,
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  'Close Market',
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.w700,
-                    color: white,
-                  ),
-                  textAlign: TextAlign.start,
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                TextFormField(
-                  decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'Update Previous High and Low ',
-                      labelStyle: TextStyle(fontSize: 14),
-                      contentPadding: EdgeInsets.all(8),
-                      errorStyle: TextStyle(
-                        fontSize: 11.0,
-                        color: bronze,
-                      )),
-                  onChanged: (String? value) {
-                    if (value == 'true') {
-                      error = false;
-                      updatePrevDayHighAndLow = true;
-                    } else if (value == 'false') {
-                      error = false;
-                      updatePrevDayHighAndLow = false;
-                    } else {
-                      error = true;
-                    }
-                  },
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  validator: (text) {
-                    if (text == null || text.isEmpty) {
-                      error = true;
-                      return 'Can\'t be empty';
-                    } else if (text != 'true' && text != 'false') {
-                      error = true;
-                      return 'Can only be true or false';
-                    }
-                    {
-                      error = false;
-                      return null;
-                    }
-                  },
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    error == true
-                        ? null
-                        : context
-                            .read<CloseMarketCubit>()
-                            .closeMarket(updatePrevDayHighAndLow);
-                  },
-                  child: const Text('Close Market'),
-                )
-              ]));
+      return closeMarketUI(context, updatePrevDayHighAndLow, error);
     });
   }
 
@@ -1592,42 +1178,7 @@ class _AdminPageState extends State<AdminPage> {
       } else if (state is UnblockAllUsersFailure) {
         logger.i('unsuccessful');
       }
-      return Container(
-          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-          decoration: BoxDecoration(
-            color: backgroundColor,
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  'Unblock All Users',
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.w700,
-                    color: white,
-                  ),
-                  textAlign: TextAlign.start,
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    error == true
-                        ? null
-                        : context
-                            .read<UnblockAllUsersCubit>()
-                            .unblockAllUsers();
-                  },
-                  child: const Text('Unblock All Users'),
-                )
-              ]));
+      return unblockAllUsersUI(context, error);
     });
   }
 
