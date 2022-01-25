@@ -81,7 +81,8 @@ class _HomePageState extends State<HomePage>
           ),
           _recentNews(),
           TextButton(
-              onPressed: () => movetonews(context), child: const Text('move to news'))
+              onPressed: () => movetonews(context),
+              child: const Text('move to news'))
         ],
       ),
     );
