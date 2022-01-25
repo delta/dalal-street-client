@@ -167,7 +167,7 @@ class _HomePageState extends State<HomePage>
     );
   }
 
- movetonews(BuildContext context) {
+  movetonews(BuildContext context) {
     Navigator.of(context).pushNamed('/news');
   }
 }
