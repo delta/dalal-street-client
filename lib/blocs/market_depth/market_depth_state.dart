@@ -9,18 +9,23 @@ abstract class MarketDepthState extends Equatable {
 
 class MarketDepthInitial extends MarketDepthState {}
 
-class SubscriptionToMarketDepthSuccess extends MarketDepthState {
-  final MarketDepthUpdate marketDepthUpdate;
-  const SubscriptionToMarketDepthSuccess(this.marketDepthUpdate);
-
-  @override
-  List<Object> get props => [marketDepthUpdate];
-}
-
 class SubscriptionToMarketDepthFailed extends MarketDepthState {
   final String error;
   const SubscriptionToMarketDepthFailed(this.error);
 
   @override
   List<Object> get props => [error];
+}
+
+class MarketDepthUpdateState extends MarketDepthState {
+  final Map<Int64, Int64> askDepth;
+  final Map<Int64, Int64> bidDepth;
+
+  const MarketDepthUpdateState(this.askDepth, this.bidDepth);
+}
+
+class TradeUpdateState extends MarketDepthState {
+  final List<Trade> trades;
+
+  const TradeUpdateState(this.trades);
 }
