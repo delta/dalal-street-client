@@ -1,9 +1,10 @@
 import 'package:dalal_street_client/blocs/market_depth/market_depth_bloc.dart';
 import 'package:dalal_street_client/blocs/subscribe/subscribe_cubit.dart';
-import 'package:dalal_street_client/config/log.dart';
-import 'package:dalal_street_client/proto_build/datastreams/MarketDepth.pb.dart';
+import 'package:dalal_street_client/constants/constants.dart';
+import 'package:dalal_street_client/models/market_orders.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
 import 'package:dalal_street_client/theme/colors.dart';
+import 'package:fixnum/fixnum.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -14,13 +15,13 @@ Widget marketDepth(Stock company) {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: const [
           Text(
-            'Bid Depth',
+            'Buy',
             style: TextStyle(
                 fontSize: 20, fontWeight: FontWeight.w700, color: white),
             textAlign: TextAlign.start,
           ),
           Text(
-            'Ask Depth',
+            'Sell',
             style: TextStyle(
                 fontSize: 20, fontWeight: FontWeight.w700, color: white),
             textAlign: TextAlign.start,
@@ -30,19 +31,14 @@ Widget marketDepth(Stock company) {
       BlocBuilder<SubscribeCubit, SubscribeState>(
         builder: (context, state) {
           if (state is SubscriptionDataLoaded) {
-            logger.i(state.subscriptionId);
             // Start the stream of Market Depths
             context
                 .read<MarketDepthBloc>()
                 .add(SubscribeToMarketDepthUpdates(state.subscriptionId));
-            List<MarketDepthUpdate> marketDepthUpdates = [];
+
             return BlocBuilder<MarketDepthBloc, MarketDepthState>(
               builder: (context, state) {
-                if (state is SubscriptionToMarketDepthSuccess) {
-                  logger.i(state.marketDepthUpdate.toString());
-                  if (state.marketDepthUpdate.stockId == company.id) {
-                    marketDepthUpdates.add(state.marketDepthUpdate);
-                  }
+                if (state is MarketDepthUpdateState) {
                   return SingleChildScrollView(
                     scrollDirection: Axis.vertical,
                     child: SingleChildScrollView(
@@ -62,7 +58,9 @@ Widget marketDepth(Stock company) {
                             label: Text('Price'),
                           ),
                         ],
-                        rows: buildRowsOfMarketDepth(marketDepthUpdates),
+                        rows: buildRowsOfMarketDepth(
+                            state.askDepth, state.bidDepth),
+                        dataRowHeight: 20,
                       ),
                     ),
                   );
@@ -109,47 +107,86 @@ Widget marketDepth(Stock company) {
 }
 
 List<DataRow> buildRowsOfMarketDepth(
-    List<MarketDepthUpdate> marketDepthUpdates) {
-  return marketDepthUpdates.map((marketDepth) {
-    return DataRow(
-      cells: [
-        DataCell(
-          Text(
-            marketDepth.bidDepth.toString(),
-            style: const TextStyle(
-              fontSize: 14,
-              color: white,
-            ),
+    Map<Int64, Int64> askDepth, Map<Int64, Int64> bidDepth) {
+  List<DataRow> rows = [];
+
+  final List<MarketOrders> askDepthArray = [];
+  final List<MarketOrders> bidDepthArray = [];
+
+  for (var element in askDepth.entries) {
+    askDepthArray.add(MarketOrders(element.key, element.value));
+  }
+  for (var element in bidDepth.entries) {
+    bidDepthArray.add(MarketOrders(element.key, element.value));
+  }
+
+  askDepthArray.sort((a, b) {
+    return (a.price - b.price).toInt();
+  });
+
+  bidDepthArray.sort((a, b) {
+    if (a.price == 0) return -1;
+    if (b.price == 0) return 1;
+
+    return (a.price - b.price).toInt();
+  });
+
+  for (int i = 0; i < marketDepthRows; i++) {
+    String askPrice =
+        i < askDepthArray.length ? askDepthArray[i].price.toString() : '';
+    String askVolume =
+        i < askDepthArray.length ? askDepthArray[i].volume.toString() : '';
+    String bidPrice =
+        i < bidDepthArray.length ? bidDepthArray[i].price.toString() : '';
+    String bidVolume =
+        i < bidDepthArray.length ? bidDepthArray[i].volume.toString() : '';
+
+    rows.add(marketDepthRow(bidPrice, bidVolume, askPrice, askVolume));
+  }
+
+  return rows;
+}
+
+DataRow marketDepthRow(
+    String bidPrice, String bidVolume, String askPrice, String askVolume) {
+  return DataRow(
+    cells: [
+      DataCell(
+        Text(
+          bidVolume,
+          style: const TextStyle(
+            fontSize: 12,
+            color: white,
           ),
         ),
-        DataCell(
-          Text(
-            marketDepth.bidDepthDiff.toString(),
-            style: const TextStyle(
-              fontSize: 14,
-              color: white,
-            ),
+      ),
+      DataCell(
+        Text(
+          bidPrice == '0' ? 'market' : bidPrice,
+          style: const TextStyle(
+            fontSize: 12,
+            color: secondaryColor,
           ),
         ),
-        DataCell(
-          Text(
-            marketDepth.askDepth.toString(),
-            style: const TextStyle(
-              fontSize: 14,
-              color: white,
-            ),
+      ),
+      DataCell(
+        Text(
+          askVolume,
+          style: const TextStyle(
+            fontSize: 12,
+            color: white,
           ),
         ),
-        DataCell(
-          Text(
-            marketDepth.askDepthDiff.toString(),
-            style: const TextStyle(
-              fontSize: 14,
-              color: white,
-            ),
+      ),
+      DataCell(
+        Text(
+          askPrice == '0' ? 'market' : askPrice,
+          style: const TextStyle(
+            fontSize: 12,
+            color: heartRed,
           ),
         ),
-      ],
-    );
-  }).toList();
+      ),
+    ],
+  );
 }
