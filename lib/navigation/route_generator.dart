@@ -1,3 +1,4 @@
+import 'package:dalal_street_client/blocs/admin/tab1/tab1_cubit.dart';
 import 'package:dalal_street_client/blocs/auth/forgot_password/forgot_password_cubit.dart';
 import 'package:dalal_street_client/blocs/admin/add_daily_challenge/add_daily_challenge_cubit.dart';
 import 'package:dalal_street_client/blocs/admin/add_market_event/add_market_event_cubit.dart';
@@ -133,6 +134,9 @@ class RouteGenerator {
             ),
             BlocProvider(
               create: (context) => AddDailyChallengeCubit(),
+            ),
+            BlocProvider(
+              create: (context) => Tab1Cubit(),
             ),
           ],
           child: const AdminPage(),

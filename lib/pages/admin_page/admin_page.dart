@@ -5,15 +5,16 @@ import 'package:dalal_street_client/blocs/admin/block_user/block_user_cubit.dart
 import 'package:dalal_street_client/blocs/admin/close_daily_challenge/close_daily_challenge_cubit.dart';
 import 'package:dalal_street_client/blocs/admin/close_market/close_market_cubit.dart';
 import 'package:dalal_street_client/blocs/admin/inspect_user/inspect_user_cubit.dart';
-import 'package:dalal_street_client/blocs/admin/load_stocks/load_stocks_cubit.dart';
+//import 'package:dalal_street_client/blocs/admin/load_stocks/load_stocks_cubit.dart';
 import 'package:dalal_street_client/blocs/admin/open_daily_challenge/open_daily_challenge_cubit.dart';
 import 'package:dalal_street_client/blocs/admin/open_market/open_market_cubit.dart';
-import 'package:dalal_street_client/blocs/admin/send_dividends/send_dividends_cubit.dart';
-import 'package:dalal_street_client/blocs/admin/send_news/send_news_cubit.dart';
-import 'package:dalal_street_client/blocs/admin/send_notifications/send_notifications_cubit.dart';
-import 'package:dalal_street_client/blocs/admin/set_bankruptcy/set_bankruptcy_cubit.dart';
-import 'package:dalal_street_client/blocs/admin/set_gives_dividends/set_gives_dividends_cubit.dart';
-import 'package:dalal_street_client/blocs/admin/set_market_day/set_market_day_cubit.dart';
+//import 'package:dalal_street_client/blocs/admin/send_dividends/send_dividends_cubit.dart';
+//import 'package:dalal_street_client/blocs/admin/send_news/send_news_cubit.dart';
+import 'package:dalal_street_client/blocs/admin/tab1/tab1_cubit.dart';
+//import 'package:dalal_street_client/blocs/admin/send_notifications/send_notifications_cubit.dart';
+//import 'package:dalal_street_client/blocs/admin/set_bankruptcy/set_bankruptcy_cubit.dart';
+//import 'package:dalal_street_client/blocs/admin/set_gives_dividends/set_gives_dividends_cubit.dart';
+//import 'package:dalal_street_client/blocs/admin/set_market_day/set_market_day_cubit.dart';
 import 'package:dalal_street_client/blocs/admin/unblock_all_users/unblock_all_users_cubit.dart';
 import 'package:dalal_street_client/blocs/admin/unblock_user/unblock_user_cubit.dart';
 import 'package:dalal_street_client/blocs/admin/update_end_of_day_values/update_end_of_day_values_cubit.dart';
@@ -186,11 +187,10 @@ class _AdminPageState extends State<AdminPage> {
     );
   }
 
-  BlocConsumer<SendNewsCubit, SendNewsState> _onSendNews() {
+  BlocConsumer<Tab1Cubit, Tab1State> _onSendNews() {
     String news = ' ';
     bool error = false;
-    return BlocConsumer<SendNewsCubit, SendNewsState>(
-        listener: (context, state) {
+    return BlocConsumer<Tab1Cubit, Tab1State>(listener: (context, state) {
       if (state is SendNewsSuccess) {
         logger.i('sent news successfully');
         showSnackBar(context, 'sent news successfully');
@@ -290,12 +290,11 @@ class _AdminPageState extends State<AdminPage> {
     });
   }
 
-  BlocConsumer<SendDividendsCubit, SendDividendsState> _onSendDividends() {
+  BlocConsumer<Tab1Cubit, Tab1State> _onSendDividends() {
     int stockId = 0;
     Int64 dividendAmt = Int64(0);
     bool error = false;
-    return BlocConsumer<SendDividendsCubit, SendDividendsState>(
-        listener: (context, state) {
+    return BlocConsumer<Tab1Cubit, Tab1State>(listener: (context, state) {
       if (state is SendDividendsSuccess) {
         logger.i('Send Dividends successfully');
         showSnackBar(context, 'sent dividends successfully');
@@ -314,11 +313,10 @@ class _AdminPageState extends State<AdminPage> {
     });
   }
 
-  BlocConsumer<SetMarketDayCubit, SetMarketDayState> _onSetMarketDay() {
+  BlocConsumer<Tab1Cubit, Tab1State> _onSetMarketDay() {
     int marketDay = 0;
     bool error = false;
-    return BlocConsumer<SetMarketDayCubit, SetMarketDayState>(
-        listener: (context, state) {
+    return BlocConsumer<Tab1Cubit, Tab1State>(listener: (context, state) {
       if (state is SetMarketDaySuccess) {
         logger.i('successful');
         showSnackBar(context, 'Set Market Day successfully');
@@ -415,12 +413,11 @@ class _AdminPageState extends State<AdminPage> {
     });
   }
 
-  BlocConsumer<SetBankruptcyCubit, SetBankruptcyState> _onSetBankruptcy() {
+  BlocConsumer<Tab1Cubit, Tab1State> _onSetBankruptcy() {
     int stockId = 0;
     bool isBankrupt = true;
     bool error = false;
-    return BlocConsumer<SetBankruptcyCubit, SetBankruptcyState>(
-        listener: (context, state) {
+    return BlocConsumer<Tab1Cubit, Tab1State>(listener: (context, state) {
       if (state is SetBankruptcySuccess) {
         logger.i('Set Bankruptcy success');
         showSnackBar(context, 'bankrupt F');
@@ -487,13 +484,11 @@ class _AdminPageState extends State<AdminPage> {
     });
   }
 
-  BlocConsumer<SetGivesDividendsCubit, SetGivesDividendsState>
-      _onSetGivesDividends() {
+  BlocConsumer<Tab1Cubit, Tab1State> _onSetGivesDividends() {
     int stockId = 0;
     bool givesDividends = true;
     bool error = false;
-    return BlocConsumer<SetGivesDividendsCubit, SetGivesDividendsState>(
-        listener: (context, state) {
+    return BlocConsumer<Tab1Cubit, Tab1State>(listener: (context, state) {
       if (state is SetGivesDividendsSuccess) {
         logger.i('Set Gives Dividends successfully');
         showSnackBar(context, 'Set Gives Dividends successfully');
@@ -512,13 +507,12 @@ class _AdminPageState extends State<AdminPage> {
     });
   }
 
-  BlocConsumer<SendNotificationsCubit, SendNotificationsState> _onSendNotifs() {
+  BlocConsumer<Tab1Cubit, Tab1State> _onSendNotifs() {
     String notifs = ' ';
     int userId = 0;
     bool isGlobal = true;
     bool error = false;
-    return BlocConsumer<SendNotificationsCubit, SendNotificationsState>(
-        listener: (context, state) {
+    return BlocConsumer<Tab1Cubit, Tab1State>(listener: (context, state) {
       if (state is SendNotificationsSuccess) {
         logger.i('sent notif successfully');
         showSnackBar(context, 'sent notif successfully');
@@ -606,10 +600,9 @@ class _AdminPageState extends State<AdminPage> {
     });
   }
 
-  BlocConsumer<LoadStocksCubit, LoadStocksState> _onLoadStocks() {
+  BlocConsumer<Tab1Cubit, Tab1State> _onLoadStocks() {
     bool error = false;
-    return BlocConsumer<LoadStocksCubit, LoadStocksState>(
-        listener: (context, state) {
+    return BlocConsumer<Tab1Cubit, Tab1State>(listener: (context, state) {
       if (state is LoadStocksSuccess) {
         logger.i('successful');
         showSnackBar(context, 'loaded stocks successfully');

@@ -1,10 +1,4 @@
-import 'package:dalal_street_client/blocs/admin/load_stocks/load_stocks_cubit.dart';
-import 'package:dalal_street_client/blocs/admin/send_dividends/send_dividends_cubit.dart';
-import 'package:dalal_street_client/blocs/admin/send_news/send_news_cubit.dart';
-import 'package:dalal_street_client/blocs/admin/send_notifications/send_notifications_cubit.dart';
-import 'package:dalal_street_client/blocs/admin/set_bankruptcy/set_bankruptcy_cubit.dart';
-import 'package:dalal_street_client/blocs/admin/set_gives_dividends/set_gives_dividends_cubit.dart';
-import 'package:dalal_street_client/blocs/admin/set_market_day/set_market_day_cubit.dart';
+import 'package:dalal_street_client/blocs/admin/tab1/tab1_cubit.dart';
 import 'package:dalal_street_client/theme/colors.dart';
 import 'package:flutter/material.dart';
 // ignore: implementation_imports
@@ -70,9 +64,7 @@ Widget sendNewsUI(BuildContext context, String news, bool error) {
             ),
             ElevatedButton(
               onPressed: () {
-                error == true
-                    ? null
-                    : context.read<SendNewsCubit>().sendNews(news);
+                error == true ? null : context.read<Tab1Cubit>().sendNews(news);
               },
               child: const Text('Send News'),
             )
@@ -204,7 +196,7 @@ Widget sendNotifsUI(BuildContext context, String notifs, int userId,
                 error == true
                     ? null
                     : context
-                        .read<SendNotificationsCubit>()
+                        .read<Tab1Cubit>()
                         .sendNotifications(userId, notifs, isGlobal);
               },
               child: const Text('Send Notifications'),
@@ -273,7 +265,7 @@ Widget setMarketDayUI(BuildContext context, int marketDay, bool error) {
               onPressed: () {
                 error == true
                     ? null
-                    : context.read<SetMarketDayCubit>().setMarketDay(marketDay);
+                    : context.read<Tab1Cubit>().setMarketDay(marketDay);
               },
               child: const Text('Set Market Day'),
             )
@@ -377,7 +369,7 @@ Widget sendDividendsUI(
                 error == true
                     ? null
                     : context
-                        .read<SendDividendsCubit>()
+                        .read<Tab1Cubit>()
                         .sendDividends(stockId, dividendAmount);
               },
               child: const Text('Send Dividends'),
@@ -476,7 +468,7 @@ Widget setGivesDividendsUI(
                 error == true
                     ? null
                     : context
-                        .read<SetGivesDividendsCubit>()
+                        .read<Tab1Cubit>()
                         .setGivesDividends(stockId, givesDividends);
               },
               child: const Text('Set Gives Dividends'),
@@ -575,7 +567,7 @@ Widget setBankruptcyUI(
                 error == true
                     ? null
                     : context
-                        .read<SetBankruptcyCubit>()
+                        .read<Tab1Cubit>()
                         .setBankruptcy(stockId, isBankrupt);
               },
               child: const Text('Set Bankruptcy'),
@@ -608,9 +600,7 @@ Widget loadStocksUI(BuildContext context, bool error) {
             ),
             ElevatedButton(
               onPressed: () {
-                error == true
-                    ? null
-                    : context.read<LoadStocksCubit>().loadStocks();
+                error == true ? null : context.read<Tab1Cubit>().loadStocks();
               },
               child: const Text('Load Stocks'),
             )
