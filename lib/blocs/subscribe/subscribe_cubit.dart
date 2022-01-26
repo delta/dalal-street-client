@@ -14,7 +14,7 @@ class SubscribeCubit extends Cubit<SubscribeState> {
 // datastreamId takes in stockId, and it must be passed
 // for [StockHistoryUpdates] and [MarketDepthUpdates] stream
   Future<void> subscribe(DataStreamType dataStreamType,
-      {String dataStreamId = '0'}) async {
+      {String? dataStreamId}) async {
     try {
       final subscribeResponse = await streamClient.subscribe(
           SubscribeRequest(
