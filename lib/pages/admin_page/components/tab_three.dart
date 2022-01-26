@@ -1,10 +1,4 @@
-import 'package:dalal_street_client/blocs/admin/add_daily_challenge/add_daily_challenge_cubit.dart';
-import 'package:dalal_street_client/blocs/admin/add_market_event/add_market_event_cubit.dart';
-import 'package:dalal_street_client/blocs/admin/add_stocks_to_exchange/add_stocks_to_exchange_cubit.dart';
-import 'package:dalal_street_client/blocs/admin/close_daily_challenge/close_daily_challenge_cubit.dart';
-import 'package:dalal_street_client/blocs/admin/open_daily_challenge/open_daily_challenge_cubit.dart';
-import 'package:dalal_street_client/blocs/admin/update_end_of_day_values/update_end_of_day_values_cubit.dart';
-import 'package:dalal_street_client/blocs/admin/update_stock_price/update_stock_price_cubit.dart';
+import 'package:dalal_street_client/blocs/admin/tab3/tab3_cubit.dart';
 import 'package:dalal_street_client/proto_build/actions/AddDailyChallenge.pbenum.dart';
 import 'package:dalal_street_client/theme/colors.dart';
 import 'package:flutter/material.dart';
@@ -42,9 +36,7 @@ Widget updateEndOfDayValuesUI(BuildContext context, bool error) {
               onPressed: () {
                 error == true
                     ? null
-                    : context
-                        .read<UpdateEndOfDayValuesCubit>()
-                        .updateEndOfDaysValues();
+                    : context.read<Tab3Cubit>().updateEndOfDaysValues();
               },
               child: const Text('Update End Of Day Values'),
             )
@@ -148,7 +140,7 @@ Widget updateStockPriceUI(
                 error == true
                     ? null
                     : context
-                        .read<UpdateStockPriceCubit>()
+                        .read<Tab3Cubit>()
                         .updateStockPrice(stockId, newPrice);
               },
               child: const Text('Update Stock Price'),
@@ -253,7 +245,7 @@ Widget addStocksToExchangeUI(
                 error == true
                     ? null
                     : context
-                        .read<AddStocksToExchangeCubit>()
+                        .read<Tab3Cubit>()
                         .addStocksToExchange(stockId, newStocks);
               },
               child: const Text('Add Stocks To Exchange'),
@@ -393,7 +385,7 @@ Widget addMarketEventUI(BuildContext context, String headline, String text,
               onPressed: () {
                 error == true
                     ? null
-                    : context.read<AddMarketEventCubit>().addMarketEvent(
+                    : context.read<Tab3Cubit>().addMarketEvent(
                         stockId, headline, text, imageUri, isGlobal);
               },
               child: const Text('Add Market Event'),
@@ -597,7 +589,7 @@ Widget addDailyChallengeUI(BuildContext context, int marketDay, int stockId,
               onPressed: () {
                 error == true
                     ? null
-                    : context.read<AddDailyChallengeCubit>().addDailyChallenge(
+                    : context.read<Tab3Cubit>().addDailyChallenge(
                         marketDay,
                         {
                           ChallengeType.Cash,
@@ -641,9 +633,7 @@ Widget openDailyChallengeUI(BuildContext context, bool error) {
               onPressed: () {
                 error == true
                     ? null
-                    : context
-                        .read<OpenDailyChallengeCubit>()
-                        .openDailyChallenge();
+                    : context.read<Tab3Cubit>().openDailyChallenge();
               },
               child: const Text('Open Daily Challenge'),
             )
@@ -677,9 +667,7 @@ Widget closeDailyChallengeUI(BuildContext context, bool error) {
               onPressed: () {
                 error == true
                     ? null
-                    : context
-                        .read<CloseDailyChallengeCubit>()
-                        .closeDailyChallenges();
+                    : context.read<Tab3Cubit>().closeDailyChallenges();
               },
               child: const Text('Close Daily Challenge'),
             )

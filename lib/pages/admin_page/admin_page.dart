@@ -1,25 +1,6 @@
-import 'package:dalal_street_client/blocs/admin/add_daily_challenge/add_daily_challenge_cubit.dart';
-import 'package:dalal_street_client/blocs/admin/add_market_event/add_market_event_cubit.dart';
-import 'package:dalal_street_client/blocs/admin/add_stocks_to_exchange/add_stocks_to_exchange_cubit.dart';
-//import 'package:dalal_street_client/blocs/admin/block_user/block_user_cubit.dart';
-import 'package:dalal_street_client/blocs/admin/close_daily_challenge/close_daily_challenge_cubit.dart';
-//import 'package:dalal_street_client/blocs/admin/close_market/close_market_cubit.dart';
-//import 'package:dalal_street_client/blocs/admin/inspect_user/inspect_user_cubit.dart';
-//import 'package:dalal_street_client/blocs/admin/load_stocks/load_stocks_cubit.dart';
-import 'package:dalal_street_client/blocs/admin/open_daily_challenge/open_daily_challenge_cubit.dart';
-//import 'package:dalal_street_client/blocs/admin/open_market/open_market_cubit.dart';
-//import 'package:dalal_street_client/blocs/admin/send_dividends/send_dividends_cubit.dart';
-//import 'package:dalal_street_client/blocs/admin/send_news/send_news_cubit.dart';
 import 'package:dalal_street_client/blocs/admin/tab1/tab1_cubit.dart';
 import 'package:dalal_street_client/blocs/admin/tab2/tab2_cubit.dart';
-//import 'package:dalal_street_client/blocs/admin/send_notifications/send_notifications_cubit.dart';
-//import 'package:dalal_street_client/blocs/admin/set_bankruptcy/set_bankruptcy_cubit.dart';
-//import 'package:dalal_street_client/blocs/admin/set_gives_dividends/set_gives_dividends_cubit.dart';
-//import 'package:dalal_street_client/blocs/admin/set_market_day/set_market_day_cubit.dart';
-//import 'package:dalal_street_client/blocs/admin/unblock_all_users/unblock_all_users_cubit.dart';
-//import 'package:dalal_street_client/blocs/admin/unblock_user/unblock_user_cubit.dart';
-import 'package:dalal_street_client/blocs/admin/update_end_of_day_values/update_end_of_day_values_cubit.dart';
-import 'package:dalal_street_client/blocs/admin/update_stock_price/update_stock_price_cubit.dart';
+import 'package:dalal_street_client/blocs/admin/tab3/tab3_cubit.dart';
 import 'package:dalal_street_client/config/log.dart';
 import 'package:dalal_street_client/pages/admin_page/components/tab_one.dart';
 import 'package:dalal_street_client/pages/admin_page/components/tab_three.dart';
@@ -255,8 +236,7 @@ class _AdminPageState extends State<AdminPage> {
     });
   }
 
-  BlocConsumer<AddDailyChallengeCubit, AddDailyChallengeState>
-      _onAddDailyChallenge() {
+  BlocConsumer<Tab3Cubit, Tab3State> _onAddDailyChallenge() {
     int marketDay = 0;
     int stockId = 0;
     int reward = 0;
@@ -268,8 +248,7 @@ class _AdminPageState extends State<AdminPage> {
       ChallengeType.StockWorth;
     }
     bool error = false;
-    return BlocConsumer<AddDailyChallengeCubit, AddDailyChallengeState>(
-        listener: (context, state) {
+    return BlocConsumer<Tab3Cubit, Tab3State>(listener: (context, state) {
       if (state is AddDailyChallengeSuccess) {
         logger.i('Added Daily Challenge successfully');
         showSnackBar(context, 'Added Daily Challenge successfully');
@@ -334,13 +313,11 @@ class _AdminPageState extends State<AdminPage> {
     });
   }
 
-  BlocConsumer<UpdateStockPriceCubit, UpdateStockPriceState>
-      _onUpdateStockPrice() {
+  BlocConsumer<Tab3Cubit, Tab3State> _onUpdateStockPrice() {
     int stockId = 0;
     Int64 newPrice = Int64(0);
     bool error = false;
-    return BlocConsumer<UpdateStockPriceCubit, UpdateStockPriceState>(
-        listener: (context, state) {
+    return BlocConsumer<Tab3Cubit, Tab3State>(listener: (context, state) {
       if (state is UpdateStockPriceSuccess) {
         logger.i('successful');
         showSnackBar(context, 'updated prices successfully');
@@ -359,13 +336,11 @@ class _AdminPageState extends State<AdminPage> {
     });
   }
 
-  BlocConsumer<AddStocksToExchangeCubit, AddStocksToExchangeState>
-      _onAddStocksToExchange() {
+  BlocConsumer<Tab3Cubit, Tab3State> _onAddStocksToExchange() {
     int stockId = 0;
     Int64 newStocks = Int64(0);
     bool error = false;
-    return BlocConsumer<AddStocksToExchangeCubit, AddStocksToExchangeState>(
-        listener: (context, state) {
+    return BlocConsumer<Tab3Cubit, Tab3State>(listener: (context, state) {
       if (state is AddStocksToExchangeSuccess) {
         logger.i('successful');
         showSnackBar(context, 'added stocks to exchange successfully');
@@ -384,15 +359,14 @@ class _AdminPageState extends State<AdminPage> {
     });
   }
 
-  BlocConsumer<AddMarketEventCubit, AddMarketEventState> _onAddMarketEvent() {
+  BlocConsumer<Tab3Cubit, Tab3State> _onAddMarketEvent() {
+    int stockId = 0;
     String headline = ' ';
     String text = '';
     String imageUri = '';
-    int stockId = 0;
     bool isGlobal = true;
     bool error = false;
-    return BlocConsumer<AddMarketEventCubit, AddMarketEventState>(
-        listener: (context, state) {
+    return BlocConsumer<Tab3Cubit, Tab3State>(listener: (context, state) {
       if (state is AddMarketEventSuccess) {
         logger.i('successful');
         showSnackBar(context, 'successfully added market event');
@@ -550,11 +524,9 @@ class _AdminPageState extends State<AdminPage> {
     });
   }
 
-  BlocConsumer<UpdateEndOfDayValuesCubit, UpdateEndOfDayValuesState>
-      _onUpdateEndOfDayValues() {
+  BlocConsumer<Tab3Cubit, Tab3State> _onUpdateEndOfDayValues() {
     bool error = false;
-    return BlocConsumer<UpdateEndOfDayValuesCubit, UpdateEndOfDayValuesState>(
-        listener: (context, state) {
+    return BlocConsumer<Tab3Cubit, Tab3State>(listener: (context, state) {
       if (state is UpdateEndOfDayValuesSuccess) {
         logger.i('successful');
         showSnackBar(context, 'updated end of day values successfully');
@@ -615,11 +587,9 @@ class _AdminPageState extends State<AdminPage> {
     });
   }
 
-  BlocConsumer<OpenDailyChallengeCubit, OpenDailyChallengeState>
-      _onOpenDailyChallenge() {
+  BlocConsumer<Tab3Cubit, Tab3State> _onOpenDailyChallenge() {
     bool error = false;
-    return BlocConsumer<OpenDailyChallengeCubit, OpenDailyChallengeState>(
-        listener: (context, state) {
+    return BlocConsumer<Tab3Cubit, Tab3State>(listener: (context, state) {
       if (state is OpenDailyChallengeSuccess) {
         logger.i('successful');
         showSnackBar(context, 'Opened Daily Challenge successfully');
@@ -638,11 +608,9 @@ class _AdminPageState extends State<AdminPage> {
     });
   }
 
-  BlocConsumer<CloseDailyChallengeCubit, CloseDailyChallengeState>
-      _onCloseDailyChallenge() {
+  BlocConsumer<Tab3Cubit, Tab3State> _onCloseDailyChallenge() {
     bool error = false;
-    return BlocConsumer<CloseDailyChallengeCubit, CloseDailyChallengeState>(
-        listener: (context, state) {
+    return BlocConsumer<Tab3Cubit, Tab3State>(listener: (context, state) {
       if (state is CloseDailyChallengeSuccess) {
         logger.i('successful');
         showSnackBar(context, 'Closed Daily Challenge successfully');
