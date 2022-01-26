@@ -1,22 +1,23 @@
 import 'package:dalal_street_client/blocs/admin/add_daily_challenge/add_daily_challenge_cubit.dart';
 import 'package:dalal_street_client/blocs/admin/add_market_event/add_market_event_cubit.dart';
 import 'package:dalal_street_client/blocs/admin/add_stocks_to_exchange/add_stocks_to_exchange_cubit.dart';
-import 'package:dalal_street_client/blocs/admin/block_user/block_user_cubit.dart';
+//import 'package:dalal_street_client/blocs/admin/block_user/block_user_cubit.dart';
 import 'package:dalal_street_client/blocs/admin/close_daily_challenge/close_daily_challenge_cubit.dart';
-import 'package:dalal_street_client/blocs/admin/close_market/close_market_cubit.dart';
-import 'package:dalal_street_client/blocs/admin/inspect_user/inspect_user_cubit.dart';
+//import 'package:dalal_street_client/blocs/admin/close_market/close_market_cubit.dart';
+//import 'package:dalal_street_client/blocs/admin/inspect_user/inspect_user_cubit.dart';
 //import 'package:dalal_street_client/blocs/admin/load_stocks/load_stocks_cubit.dart';
 import 'package:dalal_street_client/blocs/admin/open_daily_challenge/open_daily_challenge_cubit.dart';
-import 'package:dalal_street_client/blocs/admin/open_market/open_market_cubit.dart';
+//import 'package:dalal_street_client/blocs/admin/open_market/open_market_cubit.dart';
 //import 'package:dalal_street_client/blocs/admin/send_dividends/send_dividends_cubit.dart';
 //import 'package:dalal_street_client/blocs/admin/send_news/send_news_cubit.dart';
 import 'package:dalal_street_client/blocs/admin/tab1/tab1_cubit.dart';
+import 'package:dalal_street_client/blocs/admin/tab2/tab2_cubit.dart';
 //import 'package:dalal_street_client/blocs/admin/send_notifications/send_notifications_cubit.dart';
 //import 'package:dalal_street_client/blocs/admin/set_bankruptcy/set_bankruptcy_cubit.dart';
 //import 'package:dalal_street_client/blocs/admin/set_gives_dividends/set_gives_dividends_cubit.dart';
 //import 'package:dalal_street_client/blocs/admin/set_market_day/set_market_day_cubit.dart';
-import 'package:dalal_street_client/blocs/admin/unblock_all_users/unblock_all_users_cubit.dart';
-import 'package:dalal_street_client/blocs/admin/unblock_user/unblock_user_cubit.dart';
+//import 'package:dalal_street_client/blocs/admin/unblock_all_users/unblock_all_users_cubit.dart';
+//import 'package:dalal_street_client/blocs/admin/unblock_user/unblock_user_cubit.dart';
 import 'package:dalal_street_client/blocs/admin/update_end_of_day_values/update_end_of_day_values_cubit.dart';
 import 'package:dalal_street_client/blocs/admin/update_stock_price/update_stock_price_cubit.dart';
 import 'package:dalal_street_client/config/log.dart';
@@ -209,12 +210,11 @@ class _AdminPageState extends State<AdminPage> {
     });
   }
 
-  BlocConsumer<BlockUserCubit, BlockUserState> _onBlockUser() {
+  BlocConsumer<Tab2Cubit, Tab2State> _onBlockUser() {
     int userId = 0;
     Int64 penalty = Int64(0);
     bool error = false;
-    return BlocConsumer<BlockUserCubit, BlockUserState>(
-        listener: (context, state) {
+    return BlocConsumer<Tab2Cubit, Tab2State>(listener: (context, state) {
       if (state is BlockUserSuccess) {
         logger.i('blocked user successfully');
         showSnackBar(context, 'blocked user with userId: $userId successfully');
@@ -233,11 +233,10 @@ class _AdminPageState extends State<AdminPage> {
     });
   }
 
-  BlocConsumer<OpenMarketCubit, OpenMarketState> _onOpenMarket() {
+  BlocConsumer<Tab2Cubit, Tab2State> _onOpenMarket() {
     bool updateDayHighAndLow = true;
     bool error = false;
-    return BlocConsumer<OpenMarketCubit, OpenMarketState>(
-        listener: (context, state) {
+    return BlocConsumer<Tab2Cubit, Tab2State>(listener: (context, state) {
       if (state is OpenMarketSuccess) {
         logger.i('Opened Market successfully');
         showSnackBar(context, 'opened market');
@@ -436,13 +435,12 @@ class _AdminPageState extends State<AdminPage> {
     });
   }
 
-  BlocConsumer<InspectUserCubit, InspectUserState> _onInspectUser() {
+  BlocConsumer<Tab2Cubit, Tab2State> _onInspectUser() {
     int userId = 0;
     int day = 0;
     bool transactionType = true;
     bool error = false;
-    return BlocConsumer<InspectUserCubit, InspectUserState>(
-        listener: (context, state) {
+    return BlocConsumer<Tab2Cubit, Tab2State>(listener: (context, state) {
       if (state is InspectUserSuccess) {
         logger.i('Inspected User successfully');
         showSnackBar(context, 'Inspected User successfully');
@@ -461,11 +459,10 @@ class _AdminPageState extends State<AdminPage> {
     });
   }
 
-  BlocConsumer<UnblockUserCubit, UnblockUserState> _onUnblockUser() {
+  BlocConsumer<Tab2Cubit, Tab2State> _onUnblockUser() {
     int userId = 0;
     bool error = false;
-    return BlocConsumer<UnblockUserCubit, UnblockUserState>(
-        listener: (context, state) {
+    return BlocConsumer<Tab2Cubit, Tab2State>(listener: (context, state) {
       if (state is UnblockUserSuccess) {
         logger.i('Unblocked User successfully');
         showSnackBar(context, 'Unblocked User successfully');
@@ -531,11 +528,10 @@ class _AdminPageState extends State<AdminPage> {
     });
   }
 
-  BlocConsumer<CloseMarketCubit, CloseMarketState> _onCloseMarket() {
+  BlocConsumer<Tab2Cubit, Tab2State> _onCloseMarket() {
     bool updatePrevDayHighAndLow = true;
     bool error = false;
-    return BlocConsumer<CloseMarketCubit, CloseMarketState>(
-        listener: (context, state) {
+    return BlocConsumer<Tab2Cubit, Tab2State>(listener: (context, state) {
       if (state is CloseMarketSuccess) {
         logger.i('Opened Market successfully');
         showSnackBar(context, 'Closed Market  successfully');
@@ -577,11 +573,9 @@ class _AdminPageState extends State<AdminPage> {
     });
   }
 
-  BlocConsumer<UnblockAllUsersCubit, UnblockAllUsersState>
-      _onUnblockAllUsers() {
+  BlocConsumer<Tab2Cubit, Tab2State> _onUnblockAllUsers() {
     bool error = false;
-    return BlocConsumer<UnblockAllUsersCubit, UnblockAllUsersState>(
-        listener: (context, state) {
+    return BlocConsumer<Tab2Cubit, Tab2State>(listener: (context, state) {
       if (state is UnblockAllUsersSuccess) {
         logger.i('successful');
         showSnackBar(context, 'Unblocked All Users successfully');

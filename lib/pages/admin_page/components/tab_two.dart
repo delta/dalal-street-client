@@ -1,7 +1,5 @@
-import 'package:dalal_street_client/blocs/admin/block_user/block_user_cubit.dart';
-import 'package:dalal_street_client/blocs/admin/close_market/close_market_cubit.dart';
 import 'package:dalal_street_client/blocs/admin/inspect_user/inspect_user_cubit.dart';
-import 'package:dalal_street_client/blocs/admin/open_market/open_market_cubit.dart';
+import 'package:dalal_street_client/blocs/admin/tab2/tab2_cubit.dart';
 import 'package:dalal_street_client/blocs/admin/unblock_all_users/unblock_all_users_cubit.dart';
 import 'package:dalal_street_client/blocs/admin/unblock_user/unblock_user_cubit.dart';
 import 'package:dalal_street_client/theme/colors.dart';
@@ -80,9 +78,7 @@ Widget openMarketUI(
               onPressed: () {
                 error == true
                     ? null
-                    : context
-                        .read<OpenMarketCubit>()
-                        .openMarket(updateDayHighAndLow);
+                    : context.read<Tab2Cubit>().openMarket(updateDayHighAndLow);
               },
               child: const Text('Open Market'),
             )
@@ -157,7 +153,7 @@ Widget closeMarketUI(
                 error == true
                     ? null
                     : context
-                        .read<CloseMarketCubit>()
+                        .read<Tab2Cubit>()
                         .closeMarket(updatePrevDayHighAndLow);
               },
               child: const Text('Close Market'),
@@ -261,7 +257,7 @@ Widget blockUserUI(
               onPressed: () {
                 error == true
                     ? null
-                    : context.read<BlockUserCubit>().blockUser(userId, penalty);
+                    : context.read<Tab2Cubit>().blockUser(userId, penalty);
               },
               child: const Text('Block User'),
             )
@@ -382,7 +378,7 @@ Widget inspectUserUI(BuildContext context, int userId, int day,
                 error == true
                     ? null
                     : context
-                        .read<InspectUserCubit>()
+                        .read<Tab2Cubit>()
                         .inspectUser(userId, transactionType, day);
               },
               child: const Text('Inspect User'),
@@ -420,7 +416,7 @@ Widget unblockAllUsersUI(BuildContext context, bool error) {
               onPressed: () {
                 error == true
                     ? null
-                    : context.read<UnblockAllUsersCubit>().unblockAllUsers();
+                    : context.read<Tab2Cubit>().unblockAllUsers();
               },
               child: const Text('Unblock All Users'),
             )
@@ -477,7 +473,7 @@ Widget unblockUserUI(BuildContext context, int userId, bool error) {
               onPressed: () {
                 error == true
                     ? null
-                    : context.read<UnblockUserCubit>().unblockUser(userId);
+                    : context.read<Tab2Cubit>().unblockUser(userId);
               },
               child: const Text('Set Gives Dividends'),
             )
