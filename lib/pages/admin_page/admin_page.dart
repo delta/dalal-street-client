@@ -169,7 +169,7 @@ class _AdminPageState extends State<AdminPage> {
     );
   }
 
-  BlocConsumer<Tab1Cubit, Tab1State> _onSendNews() {
+  Widget _onSendNews() {
     String news = ' ';
     bool error = false;
     return BlocConsumer<Tab1Cubit, Tab1State>(listener: (context, state) {
@@ -191,7 +191,7 @@ class _AdminPageState extends State<AdminPage> {
     });
   }
 
-  BlocConsumer<Tab2Cubit, Tab2State> _onBlockUser() {
+  Widget _onBlockUser() {
     int userId = 0;
     Int64 penalty = Int64(0);
     bool error = false;
@@ -214,7 +214,7 @@ class _AdminPageState extends State<AdminPage> {
     });
   }
 
-  BlocConsumer<Tab2Cubit, Tab2State> _onOpenMarket() {
+  Widget _onOpenMarket() {
     bool updateDayHighAndLow = true;
     bool error = false;
     return BlocConsumer<Tab2Cubit, Tab2State>(listener: (context, state) {
@@ -236,7 +236,7 @@ class _AdminPageState extends State<AdminPage> {
     });
   }
 
-  BlocConsumer<Tab3Cubit, Tab3State> _onAddDailyChallenge() {
+  Widget _onAddDailyChallenge() {
     int marketDay = 0;
     int stockId = 0;
     int reward = 0;
@@ -268,7 +268,7 @@ class _AdminPageState extends State<AdminPage> {
     });
   }
 
-  BlocConsumer<Tab1Cubit, Tab1State> _onSendDividends() {
+  Widget _onSendDividends() {
     int stockId = 0;
     Int64 dividendAmt = Int64(0);
     bool error = false;
@@ -291,7 +291,7 @@ class _AdminPageState extends State<AdminPage> {
     });
   }
 
-  BlocConsumer<Tab1Cubit, Tab1State> _onSetMarketDay() {
+  Widget _onSetMarketDay() {
     int marketDay = 0;
     bool error = false;
     return BlocConsumer<Tab1Cubit, Tab1State>(listener: (context, state) {
@@ -313,7 +313,7 @@ class _AdminPageState extends State<AdminPage> {
     });
   }
 
-  BlocConsumer<Tab3Cubit, Tab3State> _onUpdateStockPrice() {
+  Widget _onUpdateStockPrice() {
     int stockId = 0;
     Int64 newPrice = Int64(0);
     bool error = false;
@@ -336,7 +336,7 @@ class _AdminPageState extends State<AdminPage> {
     });
   }
 
-  BlocConsumer<Tab3Cubit, Tab3State> _onAddStocksToExchange() {
+  Widget _onAddStocksToExchange() {
     int stockId = 0;
     Int64 newStocks = Int64(0);
     bool error = false;
@@ -359,7 +359,7 @@ class _AdminPageState extends State<AdminPage> {
     });
   }
 
-  BlocConsumer<Tab3Cubit, Tab3State> _onAddMarketEvent() {
+  Widget _onAddMarketEvent() {
     int stockId = 0;
     String headline = ' ';
     String text = '';
@@ -386,7 +386,7 @@ class _AdminPageState extends State<AdminPage> {
     });
   }
 
-  BlocConsumer<Tab1Cubit, Tab1State> _onSetBankruptcy() {
+  Widget _onSetBankruptcy() {
     int stockId = 0;
     bool isBankrupt = true;
     bool error = false;
@@ -409,7 +409,7 @@ class _AdminPageState extends State<AdminPage> {
     });
   }
 
-  BlocConsumer<Tab2Cubit, Tab2State> _onInspectUser() {
+  Widget _onInspectUser() {
     int userId = 0;
     int day = 0;
     bool transactionType = true;
@@ -433,7 +433,7 @@ class _AdminPageState extends State<AdminPage> {
     });
   }
 
-  BlocConsumer<Tab2Cubit, Tab2State> _onUnblockUser() {
+  Widget _onUnblockUser() {
     int userId = 0;
     bool error = false;
     return BlocConsumer<Tab2Cubit, Tab2State>(listener: (context, state) {
@@ -455,7 +455,7 @@ class _AdminPageState extends State<AdminPage> {
     });
   }
 
-  BlocConsumer<Tab1Cubit, Tab1State> _onSetGivesDividends() {
+  Widget _onSetGivesDividends() {
     int stockId = 0;
     bool givesDividends = true;
     bool error = false;
@@ -478,7 +478,7 @@ class _AdminPageState extends State<AdminPage> {
     });
   }
 
-  BlocConsumer<Tab1Cubit, Tab1State> _onSendNotifs() {
+  Widget _onSendNotifs() {
     String notifs = ' ';
     int userId = 0;
     bool isGlobal = true;
@@ -502,7 +502,7 @@ class _AdminPageState extends State<AdminPage> {
     });
   }
 
-  BlocConsumer<Tab2Cubit, Tab2State> _onCloseMarket() {
+  Widget _onCloseMarket() {
     bool updatePrevDayHighAndLow = true;
     bool error = false;
     return BlocConsumer<Tab2Cubit, Tab2State>(listener: (context, state) {
@@ -524,7 +524,7 @@ class _AdminPageState extends State<AdminPage> {
     });
   }
 
-  BlocConsumer<Tab3Cubit, Tab3State> _onUpdateEndOfDayValues() {
+  Widget _onUpdateEndOfDayValues() {
     bool error = false;
     return BlocConsumer<Tab3Cubit, Tab3State>(listener: (context, state) {
       if (state is UpdateEndOfDayValuesSuccess) {
@@ -545,7 +545,7 @@ class _AdminPageState extends State<AdminPage> {
     });
   }
 
-  BlocConsumer<Tab2Cubit, Tab2State> _onUnblockAllUsers() {
+  Widget _onUnblockAllUsers() {
     bool error = false;
     return BlocConsumer<Tab2Cubit, Tab2State>(listener: (context, state) {
       if (state is UnblockAllUsersSuccess) {
@@ -566,7 +566,7 @@ class _AdminPageState extends State<AdminPage> {
     });
   }
 
-  BlocConsumer<Tab1Cubit, Tab1State> _onLoadStocks() {
+  Widget _onLoadStocks() {
     bool error = false;
     return BlocConsumer<Tab1Cubit, Tab1State>(listener: (context, state) {
       if (state is LoadStocksSuccess) {
@@ -587,7 +587,7 @@ class _AdminPageState extends State<AdminPage> {
     });
   }
 
-  BlocConsumer<Tab3Cubit, Tab3State> _onOpenDailyChallenge() {
+  Widget _onOpenDailyChallenge() {
     bool error = false;
     return BlocConsumer<Tab3Cubit, Tab3State>(listener: (context, state) {
       if (state is OpenDailyChallengeSuccess) {
@@ -608,7 +608,7 @@ class _AdminPageState extends State<AdminPage> {
     });
   }
 
-  BlocConsumer<Tab3Cubit, Tab3State> _onCloseDailyChallenge() {
+  Widget _onCloseDailyChallenge() {
     bool error = false;
     return BlocConsumer<Tab3Cubit, Tab3State>(listener: (context, state) {
       if (state is CloseDailyChallengeSuccess) {
