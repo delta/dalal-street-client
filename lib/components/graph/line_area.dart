@@ -1,5 +1,5 @@
 import 'package:dalal_street_client/blocs/stock_history/history/stock_history_cubit.dart';
-import 'package:dalal_street_client/components/graph/time_series_data.dart';
+import 'package:dalal_street_client/models/time_series_data.dart';
 import 'package:dalal_street_client/config/log.dart';
 import 'package:dalal_street_client/proto_build/actions/GetStockHistory.pbenum.dart';
 import 'package:dalal_street_client/proto_build/models/StockHistory.pb.dart';

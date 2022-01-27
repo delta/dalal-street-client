@@ -8,3 +8,15 @@ abstract class StockHistoryStreamState extends Equatable {
 }
 
 class StockHistoryStreamInitial extends StockHistoryStreamState {}
+
+class StockHistoryStreamUpdate extends StockHistoryStreamState {
+  final StockHistory stockHistory;
+
+  const StockHistoryStreamUpdate(this.stockHistory);
+}
+
+class StockHistoryStreamError extends StockHistoryStreamState {
+  final String message;
+
+  const StockHistoryStreamError(this.message);
+}
