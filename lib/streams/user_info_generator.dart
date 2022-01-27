@@ -108,35 +108,38 @@ class UserInfoGenerator {
   /// Updates [dynamicUserInfo] for every new relevant [GameStateUpdate]
   void _listenToGameState() => gameStateStream.listen((newUpdate) {
         final gameState = newUpdate.gameState;
-        final type = gameState.type;
-        // TODO: use switch case for enum
-        if (type == GameStateUpdateType.UserBlockStateUpdate) {
-          // TODO: show snackbar message whenever isBlocked changes
-          final blockState = gameState.userBlockState;
-          final newCash = blockState.cash.toInt();
-          // ignore: unused_local_variable
-          final penalty = newCash - dynamicUserInfo.cash;
-          updateUserInfo(dynamicUserInfo.clone(
-            newCash: newCash,
-            newTotalWorth: dynamicUserInfo.newTotalWorth(
-              stockMapStream.value.toPricesMap(),
+        // TODO: Show notification when user gets referral reward
+        switch (gameState.type) {
+          case GameStateUpdateType.UserBlockStateUpdate:
+            // TODO: show snackbar message whenever isBlocked changes
+            final blockState = gameState.userBlockState;
+            final newCash = blockState.cash.toInt();
+            // ignore: unused_local_variable
+            final penalty = newCash - dynamicUserInfo.cash;
+            updateUserInfo(dynamicUserInfo.clone(
               newCash: newCash,
-            ),
-            newIsBlocked: blockState.isBlocked,
-          ));
-        } else if (type == GameStateUpdateType.UserReferredCreditUpdate ||
-            type == GameStateUpdateType.UserRewardCreditUpdate) {
-          final newCash = (gameState.hasUserReferredCredit()
-                  ? gameState.userReferredCredit.cash
-                  : gameState.userRewardCredit.cash)
-              .toInt();
-          updateUserInfo(dynamicUserInfo.clone(
-            newCash: newCash,
-            newTotalWorth: dynamicUserInfo.newTotalWorth(
-              stockMapStream.value.toPricesMap(),
+              newTotalWorth: dynamicUserInfo.newTotalWorth(
+                stockMapStream.value.toPricesMap(),
+                newCash: newCash,
+              ),
+              newIsBlocked: blockState.isBlocked,
+            ));
+            break;
+          case GameStateUpdateType.UserReferredCreditUpdate:
+          case GameStateUpdateType.UserRewardCreditUpdate:
+            final newCash = (gameState.hasUserReferredCredit()
+                    ? gameState.userReferredCredit.cash
+                    : gameState.userRewardCredit.cash)
+                .toInt();
+            updateUserInfo(dynamicUserInfo.clone(
               newCash: newCash,
-            ),
-          ));
+              newTotalWorth: dynamicUserInfo.newTotalWorth(
+                stockMapStream.value.toPricesMap(),
+                newCash: newCash,
+              ),
+            ));
+            break;
+          default:
         }
       });
 }
