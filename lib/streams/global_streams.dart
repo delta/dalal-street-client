@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dalal_street_client/grpc/client.dart';
 import 'package:dalal_street_client/models/dynamic_user_info.dart';
 import 'package:dalal_street_client/proto_build/actions/GetPortfolio.pb.dart';
@@ -18,7 +20,7 @@ import 'package:rxdart/streams.dart';
 import '../config/log.dart';
 import '../grpc/subscription.dart';
 
-part 'generate_stock_stream.dart';
+part 'stock_stream_generator.dart';
 
 /// Streams used in many places in the app
 ///
@@ -31,7 +33,6 @@ class GlobalStreams extends Equatable {
   final Stream<TransactionUpdate> transactionStream;
   final Stream<NotificationUpdate> notificationStream;
 
-  // TODO: handle GameState stream to update custom streams
   // Custom streams generated from server streams
   final ValueStream<Map<int, Stock>> stockMapStream;
   final ValueStream<DynamicUserInfo> dynamicUserInfoStream;
@@ -152,11 +153,12 @@ Future<GlobalStreams> subscribeToGlobalStreams(
   // Generate custom streams
   logger.i('Generating custom streams from server streams');
   // Stock map stream
-  final stockMapStream = _generateStockMapStream(
+  final stockMapStream = StockStreamGenerator(
     initialStocks,
     stockPricesStream,
     stockExchangeStream,
-  );
+    gameStateStream,
+  ).stream.shareValueSeeded(initialStocks);
 
   // DynamicUserInfo stream
   final portfolioResponse = await actionClient.getPortfolio(
@@ -174,15 +176,13 @@ Future<GlobalStreams> subscribeToGlobalStreams(
     user.isBlocked,
     initialStocks,
   );
-  final userGenerator = UserInfoGenerator(
+  final dynamicUserInfoStream = UserInfoGenerator(
     initialUserInfo,
     transactionStream,
     stockMapStream,
     stockPricesStream.skip(1),
     gameStateStream,
-  );
-  final dynamicUserInfoStream =
-      userGenerator.stream.shareValueSeeded(initialUserInfo);
+  ).stream.shareValueSeeded(initialUserInfo);
 
   return GlobalStreams(
     gameStateStream,
