@@ -105,10 +105,11 @@ class UserInfoGenerator {
         updateUserInfo(dynamicUserInfo.clone(newTotalWorth: newTotalWorth));
       });
 
-  /// Updates [dynamicUserInfo] for every new [GameStateUpdate]
+  /// Updates [dynamicUserInfo] for every new relevant [GameStateUpdate]
   void _listenToGameState() => gameStateStream.listen((newUpdate) {
         final gameState = newUpdate.gameState;
         final type = gameState.type;
+        // TODO: use switch case for enum
         if (type == GameStateUpdateType.UserBlockStateUpdate) {
           // TODO: show snackbar message whenever isBlocked changes
           final blockState = gameState.userBlockState;
