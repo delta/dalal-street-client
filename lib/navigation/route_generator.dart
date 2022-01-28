@@ -1,6 +1,7 @@
 import 'package:dalal_street_client/blocs/admin/tab1/tab1_cubit.dart';
 import 'package:dalal_street_client/blocs/admin/tab2/tab2_cubit.dart';
 import 'package:dalal_street_client/blocs/admin/tab3/tab3_cubit.dart';
+import 'package:dalal_street_client/blocs/auth/change_password/change_password_cubit.dart';
 import 'package:dalal_street_client/blocs/auth/forgot_password/forgot_password_cubit.dart';
 import 'package:dalal_street_client/blocs/auth/login/login_cubit.dart';
 import 'package:dalal_street_client/blocs/notifications/notifications_cubit.dart';
@@ -16,6 +17,7 @@ import 'package:dalal_street_client/blocs/market_depth/market_depth_bloc.dart';
 import 'package:dalal_street_client/pages/dalal_home/dalal_home.dart';
 import 'package:dalal_street_client/pages/auth/check_mail_page.dart';
 import 'package:dalal_street_client/pages/auth/forgot_password_page.dart';
+import 'package:dalal_street_client/pages/auth/change_password_page.dart';
 import 'package:dalal_street_client/pages/auth/login_page.dart';
 import 'package:dalal_street_client/pages/auth/register_page.dart';
 import 'package:dalal_street_client/pages/auth/verify_phone/enter_otp_page.dart';
@@ -96,6 +98,11 @@ class RouteGenerator {
         return BlocProvider(
           create: (context) => ForgotPasswordCubit(),
           child: ForgotPasswordPage(),
+        );
+      case '/resetPassword':
+        return BlocProvider(
+          create: (context) => ChangePasswordCubit(),
+          child: ChangePasswordPage(),
         );
       case '/register':
         return BlocProvider(
