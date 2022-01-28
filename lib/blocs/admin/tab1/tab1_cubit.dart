@@ -21,7 +21,7 @@ class Tab1Cubit extends Cubit<Tab1State> {
   Future<void> sendNews(
     String news,
   ) async {
-    emit(const SendNewsLoading(Adminrpc.SendNews));
+    emit(const SendNewsLoading());
     try {
       final resp = await actionClient.sendNews(
           SendNewsRequest(
@@ -29,14 +29,14 @@ class Tab1Cubit extends Cubit<Tab1State> {
           ),
           options: sessionOptions(getIt()));
       if (resp.statusCode == SendNewsResponse_StatusCode.OK) {
-        emit(const SendNewsSuccess(Adminrpc.SendNews));
+        emit(SendNewsSuccess(resp.statusMessage));
       } else {
-        emit(const SendNewsFailure(Adminrpc.SendNews));
+        emit(SendNewsFailure(resp.statusMessage));
         emit(SendNewsInitial());
       }
     } catch (e) {
       logger.e(e);
-      emit(const SendNewsFailure(Adminrpc.SendNews));
+      emit(const SendNewsFailure(failedToReachServer));
     }
   }
 

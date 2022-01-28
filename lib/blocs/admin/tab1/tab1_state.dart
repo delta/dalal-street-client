@@ -8,6 +8,8 @@ abstract class Tab1State extends Equatable {
 
 class Tab1Initial extends Tab1State {}
 
+// TODO: Need to add tags for each RPC call
+
 abstract class SendNewsState extends Equatable {
   const SendNewsState();
 
@@ -15,33 +17,25 @@ abstract class SendNewsState extends Equatable {
   List<Object> get props => [];
 }
 
-enum Adminrpc {
-  SendNews,
-}
-
 class SendNewsInitial extends Tab1State {}
 
 class SendNewsLoading extends Tab1State {
-  final Adminrpc tag;
-
-  const SendNewsLoading(this.tag);
-
-  //const SendNewsLoading();
+  const SendNewsLoading();
 }
 
 class SendNewsFailure extends Tab1State {
-  final Adminrpc tag;
+  final String msg;
 
-  const SendNewsFailure(this.tag);
+  const SendNewsFailure(this.msg);
 
   @override
-  List<Object> get props => [tag];
+  List<Object> get props => [msg];
 }
 
 class SendNewsSuccess extends Tab1State {
-  final Adminrpc tag;
+  final String msg;
 
-  const SendNewsSuccess(this.tag);
+  const SendNewsSuccess(this.msg);
 }
 
 abstract class SendNotificationsState extends Equatable {

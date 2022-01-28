@@ -178,7 +178,7 @@ class _AdminPageState extends State<AdminPage> {
         showSnackBar(context, 'sent news successfully');
       } else if (state is SendNewsFailure) {
         logger.i('unsuccessful');
-        showSnackBar(context, state.tag.toString());
+        showSnackBar(context, state.msg);
       }
     }, builder: (context, state) {
       if (state is SendNewsLoading) {
