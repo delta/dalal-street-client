@@ -79,6 +79,23 @@ class RouteGenerator {
           child: const AdminPage(),
         );
 
+      //Admin Pages
+      case '/admin':
+        return MultiBlocProvider(
+          providers: [
+            BlocProvider(
+              create: (context) => Tab1Cubit(),
+            ),
+            BlocProvider(
+              create: (context) => Tab2Cubit(),
+            ),
+            BlocProvider(
+              create: (context) => Tab3Cubit(),
+            ),
+          ],
+          child: const AdminPage(),
+        );
+
       // Auth Pages
       case '/login':
         return BlocProvider(
