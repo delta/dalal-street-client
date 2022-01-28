@@ -15,25 +15,33 @@ abstract class SendNewsState extends Equatable {
   List<Object> get props => [];
 }
 
+enum Adminrpc {
+  SendNews,
+}
+
 class SendNewsInitial extends Tab1State {}
 
 class SendNewsLoading extends Tab1State {
-  const SendNewsLoading();
+  final Adminrpc tag;
+
+  const SendNewsLoading(this.tag);
+
+  //const SendNewsLoading();
 }
 
 class SendNewsFailure extends Tab1State {
-  final String msg;
+  final Adminrpc tag;
 
-  const SendNewsFailure(this.msg);
+  const SendNewsFailure(this.tag);
 
   @override
-  List<Object> get props => [msg];
+  List<Object> get props => [tag];
 }
 
 class SendNewsSuccess extends Tab1State {
-  final String msg;
+  final Adminrpc tag;
 
-  const SendNewsSuccess(this.msg);
+  const SendNewsSuccess(this.tag);
 }
 
 abstract class SendNotificationsState extends Equatable {
