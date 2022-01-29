@@ -1,8 +1,3 @@
-import 'package:dalal_street_client/config/log.dart';
-import 'package:dalal_street_client/constants/exception.dart';
-import 'package:dalal_street_client/grpc/client.dart';
-import 'package:dalal_street_client/proto_build/datastreams/Subscribe.pb.dart';
-
 ///  grpc server server side streaming
 ///
 ///  Flow
@@ -11,7 +6,14 @@ import 'package:dalal_street_client/proto_build/datastreams/Subscribe.pb.dart';
 ///  - unsubcribe to that stream, with [SubscriptionId]
 ///
 /// [SubscriptionId] is used for unsubcribing and calling respected stream rpc
+///
+import 'package:dalal_street_client/config/log.dart';
+import 'package:dalal_street_client/constants/exception.dart';
+import 'package:dalal_street_client/grpc/client.dart';
+import 'package:dalal_street_client/proto_build/datastreams/Subscribe.pb.dart';
 
+/// Subscribes to a stream using given [subscribeRequest]
+/// Throws exception in case of an error
 Future<SubscriptionId> subscribe(
     SubscribeRequest subscribeRequest, String sessionId) async {
   late final SubscribeResponse subscribeResponse;
@@ -35,6 +37,8 @@ Future<SubscriptionId> subscribe(
   return subscribeResponse.subscriptionId;
 }
 
+/// Unsubscribes to the stream with given [subscriptionId]
+/// Throws exception in case of an error
 Future<void> unSubscribe(
     SubscriptionId subscriptionId, String sessionId) async {
   late final UnsubscribeResponse unsubscribeResponse;

@@ -1,20 +1,20 @@
 import 'package:dalal_street_client/models/dynamic_user_info.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
 import 'package:fixnum/fixnum.dart';
-import 'package:rxdart/rxdart.dart';
 
-// returns a stream of user cash worth
-Stream<int> getCashStream(ValueStream<DynamicUserInfo> userInfoStream) =>
-    userInfoStream.map((userInfo) => userInfo.cash).distinct();
+/// Useful extensions on user info stream
+extension UserInfoStreamTransformations on Stream<DynamicUserInfo> {
+  /// Transforms userInfoStream into a distinct cash stream
+  Stream<int> cashStream() => map((userInfo) => userInfo.cash).distinct();
 
-// returns a stock price stream of a particular stock id
-Stream<Int64> getStockPriceStream(
-        int stockId, ValueStream<Map<int, Stock>> stockMapStream) =>
-    stockMapStream.map((event) => event[stockId]!.currentPrice).distinct();
+  /// Transforms userInfoStream into a distinct stocks owned stream for the given [stockId]
+  Stream<int> stocksOwnedStream(int stockId) =>
+      map((userInfo) => userInfo.stocksOwnedMap[stockId] ?? 0).distinct();
+}
 
-// returns a stream of stockOwnedMap
-Stream<int> getStocksOwnedStream(
-        int stockId, ValueStream<DynamicUserInfo> userInfoStream) =>
-    userInfoStream
-        .map((userInfo) => userInfo.stocksOwnedMap[stockId] ?? 0)
-        .distinct();
+/// Useful extensions on stock map stream
+extension StockMapStreamTransformations on Stream<Map<int, Stock>> {
+  /// Transforms stockMapStream into a distinct stock price stream for the given [stockId]
+  Stream<Int64> priceStream(int stockId) =>
+      map((stocks) => stocks[stockId]?.currentPrice ?? Int64(0)).distinct();
+}

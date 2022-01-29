@@ -1,13 +1,15 @@
 import 'dart:async';
 
 import 'package:dalal_street_client/models/dynamic_user_info.dart';
+import 'package:dalal_street_client/proto_build/datastreams/GameState.pb.dart';
 import 'package:dalal_street_client/proto_build/datastreams/StockPrices.pb.dart';
 import 'package:dalal_street_client/proto_build/datastreams/Transactions.pb.dart';
+import 'package:dalal_street_client/proto_build/models/GameState.pb.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
 import 'package:dalal_street_client/utils/convert.dart';
 import 'package:rxdart/streams.dart';
 
-/// To generate stream of [DynamicUserInfo] using [transactionStream], [stockPricesStream]
+/// Generate a stream of [DynamicUserInfo] using [transactionStream], [stockPricesStream]
 class UserInfoGenerator {
   DynamicUserInfo dynamicUserInfo;
 
@@ -16,18 +18,34 @@ class UserInfoGenerator {
   final ValueStream<Map<int, Stock>> stockMapStream;
   // Updates only totalWorth
   final Stream<StockPricesUpdate> stockPricesStream;
+  // Updates cash, totalWorth and isBlocked
+  final Stream<GameStateUpdate> gameStateStream;
 
   UserInfoGenerator(
     this.dynamicUserInfo,
     this.transactionStream,
     this.stockMapStream,
     this.stockPricesStream,
+    this.gameStateStream,
   ) {
-    // TODO: use getters, setters or copy function in DynamicUserInfo to reduce code
     _listenToTransactions();
     _listenToPrices();
+    _listenToGameState();
   }
 
+  /// The [StreamController] used to generate a stream of [DynamicUserInfo]
+  final _controller = StreamController<DynamicUserInfo>();
+
+  /// A Read-only stream of [DynamicUserInfo]
+  Stream<DynamicUserInfo> get stream => _controller.stream;
+
+  /// Updates [dynamicUserInfo] and adds it to [_controller]
+  void updateUserInfo(DynamicUserInfo newInfo) {
+    dynamicUserInfo = newInfo;
+    _controller.add(dynamicUserInfo);
+  }
+
+  /// Updates [dynamicUserInfo] for every new [TransactionUpdate]
   void _listenToTransactions() => transactionStream.listen((newUpdate) {
         // New transaction
         final transaction = newUpdate.transaction;
@@ -69,7 +87,7 @@ class UserInfoGenerator {
         totalWorth = calculateTotalWorth(cash, reservedCash, stocksOwnedMap,
             stocksReservedMap, stocks.toPricesMap());
 
-        dynamicUserInfo = DynamicUserInfo(
+        updateUserInfo(DynamicUserInfo(
           cash,
           reservedCash,
           stocksOwnedMap,
@@ -77,27 +95,51 @@ class UserInfoGenerator {
           stockWorth,
           reservedStockWorth,
           totalWorth,
-        );
-        _controller.add(dynamicUserInfo);
+          dynamicUserInfo.isBlocked,
+        ));
       });
 
+  /// Updates [dynamicUserInfo] for every new [StockPricesUpdate]
   void _listenToPrices() => stockPricesStream.listen((newUpdate) {
         final newTotalWorth = dynamicUserInfo.newTotalWorth(newUpdate.prices);
-        dynamicUserInfo = DynamicUserInfo(
-          dynamicUserInfo.cash,
-          dynamicUserInfo.reservedCash,
-          dynamicUserInfo.stocksOwnedMap,
-          dynamicUserInfo.stocksReservedMap,
-          dynamicUserInfo.stockWorth,
-          dynamicUserInfo.reservedStocksWorth,
-          newTotalWorth,
-        );
-        _controller.add(dynamicUserInfo);
+        updateUserInfo(dynamicUserInfo.clone(newTotalWorth: newTotalWorth));
       });
 
-  /// The [StreamController] used to modify the stream of [DynamicUserInfo]
-  final _controller = StreamController<DynamicUserInfo>();
-
-  /// Read-only stream of [DynamicUserInfo]
-  Stream<DynamicUserInfo> get stream => _controller.stream;
+  /// Updates [dynamicUserInfo] for every new relevant [GameStateUpdate]
+  void _listenToGameState() => gameStateStream.listen((newUpdate) {
+        final gameState = newUpdate.gameState;
+        // TODO: Show notification when user gets referral reward
+        switch (gameState.type) {
+          case GameStateUpdateType.UserBlockStateUpdate:
+            // TODO: show snackbar message whenever isBlocked changes
+            final blockState = gameState.userBlockState;
+            final newCash = blockState.cash.toInt();
+            // ignore: unused_local_variable
+            final penalty = newCash - dynamicUserInfo.cash;
+            updateUserInfo(dynamicUserInfo.clone(
+              newCash: newCash,
+              newTotalWorth: dynamicUserInfo.newTotalWorth(
+                stockMapStream.value.toPricesMap(),
+                newCash: newCash,
+              ),
+              newIsBlocked: blockState.isBlocked,
+            ));
+            break;
+          case GameStateUpdateType.UserReferredCreditUpdate:
+          case GameStateUpdateType.UserRewardCreditUpdate:
+            final newCash = (gameState.hasUserReferredCredit()
+                    ? gameState.userReferredCredit.cash
+                    : gameState.userRewardCredit.cash)
+                .toInt();
+            updateUserInfo(dynamicUserInfo.clone(
+              newCash: newCash,
+              newTotalWorth: dynamicUserInfo.newTotalWorth(
+                stockMapStream.value.toPricesMap(),
+                newCash: newCash,
+              ),
+            ));
+            break;
+          default:
+        }
+      });
 }

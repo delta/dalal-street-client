@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dalal_street_client/grpc/client.dart';
 import 'package:dalal_street_client/models/dynamic_user_info.dart';
 import 'package:dalal_street_client/proto_build/actions/GetPortfolio.pb.dart';
@@ -11,14 +13,13 @@ import 'package:dalal_street_client/proto_build/datastreams/Transactions.pb.dart
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
 import 'package:dalal_street_client/proto_build/models/User.pb.dart';
 import 'package:dalal_street_client/streams/user_info_generator.dart';
+import 'package:dalal_street_client/streams/stock_stream_generator.dart';
 import 'package:dalal_street_client/utils/convert.dart';
 import 'package:equatable/equatable.dart';
 import 'package:rxdart/streams.dart';
 
 import '../config/log.dart';
 import '../grpc/subscription.dart';
-
-part 'generate_stock_stream.dart';
 
 /// Streams used in many places in the app
 ///
@@ -31,10 +32,10 @@ class GlobalStreams extends Equatable {
   final Stream<TransactionUpdate> transactionStream;
   final Stream<NotificationUpdate> notificationStream;
 
-  // TODO: handle GameState stream to update custom streams
   // Custom streams generated from server streams
   final ValueStream<Map<int, Stock>> stockMapStream;
   final ValueStream<DynamicUserInfo> dynamicUserInfoStream;
+  // TODO: create a stream for isMaketOpen
 
   // Only used to unsubscribe from global streams. Don't use these to subscribe again
   final List<SubscriptionId> subscriptionIds;
@@ -152,11 +153,12 @@ Future<GlobalStreams> subscribeToGlobalStreams(
   // Generate custom streams
   logger.i('Generating custom streams from server streams');
   // Stock map stream
-  final stockMapStream = _generateStockMapStream(
+  final stockMapStream = StockStreamGenerator(
     initialStocks,
     stockPricesStream,
     stockExchangeStream,
-  );
+    gameStateStream,
+  ).stream.shareValueSeeded(initialStocks);
 
   // DynamicUserInfo stream
   final portfolioResponse = await actionClient.getPortfolio(
@@ -171,12 +173,16 @@ Future<GlobalStreams> subscribeToGlobalStreams(
     user.reservedCash.toInt(),
     portfolioResponse.stocksOwned.toIntMap(),
     portfolioResponse.reservedStocksOwned.toIntMap(),
+    user.isBlocked,
     initialStocks,
   );
-  final userGenerator = UserInfoGenerator(initialUserInfo, transactionStream,
-      stockMapStream, stockPricesStream.skip(1));
-  final dynamicUserInfoStream =
-      userGenerator.stream.shareValueSeeded(initialUserInfo);
+  final dynamicUserInfoStream = UserInfoGenerator(
+    initialUserInfo,
+    transactionStream,
+    stockMapStream,
+    stockPricesStream.skip(1),
+    gameStateStream,
+  ).stream.shareValueSeeded(initialUserInfo);
 
   return GlobalStreams(
     gameStateStream,

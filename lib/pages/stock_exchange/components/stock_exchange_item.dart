@@ -134,7 +134,7 @@ class _StockExchangeItemState extends State<StockExchangeItem> {
   ) =>
       Expanded(
         child: StreamBuilder<Int64>(
-          stream: getStockPriceStream(stockId, stockMapStream),
+          stream: stockMapStream.priceStream(stockId),
           initialData: Int64(currentPrice),
           builder: (_, snapshot) {
             int stockPrice = snapshot.data!.toInt();
