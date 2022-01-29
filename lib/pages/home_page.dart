@@ -156,7 +156,7 @@ class _HomePageState extends State<HomePage>
     List<Widget> stockItems = stocks.entries
         .map((entry) => StockItem(
             stock: entry.value,
-            stockPriceStream: getStockPriceStream(entry.key, stockMapStream)))
+            stockPriceStream: stockMapStream.priceStream(entry.key)))
         .toList();
     return ListView(
       shrinkWrap: true,

@@ -15,6 +15,8 @@ class DynamicUserInfo extends Equatable {
   final int stockWorth;
   final int reservedStocksWorth;
   final int totalWorth;
+  // Other info
+  final bool isBlocked;
 
   const DynamicUserInfo(
     this.cash,
@@ -24,6 +26,7 @@ class DynamicUserInfo extends Equatable {
     this.stockWorth,
     this.reservedStocksWorth,
     this.totalWorth,
+    this.isBlocked,
   );
 
   DynamicUserInfo.from(
@@ -31,6 +34,7 @@ class DynamicUserInfo extends Equatable {
     this.reservedCash,
     this.stocksOwnedMap,
     this.stocksReservedMap,
+    this.isBlocked,
     Map<int, Stock> stocks,
   )   : stockWorth = calculateStockWorth(stocksOwnedMap, stocks),
         reservedStocksWorth = calculateStockWorth(stocksReservedMap, stocks),
@@ -42,8 +46,30 @@ class DynamicUserInfo extends Equatable {
           stocks.toPricesMap(),
         );
 
-  int newTotalWorth(Map<int, Int64> stockPrices) => calculateTotalWorth(
-        cash,
+  DynamicUserInfo clone({
+    int? newCash,
+    int? newReservedCash,
+    Map<int, int>? newStocksOwnedMap,
+    Map<int, int>? newStocksReservedMap,
+    int? newStockWorth,
+    int? newReservedStockWorth,
+    int? newTotalWorth,
+    bool? newIsBlocked,
+  }) =>
+      DynamicUserInfo(
+        newCash ?? cash,
+        newReservedCash ?? reservedCash,
+        newStocksOwnedMap ?? stocksOwnedMap,
+        newStocksReservedMap ?? stocksReservedMap,
+        newStockWorth ?? stockWorth,
+        newReservedStockWorth ?? reservedStocksWorth,
+        newTotalWorth ?? totalWorth,
+        newIsBlocked ?? isBlocked,
+      );
+
+  int newTotalWorth(Map<int, Int64> stockPrices, {int? newCash}) =>
+      calculateTotalWorth(
+        newCash ?? cash,
         reservedCash,
         stocksOwnedMap,
         stocksReservedMap,
@@ -59,6 +85,7 @@ class DynamicUserInfo extends Equatable {
         stockWorth,
         reservedStocksWorth,
         totalWorth,
+        isBlocked,
       ];
 }
 
