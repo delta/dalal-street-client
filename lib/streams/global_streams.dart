@@ -35,7 +35,7 @@ class GlobalStreams extends Equatable {
   // Custom streams generated from server streams
   final ValueStream<Map<int, Stock>> stockMapStream;
   final ValueStream<DynamicUserInfo> dynamicUserInfoStream;
-  // TODO: create a stream for isMaketOpen
+  final ValueStream<bool> isMaketOpenStream;
 
   // Only used to unsubscribe from global streams. Don't use these to subscribe again
   final List<SubscriptionId> subscriptionIds;
@@ -46,6 +46,7 @@ class GlobalStreams extends Equatable {
     this.stockExchangeStream,
     this.transactionStream,
     this.notificationStream,
+    this.isMaketOpenStream,
     this.stockMapStream,
     this.dynamicUserInfoStream,
     this.subscriptionIds,
@@ -64,6 +65,7 @@ class GlobalStreams extends Equatable {
         stockExchangeStream,
         transactionStream,
         notificationStream,
+        isMaketOpenStream,
         stockMapStream,
         dynamicUserInfoStream,
         subscriptionIds,
@@ -77,6 +79,7 @@ Future<GlobalStreams> subscribeToGlobalStreams(
   logger.i('Subscribing to all global streams');
   final user = loginResponse.user;
   final sessionId = loginResponse.sessionId;
+  final isMaketOpen = loginResponse.isMarketOpen;
 
   // getStockList request, return map of stockId -> Stock
   final stockResponse = await actionClient.getStockList(
@@ -154,6 +157,9 @@ Future<GlobalStreams> subscribeToGlobalStreams(
   // Generate custom streams
   logger.i('Generating custom streams from server streams');
 
+  // is maket open stream
+  final isMaketOpenStream = const Stream<bool>.empty().shareValueSeeded(isMaketOpen);
+
   // Stock map stream
   final stockMapStream = StockStreamGenerator(
     initialStocks,
@@ -192,6 +198,7 @@ Future<GlobalStreams> subscribeToGlobalStreams(
     stockExchangeStream,
     transactionStream,
     notificationStream,
+    isMaketOpenStream,
     stockMapStream,
     dynamicUserInfoStream,
     subscriptionIds,
