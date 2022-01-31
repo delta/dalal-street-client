@@ -40,7 +40,7 @@ class UserInfoGenerator {
   Stream<DynamicUserInfo> get stream => _controller.stream;
 
   /// Updates [dynamicUserInfo] and adds it to [_controller]
-  void updateUserInfo(DynamicUserInfo newInfo) {
+  void updateStream(DynamicUserInfo newInfo) {
     dynamicUserInfo = newInfo;
     _controller.add(dynamicUserInfo);
   }
@@ -87,7 +87,7 @@ class UserInfoGenerator {
         totalWorth = calculateTotalWorth(cash, reservedCash, stocksOwnedMap,
             stocksReservedMap, stocks.toPricesMap());
 
-        updateUserInfo(DynamicUserInfo(
+        updateStream(DynamicUserInfo(
           cash,
           reservedCash,
           stocksOwnedMap,
@@ -102,7 +102,7 @@ class UserInfoGenerator {
   /// Updates [dynamicUserInfo] for every new [StockPricesUpdate]
   void _listenToPrices() => stockPricesStream.listen((newUpdate) {
         final newTotalWorth = dynamicUserInfo.newTotalWorth(newUpdate.prices);
-        updateUserInfo(dynamicUserInfo.clone(newTotalWorth: newTotalWorth));
+        updateStream(dynamicUserInfo.clone(newTotalWorth: newTotalWorth));
       });
 
   /// Updates [dynamicUserInfo] for every new relevant [GameStateUpdate]
@@ -116,7 +116,7 @@ class UserInfoGenerator {
             final newCash = blockState.cash.toInt();
             // ignore: unused_local_variable
             final penalty = newCash - dynamicUserInfo.cash;
-            updateUserInfo(dynamicUserInfo.clone(
+            updateStream(dynamicUserInfo.clone(
               newCash: newCash,
               newTotalWorth: dynamicUserInfo.newTotalWorth(
                 stockMapStream.value.toPricesMap(),
@@ -131,7 +131,7 @@ class UserInfoGenerator {
                     ? gameState.userReferredCredit.cash
                     : gameState.userRewardCredit.cash)
                 .toInt();
-            updateUserInfo(dynamicUserInfo.clone(
+            updateStream(dynamicUserInfo.clone(
               newCash: newCash,
               newTotalWorth: dynamicUserInfo.newTotalWorth(
                 stockMapStream.value.toPricesMap(),

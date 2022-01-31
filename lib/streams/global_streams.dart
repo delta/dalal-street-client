@@ -12,6 +12,7 @@ import 'package:dalal_street_client/proto_build/datastreams/StockPrices.pb.dart'
 import 'package:dalal_street_client/proto_build/datastreams/Subscribe.pb.dart';
 import 'package:dalal_street_client/proto_build/datastreams/Transactions.pb.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
+import 'package:dalal_street_client/streams/generators/market_open_generator.dart';
 import 'package:dalal_street_client/streams/generators/user_info_generator.dart';
 import 'package:dalal_street_client/streams/generators/stock_stream_generator.dart';
 import 'package:dalal_street_client/utils/convert.dart';
@@ -158,7 +159,9 @@ Future<GlobalStreams> subscribeToGlobalStreams(
   logger.i('Generating custom streams from server streams');
 
   // is maket open stream
-  final isMaketOpenStream = const Stream<bool>.empty().shareValueSeeded(isMaketOpen);
+  final isMaketOpenStream = MarketOpenGenerator(isMaketOpen, gameStateStream)
+      .stream
+      .shareValueSeeded(isMaketOpen);
 
   // Stock map stream
   final stockMapStream = StockStreamGenerator(
