@@ -4,6 +4,7 @@ import 'package:dalal_street_client/grpc/client.dart';
 import 'package:dalal_street_client/models/dynamic_user_info.dart';
 import 'package:dalal_street_client/proto_build/actions/GetPortfolio.pb.dart';
 import 'package:dalal_street_client/proto_build/actions/GetStockList.pb.dart';
+import 'package:dalal_street_client/proto_build/actions/Login.pb.dart';
 import 'package:dalal_street_client/proto_build/datastreams/GameState.pb.dart';
 import 'package:dalal_street_client/proto_build/datastreams/Notifications.pb.dart';
 import 'package:dalal_street_client/proto_build/datastreams/StockExchange.pb.dart';
@@ -11,7 +12,6 @@ import 'package:dalal_street_client/proto_build/datastreams/StockPrices.pb.dart'
 import 'package:dalal_street_client/proto_build/datastreams/Subscribe.pb.dart';
 import 'package:dalal_street_client/proto_build/datastreams/Transactions.pb.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
-import 'package:dalal_street_client/proto_build/models/User.pb.dart';
 import 'package:dalal_street_client/streams/generators/user_info_generator.dart';
 import 'package:dalal_street_client/streams/generators/stock_stream_generator.dart';
 import 'package:dalal_street_client/utils/convert.dart';
@@ -73,10 +73,11 @@ class GlobalStreams extends Equatable {
 /// Subscribes to all Global Streams and Initializes Custom Streams after login and returns the stream objects
 /// Throws exception if any of them fails. Exception must be handled
 Future<GlobalStreams> subscribeToGlobalStreams(
-  User user,
-  String sessionId,
-) async {
+    LoginResponse loginResponse) async {
   logger.i('Subscribing to all global streams');
+  final user = loginResponse.user;
+  final sessionId = loginResponse.sessionId;
+
   // getStockList request, return map of stockId -> Stock
   final stockResponse = await actionClient.getStockList(
     GetStockListRequest(),
@@ -152,6 +153,7 @@ Future<GlobalStreams> subscribeToGlobalStreams(
 
   // Generate custom streams
   logger.i('Generating custom streams from server streams');
+
   // Stock map stream
   final stockMapStream = StockStreamGenerator(
     initialStocks,

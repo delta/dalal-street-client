@@ -51,10 +51,7 @@ class DalalBloc extends HydratedBloc<DalalEvent, DalalState> {
           emit(DalalVerificationPending(sessionId));
           return;
         }
-        final globalStreams = await subscribeToGlobalStreams(
-          loginResponse.user,
-          sessionId,
-        );
+        final globalStreams = await subscribeToGlobalStreams(loginResponse);
         emit(DalalDataLoaded(
           loginResponse.user,
           loginResponse.sessionId,
@@ -78,14 +75,15 @@ class DalalBloc extends HydratedBloc<DalalEvent, DalalState> {
     });
 
     on<DalalCheckVerification>((event, emit) async {
-      if (event.user.isPhoneVerified) {
+      final resp = event.loginResponse;
+      if (resp.user.isPhoneVerified) {
         emit(DalalDataLoaded(
-          event.user,
-          event.sessionId,
-          await subscribeToGlobalStreams(event.user, event.sessionId),
+          resp.user,
+          resp.sessionId,
+          await subscribeToGlobalStreams(resp),
         ));
       } else {
-        emit(DalalVerificationPending(event.sessionId));
+        emit(DalalVerificationPending(resp.sessionId));
       }
     });
 

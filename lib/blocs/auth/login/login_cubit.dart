@@ -26,10 +26,7 @@ class LoginCubit extends Cubit<LoginState> {
       }
       emit(LoginSuccess(loginResp));
 
-      dalalBloc.add(DalalCheckVerification(
-        loginResp.user,
-        loginResp.sessionId,
-      ));
+      dalalBloc.add(DalalCheckVerification(loginResp));
     } catch (e) {
       // Inavlid session id error not possible because this is first time login
       // No need to check for grpc error code 16
