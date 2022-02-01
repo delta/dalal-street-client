@@ -4,6 +4,7 @@ import 'package:dalal_street_client/grpc/client.dart';
 import 'package:dalal_street_client/models/dynamic_user_info.dart';
 import 'package:dalal_street_client/proto_build/actions/GetPortfolio.pb.dart';
 import 'package:dalal_street_client/proto_build/actions/GetStockList.pb.dart';
+import 'package:dalal_street_client/proto_build/actions/Login.pb.dart';
 import 'package:dalal_street_client/proto_build/datastreams/GameState.pb.dart';
 import 'package:dalal_street_client/proto_build/datastreams/Notifications.pb.dart';
 import 'package:dalal_street_client/proto_build/datastreams/StockExchange.pb.dart';
@@ -11,9 +12,9 @@ import 'package:dalal_street_client/proto_build/datastreams/StockPrices.pb.dart'
 import 'package:dalal_street_client/proto_build/datastreams/Subscribe.pb.dart';
 import 'package:dalal_street_client/proto_build/datastreams/Transactions.pb.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
-import 'package:dalal_street_client/proto_build/models/User.pb.dart';
-import 'package:dalal_street_client/streams/user_info_generator.dart';
-import 'package:dalal_street_client/streams/stock_stream_generator.dart';
+import 'package:dalal_street_client/streams/generators/market_open_generator.dart';
+import 'package:dalal_street_client/streams/generators/user_info_generator.dart';
+import 'package:dalal_street_client/streams/generators/stock_stream_generator.dart';
 import 'package:dalal_street_client/utils/convert.dart';
 import 'package:equatable/equatable.dart';
 import 'package:rxdart/streams.dart';
@@ -35,7 +36,7 @@ class GlobalStreams extends Equatable {
   // Custom streams generated from server streams
   final ValueStream<Map<int, Stock>> stockMapStream;
   final ValueStream<DynamicUserInfo> dynamicUserInfoStream;
-  // TODO: create a stream for isMaketOpen
+  final ValueStream<bool> isMaketOpenStream;
 
   // Only used to unsubscribe from global streams. Don't use these to subscribe again
   final List<SubscriptionId> subscriptionIds;
@@ -46,6 +47,7 @@ class GlobalStreams extends Equatable {
     this.stockExchangeStream,
     this.transactionStream,
     this.notificationStream,
+    this.isMaketOpenStream,
     this.stockMapStream,
     this.dynamicUserInfoStream,
     this.subscriptionIds,
@@ -64,6 +66,7 @@ class GlobalStreams extends Equatable {
         stockExchangeStream,
         transactionStream,
         notificationStream,
+        isMaketOpenStream,
         stockMapStream,
         dynamicUserInfoStream,
         subscriptionIds,
@@ -73,10 +76,12 @@ class GlobalStreams extends Equatable {
 /// Subscribes to all Global Streams and Initializes Custom Streams after login and returns the stream objects
 /// Throws exception if any of them fails. Exception must be handled
 Future<GlobalStreams> subscribeToGlobalStreams(
-  User user,
-  String sessionId,
-) async {
+    LoginResponse loginResponse) async {
   logger.i('Subscribing to all global streams');
+  final user = loginResponse.user;
+  final sessionId = loginResponse.sessionId;
+  final isMaketOpen = loginResponse.isMarketOpen;
+
   // getStockList request, return map of stockId -> Stock
   final stockResponse = await actionClient.getStockList(
     GetStockListRequest(),
@@ -152,6 +157,12 @@ Future<GlobalStreams> subscribeToGlobalStreams(
 
   // Generate custom streams
   logger.i('Generating custom streams from server streams');
+
+  // is maket open stream
+  final isMaketOpenStream = MarketOpenGenerator(isMaketOpen, gameStateStream)
+      .stream
+      .shareValueSeeded(isMaketOpen);
+
   // Stock map stream
   final stockMapStream = StockStreamGenerator(
     initialStocks,
@@ -190,6 +201,7 @@ Future<GlobalStreams> subscribeToGlobalStreams(
     stockExchangeStream,
     transactionStream,
     notificationStream,
+    isMaketOpenStream,
     stockMapStream,
     dynamicUserInfoStream,
     subscriptionIds,
