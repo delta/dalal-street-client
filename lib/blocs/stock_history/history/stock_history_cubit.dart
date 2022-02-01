@@ -21,6 +21,7 @@ class StockHistoryCubit extends Cubit<StockHistoryState> {
   Future<void> getStockHistory(
       int stockId, StockHistoryResolution resolution) async {
     try {
+      emit(StockHistoryInitial());
       // fetching stock history data
       final response = await actionClient.getStockHistory(
           GetStockHistoryRequest(stockId: stockId, resolution: resolution),

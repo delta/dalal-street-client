@@ -18,7 +18,7 @@ class StockHistoryStreamCubit extends Cubit<StockHistoryStreamState> {
     try {
       //subscribing to stockHistory updates
       SubscribeRequest subscribeRequest = SubscribeRequest(
-          dataStreamId: stockId as String,
+          dataStreamId: stockId.toString(),
           dataStreamType: DataStreamType.STOCK_HISTORY);
 
       subscribtionId = await subscribe(subscribeRequest, getIt<String>());
@@ -34,6 +34,14 @@ class StockHistoryStreamCubit extends Cubit<StockHistoryStreamState> {
     } catch (e) {
       logger.e(e);
       emit(StockHistoryStreamError(e.toString()));
+    }
+  }
+
+  void unsubscribe() async {
+    try {
+      unSubscribe(subscribtionId, getIt<String>());
+    } catch (e) {
+      logger.e('error unsubscribing stock history request', e);
     }
   }
 }

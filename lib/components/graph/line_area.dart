@@ -78,7 +78,7 @@ class _LineGraphState extends State<LineGraph> {
         }
 
         // todo : return loading state static graph
-        return Container();
+        return const Text('hello');
       },
     );
   }
