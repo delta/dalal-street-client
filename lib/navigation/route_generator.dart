@@ -9,7 +9,7 @@ import 'package:dalal_street_client/blocs/auth/register/register_cubit.dart';
 import 'package:dalal_street_client/blocs/auth/verify_phone/enter_otp/enter_otp_cubit.dart';
 import 'package:dalal_street_client/blocs/auth/verify_phone/enter_phone/enter_phone_cubit.dart';
 import 'package:dalal_street_client/blocs/exchange/exchange_cubit.dart';
-import 'package:dalal_street_client/blocs/news/news_subscription_cubit.dart';
+import 'package:dalal_street_client/blocs/news_subscription/news_subscription_cubit.dart';
 import 'package:dalal_street_client/blocs/referral/referral_cubit.dart';
 import 'package:dalal_street_client/blocs/subscribe/subscribe_cubit.dart';
 import 'package:dalal_street_client/blocs/daily_challenges/daily_challenges_page_cubit.dart';

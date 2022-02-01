@@ -20,7 +20,7 @@ class NewsSubscriptionCubit extends Cubit<NewsSubscriptionState> {
       }
     } catch (e) {
       logger.e(e);
-      emit(SubscriptionToNewsFailed(e.toString()));
+      emit(SubscriptionToNewsFailed(subscriptionId));
     }
   }
 }

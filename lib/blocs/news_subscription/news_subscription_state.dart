@@ -18,7 +18,7 @@ class SubscriptionToNewsSuccess extends NewsSubscriptionState {
 }
 
 class SubscriptionToNewsFailed extends NewsSubscriptionState {
-  final String subscriptionId;
+  final SubscriptionId subscriptionId;
   const SubscriptionToNewsFailed(this.subscriptionId);
 
   @override
