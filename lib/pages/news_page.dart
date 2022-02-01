@@ -20,7 +20,7 @@ class _NewsPageState extends State<NewsPage> {
   final ScrollController _scrollController = ScrollController();
   List<MarketEvent> mapMarketEvents = [];
   List<MarketEvent> mapmarketEventsCopy = [];
-  int i =1;
+  int i = 1;
   @override
   void initState() {
     super.initState();
@@ -30,9 +30,10 @@ class _NewsPageState extends State<NewsPage> {
       if (_scrollController.position.atEdge) {
         if (_scrollController.position.pixels != 0) {
           logger.i(mapMarketEvents.length);
-          if(mapMarketEvents[mapMarketEvents.length -1].id>0){
+          if (mapMarketEvents[mapMarketEvents.length - 1].id > 0) {
             logger.i('condition true');
-          context.read<NewsBloc>().add(GetMoreNews(mapMarketEvents[mapMarketEvents.length -1 ].id - 1));
+            context.read<NewsBloc>().add(GetMoreNews(
+                mapMarketEvents[mapMarketEvents.length - 1].id - 1));
           }
         }
       }
@@ -76,16 +77,15 @@ class _NewsPageState extends State<NewsPage> {
 
   Widget feedlist() =>
       BlocBuilder<NewsBloc, NewsState>(builder: (context, state) {
-        if (state is GetNewsSucess ) {
+        if (state is GetNewsSucess) {
           if (state.marketEventsList.moreExists) {
             mapMarketEvents.addAll(state.marketEventsList.marketEvents);
-            if(i==1)
-            {
+            if (i == 1) {
               mapMarketEvents.remove(mapMarketEvents[0]);
               i++;
             }
           }
-          
+
           logger.i(state.marketEventsList.moreExists);
           return ListView.separated(
             shrinkWrap: true,
@@ -99,13 +99,18 @@ class _NewsPageState extends State<NewsPage> {
               String text = marketEvent.text;
               String dur = getdur(createdAt);
               return GestureDetector(
-                  child: newsItem(headline, 'https://upload.wikimedia.org/wikipedia/commons/4/4b/BSE_building_at_Dalal_Street.JPG', createdAt, false),
+                  child: newsItem(
+                      headline,
+                      'https://upload.wikimedia.org/wikipedia/commons/4/4b/BSE_building_at_Dalal_Street.JPG',
+                      createdAt,
+                      false),
                   onTap: () => Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) => NewsDetail(
                             text: text,
-                            imagePath: 'https://upload.wikimedia.org/wikipedia/commons/4/4b/BSE_building_at_Dalal_Street.JPG',
+                            imagePath:
+                                'https://upload.wikimedia.org/wikipedia/commons/4/4b/BSE_building_at_Dalal_Street.JPG',
                             headline: headline,
                             dur: dur),
                       )));
@@ -116,22 +121,22 @@ class _NewsPageState extends State<NewsPage> {
           );
         } else if (state is GetNewsFailure) {
           return Column(
-        children: [
-          const Text('Failed to reach server'),
-          const SizedBox(height: 20),
-          SizedBox(
-            width: 100,
-            height: 50,
-            child: OutlinedButton(
-              onPressed: () => context.read<NewsBloc>().add( GetMoreNews(mapMarketEvents[mapMarketEvents.length -1 ].id - 1)),
-              child: const Text('Retry'),
-            ),
-          ),
-        ],
-      );
-        }
-        else{
-           return const Center(
+            children: [
+              const Text('Failed to reach server'),
+              const SizedBox(height: 20),
+              SizedBox(
+                width: 100,
+                height: 50,
+                child: OutlinedButton(
+                  onPressed: () => context.read<NewsBloc>().add(GetMoreNews(
+                      mapMarketEvents[mapMarketEvents.length - 1].id - 1)),
+                  child: const Text('Retry'),
+                ),
+              ),
+            ],
+          );
+        } else {
+          return const Center(
             child: CircularProgressIndicator(
               color: secondaryColor,
             ),
@@ -200,39 +205,45 @@ class _NewsPageState extends State<NewsPage> {
               String text = marketEvent.text;
               String dur = getdur(createdAt);
               return GestureDetector(
-                  child: newsItem(headline, 'https://upload.wikimedia.org/wikipedia/commons/4/4b/BSE_building_at_Dalal_Street.JPG', createdAt, true),
+                  child: newsItem(
+                      headline,
+                      'https://upload.wikimedia.org/wikipedia/commons/4/4b/BSE_building_at_Dalal_Street.JPG',
+                      createdAt,
+                      true),
                   onTap: () => Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) => NewsDetail(
                           text: text,
-                          imagePath: 'https://upload.wikimedia.org/wikipedia/commons/4/4b/BSE_building_at_Dalal_Street.JPG',
+                          imagePath:
+                              'https://upload.wikimedia.org/wikipedia/commons/4/4b/BSE_building_at_Dalal_Street.JPG',
                           headline: headline,
                           dur: dur,
                         ),
                       )));
             } else if (state is SubscriptionToNewsFailed) {
-                return Column(
-        children: [
-          const Text('Failed to reach server'),
-          const SizedBox(height: 20),
-          SizedBox(
-            width: 100,
-            height: 50,
-            child: OutlinedButton(
-              onPressed: () =>  context
-              .read<NewsSubscriptionCubit>()
-              .getNewsFeed(state.subscriptionId),
-              child: const Text('Retry'),
-            ),
-          ),
-        ],
-      );
+              return Column(
+                children: [
+                  const Text('Failed to reach server'),
+                  const SizedBox(height: 20),
+                  SizedBox(
+                    width: 100,
+                    height: 50,
+                    child: OutlinedButton(
+                      onPressed: () => context
+                          .read<NewsSubscriptionCubit>()
+                          .getNewsFeed(state.subscriptionId),
+                      child: const Text('Retry'),
+                    ),
+                  ),
+                ],
+              );
             } else {
               return BlocBuilder<NewsBloc, NewsState>(
                   builder: (context, state) {
                 if (state is GetNewsSucess) {
-                  mapmarketEventsCopy.addAll(state.marketEventsList.marketEvents);
+                  mapmarketEventsCopy
+                      .addAll(state.marketEventsList.marketEvents);
                   MarketEvent marketEvent = mapmarketEventsCopy[0];
                   String headline = marketEvent.headline;
                   String imagePath = marketEvent.imagePath;
@@ -240,32 +251,41 @@ class _NewsPageState extends State<NewsPage> {
                   String text = marketEvent.text;
                   String dur = getdur(createdAt);
                   return GestureDetector(
-                      child: newsItem(headline, 'https://upload.wikimedia.org/wikipedia/commons/4/4b/BSE_building_at_Dalal_Street.JPG', createdAt, true),
+                      child: newsItem(
+                          headline,
+                          'https://upload.wikimedia.org/wikipedia/commons/4/4b/BSE_building_at_Dalal_Street.JPG',
+                          createdAt,
+                          true),
                       onTap: () => Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) => NewsDetail(
                               text: text,
-                              imagePath: 'https://upload.wikimedia.org/wikipedia/commons/4/4b/BSE_building_at_Dalal_Street.JPG',
+                              imagePath:
+                                  'https://upload.wikimedia.org/wikipedia/commons/4/4b/BSE_building_at_Dalal_Street.JPG',
                               headline: headline,
                               dur: dur,
                             ),
                           )));
                 } else if (state is GetNewsFailure) {
-                   return Column(
-        children: [
-          const Text('Failed to reach server'),
-          const SizedBox(height: 20),
-          SizedBox(
-            width: 100,
-            height: 50,
-            child: OutlinedButton(
-              onPressed: () => context.read<NewsBloc>().add( GetMoreNews(mapMarketEvents[mapMarketEvents.length -1 ].id - 1)),
-              child: const Text('Retry'),
-            ),
-          ),
-        ],
-      );
+                  return Column(
+                    children: [
+                      const Text('Failed to reach server'),
+                      const SizedBox(height: 20),
+                      SizedBox(
+                        width: 100,
+                        height: 50,
+                        child: OutlinedButton(
+                          onPressed: () => context.read<NewsBloc>().add(
+                              GetMoreNews(
+                                  mapMarketEvents[mapMarketEvents.length - 1]
+                                          .id -
+                                      1)),
+                          child: const Text('Retry'),
+                        ),
+                      ),
+                    ],
+                  );
                 } else {
                   return const Center(
                     child: CircularProgressIndicator(
@@ -277,20 +297,22 @@ class _NewsPageState extends State<NewsPage> {
             }
           });
         } else if (state is SubscriptonDataFailed) {
-           return Column(
-        children: [
-          const Text('Failed to reach server'),
-          const SizedBox(height: 20),
-          SizedBox(
-            width: 100,
-            height: 50,
-            child: OutlinedButton(
-              onPressed: () => context.read<SubscribeCubit>().subscribe(DataStreamType.MARKET_EVENTS),
-              child: const Text('Retry'),
-            ),
-          ),
-        ],
-      );
+          return Column(
+            children: [
+              const Text('Failed to reach server'),
+              const SizedBox(height: 20),
+              SizedBox(
+                width: 100,
+                height: 50,
+                child: OutlinedButton(
+                  onPressed: () => context
+                      .read<SubscribeCubit>()
+                      .subscribe(DataStreamType.MARKET_EVENTS),
+                  child: const Text('Retry'),
+                ),
+              ),
+            ],
+          );
         } else {
           return const Center(
             child: CircularProgressIndicator(
@@ -320,7 +342,8 @@ class _NewsPageState extends State<NewsPage> {
                 width: 100,
                 height: 100,
                 fit: BoxFit.contain,
-                image: NetworkImage('https://upload.wikimedia.org/wikipedia/commons/4/4b/BSE_building_at_Dalal_Street.JPG'),
+                image: NetworkImage(
+                    'https://upload.wikimedia.org/wikipedia/commons/4/4b/BSE_building_at_Dalal_Street.JPG'),
               ),
             ),
             Column(
@@ -352,44 +375,45 @@ class _NewsPageState extends State<NewsPage> {
         ),
       ));
     } else {
-      return
-      Container(
-        padding: const EdgeInsets.all(10),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.8,
-                    child: Flexible(
-                        child: Text(text,
-                            style: const TextStyle(
-                                color: Colors.white, fontSize: 15)),
-                        fit: FlexFit.loose),
+      return Container(
+          padding: const EdgeInsets.all(10),
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.8,
+                        child: Flexible(
+                            child: Text(text,
+                                style: const TextStyle(
+                                    color: Colors.white, fontSize: 15)),
+                            fit: FlexFit.loose),
+                      ),
+                      const SizedBox.square(
+                        dimension: 5,
+                      ),
+                      Text(dur,
+                          style:
+                              const TextStyle(color: lightGray, fontSize: 12)),
+                    ]),
+                const SizedBox.square(
+                  dimension: 20,
+                ),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: Image(
+                    image: const NetworkImage(
+                        'https://upload.wikimedia.org/wikipedia/commons/4/4b/BSE_building_at_Dalal_Street.JPG'),
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height * 0.25,
+                    fit: BoxFit.contain,
                   ),
-                  const SizedBox.square(
-                    dimension: 5,
-                  ),
-                  Text(dur,
-                      style: const TextStyle(color: lightGray, fontSize: 12)),
-                ]),
-            const SizedBox.square(
-              dimension: 20,
-            ),
-            ClipRRect(
-              borderRadius: BorderRadius.circular(20),
-              child: Image(
-                image: const NetworkImage('https://upload.wikimedia.org/wikipedia/commons/4/4b/BSE_building_at_Dalal_Street.JPG'),
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height * 0.25,
-                fit: BoxFit.contain,
-              ),
-            )
-          ]));
+                )
+              ]));
     }
   }
 
