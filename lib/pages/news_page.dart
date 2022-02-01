@@ -1,7 +1,6 @@
 import 'package:dalal_street_client/blocs/news/news_bloc.dart';
 import 'package:dalal_street_client/blocs/news_subscription/news_subscription_cubit.dart';
 import 'package:dalal_street_client/blocs/subscribe/subscribe_cubit.dart';
-import 'package:dalal_street_client/config/log.dart';
 import 'package:dalal_street_client/pages/newsdetail_page.dart';
 import 'package:dalal_street_client/proto_build/datastreams/Subscribe.pb.dart';
 import 'package:dalal_street_client/proto_build/models/MarketEvent.pb.dart';
@@ -29,9 +28,7 @@ class _NewsPageState extends State<NewsPage> {
     _scrollController.addListener(() {
       if (_scrollController.position.atEdge) {
         if (_scrollController.position.pixels != 0) {
-          logger.i(mapMarketEvents.length);
           if (mapMarketEvents[mapMarketEvents.length - 1].id > 0) {
-            logger.i('condition true');
             context.read<NewsBloc>().add(GetMoreNews(
                 mapMarketEvents[mapMarketEvents.length - 1].id - 1));
           }
@@ -85,8 +82,6 @@ class _NewsPageState extends State<NewsPage> {
               i++;
             }
           }
-
-          logger.i(state.marketEventsList.moreExists);
           return ListView.separated(
             shrinkWrap: true,
             physics: const ScrollPhysics(),
@@ -99,18 +94,13 @@ class _NewsPageState extends State<NewsPage> {
               String text = marketEvent.text;
               String dur = getdur(createdAt);
               return GestureDetector(
-                  child: newsItem(
-                      headline,
-                      'https://upload.wikimedia.org/wikipedia/commons/4/4b/BSE_building_at_Dalal_Street.JPG',
-                      createdAt,
-                      false),
+                  child: newsItem(headline, imagePath, createdAt, false),
                   onTap: () => Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) => NewsDetail(
                             text: text,
-                            imagePath:
-                                'https://upload.wikimedia.org/wikipedia/commons/4/4b/BSE_building_at_Dalal_Street.JPG',
+                            imagePath: imagePath,
                             headline: headline,
                             dur: dur),
                       )));
@@ -205,18 +195,13 @@ class _NewsPageState extends State<NewsPage> {
               String text = marketEvent.text;
               String dur = getdur(createdAt);
               return GestureDetector(
-                  child: newsItem(
-                      headline,
-                      'https://upload.wikimedia.org/wikipedia/commons/4/4b/BSE_building_at_Dalal_Street.JPG',
-                      createdAt,
-                      true),
+                  child: newsItem(headline, imagePath, createdAt, true),
                   onTap: () => Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) => NewsDetail(
                           text: text,
-                          imagePath:
-                              'https://upload.wikimedia.org/wikipedia/commons/4/4b/BSE_building_at_Dalal_Street.JPG',
+                          imagePath: imagePath,
                           headline: headline,
                           dur: dur,
                         ),
@@ -251,18 +236,13 @@ class _NewsPageState extends State<NewsPage> {
                   String text = marketEvent.text;
                   String dur = getdur(createdAt);
                   return GestureDetector(
-                      child: newsItem(
-                          headline,
-                          'https://upload.wikimedia.org/wikipedia/commons/4/4b/BSE_building_at_Dalal_Street.JPG',
-                          createdAt,
-                          true),
+                      child: newsItem(headline, imagePath, createdAt, true),
                       onTap: () => Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) => NewsDetail(
                               text: text,
-                              imagePath:
-                                  'https://upload.wikimedia.org/wikipedia/commons/4/4b/BSE_building_at_Dalal_Street.JPG',
+                              imagePath: imagePath,
                               headline: headline,
                               dur: dur,
                             ),
@@ -338,12 +318,11 @@ class _NewsPageState extends State<NewsPage> {
           children: <Widget>[
             ClipRRect(
               borderRadius: BorderRadius.circular(20),
-              child: const Image(
+              child: Image(
                 width: 100,
                 height: 100,
                 fit: BoxFit.contain,
-                image: NetworkImage(
-                    'https://upload.wikimedia.org/wikipedia/commons/4/4b/BSE_building_at_Dalal_Street.JPG'),
+                image: NetworkImage(imagePath),
               ),
             ),
             Column(
@@ -406,8 +385,7 @@ class _NewsPageState extends State<NewsPage> {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(20),
                   child: Image(
-                    image: const NetworkImage(
-                        'https://upload.wikimedia.org/wikipedia/commons/4/4b/BSE_building_at_Dalal_Street.JPG'),
+                    image: NetworkImage(imagePath),
                     width: MediaQuery.of(context).size.width,
                     height: MediaQuery.of(context).size.height * 0.25,
                     fit: BoxFit.contain,
