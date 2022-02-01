@@ -24,13 +24,12 @@ class GetUserData extends DalalEvent {
 
 /// User has logged in by entering creds. Check verification and redirect accordingly
 class DalalCheckVerification extends DalalEvent {
-  final User user;
-  final String sessionId;
+  final LoginResponse loginResponse;
 
-  const DalalCheckVerification(this.user, this.sessionId);
+  const DalalCheckVerification(this.loginResponse);
 
   @override
-  List<Object> get props => [user, sessionId];
+  List<Object> get props => [loginResponse];
 }
 
 /// Logout the user
