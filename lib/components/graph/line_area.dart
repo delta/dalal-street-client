@@ -62,14 +62,14 @@ class _LineGraphState extends State<LineGraph> {
                   viewport: charts.DateTimeExtents(start: start, end: end)),
               primaryMeasureAxis: const charts.NumericAxisSpec(
                   renderSpec: charts.NoneRenderSpec()),
-              customSeriesRenderers: [
-                charts.LineRendererConfig(
-                    customRendererId: 'area',
-                    includeArea: true,
-                    areaOpacity: 0.5,
-                    strokeWidthPx: 1.5,
-                    includeLine: true)
-              ],
+              // customSeriesRenderers: [
+              //   charts.LineRendererConfig(
+              //       customRendererId: 'area',
+              //       includeArea: true,
+              //       areaOpacity: 0.5,
+              //       strokeWidthPx: 1.5,
+              //       includeLine: true)
+              // ],
             );
           }
         } else if (state is StockHistoryError) {
@@ -105,7 +105,8 @@ class _LineGraphState extends State<LineGraph> {
         data: data,
         domainFn: (TimeSeriesData x, _) => x.time,
         measureFn: (TimeSeriesData y, _) => y.stockPrice,
-      )..setAttribute(charts.rendererIdKey, 'area'),
+      )
+      // ..setAttribute(charts.rendererIdKey, 'area'),
     ];
   }
 }

@@ -55,7 +55,6 @@ class _CandleStickLayoutState extends State<CandleStickLayout> {
 
   @override
   Widget build(BuildContext context) {
-    logger.d(currentResolution);
     return Column(
       children: [
         const SizedBox(height: 20),
@@ -115,10 +114,11 @@ class _CandleStickLayoutState extends State<CandleStickLayout> {
 
     return BlocBuilder<StockHistoryStreamCubit, StockHistoryStreamState>(
       builder: (context, state) {
-        // if (state is StockHistoryStreamUpdate) {
-        //   // TODO check interval and add
-        //   data.add(_extractCandleData(state.stockHistory));
-        // }
+        if (state is StockHistoryStreamUpdate) {
+          // TODO check interval and add
+          data.add(_extractCandleData(state.stockHistory));
+          logger.d(state.stockHistory, 'candle-chart rl update');
+        }
 
         return InteractiveChart(
           candles: data,
@@ -147,17 +147,18 @@ class _CandleStickLayoutState extends State<CandleStickLayout> {
 
     return BlocBuilder<StockHistoryStreamCubit, StockHistoryStreamState>(
       builder: (context, state) {
-        // if (state is StockHistoryStreamUpdate) {
-        //   // TODO check interval and add
-        //   data.add(_getLineChartData(
-        //       {state.stockHistory.createdAt: state.stockHistory})[0]);
-        // }
+        if (state is StockHistoryStreamUpdate) {
+          // TODO check interval and add
+          stockHistoryMap[state.stockHistory.createdAt] = state.stockHistory;
+          data = _getLineChartData(stockHistoryMap);
+        }
+
         return charts.TimeSeriesChart(
           data,
           animate: true,
           domainAxis: const charts.EndPointsTimeAxisSpec(),
           dateTimeFactory: const charts.LocalDateTimeFactory(),
-          // defaultRenderer: charts.BarRendererConfig<DateTime>(),
+          // defaultRenderer: charts.BarRendererConfig<DateTime>(), uncomment this for bar chart :)
         );
       },
     );

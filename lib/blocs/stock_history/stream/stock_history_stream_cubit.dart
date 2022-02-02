@@ -28,7 +28,6 @@ class StockHistoryStreamCubit extends Cubit<StockHistoryStreamState> {
           options: sessionOptions(getIt()));
 
       await for (final update in stockHistoryStream) {
-        logger.d(update.stockHistory);
         emit(StockHistoryStreamUpdate(update.stockHistory));
       }
     } catch (e) {
