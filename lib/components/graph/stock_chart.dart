@@ -2,6 +2,7 @@ import 'package:dalal_street_client/blocs/stock_history/history/stock_history_cu
 import 'package:dalal_street_client/blocs/stock_history/stream/stock_history_stream_cubit.dart';
 import 'package:dalal_street_client/components/graph/chart_enum.dart';
 import 'package:dalal_street_client/config/log.dart';
+import 'package:dalal_street_client/models/time_series_data.dart';
 import 'package:dalal_street_client/proto_build/actions/GetStockHistory.pbenum.dart';
 import 'package:dalal_street_client/proto_build/models/StockHistory.pb.dart';
 import 'package:dalal_street_client/theme/colors.dart';
@@ -9,6 +10,7 @@ import 'package:dalal_street_client/utils/resolution_to_str.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:interactive_chart/interactive_chart.dart';
+import 'package:charts_flutter/flutter.dart' as charts;
 
 class StockChart extends StatelessWidget {
   final int stockId;
@@ -67,67 +69,98 @@ class _CandleStickLayoutState extends State<CandleStickLayout> {
   Widget _chart() => BlocBuilder<StockHistoryCubit, StockHistoryState>(
         builder: (context, state) {
           if (state is StockHistoryInitial) {
-            return const Text('loading');
+            return const SizedBox(
+                height: 250,
+                child: Center(
+                    child: CircularProgressIndicator(
+                  color: primaryColor,
+                )));
           } else if (state is StockHistorySuccess) {
             var stockHistoryMap = state.stockHistoryMap;
 
-            List<CandleData> data = [];
+            if (stockHistoryMap.length <= 3) {
+              return const SizedBox(
+                height: 250,
+                child: Center(
+                  child: Text('chart data is insufficient, try again later'),
+                ),
+              );
+            }
 
-            stockHistoryMap.forEach((createdAt, stockHistory) {
-              data.add(_extractCandleData(stockHistory));
-            });
-
-            return BlocBuilder<StockHistoryStreamCubit,
-                StockHistoryStreamState>(
-              builder: (context, state) {
-                if (state is StockHistoryStreamUpdate) {
-                  // TODO check interval and add
-                  data.add(_extractCandleData(state.stockHistory));
-                }
-
-                if (data.length <= 3) {
-                  return const Text(
-                      'chart data is insufficient, try again later');
-                }
-
-                return SizedBox(
-                  height: 250,
-                  child: chart == ChartType.candlestick
-                      ? _candleStickChart(data)
-                      : _lineChart(),
-                );
-              },
+            return SizedBox(
+              height: 250,
+              child: chart == ChartType.candlestick
+                  ? _candleStickChart(stockHistoryMap)
+                  : _lineChart(stockHistoryMap),
             );
           }
 
           // return error
-          return const Text('error loading graph');
+          return const SizedBox(
+              height: 250,
+              child: Center(
+                  child: Text(
+                'error loading graph',
+                style: TextStyle(color: heartRed, backgroundColor: redOpacity),
+              )));
         },
       );
 
-  InteractiveChart _candleStickChart(List<CandleData> data) {
-    return InteractiveChart(
-      candles: data,
-      style: const ChartStyle(
-          volumeHeightFactor: 0,
-          priceGainColor: primaryColor,
-          priceLossColor: red,
-          overlayBackgroundColor: backgroundColor,
-          timeLabelStyle: TextStyle(fontSize: 10),
-          overlayTextStyle: TextStyle(fontSize: 12)),
-      overlayInfo: (candle) => {
-        'open': candle.open.toString(),
-        'close': candle.close.toString(),
-        'low': candle.low.toString(),
-        'high': candle.high.toString(),
-        'timestamp': DateTime.fromMillisecondsSinceEpoch(candle.timestamp)
-            .toString() // TODO better timestamps for different resolution
+  Widget _candleStickChart(Map<String, StockHistory> stockHistoryMap) {
+    List<CandleData> data = [];
+
+    stockHistoryMap.forEach((createdAt, stockHistory) {
+      data.add(_extractCandleData(stockHistory));
+    });
+
+    return BlocBuilder<StockHistoryStreamCubit, StockHistoryStreamState>(
+      builder: (context, state) {
+        // if (state is StockHistoryStreamUpdate) {
+        //   // TODO check interval and add
+        //   data.add(_extractCandleData(state.stockHistory));
+        // }
+
+        return InteractiveChart(
+          candles: data,
+          style: const ChartStyle(
+              volumeHeightFactor: 0,
+              priceGainColor: primaryColor,
+              priceLossColor: red,
+              overlayBackgroundColor: backgroundColor,
+              timeLabelStyle: TextStyle(fontSize: 10),
+              overlayTextStyle: TextStyle(fontSize: 12)),
+          overlayInfo: (candle) => {
+            'open': candle.open.toString(),
+            'close': candle.close.toString(),
+            'low': candle.low.toString(),
+            'high': candle.high.toString(),
+            'timestamp': DateTime.fromMillisecondsSinceEpoch(candle.timestamp)
+                .toString() // TODO better timestamps for different resolution
+          },
+        );
       },
     );
   }
 
-  Widget _lineChart() {
-    return Container();
+  Widget _lineChart(Map<String, StockHistory> stockHistoryMap) {
+    var data = _getLineChartData(stockHistoryMap);
+
+    return BlocBuilder<StockHistoryStreamCubit, StockHistoryStreamState>(
+      builder: (context, state) {
+        // if (state is StockHistoryStreamUpdate) {
+        //   // TODO check interval and add
+        //   data.add(_getLineChartData(
+        //       {state.stockHistory.createdAt: state.stockHistory})[0]);
+        // }
+        return charts.TimeSeriesChart(
+          data,
+          animate: true,
+          domainAxis: const charts.EndPointsTimeAxisSpec(),
+          dateTimeFactory: const charts.LocalDateTimeFactory(),
+          // defaultRenderer: charts.BarRendererConfig<DateTime>(),
+        );
+      },
+    );
   }
 
   Row _resolutionTab(BuildContext context) {
@@ -138,6 +171,7 @@ class _CandleStickLayoutState extends State<CandleStickLayout> {
           Resolution resolution = resolutionToString(r);
           return TextButton(
             onPressed: () {
+              // TODO show tool tip
               // showTooltip(context, resolution.tooltip);
               setState(() {
                 currentResolution = r;
@@ -162,9 +196,13 @@ class _CandleStickLayoutState extends State<CandleStickLayout> {
         IconButton(
             onPressed: () {
               if (chart == ChartType.line) {
-                chart = ChartType.candlestick;
+                setState(() {
+                  chart = ChartType.candlestick;
+                });
               } else {
-                chart = ChartType.line;
+                setState(() {
+                  chart = ChartType.line;
+                });
               }
             },
             icon: const Icon(Icons.show_chart_outlined))
@@ -181,5 +219,27 @@ class _CandleStickLayoutState extends State<CandleStickLayout> {
         high: stockHistory.high.toDouble(),
         low: stockHistory.low.toDouble(),
         volume: null);
+  }
+
+  List<charts.Series<TimeSeriesData, DateTime>> _getLineChartData(
+      Map<String, StockHistory> stockHistoryMap) {
+    List<TimeSeriesData> data = [];
+
+    stockHistoryMap.forEach((createdAt, stockHistory) {
+      data.add(TimeSeriesData(DateTime.parse(createdAt),
+          stockHistory.close.toDouble())); // using close price
+    });
+
+    data.sort((a, b) => a.time.compareTo(b.time));
+
+    return [
+      charts.Series<TimeSeriesData, DateTime>(
+        id: 'graph',
+        colorFn: (_, __) => charts.ColorUtil.fromDartColor(blue),
+        data: data,
+        domainFn: (TimeSeriesData x, _) => x.time,
+        measureFn: (TimeSeriesData y, _) => y.stockPrice,
+      )
+    ];
   }
 }

@@ -1,1 +1,1 @@
-enum ChartType { line, candlestick }
+enum ChartType { line, candlestick, bar }
