@@ -1,6 +1,5 @@
 import 'package:dalal_street_client/blocs/stock_history/history/stock_history_cubit.dart';
 import 'package:dalal_street_client/models/time_series_data.dart';
-import 'package:dalal_street_client/config/log.dart';
 import 'package:dalal_street_client/proto_build/actions/GetStockHistory.pbenum.dart';
 import 'package:dalal_street_client/proto_build/models/StockHistory.pb.dart';
 import 'package:dalal_street_client/theme/colors.dart';
@@ -76,11 +75,15 @@ class _LineGraphState extends State<LineGraph> {
           }
         } else if (state is StockHistoryError) {
           // error loading graph
-          logger.e(state.message);
+
+          // TODO : do something better
+          return const Text('error loading chart');
         }
 
-        // todo : return loading state static graph
-        return const Text('hello');
+        return const Center(
+            child: CircularProgressIndicator(
+          color: primaryColor,
+        ));
       },
     );
   }
@@ -93,6 +96,8 @@ class _LineGraphState extends State<LineGraph> {
       data.add(TimeSeriesData(DateTime.parse(createdAt),
           stockHistory.close.toDouble())); // using close price
     });
+
+    data = List.from(data.reversed);
 
     /// checking lastest 2 values to find if the stock price is increasing or decreasing
     /// [data] List will always be of length >= 2
