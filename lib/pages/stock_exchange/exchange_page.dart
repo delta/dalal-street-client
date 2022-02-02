@@ -109,7 +109,8 @@ class _ExchangePageState extends State<ExchangePage>
               shrinkWrap: true,
               itemBuilder: (context, index) {
                 Stock? company = mapOfStocks[index + 1];
-                int currentPrice = mapOfStocks[index + 1]?.currentPrice.toInt() ?? 0;
+                int currentPrice =
+                    mapOfStocks[index + 1]?.currentPrice.toInt() ?? 0;
                 return StockExchangeItem(
                     company: company ?? Stock(),
                     stockId: index + 1,
@@ -122,13 +123,10 @@ class _ExchangePageState extends State<ExchangePage>
               },
               itemCount: mapOfStocks.length),
         ),
-            Flexible(
-              flex: 1,
-              child: Container(
-                
-              ),
-            )
-
+        Flexible(
+          flex: 1,
+          child: Container(),
+        )
       ],
     );
   }
