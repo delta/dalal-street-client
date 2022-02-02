@@ -73,7 +73,12 @@ class _StockExchangeItemState extends State<StockExchangeItem> {
                       overlayColor: MaterialStateProperty.all(secondaryColor),
                       backgroundColor: MaterialStateProperty.all(
                           primaryColor.withOpacity(0.2))),
-                  onPressed: () {},
+                  onPressed: () {
+                    int cash =
+                        getIt<GlobalStreams>().dynamicUserInfoStream.value.cash;
+                    List<int> data = [widget.stockId, cash];
+                    Navigator.pushNamed(context, '/company', arguments: data);
+                  },
                   child: const Text(
                     'View',
                     style: TextStyle(color: primaryColor, fontSize: 14),
