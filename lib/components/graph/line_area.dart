@@ -35,7 +35,7 @@ class _LineGraphState extends State<LineGraph> {
     context.read<StockHistoryCubit>().getStockHistory(
         widget.stockId,
         StockHistoryResolution
-            .OneMinute); // using OneMinute resoulution for latest updates
+            .SixtyMinutes); // using OneMinute resoulution for latest updates
   }
 
   @override
@@ -47,29 +47,31 @@ class _LineGraphState extends State<LineGraph> {
               state.stockHistoryMap;
 
           if (stockHistoryMap.length >= 2) {
+            // TODO for area data sent from server is not consitent for all company
             /// finding the start and end timestamps
-            final Iterable<String> timeStamps = stockHistoryMap.keys;
-            final start = DateTime.parse(timeStamps.elementAt(0));
-            final end = DateTime.parse(
-                timeStamps.elementAt(stockHistoryMap.length - 1));
+            // final Iterable<String> timeStamps = stockHistoryMap.keys;
+            // final start = DateTime.parse(timeStamps.elementAt(0));
+            // final end = DateTime.parse(
+            //     timeStamps.elementAt(stockHistoryMap.length - 1));
 
             return charts.TimeSeriesChart(
               _getGraphData(stockHistoryMap),
               animate: true,
-              domainAxis: charts.DateTimeAxisSpec(
-                  renderSpec: const charts.NoneRenderSpec(),
-                  showAxisLine: false,
-                  viewport: charts.DateTimeExtents(start: start, end: end)),
+              domainAxis: const charts.DateTimeAxisSpec(
+                renderSpec: charts.NoneRenderSpec(),
+                showAxisLine: false,
+                // viewport: charts.DateTimeExtents(start: start, end: end)
+              ),
               primaryMeasureAxis: const charts.NumericAxisSpec(
                   renderSpec: charts.NoneRenderSpec()),
-              // customSeriesRenderers: [
-              //   charts.LineRendererConfig(
-              //       customRendererId: 'area',
-              //       includeArea: true,
-              //       areaOpacity: 0.5,
-              //       strokeWidthPx: 1.5,
-              //       includeLine: true)
-              // ],
+              customSeriesRenderers: [
+                charts.LineRendererConfig(
+                    customRendererId: 'area',
+                    // includeArea: true,
+                    areaOpacity: 0.5,
+                    strokeWidthPx: 1.8,
+                    includeLine: true)
+              ],
             );
           }
         } else if (state is StockHistoryError) {
@@ -105,8 +107,7 @@ class _LineGraphState extends State<LineGraph> {
         data: data,
         domainFn: (TimeSeriesData x, _) => x.time,
         measureFn: (TimeSeriesData y, _) => y.stockPrice,
-      )
-      // ..setAttribute(charts.rendererIdKey, 'area'),
+      )..setAttribute(charts.rendererIdKey, 'area'),
     ];
   }
 }

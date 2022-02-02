@@ -42,15 +42,23 @@ class _CandleStickLayoutState extends State<CandleStickLayout> {
   @override
   void initState() {
     super.initState();
-    // subscribing to stockHistory stream
-    context
-        .read<StockHistoryStreamCubit>()
-        .getStockHistoryUpdates(widget.stockId);
 
     // fetching stockHistory
     context
         .read<StockHistoryCubit>()
         .getStockHistory(widget.stockId, currentResolution);
+
+    // subscribing to stockHistory stream
+    context
+        .read<StockHistoryStreamCubit>()
+        .getStockHistoryUpdates(widget.stockId);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    // unsubscring stock history stream
+    context.read<StockHistoryStreamCubit>().unsubscribe();
   }
 
   @override
