@@ -167,6 +167,16 @@ class _CandleStickLayoutState extends State<CandleStickLayout> {
           domainAxis: const charts.EndPointsTimeAxisSpec(),
           dateTimeFactory: const charts.LocalDateTimeFactory(),
           // defaultRenderer: charts.BarRendererConfig<DateTime>(), uncomment this for bar chart :)
+          customSeriesRenderers: [
+            charts.LineRendererConfig(
+                customRendererId: 'area',
+                areaOpacity: 0.2,
+                includeArea: true,
+                strokeWidthPx: 2,
+                includeLine: true,
+                includePoints: false,
+                roundEndCaps: true)
+          ],
         );
       },
     );
@@ -248,7 +258,7 @@ class _CandleStickLayoutState extends State<CandleStickLayout> {
         data: data,
         domainFn: (TimeSeriesData x, _) => x.time,
         measureFn: (TimeSeriesData y, _) => y.stockPrice,
-      )
+      )..setAttribute(charts.rendererIdKey, 'area')
     ];
   }
 }

@@ -97,6 +97,8 @@ class _LineGraphState extends State<LineGraph> {
           stockHistory.close.toDouble())); // using close price
     });
 
+    // data from the server is sent in descending order of time
+    // TODO change the order in backend ? (same goes for company chart)
     data = List.from(data.reversed);
 
     /// checking lastest 2 values to find if the stock price is increasing or decreasing
