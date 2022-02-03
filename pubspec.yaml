@@ -69,7 +69,8 @@ flutter:
   assets:
     - assets/icon/
     - assets/images/
-    - assets/tls_keys/dev/server.crt
+    - assets/tls_keys/dev/
+    - assets/tls_keys/test/
     - config.json
 
   uses-material-design: true

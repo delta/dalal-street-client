@@ -47,3 +47,4 @@ app.*.map.json
 
 proto_build
 config.json
+assets/tls_keys/docker

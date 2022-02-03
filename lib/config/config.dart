@@ -13,11 +13,14 @@ class GrpcConfig {
       : host = json['host'],
         port = json['port'];
 
-  String get url => 'http://$host:$port/';
+  String get url {
+    return port == 443 ? 'https://$host/' : 'http://$host:$port/';
+  }
 }
 
 late GrpcConfig mobileConfig;
 late GrpcConfig webConfig;
+late String tlsCert;
 
 Future<void> readConfig() async {
   final jsonString = await rootBundle.loadString('config.json');
@@ -25,4 +28,5 @@ Future<void> readConfig() async {
 
   mobileConfig = GrpcConfig.fromJson(jsonMap['mobile']);
   webConfig = GrpcConfig.fromJson(jsonMap['web']);
+  tlsCert = jsonMap['TLScert'];
 }
