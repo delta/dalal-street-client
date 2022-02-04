@@ -30,45 +30,48 @@ class _StockListItemState extends State<StockListItem> {
   Widget build(BuildContext context) {
     int previousDayClose = widget.company.previousDayClose.toInt();
     return GestureDetector(
-      onTap: () { context.read<ListSelectedItemCubit>().setSelectedItem(widget.stockId); },
+      onTap: () {
+        context.read<ListSelectedItemCubit>().setSelectedItem(widget.stockId);
+      },
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-        decoration: const BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-          color: background2,
-        ),
-        child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          _stockNames(widget.company),
-          _stockPrices(
-            widget.stockId,
-            previousDayClose,
-            widget.currentPrice,
+          padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+          decoration: const BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+            color: background2,
           ),
-        ])),
+          child:
+              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+            _stockNames(widget.company),
+            _stockPrices(
+              widget.stockId,
+              previousDayClose,
+              widget.currentPrice,
+            ),
+          ])),
     );
   }
 
   Widget _stockNames(Stock? company) {
     return Expanded(
-      child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.center, children: [
-        Text(
-          company?.shortName ?? 'Airtel',
-          style: const TextStyle(
-            fontSize: 24,
-            color: white
-          ),
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-        Text(
-          company?.fullName ?? 'Airtel Pvt Ltd',
-          style: const TextStyle(
-            fontSize: 18,
-            color: whiteWithOpacity50,
-          ),
-        ),
-      ]),
+      child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              company?.shortName ?? 'Airtel',
+              style: const TextStyle(fontSize: 24, color: white),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Text(
+              company?.fullName ?? 'Airtel Pvt Ltd',
+              style: const TextStyle(
+                fontSize: 18,
+                color: whiteWithOpacity50,
+              ),
+            ),
+          ]),
     );
   }
 
@@ -89,10 +92,7 @@ class _StockListItemState extends State<StockListItem> {
               children: [
                 Text(
                   '₹' + oCcy.format(stockPrice).toString(),
-                  style: const TextStyle(
-                    fontSize: 24,
-                    color: white
-                  ),
+                  style: const TextStyle(fontSize: 24, color: white),
                 ),
                 const SizedBox(
                   height: 10,

@@ -117,10 +117,7 @@ class _StockExchangeItemState extends State<StockExchangeItem> {
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Text(
           company?.shortName ?? 'Airtel',
-          style: const TextStyle(
-            fontSize: 18,
-            color: white
-          ),
+          style: const TextStyle(fontSize: 18, color: white),
         ),
         Text(
           company?.fullName ?? 'Airtel Pvt Ltd',
@@ -150,10 +147,7 @@ class _StockExchangeItemState extends State<StockExchangeItem> {
               children: [
                 Text(
                   '₹' + oCcy.format(stockPrice).toString(),
-                  style: const TextStyle(
-                    fontSize: 18,
-                    color: white
-                  ),
+                  style: const TextStyle(fontSize: 18, color: white),
                 ),
                 Text(
                   updatedPriceChange >= 0
