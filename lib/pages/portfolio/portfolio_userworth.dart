@@ -155,6 +155,7 @@ class _PortfolioUserWorthState extends State<PortfolioUserWorth> {
 
     Map<int, Int64> stocksReservedMap = state.reservedStocks;
     Map<int, Int64> stocksOwnedMap = state.stocks;
+    Map<int, Int64> cashSpentMap = state.cashSpent;
 
     mapOfStocks.forEach((stockId, value) {
       if ((!stocksReservedMap.containsKey(stockId)) &
@@ -164,11 +165,16 @@ class _PortfolioUserWorthState extends State<PortfolioUserWorth> {
       }
     });
     var keyList = stockHeld.keys.toList();
-    return holdinglist(stockHeld, keyList, stocksReservedMap, stocksOwnedMap);
+    return holdinglist(
+        stockHeld, keyList, stocksReservedMap, stocksOwnedMap, cashSpentMap);
   }
 
-  Widget holdinglist(Map<dynamic, dynamic> stocksHeld, List<dynamic> keyList,
-          Map<int, Int64> stocksReservedMap, Map<int, Int64> stocksOwnedMap) =>
+  Widget holdinglist(
+          Map<dynamic, dynamic> stocksHeld,
+          List<dynamic> keyList,
+          Map<int, Int64> stocksReservedMap,
+          Map<int, Int64> stocksOwnedMap,
+          Map<int, Int64> cashSpentMap) =>
       ListView.builder(
           primary: false,
           shrinkWrap: true,
@@ -177,11 +183,13 @@ class _PortfolioUserWorthState extends State<PortfolioUserWorth> {
             return _eachStock(
                 stocksOwnedMap[keyList[index]],
                 stocksReservedMap[keyList[index]],
+                cashSpentMap[keyList[index]],
                 mapOfStocks[keyList[index]]?.fullName ?? '',
                 mapOfStocks[keyList[index]]?.currentPrice);
           });
 
-  Widget _eachStock(Int64? owned, Int64? reserved, String name, Int64? price) =>
+  Widget _eachStock(Int64? owned, Int64? reserved, Int64? cashSpent,
+          String name, Int64? price) =>
       Wrap(children: [
         Column(mainAxisAlignment: MainAxisAlignment.start, children: [
           Row(
@@ -247,6 +255,25 @@ class _PortfolioUserWorthState extends State<PortfolioUserWorth> {
                         style: TextStyle(color: blurredGray),
                       )),
                   Text(price.toString())
+                ],
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Padding(
+                      padding: EdgeInsets.only(bottom: 10),
+                      child: Text(
+                        'Cash Spent',
+                        style: TextStyle(color: blurredGray),
+                      )),
+                  Text(
+                    cashSpent.toString(),
+                    style: TextStyle(
+                        color: (cashSpent?.toInt() ?? 0) >= 0
+                            ? secondaryColor
+                            : heartRed),
+                  )
                 ],
               ),
             ],

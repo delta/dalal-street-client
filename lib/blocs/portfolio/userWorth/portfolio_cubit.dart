@@ -18,8 +18,11 @@ class PortfolioCubit extends Cubit<PortfolioState> {
       final res = await actionClient.getPortfolio(GetPortfolioRequest(),
           options: sessionOptions(getIt()));
       if (res.statusCode == GetPortfolioResponse_StatusCode.OK) {
+        logger.i('portfolio cubit called');
+        logger.i(res.cashSpent);
+        logger.i(res.reservedStocksOwned);
         emit(UserWorthLoaded(
-            res.user, res.stocksOwned, res.reservedStocksOwned));
+            res.user, res.stocksOwned, res.reservedStocksOwned, res.cashSpent));
       } else {
         emit(UserWorthFailure(res.statusMessage));
       }

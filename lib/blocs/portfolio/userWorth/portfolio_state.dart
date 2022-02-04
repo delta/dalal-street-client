@@ -16,7 +16,9 @@ class UserWorthLoaded extends PortfolioState {
   final dynamic user;
   final dynamic stocks;
   final dynamic reservedStocks;
-  const UserWorthLoaded(this.user, this.stocks, this.reservedStocks);
+  final dynamic cashSpent;
+  const UserWorthLoaded(
+      this.user, this.stocks, this.reservedStocks, this.cashSpent);
 
   @override
   List<Object> get props => [user];
