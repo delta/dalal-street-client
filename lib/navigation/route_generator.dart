@@ -38,6 +38,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dalal_street_client/blocs/portfolio/userWorth/portfolio_cubit.dart';
 
 import '../blocs/news/news_bloc.dart';
+import '../blocs/portfolio/open_orders/open_orders_cubit.dart';
+import '../pages/portfolio/portfolio_openorders.dart';
 
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
