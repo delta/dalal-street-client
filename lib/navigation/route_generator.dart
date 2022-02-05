@@ -39,7 +39,7 @@ import 'package:dalal_street_client/blocs/portfolio/userWorth/portfolio_cubit.da
 import '../blocs/news/news_bloc.dart';
 import '../blocs/portfolio/open_orders/open_orders_cubit.dart';
 import '../pages/news/news_page.dart';
-import '../pages/portfolio/portfolio_openorders.dart';
+import '../pages/openorders_page.dart';
 
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
