@@ -261,7 +261,6 @@ class _HomePageState extends State<HomePage>
       children: stockItems,
     );
   }
-
   Widget newsItem(
     String text,
     String imagePath,
@@ -324,6 +323,8 @@ class _HomePageState extends State<HomePage>
     }
   }
 }
+
+
 
 class StockItem extends StatelessWidget {
   final Stock stock;
