@@ -23,6 +23,7 @@ import 'package:dalal_street_client/pages/company_page/company_page.dart';
 import 'package:dalal_street_client/pages/daily_challenges/daily_challenges_page.dart';
 import 'package:dalal_street_client/pages/mortgage/mortgage_home.dart';
 import 'package:dalal_street_client/pages/news_page.dart';
+import 'package:dalal_street_client/pages/notifications_page.dart';
 import 'package:dalal_street_client/pages/referral_page.dart';
 import 'package:dalal_street_client/pages/stock_exchange/exchange_page.dart';
 import 'package:dalal_street_client/pages/landing_page.dart';
@@ -52,6 +53,8 @@ class RouteGenerator {
         return const SplashPage();
       case '/landing':
         return const LandingPage();
+      case '/notifications':
+        return const NotifsPage();
 
       //Admin Pages
       case '/admin':
