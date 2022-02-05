@@ -31,7 +31,7 @@ class _PortfolioOpenOrdersState extends State<PortfolioOpenOrders> {
     return SafeArea(
         child: Scaffold(
             body: Container(
-              width: MediaQuery. of(context). size. width,
+      width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10), color: background2),
       child: Column(
@@ -48,70 +48,67 @@ class _PortfolioOpenOrdersState extends State<PortfolioOpenOrders> {
                     fontWeight: FontWeight.w500),
               )),
           Padding(
-                padding: const EdgeInsets.all(10),
-                child: BlocConsumer<OpenOrdersCubit, OpenOrdersState>(
-                  listener: (context, state) {
-                    if (state is CancelorderSucess) {
-                      showSnackBar(context, 'Order Cancelled Sucessfully');
-                      context.read<OpenOrdersCubit>().getOpenOrders();
-                    } else if (state is CancelorderFailure) {
-                      showSnackBar(
-                          context, 'Failed To Cancel Order Retrying.....');
-                      logger.i(state.msg);
-                      context.read<OpenOrdersCubit>().getOpenOrders();
-                    } else if (state is OpenorderFailure) {
-                      showSnackBar(context, 'Failed to Fetch Open Orders');
-                      context.read<OpenOrdersCubit>().getOpenOrders();
-                    }
-                  },
-                  builder: (context, state) {
-                    if (state is OpenordersSucess) {
-                      return SingleChildScrollView(
-                          scrollDirection: Axis.vertical,
-                          child: DataTable(
-                              columnSpacing: 10,
-                              headingRowHeight: 40,
-                              columns: const <DataColumn>[
-                                DataColumn(
-                                    label: Text('Company',
-                                        style: TextStyle(
-                                            color: lightGray, fontSize: 12))),
-                                DataColumn(
-                                    label: Text(
-                                  'Type',
-                                  style:
-                                      TextStyle(color: lightGray, fontSize: 12),
-                                )),
-                                DataColumn(
-                                    label: Text('Volume',
-                                        style: TextStyle(
-                                            color: lightGray, fontSize: 12))),
-                                DataColumn(
-                                    label: Text('Filled',
-                                        style: TextStyle(
-                                            color: lightGray, fontSize: 12))),
-                                DataColumn(
-                                    label: Text('Price',
-                                        style: TextStyle(
-                                            color: lightGray, fontSize: 12))),
-                                DataColumn(
-                                    label: Text('Action',
-                                        style: TextStyle(
-                                            color: lightGray, fontSize: 12))),
-                              ],
-                              rows: buildRowsOfOpenOrders(state.res)
-                              )
-                              );
-                    } else {
-                      return const Center(
-                        child: CircularProgressIndicator(
-                          color: primaryColor,
-                        ),
-                      );
-                    }
-                  },
-                )),
-          
+              padding: const EdgeInsets.all(10),
+              child: BlocConsumer<OpenOrdersCubit, OpenOrdersState>(
+                listener: (context, state) {
+                  if (state is CancelorderSucess) {
+                    showSnackBar(context, 'Order Cancelled Sucessfully');
+                    context.read<OpenOrdersCubit>().getOpenOrders();
+                  } else if (state is CancelorderFailure) {
+                    showSnackBar(
+                        context, 'Failed To Cancel Order Retrying.....');
+                    logger.i(state.msg);
+                    context.read<OpenOrdersCubit>().getOpenOrders();
+                  } else if (state is OpenorderFailure) {
+                    showSnackBar(context, 'Failed to Fetch Open Orders');
+                    context.read<OpenOrdersCubit>().getOpenOrders();
+                  }
+                },
+                builder: (context, state) {
+                  if (state is OpenordersSucess) {
+                    return SingleChildScrollView(
+                        scrollDirection: Axis.vertical,
+                        child: DataTable(
+                            columnSpacing: 10,
+                            headingRowHeight: 40,
+                            columns: const <DataColumn>[
+                              DataColumn(
+                                  label: Text('Company',
+                                      style: TextStyle(
+                                          color: lightGray, fontSize: 12))),
+                              DataColumn(
+                                  label: Text(
+                                'Type',
+                                style:
+                                    TextStyle(color: lightGray, fontSize: 12),
+                              )),
+                              DataColumn(
+                                  label: Text('Volume',
+                                      style: TextStyle(
+                                          color: lightGray, fontSize: 12))),
+                              DataColumn(
+                                  label: Text('Filled',
+                                      style: TextStyle(
+                                          color: lightGray, fontSize: 12))),
+                              DataColumn(
+                                  label: Text('Price',
+                                      style: TextStyle(
+                                          color: lightGray, fontSize: 12))),
+                              DataColumn(
+                                  label: Text('Action',
+                                      style: TextStyle(
+                                          color: lightGray, fontSize: 12))),
+                            ],
+                            rows: buildRowsOfOpenOrders(state.res)));
+                  } else {
+                    return const Center(
+                      child: CircularProgressIndicator(
+                        color: primaryColor,
+                      ),
+                    );
+                  }
+                },
+              )),
         ],
       ),
     )));
@@ -143,12 +140,11 @@ class _PortfolioOpenOrdersState extends State<PortfolioOpenOrders> {
           element.price,
           element));
     }
-    if(rows.isNotEmpty)
-    {return rows;}
-    else{
-     return rows;
+    if (rows.isNotEmpty) {
+      return rows;
+    } else {
+      return rows;
     }
-
   }
 
   DataRow buildOpenAskOrdersRow(
