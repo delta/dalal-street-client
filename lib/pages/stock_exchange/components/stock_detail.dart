@@ -24,9 +24,7 @@ class _StockDetailState extends State<StockDetail> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-               Text('${state.selectedItem}')
-            ],
+            children: [Text('${state.selectedItem}')],
           ),
         );
       },

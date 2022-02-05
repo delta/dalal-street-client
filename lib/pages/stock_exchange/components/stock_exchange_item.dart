@@ -248,23 +248,23 @@ class _StockExchangeItemState extends State<StockExchangeItem> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Wrap(
-                      spacing: 14,
-                      children: [
-                        SvgPicture.asset(
-                          AppIcons.stockMarket,
-                          width: 18,
+                    spacing: 14,
+                    children: [
+                      SvgPicture.asset(
+                        AppIcons.stockMarket,
+                        width: 18,
+                      ),
+                      const Text(
+                        'Stocks in Market',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                          color: white,
                         ),
-                        const Text(
-                          'Stocks in Market',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            color: white,
-                          ),
-                          textAlign: TextAlign.start,
-                        ),
-                      ],
-                    ),
+                        textAlign: TextAlign.start,
+                      ),
+                    ],
+                  ),
                   Text(company?.stocksInMarket.toString() ?? '0')
                 ],
               ),
@@ -275,23 +275,23 @@ class _StockExchangeItemState extends State<StockExchangeItem> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Wrap(
-                      spacing: 14,
-                      children: [
-                        SvgPicture.asset(
-                          AppIcons.stockMarket,
-                          width: 18,
+                    spacing: 14,
+                    children: [
+                      SvgPicture.asset(
+                        AppIcons.stockMarket,
+                        width: 18,
+                      ),
+                      const Text(
+                        'Stocks in Exchange',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                          color: white,
                         ),
-                        const Text(
-                          'Stocks in Exchange',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            color: white,
-                          ),
-                          textAlign: TextAlign.start,
-                        ),
-                      ],
-                    ),
+                        textAlign: TextAlign.start,
+                      ),
+                    ],
+                  ),
                   Text(company?.stocksInExchange.toString() ?? '0')
                 ],
               )

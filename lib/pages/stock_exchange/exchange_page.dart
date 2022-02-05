@@ -106,14 +106,8 @@ class _ExchangePageState extends State<ExchangePage>
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Flexible(
-            flex: 1,
-            child: _companyListView()
-          ),
-          Flexible(
-            flex: 1,
-            child: StockDetail()
-          )
+          Flexible(flex: 1, child: _companyListView()),
+          Flexible(flex: 1, child: StockDetail())
         ],
       ),
     );
@@ -121,31 +115,31 @@ class _ExchangePageState extends State<ExchangePage>
 
   Widget _companyListView() {
     return Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-              decoration: const BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                color: background3,
-              ),
-              child: ListView.separated(
-                  physics: const BouncingScrollPhysics(),
-                  scrollDirection: Axis.vertical,
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) {
-                    Stock? company = mapOfStocks[index + 1];
-                    int currentPrice =
-                        mapOfStocks[index + 1]?.currentPrice.toInt() ?? 0;
-                    return StockListItem(
-                        company: company ?? Stock(),
-                        stockId: index + 1,
-                        currentPrice: currentPrice);
-                  },
-                  separatorBuilder: (BuildContext context, int index) {
-                    return const SizedBox(
-                      height: 20,
-                    );
-                  },
-                  itemCount: mapOfStocks.length),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      decoration: const BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+        color: background3,
+      ),
+      child: ListView.separated(
+          physics: const BouncingScrollPhysics(),
+          scrollDirection: Axis.vertical,
+          shrinkWrap: true,
+          itemBuilder: (context, index) {
+            Stock? company = mapOfStocks[index + 1];
+            int currentPrice =
+                mapOfStocks[index + 1]?.currentPrice.toInt() ?? 0;
+            return StockListItem(
+                company: company ?? Stock(),
+                stockId: index + 1,
+                currentPrice: currentPrice);
+          },
+          separatorBuilder: (BuildContext context, int index) {
+            return const SizedBox(
+              height: 20,
             );
+          },
+          itemCount: mapOfStocks.length),
+    );
   }
 
   Center _tabletBody() {
