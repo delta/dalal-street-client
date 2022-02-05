@@ -107,7 +107,8 @@ class _ExchangePageState extends State<ExchangePage>
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Flexible(flex: 1, child: _companyListView()),
-          Flexible(flex: 1, child: StockDetail())
+          const SizedBox(width: 10,),
+          const Flexible(flex: 1, child: StockDetail())
         ],
       ),
     );

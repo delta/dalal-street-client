@@ -182,6 +182,7 @@ class _StockExchangeItemState extends State<StockExchangeItem> {
                     (mapOfStocks[stockId]?.stocksInExchange.toInt() ?? 0);
             mapOfStocks[stockId]?.stocksInExchange = Int64(stocksInExchange);
             return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -210,9 +211,7 @@ class _StockExchangeItemState extends State<StockExchangeItem> {
                     )
                   ],
                 ),
-                const SizedBox(
-                  height: 10,
-                ),
+                const SizedBox(height: 10,),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -242,7 +241,7 @@ class _StockExchangeItemState extends State<StockExchangeItem> {
             );
           }
           return Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -265,12 +264,11 @@ class _StockExchangeItemState extends State<StockExchangeItem> {
                       ),
                     ],
                   ),
-                  Text(company?.stocksInMarket.toString() ?? '0')
+                  Text(company?.stocksInMarket.toString() ?? '0',
+                      style: const TextStyle(color: bronze))
                 ],
               ),
-              const SizedBox(
-                height: 10,
-              ),
+              const SizedBox(height: 10,),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -292,7 +290,8 @@ class _StockExchangeItemState extends State<StockExchangeItem> {
                       ),
                     ],
                   ),
-                  Text(company?.stocksInExchange.toString() ?? '0')
+                  Text(company?.stocksInExchange.toString() ?? '0',
+                      style: const TextStyle(color: gold))
                 ],
               )
             ],
