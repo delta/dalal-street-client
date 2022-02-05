@@ -1,6 +1,4 @@
-import 'package:dalal_street_client/blocs/portfolio/open_orders/open_orders_cubit.dart';
 import 'package:dalal_street_client/blocs/portfolio/userWorth/portfolio_cubit.dart';
-import 'package:dalal_street_client/pages/openorders_page.dart';
 import 'package:dalal_street_client/utils/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:dalal_street_client/theme/colors.dart';

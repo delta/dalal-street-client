@@ -4,7 +4,7 @@ import 'package:dalal_street_client/components/buttons/tertiary_button.dart';
 import 'package:dalal_street_client/components/loading.dart';
 import 'package:dalal_street_client/config/get_it.dart';
 import 'package:dalal_street_client/constants/format.dart';
-import 'package:dalal_street_client/pages/newsdetail_page.dart';
+import 'package:dalal_street_client/pages/news/newsdetail_page.dart';
 import 'package:dalal_street_client/proto_build/models/MarketEvent.pb.dart';
 import 'package:dalal_street_client/streams/transformations.dart';
 import 'package:fixnum/fixnum.dart';

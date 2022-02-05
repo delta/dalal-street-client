@@ -3,10 +3,8 @@ import 'package:dalal_street_client/constants/error_messages.dart';
 import 'package:dalal_street_client/grpc/client.dart';
 import 'package:dalal_street_client/proto_build/actions/GetMarketEvents.pb.dart';
 import 'package:equatable/equatable.dart';
-
 import '../../config/get_it.dart';
 import '../../proto_build/datastreams/Subscribe.pb.dart';
-
 part 'news_event.dart';
 part 'news_state.dart';
 
