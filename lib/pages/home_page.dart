@@ -332,8 +332,6 @@ class _HomePageState extends State<HomePage>
   }
 }
 
-
-
 class StockItem extends StatelessWidget {
   final Stock stock;
   final Stream<Int64> stockPriceStream;

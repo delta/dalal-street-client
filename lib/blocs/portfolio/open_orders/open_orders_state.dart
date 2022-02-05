@@ -23,13 +23,13 @@ class OpenorderFailure extends OpenOrdersState {
   List<Object> get props => [msg];
 }
 
-class CancelorderSucess extends OpenOrdersState{
+class CancelorderSucess extends OpenOrdersState {
   const CancelorderSucess();
 }
-class CancelorderFailure extends OpenOrdersState{
+
+class CancelorderFailure extends OpenOrdersState {
   final String msg;
   const CancelorderFailure(this.msg);
-    @override
+  @override
   List<Object> get props => [msg];
-  
 }
