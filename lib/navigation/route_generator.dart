@@ -25,7 +25,6 @@ import 'package:dalal_street_client/pages/auth/verify_phone/enter_phone_page.dar
 import 'package:dalal_street_client/pages/company_page/company_page.dart';
 import 'package:dalal_street_client/pages/daily_challenges/daily_challenges_page.dart';
 import 'package:dalal_street_client/pages/mortgage/mortgage_home.dart';
-import 'package:dalal_street_client/pages/news_page.dart';
 import 'package:dalal_street_client/pages/referral_page.dart';
 import 'package:dalal_street_client/pages/stock_exchange/exchange_page.dart';
 import 'package:dalal_street_client/pages/landing_page.dart';
@@ -39,6 +38,7 @@ import 'package:dalal_street_client/blocs/portfolio/userWorth/portfolio_cubit.da
 
 import '../blocs/news/news_bloc.dart';
 import '../blocs/portfolio/open_orders/open_orders_cubit.dart';
+import '../pages/news/news_page.dart';
 import '../pages/portfolio/portfolio_openorders.dart';
 
 class RouteGenerator {
