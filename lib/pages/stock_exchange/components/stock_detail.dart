@@ -306,39 +306,43 @@ class _StockDetailState extends State<StockDetail> {
               ),
               Padding(
                 padding: const EdgeInsets.all(9.0),
-                child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                  const Text(
-                    'Number of Stocks',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500,
-                      color: lightGray,
-                    ),
-                  ),
-                  Container(
-                    height: 40,
-                    width: 180,
-                    padding: EdgeInsets.zero,
-                    decoration: BoxDecoration(
-                      borderRadius: const BorderRadius.all(Radius.circular(5)),
-                      color: primaryColor.withOpacity(0.2),
-                    ),
-                    child: SpinBox(
-                      min: 1,
-                      max: 20,
-                      value: 01,
-                      onChanged: (value) {},
-                      decoration: const InputDecoration(border: InputBorder.none),
-                      iconColor: MaterialStateProperty.all(primaryColor),
-                      spacing: 15,
-                      cursorColor: primaryColor,
-                      textStyle: const TextStyle(
-                        color: primaryColor,
-                        fontSize: 18,
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'Number of Stocks',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                          color: lightGray,
+                        ),
                       ),
-                    ),
-                  )
-                ]),
+                      Container(
+                        height: 40,
+                        width: 180,
+                        padding: EdgeInsets.zero,
+                        decoration: BoxDecoration(
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(5)),
+                          color: primaryColor.withOpacity(0.2),
+                        ),
+                        child: SpinBox(
+                          min: 1,
+                          max: 20,
+                          value: 01,
+                          onChanged: (value) {},
+                          decoration:
+                              const InputDecoration(border: InputBorder.none),
+                          iconColor: MaterialStateProperty.all(primaryColor),
+                          spacing: 15,
+                          cursorColor: primaryColor,
+                          textStyle: const TextStyle(
+                            color: primaryColor,
+                            fontSize: 18,
+                          ),
+                        ),
+                      )
+                    ]),
               ),
               const SizedBox(
                 height: 20,
@@ -357,7 +361,9 @@ class _StockDetailState extends State<StockDetail> {
                             arguments: data);
                       },
                       child: const Text('Know More')),
-                  const SizedBox(width: 40,),
+                  const SizedBox(
+                    width: 40,
+                  ),
                   ElevatedButton(
                     onPressed: () {},
                     child: const Text('Buy'),

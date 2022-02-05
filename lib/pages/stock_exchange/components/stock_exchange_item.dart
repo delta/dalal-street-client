@@ -211,7 +211,9 @@ class _StockExchangeItemState extends State<StockExchangeItem> {
                     )
                   ],
                 ),
-                const SizedBox(height: 10,),
+                const SizedBox(
+                  height: 10,
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -268,7 +270,9 @@ class _StockExchangeItemState extends State<StockExchangeItem> {
                       style: const TextStyle(color: bronze))
                 ],
               ),
-              const SizedBox(height: 10,),
+              const SizedBox(
+                height: 10,
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
