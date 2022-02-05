@@ -1,7 +1,7 @@
 import 'package:dalal_street_client/blocs/news/news_bloc.dart';
 import 'package:dalal_street_client/blocs/news_subscription/news_subscription_cubit.dart';
 import 'package:dalal_street_client/blocs/subscribe/subscribe_cubit.dart';
-import 'package:dalal_street_client/pages/newsdetail_page.dart';
+import 'package:dalal_street_client/pages/news/newsdetail_page.dart';
 import 'package:dalal_street_client/proto_build/datastreams/Subscribe.pb.dart';
 import 'package:dalal_street_client/proto_build/models/MarketEvent.pb.dart';
 import 'package:dalal_street_client/theme/colors.dart';
