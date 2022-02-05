@@ -11,45 +11,35 @@ part 'open_orders_state.dart';
 
 class OpenOrdersCubit extends Cubit<OpenOrdersState> {
   OpenOrdersCubit() : super(OpenOrdersInitial());
-Future<void> getOpenOrders ()
-async {
-  try{
-    final GetMyOpenOrdersResponse resp = await actionClient.getMyOpenOrders(GetMyOpenOrdersRequest(),options: sessionOptions(getIt()));
-    if(resp.statusCode==GetMyOpenOrdersResponse_StatusCode.OK)
-    {
-    emit(OpenordersSucess(resp));
+  Future<void> getOpenOrders() async {
+    try {
+      final GetMyOpenOrdersResponse resp = await actionClient.getMyOpenOrders(
+          GetMyOpenOrdersRequest(),
+          options: sessionOptions(getIt()));
+      if (resp.statusCode == GetMyOpenOrdersResponse_StatusCode.OK) {
+        emit(OpenordersSucess(resp));
+      } else {
+        emit(OpenorderFailure(resp.statusMessage));
+      }
+    } catch (e) {
+      logger.i(e.toString());
+      emit(const OpenorderFailure(failedToReachServer));
     }
-    else
-    {
-      emit(OpenorderFailure(resp.statusMessage));
-    }
-  }
-  catch(e)
-  {
-    logger.i(e.toString());
-    emit(const OpenorderFailure(failedToReachServer));
   }
 
-}
-  Future<void> cancelOpenOrders(int ? orderId,bool ? isAsk )
-  async{
-    try{
-      final CancelOrderResponse resp = await actionClient.cancelOrder(CancelOrderRequest(orderId: orderId,isAsk: isAsk),options: sessionOptions(getIt()));
-      if(resp.statusCode == CancelOrderResponse_StatusCode.OK)
-      {
+  Future<void> cancelOpenOrders(int? orderId, bool? isAsk) async {
+    try {
+      final CancelOrderResponse resp = await actionClient.cancelOrder(
+          CancelOrderRequest(orderId: orderId, isAsk: isAsk),
+          options: sessionOptions(getIt()));
+      if (resp.statusCode == CancelOrderResponse_StatusCode.OK) {
         emit(const CancelorderSucess());
-      }
-      else{
+      } else {
         emit(CancelorderFailure(resp.statusMessage));
       }
+    } catch (e) {
+      logger.i(e.toString());
+      emit(const CancelorderFailure(failedToReachServer));
     }
-      catch(e)
-  {
-    logger.i(e.toString());
-    emit(const CancelorderFailure(failedToReachServer));
   }
-  }
-
-
-
 }

@@ -81,10 +81,11 @@ class RouteGenerator {
           create: (context) => LoginCubit(context.read()),
           child: LoginPage(),
         );
-        case '/openorders':
-        return  BlocProvider(create: (context) => OpenOrdersCubit(),
-              child: const PortfolioOpenOrders(),
-              );
+      case '/openorders':
+        return BlocProvider(
+          create: (context) => OpenOrdersCubit(),
+          child: const PortfolioOpenOrders(),
+        );
       case '/referral':
         if (args is User) {
           return BlocProvider(
