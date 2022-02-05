@@ -34,21 +34,25 @@ class _NotifsState extends State<NotifsPage> {
               const SizedBox(height: 23),
               StreamBuilder(
                   stream: notifStream,
-                  builder: (context, state) {
-                    Object notification = state.data!;
-
-                    return Column(
-                      children: [
-                        Text((notification).toString(),
-                            style: const TextStyle(
-                              fontSize: 13,
-                              color: whiteWithOpacity50,
-                            )),
-                        const SizedBox(
-                          width: 1.0,
-                        ),
-                      ],
-                    );
+                  builder: (BuildContext context, AsyncSnapshot snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const CircularProgressIndicator();
+                    } else if (snapshot.connectionState ==
+                            ConnectionState.active ||
+                        snapshot.connectionState == ConnectionState.done) {
+                      if (snapshot.hasError) {
+                        return const Text('error');
+                      } else if (snapshot.hasData) {
+                        return Text(
+                          snapshot.data.toString(),
+                          style: const TextStyle(color: white, fontSize: 16),
+                        );
+                      } else {
+                        return const Text('empty data');
+                      }
+                    } else {
+                      return Text('State: ${snapshot.connectionState}');
+                    }
                   }),
             ],
           ),
