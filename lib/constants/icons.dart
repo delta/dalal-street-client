@@ -20,4 +20,6 @@ class AppIcons {
   static const String dayHigh = _iconsDir + 'dayhigh.svg';
   static const String crossWhite = _iconsDir + 'cross_white.svg';
   static const String balance = _iconsDir + 'balance.svg';
+  static const String stockMarket = _iconsDir + 'stock_market.svg';
+  static const String stockExchange = _iconsDir + 'stock_exchange.svg'; 
 }

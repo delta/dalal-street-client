@@ -1,6 +1,7 @@
 import 'package:dalal_street_client/blocs/exchange/exchange_cubit.dart';
 import 'package:dalal_street_client/blocs/list_selection/list_selection_cubit.dart';
 import 'package:dalal_street_client/config/get_it.dart';
+import 'package:dalal_street_client/pages/stock_exchange/components/stock_detail.dart';
 import 'package:dalal_street_client/pages/stock_exchange/components/stock_exchange_item.dart';
 import 'package:dalal_street_client/pages/stock_exchange/components/stock_list_item.dart';
 import 'package:dalal_street_client/streams/global_streams.dart';
@@ -107,7 +108,19 @@ class _ExchangePageState extends State<ExchangePage>
         children: [
           Flexible(
             flex: 1,
-            child: Container(
+            child: _companyListView()
+          ),
+          Flexible(
+            flex: 1,
+            child: StockDetail()
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _companyListView() {
+    return Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
               decoration: const BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(10.0)),
@@ -132,21 +145,7 @@ class _ExchangePageState extends State<ExchangePage>
                     );
                   },
                   itemCount: mapOfStocks.length),
-            ),
-          ),
-          Flexible(
-            flex: 1,
-            child: BlocBuilder<ListSelectedItemCubit, ListSelectedItemState>(
-              builder: (context, state) {
-                return Container(
-                  child: Text('${state.selectedItem}'),
-                );
-              },
-            ),
-          )
-        ],
-      ),
-    );
+            );
   }
 
   Center _tabletBody() {

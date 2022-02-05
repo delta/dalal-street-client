@@ -1,6 +1,7 @@
 import 'package:dalal_street_client/blocs/exchange/exchange_cubit.dart';
 import 'package:dalal_street_client/config/get_it.dart';
 import 'package:dalal_street_client/constants/format.dart';
+import 'package:dalal_street_client/constants/icons.dart';
 import 'package:dalal_street_client/pages/stock_exchange/components/exchange_bottom_sheet.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
 import 'package:dalal_street_client/streams/global_streams.dart';
@@ -9,6 +10,7 @@ import 'package:dalal_street_client/theme/colors.dart';
 import 'package:fixnum/fixnum.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class StockExchangeItem extends StatefulWidget {
   final Stock company;
@@ -184,7 +186,24 @@ class _StockExchangeItemState extends State<StockExchangeItem> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text('Stocks in Market'),
+                    Wrap(
+                      spacing: 14,
+                      children: [
+                        SvgPicture.asset(
+                          AppIcons.stockMarket,
+                          width: 18,
+                        ),
+                        const Text(
+                          'Stocks in Market',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            color: white,
+                          ),
+                          textAlign: TextAlign.start,
+                        ),
+                      ],
+                    ),
                     Text(
                       stocksInMarket.toString(),
                       style: const TextStyle(color: bronze),
@@ -197,7 +216,24 @@ class _StockExchangeItemState extends State<StockExchangeItem> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text('Stocks in Exchange'),
+                    Wrap(
+                      spacing: 14,
+                      children: [
+                        SvgPicture.asset(
+                          AppIcons.stockExchange,
+                          width: 18,
+                        ),
+                        const Text(
+                          'Stocks in Exchange',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            color: white,
+                          ),
+                          textAlign: TextAlign.start,
+                        ),
+                      ],
+                    ),
                     Text(stocksInExchange.toString(),
                         style: const TextStyle(color: gold))
                   ],
@@ -211,7 +247,24 @@ class _StockExchangeItemState extends State<StockExchangeItem> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text('Stocks in Market'),
+                  Wrap(
+                      spacing: 14,
+                      children: [
+                        SvgPicture.asset(
+                          AppIcons.stockMarket,
+                          width: 18,
+                        ),
+                        const Text(
+                          'Stocks in Market',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            color: white,
+                          ),
+                          textAlign: TextAlign.start,
+                        ),
+                      ],
+                    ),
                   Text(company?.stocksInMarket.toString() ?? '0')
                 ],
               ),
@@ -221,7 +274,24 @@ class _StockExchangeItemState extends State<StockExchangeItem> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text('Stocks in Exchange'),
+                  Wrap(
+                      spacing: 14,
+                      children: [
+                        SvgPicture.asset(
+                          AppIcons.stockMarket,
+                          width: 18,
+                        ),
+                        const Text(
+                          'Stocks in Exchange',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            color: white,
+                          ),
+                          textAlign: TextAlign.start,
+                        ),
+                      ],
+                    ),
                   Text(company?.stocksInExchange.toString() ?? '0')
                 ],
               )
