@@ -117,7 +117,9 @@ class _ExchangePageState extends State<ExchangePage>
   }
 
   Widget _companyListView() {
-     List<Widget> stockListItems = mapOfStocks.entries.map((entry) => StockListItem(company: entry.value)).toList();
+    List<Widget> stockListItems = mapOfStocks.entries
+        .map((entry) => StockListItem(company: entry.value))
+        .toList();
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       decoration: const BoxDecoration(
@@ -203,19 +205,21 @@ class _ExchangePageState extends State<ExchangePage>
         ),
       );
 
-  Widget _exchangeBodyMobile() { 
-    List<Widget> stockExchangeItems = mapOfStocks.entries.map((entry) => StockExchangeItem(company: entry.value)).toList();
+  Widget _exchangeBodyMobile() {
+    List<Widget> stockExchangeItems = mapOfStocks.entries
+        .map((entry) => StockExchangeItem(company: entry.value))
+        .toList();
     return ListView.separated(
-        physics: const BouncingScrollPhysics(),
-        scrollDirection: Axis.vertical,
-        shrinkWrap: true,
-        itemCount: mapOfStocks.length,
-        itemBuilder: (context, index) => stockExchangeItems[index],
-        separatorBuilder: (BuildContext context, int index) {
-          return const SizedBox(
-            height: 10,
-          );
-        },
-      );
+      physics: const BouncingScrollPhysics(),
+      scrollDirection: Axis.vertical,
+      shrinkWrap: true,
+      itemCount: mapOfStocks.length,
+      itemBuilder: (context, index) => stockExchangeItems[index],
+      separatorBuilder: (BuildContext context, int index) {
+        return const SizedBox(
+          height: 10,
+        );
+      },
+    );
   }
 }

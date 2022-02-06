@@ -28,7 +28,9 @@ class _StockListItemState extends State<StockListItem> {
     int previousDayClose = widget.company.previousDayClose.toInt();
     return GestureDetector(
       onTap: () {
-        context.read<ListSelectedItemCubit>().setSelectedItem(widget.company.id);
+        context
+            .read<ListSelectedItemCubit>()
+            .setSelectedItem(widget.company.id);
       },
       child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),

@@ -47,7 +47,8 @@ class _MortgageStockItemState extends State<MortgageStockItem> {
           const SizedBox(
             height: 10,
           ),
-          _stockMortgageDetails(widget.company.id, widget.company.currentPrice.toInt()),
+          _stockMortgageDetails(
+              widget.company.id, widget.company.currentPrice.toInt()),
           const SizedBox(
             height: 10,
           ),
