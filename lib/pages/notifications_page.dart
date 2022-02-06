@@ -62,26 +62,4 @@ class _NotifsState extends State<NotifsPage> {
           ),
         ),
       );
-
-  /*Widget _onGetNotifications() {
-    return BlocConsumer<NotificationsCubit, NotificationsState>(
-        listener: (context, state) {
-      if (state is NotificationsSuccess) {
-        logger.i('got notifications successfully');
-        showSnackBar(context, 'got notifications successfully');
-      } else if (state is NotificationsFailure) {
-        logger.i('unsuccessful');
-        showSnackBar(context, state.msg);
-      }
-    }, builder: (context, state) {
-      if (state is NotificationsLoading) {
-        logger.i('loading');
-        return const Center(child: CircularProgressIndicator());
-      } else if (state is NotificationsFailure) {
-        logger.i('unsuccessful');
-      }
-      return const SizedBox();
-    });
-  }
-  */
 }
