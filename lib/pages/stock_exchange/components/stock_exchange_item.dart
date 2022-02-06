@@ -14,15 +14,11 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 class StockExchangeItem extends StatefulWidget {
   final Stock company;
-  final int stockId;
-  final int currentPrice;
 
-  const StockExchangeItem(
-      {Key? key,
-      required this.company,
-      required this.stockId,
-      required this.currentPrice})
-      : super(key: key);
+  const StockExchangeItem({
+    Key? key,
+    required this.company,
+  }) : super(key: key);
 
   @override
   _StockExchangeItemState createState() => _StockExchangeItemState();
@@ -46,15 +42,15 @@ class _StockExchangeItemState extends State<StockExchangeItem> {
           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             _stockNames(widget.company),
             _stockPrices(
-              widget.stockId,
+              widget.company.id,
               previousDayClose,
-              widget.currentPrice,
+              widget.company.currentPrice.toInt(),
             ),
           ]),
           const SizedBox(
             height: 10,
           ),
-          _stockExchangeDetails(widget.stockId, widget.company),
+          _stockExchangeDetails(widget.company.id, widget.company),
           const SizedBox(
             height: 10,
           ),
@@ -78,7 +74,7 @@ class _StockExchangeItemState extends State<StockExchangeItem> {
                   onPressed: () {
                     int cash =
                         getIt<GlobalStreams>().dynamicUserInfoStream.value.cash;
-                    List<int> data = [widget.stockId, cash];
+                    List<int> data = [widget.company.id, cash];
                     Navigator.pushNamed(context, '/company', arguments: data);
                   },
                   child: const Text(
@@ -114,15 +110,15 @@ class _StockExchangeItemState extends State<StockExchangeItem> {
     );
   }
 
-  Widget _stockNames(Stock? company) {
+  Widget _stockNames(Stock company) {
     return Expanded(
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Text(
-          company?.shortName ?? 'Airtel',
+          company.shortName,
           style: const TextStyle(fontSize: 18, color: white),
         ),
         Text(
-          company?.fullName ?? 'Airtel Pvt Ltd',
+          company.fullName,
           style: const TextStyle(
             fontSize: 14,
             color: whiteWithOpacity50,
@@ -168,7 +164,7 @@ class _StockExchangeItemState extends State<StockExchangeItem> {
 
   Widget _stockExchangeDetails(
     int stockId,
-    Stock? company,
+    Stock company,
   ) =>
       BlocBuilder<ExchangeCubit, ExchangeState>(
         builder: (context, state) {
@@ -266,7 +262,7 @@ class _StockExchangeItemState extends State<StockExchangeItem> {
                       ),
                     ],
                   ),
-                  Text(company?.stocksInMarket.toString() ?? '0',
+                  Text(company.stocksInMarket.toString(),
                       style: const TextStyle(color: bronze))
                 ],
               ),
@@ -294,7 +290,7 @@ class _StockExchangeItemState extends State<StockExchangeItem> {
                       ),
                     ],
                   ),
-                  Text(company?.stocksInExchange.toString() ?? '0',
+                  Text(company.stocksInExchange.toString(),
                       style: const TextStyle(color: gold))
                 ],
               )
@@ -303,7 +299,7 @@ class _StockExchangeItemState extends State<StockExchangeItem> {
         },
       );
 
-  void _showModalSheet(Stock? company) {
+  void _showModalSheet(Stock company) {
     showModalBottomSheet(
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(top: Radius.circular(25.0))),
@@ -311,7 +307,7 @@ class _StockExchangeItemState extends State<StockExchangeItem> {
         context: context,
         isScrollControlled: true,
         builder: (_) {
-          return ExchangeBottomSheet(company: company ?? Stock());
+          return ExchangeBottomSheet(company: company);
         });
   }
 }

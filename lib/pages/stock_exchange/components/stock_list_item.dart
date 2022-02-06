@@ -11,14 +11,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class StockListItem extends StatefulWidget {
   final Stock company;
-  final int stockId;
-  final int currentPrice;
-  const StockListItem(
-      {Key? key,
-      required this.company,
-      required this.stockId,
-      required this.currentPrice})
-      : super(key: key);
+
+  const StockListItem({
+    Key? key,
+    required this.company,
+  }) : super(key: key);
 
   @override
   _StockListItemState createState() => _StockListItemState();
@@ -31,7 +28,7 @@ class _StockListItemState extends State<StockListItem> {
     int previousDayClose = widget.company.previousDayClose.toInt();
     return GestureDetector(
       onTap: () {
-        context.read<ListSelectedItemCubit>().setSelectedItem(widget.stockId);
+        context.read<ListSelectedItemCubit>().setSelectedItem(widget.company.id);
       },
       child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
@@ -43,29 +40,29 @@ class _StockListItemState extends State<StockListItem> {
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             _stockNames(widget.company),
             _stockPrices(
-              widget.stockId,
+              widget.company.id,
               previousDayClose,
-              widget.currentPrice,
+              widget.company.currentPrice.toInt(),
             ),
           ])),
     );
   }
 
-  Widget _stockNames(Stock? company) {
+  Widget _stockNames(Stock company) {
     return Expanded(
       child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              company?.shortName ?? 'Airtel',
+              company.shortName,
               style: const TextStyle(fontSize: 24, color: white),
             ),
             const SizedBox(
               height: 10,
             ),
             Text(
-              company?.fullName ?? 'Airtel Pvt Ltd',
+              company.fullName,
               style: const TextStyle(
                 fontSize: 18,
                 color: whiteWithOpacity50,

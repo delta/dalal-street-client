@@ -21,23 +21,19 @@ class _MortgagePageState extends State<MortgagePage> {
     );
   }
 
-  Widget _mortgageBody() => ListView.separated(
+  Widget _mortgageBody() { 
+    List<Widget> stockMortgageItems = mapOfStocks.entries.map((entry) => MortgageStockItem(company: entry.value)).toList();
+    return ListView.separated(
         physics: const BouncingScrollPhysics(),
         scrollDirection: Axis.vertical,
         shrinkWrap: true,
         itemCount: mapOfStocks.length,
-        itemBuilder: (context, index) {
-          Stock? company = mapOfStocks[index + 1];
-          int currentPrice = mapOfStocks[index + 1]?.currentPrice.toInt() ?? 0;
-          return MortgageStockItem(
-              company: company ?? Stock(),
-              stockId: index + 1,
-              currentPrice: currentPrice);
-        },
+        itemBuilder: (context, index) => stockMortgageItems[index],
         separatorBuilder: (BuildContext context, int index) {
           return const SizedBox(
             height: 10,
           );
         },
       );
+  }
 }

@@ -117,6 +117,7 @@ class _ExchangePageState extends State<ExchangePage>
   }
 
   Widget _companyListView() {
+     List<Widget> stockListItems = mapOfStocks.entries.map((entry) => StockListItem(company: entry.value)).toList();
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       decoration: const BoxDecoration(
@@ -127,15 +128,7 @@ class _ExchangePageState extends State<ExchangePage>
           physics: const BouncingScrollPhysics(),
           scrollDirection: Axis.vertical,
           shrinkWrap: true,
-          itemBuilder: (context, index) {
-            Stock? company = mapOfStocks[index + 1];
-            int currentPrice =
-                mapOfStocks[index + 1]?.currentPrice.toInt() ?? 0;
-            return StockListItem(
-                company: company ?? Stock(),
-                stockId: index + 1,
-                currentPrice: currentPrice);
-          },
+          itemBuilder: (context, index) => stockListItems[index],
           separatorBuilder: (BuildContext context, int index) {
             return const SizedBox(
               height: 20,
@@ -210,23 +203,19 @@ class _ExchangePageState extends State<ExchangePage>
         ),
       );
 
-  Widget _exchangeBodyMobile() => ListView.separated(
+  Widget _exchangeBodyMobile() { 
+    List<Widget> stockExchangeItems = mapOfStocks.entries.map((entry) => StockExchangeItem(company: entry.value)).toList();
+    return ListView.separated(
         physics: const BouncingScrollPhysics(),
         scrollDirection: Axis.vertical,
         shrinkWrap: true,
         itemCount: mapOfStocks.length,
-        itemBuilder: (context, index) {
-          Stock? company = mapOfStocks[index + 1];
-          int currentPrice = mapOfStocks[index + 1]?.currentPrice.toInt() ?? 0;
-          return StockExchangeItem(
-              company: company ?? Stock(),
-              stockId: index + 1,
-              currentPrice: currentPrice);
-        },
+        itemBuilder: (context, index) => stockExchangeItems[index],
         separatorBuilder: (BuildContext context, int index) {
           return const SizedBox(
             height: 10,
           );
         },
       );
+  }
 }
