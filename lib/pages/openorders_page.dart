@@ -141,11 +141,7 @@ class _PortfolioOpenOrdersState extends State<PortfolioOpenOrders> {
           element.price,
           element));
     }
-    if (rows.isNotEmpty) {
-      return rows;
-    } else {
-      return rows;
-    }
+    return rows;
   }
 
   DataRow buildOpenAskOrdersRow(
