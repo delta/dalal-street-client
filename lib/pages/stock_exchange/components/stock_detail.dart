@@ -1,4 +1,5 @@
 import 'package:dalal_street_client/blocs/exchange/exchange_cubit.dart';
+import 'package:dalal_street_client/blocs/exchange/sheet/exchange_sheet_cubit.dart';
 import 'package:dalal_street_client/blocs/list_selection/list_selection_cubit.dart';
 import 'package:dalal_street_client/config/get_it.dart';
 import 'package:dalal_street_client/constants/format.dart';
@@ -7,6 +8,7 @@ import 'package:dalal_street_client/pages/company_page/components/market_status_
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
 import 'package:dalal_street_client/streams/global_streams.dart';
 import 'package:dalal_street_client/theme/colors.dart';
+import 'package:dalal_street_client/utils/snackbar.dart';
 import 'package:fixnum/fixnum.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,6 +23,7 @@ class StockDetail extends StatefulWidget {
 }
 
 class _StockDetailState extends State<StockDetail> {
+  int quantity = 1;
   @override
   Widget build(BuildContext context) {
     Map<int, Stock> mapOfStocks = getIt<GlobalStreams>().latestStockMap;
@@ -329,7 +332,9 @@ class _StockDetailState extends State<StockDetail> {
                           min: 1,
                           max: 20,
                           value: 01,
-                          onChanged: (value) {},
+                          onChanged: (value) {
+                            quantity = value as int;
+                          },
                           decoration:
                               const InputDecoration(border: InputBorder.none),
                           iconColor: MaterialStateProperty.all(primaryColor),
@@ -363,9 +368,37 @@ class _StockDetailState extends State<StockDetail> {
                   const SizedBox(
                     width: 40,
                   ),
-                  ElevatedButton(
-                    onPressed: () {},
-                    child: const Text('Buy'),
+                  BlocProvider(
+                    create: (context) => ExchangeSheetCubit(),
+                    child: BlocConsumer<ExchangeSheetCubit, ExchangeSheetState>(
+                      listener: (context, state) {
+                         
+                        if (state is ExchangeSheetSuccess) {
+                          showSnackBar(context,
+                              'Successfully bought $quantity ${company.fullName} stocks');
+                        } else if (state is ExchangeSheetFailure) {
+                          showSnackBar(context, state.msg);
+                        }
+                      },
+                      builder: (context, state) {
+                        if (state is ExchangeSheetLoading) {
+                          return const Center(
+                            child: CircularProgressIndicator(
+                              color: Colors.green,
+                            ),
+                          );
+                        }
+                        return ElevatedButton(
+                          onPressed: () {
+                            context
+                                .read<ExchangeSheetCubit>()
+                                .buyStocksFromExchange(
+                                    company.id, quantity);
+                          },
+                          child: const Text('Buy'),
+                        );
+                      },
+                    ),
                   ),
                 ],
               )

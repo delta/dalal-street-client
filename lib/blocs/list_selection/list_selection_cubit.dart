@@ -3,7 +3,9 @@ import 'package:bloc/bloc.dart';
 part 'list_selection_state.dart';
 
 class ListSelectedItemCubit extends Cubit<ListSelectedItemState> {
-  ListSelectedItemCubit() : super(ListSelectedItemState(selectedItem: 1));
+  final int initialItem;
+  ListSelectedItemCubit(this.initialItem)
+      : super(ListSelectedItemState(selectedItem: initialItem));
 
   void setSelectedItem(int selected) =>
       emit(ListSelectedItemState(selectedItem: selected));

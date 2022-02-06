@@ -1,3 +1,4 @@
+import 'package:dalal_street_client/blocs/list_selection/selectedIndex/selected_index_cubit.dart';
 import 'package:dalal_street_client/blocs/list_selection/list_selection_cubit.dart';
 import 'package:dalal_street_client/config/get_it.dart';
 import 'package:dalal_street_client/constants/format.dart';
@@ -11,10 +12,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class StockListItem extends StatefulWidget {
   final Stock company;
+  final List<bool> selectedItems;
+  final int index;
 
   const StockListItem({
     Key? key,
     required this.company,
+    required this.selectedItems,
+    required this.index,
   }) : super(key: key);
 
   @override
@@ -23,20 +28,26 @@ class StockListItem extends StatefulWidget {
 
 class _StockListItemState extends State<StockListItem> {
   final stockMapStream = getIt<GlobalStreams>().stockMapStream;
+
+
   @override
   Widget build(BuildContext context) {
     int previousDayClose = widget.company.previousDayClose.toInt();
     return GestureDetector(
       onTap: () {
+        context.read<SelectedIndexCubit>().setSelected(widget.index);
         context
             .read<ListSelectedItemCubit>()
             .setSelectedItem(widget.company.id);
       },
       child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-          decoration: const BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(10.0)),
-            color: background2,
+          decoration: BoxDecoration(
+            borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+            border: widget.selectedItems[widget.index]
+                ? Border.all(color: primaryColor)
+                : Border.all(color: Colors.transparent),
+            color: widget.selectedItems[widget.index] ? baseColor : background2,
           ),
           child:
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [

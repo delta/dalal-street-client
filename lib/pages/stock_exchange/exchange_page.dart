@@ -1,4 +1,5 @@
 import 'package:dalal_street_client/blocs/exchange/exchange_cubit.dart';
+import 'package:dalal_street_client/blocs/list_selection/selectedIndex/selected_index_cubit.dart';
 import 'package:dalal_street_client/blocs/list_selection/list_selection_cubit.dart';
 import 'package:dalal_street_client/config/get_it.dart';
 import 'package:dalal_street_client/pages/stock_exchange/components/stock_detail.dart';
@@ -100,8 +101,9 @@ class _ExchangePageState extends State<ExchangePage>
   }
 
   Widget _exchangeBodyWeb() {
+    int initailSelectedItem = mapOfStocks.entries.first.key;
     return BlocProvider(
-      create: (context) => ListSelectedItemCubit(),
+      create: (context) => ListSelectedItemCubit(initailSelectedItem),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -117,26 +119,37 @@ class _ExchangePageState extends State<ExchangePage>
   }
 
   Widget _companyListView() {
-    List<Widget> stockListItems = mapOfStocks.entries
-        .map((entry) => StockListItem(company: entry.value))
-        .toList();
+    List<int> stockListItems =
+        mapOfStocks.entries.map((entry) => entry.value.id).toList();
+    List<bool> selectedItems = List.filled(mapOfStocks.length, false);
+    selectedItems[0] = true;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       decoration: const BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(10.0)),
         color: background3,
       ),
-      child: ListView.separated(
-          physics: const BouncingScrollPhysics(),
-          scrollDirection: Axis.vertical,
-          shrinkWrap: true,
-          itemBuilder: (context, index) => stockListItems[index],
-          separatorBuilder: (BuildContext context, int index) {
-            return const SizedBox(
-              height: 20,
-            );
+      child: BlocProvider(
+        create: (context) => SelectedIndexCubit(selectedItems),
+        child: BlocBuilder<SelectedIndexCubit, SelectedIndexState>(
+          builder: (context, state) {
+            return ListView.separated(
+                physics: const BouncingScrollPhysics(),
+                scrollDirection: Axis.vertical,
+                shrinkWrap: true,
+                itemBuilder: (context, index) => StockListItem(
+                    company: mapOfStocks[stockListItems[index]] ?? Stock(),
+                    selectedItems: state.selectedItems,
+                    index: index),
+                separatorBuilder: (BuildContext context, int index) {
+                  return const SizedBox(
+                    height: 20,
+                  );
+                },
+                itemCount: mapOfStocks.length);
           },
-          itemCount: mapOfStocks.length),
+        ),
+      ),
     );
   }
 
