@@ -6,6 +6,7 @@ import 'package:dalal_street_client/proto_build/actions/GetPortfolio.pb.dart';
 import 'package:dalal_street_client/proto_build/actions/GetStockList.pb.dart';
 import 'package:dalal_street_client/proto_build/actions/Login.pb.dart';
 import 'package:dalal_street_client/proto_build/datastreams/GameState.pb.dart';
+import 'package:dalal_street_client/proto_build/datastreams/MyOrders.pb.dart';
 import 'package:dalal_street_client/proto_build/datastreams/Notifications.pb.dart';
 import 'package:dalal_street_client/proto_build/datastreams/StockExchange.pb.dart';
 import 'package:dalal_street_client/proto_build/datastreams/StockPrices.pb.dart';
@@ -18,7 +19,6 @@ import 'package:dalal_street_client/streams/generators/stock_stream_generator.da
 import 'package:dalal_street_client/utils/convert.dart';
 import 'package:equatable/equatable.dart';
 import 'package:rxdart/streams.dart';
-
 import '../config/log.dart';
 import '../grpc/subscription.dart';
 
@@ -32,6 +32,7 @@ class GlobalStreams extends Equatable {
   final ValueStream<StockExchangeUpdate> stockExchangeStream;
   final Stream<TransactionUpdate> transactionStream;
   final Stream<NotificationUpdate> notificationStream;
+  final Stream<MyOrderUpdate> myopenorderStream;
 
   // Custom streams generated from server streams
   final ValueStream<Map<int, Stock>> stockMapStream;
@@ -47,6 +48,7 @@ class GlobalStreams extends Equatable {
     this.stockExchangeStream,
     this.transactionStream,
     this.notificationStream,
+    this.myopenorderStream,
     this.isMaketOpenStream,
     this.stockMapStream,
     this.dynamicUserInfoStream,
@@ -66,6 +68,7 @@ class GlobalStreams extends Equatable {
         stockExchangeStream,
         transactionStream,
         notificationStream,
+        myopenorderStream,
         isMaketOpenStream,
         stockMapStream,
         dynamicUserInfoStream,
@@ -113,12 +116,15 @@ Future<GlobalStreams> subscribeToGlobalStreams(
     SubscribeRequest(dataStreamType: DataStreamType.NOTIFICATIONS),
     sessionId,
   );
+  final myopenordersSubscriptionId = await subscribe(
+      SubscribeRequest(dataStreamType: DataStreamType.MY_ORDERS), sessionId);
   final subscriptionIds = [
     gameStateSubscriptionId,
     stockPriceSubscriptionId,
     stockExchangeSubscriptionId,
     transactionSubscriptionId,
     notificationSubscriptionId,
+    myopenordersSubscriptionId
   ];
 
   // Get the streams using the subscription ids
@@ -151,6 +157,12 @@ Future<GlobalStreams> subscribeToGlobalStreams(
   final notificationStream = streamClient
       .getNotificationUpdates(
         notificationSubscriptionId,
+        options: sessionOptions(sessionId),
+      )
+      .asBroadcastStream();
+  final myopenOrderStream = streamClient
+      .getMyOrderUpdates(
+        myopenordersSubscriptionId,
         options: sessionOptions(sessionId),
       )
       .asBroadcastStream();
@@ -201,6 +213,7 @@ Future<GlobalStreams> subscribeToGlobalStreams(
     stockExchangeStream,
     transactionStream,
     notificationStream,
+    myopenOrderStream,
     isMaketOpenStream,
     stockMapStream,
     dynamicUserInfoStream,
