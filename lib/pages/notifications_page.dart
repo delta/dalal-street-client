@@ -1,7 +1,11 @@
+import 'package:dalal_street_client/blocs/notifications/notifications_cubit.dart';
 import 'package:dalal_street_client/config/get_it.dart';
+import 'package:dalal_street_client/config/log.dart';
 import 'package:dalal_street_client/streams/global_streams.dart';
 import 'package:dalal_street_client/theme/colors.dart';
+import 'package:dalal_street_client/utils/snackbar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 final notifStream = getIt<GlobalStreams>().notificationStream;
 
@@ -58,4 +62,25 @@ class _NotifsState extends State<NotifsPage> {
           ),
         ),
       );
+
+  Widget _onGetNotifications() {
+    return BlocConsumer<NotificationsCubit, NotificationsState>(
+        listener: (context, state) {
+      if (state is NotificationsSuccess) {
+        logger.i('got notifications successfully');
+        showSnackBar(context, 'got notifications successfully');
+      } else if (state is NotificationsFailure) {
+        logger.i('unsuccessful');
+        showSnackBar(context, state.msg);
+      }
+    }, builder: (context, state) {
+      if (state is NotificationsLoading) {
+        logger.i('loading');
+        return const Center(child: CircularProgressIndicator());
+      } else if (state is NotificationsFailure) {
+        logger.i('unsuccessful');
+      }
+      return const SizedBox();
+    });
+  }
 }
