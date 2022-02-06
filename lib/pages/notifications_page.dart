@@ -63,7 +63,7 @@ class _NotifsState extends State<NotifsPage> {
         ),
       );
 
-  Widget _onGetNotifications() {
+  /*Widget _onGetNotifications() {
     return BlocConsumer<NotificationsCubit, NotificationsState>(
         listener: (context, state) {
       if (state is NotificationsSuccess) {
@@ -83,4 +83,5 @@ class _NotifsState extends State<NotifsPage> {
       return const SizedBox();
     });
   }
+  */
 }
