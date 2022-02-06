@@ -26,6 +26,7 @@ class ExchangeSheetCubit extends Cubit<ExchangeSheetState> {
         logger.e(resp.statusMessage);
         emit(ExchangeSheetFailure(resp.statusMessage));
       }
+      emit(ExchangeSheetInitial());
     } catch (e) {
       logger.e(e);
       emit(const ExchangeSheetFailure(failedToReachServer));

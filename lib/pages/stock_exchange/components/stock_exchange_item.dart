@@ -1,6 +1,7 @@
 import 'package:dalal_street_client/blocs/exchange/exchange_cubit.dart';
 import 'package:dalal_street_client/config/get_it.dart';
 import 'package:dalal_street_client/constants/format.dart';
+import 'package:dalal_street_client/constants/icons.dart';
 import 'package:dalal_street_client/pages/stock_exchange/components/exchange_bottom_sheet.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
 import 'package:dalal_street_client/streams/global_streams.dart';
@@ -9,18 +10,15 @@ import 'package:dalal_street_client/theme/colors.dart';
 import 'package:fixnum/fixnum.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class StockExchangeItem extends StatefulWidget {
   final Stock company;
-  final int stockId;
-  final int currentPrice;
 
-  const StockExchangeItem(
-      {Key? key,
-      required this.company,
-      required this.stockId,
-      required this.currentPrice})
-      : super(key: key);
+  const StockExchangeItem({
+    Key? key,
+    required this.company,
+  }) : super(key: key);
 
   @override
   _StockExchangeItemState createState() => _StockExchangeItemState();
@@ -44,15 +42,15 @@ class _StockExchangeItemState extends State<StockExchangeItem> {
           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             _stockNames(widget.company),
             _stockPrices(
-              widget.stockId,
+              widget.company.id,
               previousDayClose,
-              widget.currentPrice,
+              widget.company.currentPrice.toInt(),
             ),
           ]),
           const SizedBox(
             height: 10,
           ),
-          _stockExchangeDetails(widget.stockId, widget.company),
+          _stockExchangeDetails(widget.company.id, widget.company),
           const SizedBox(
             height: 10,
           ),
@@ -76,7 +74,7 @@ class _StockExchangeItemState extends State<StockExchangeItem> {
                   onPressed: () {
                     int cash =
                         getIt<GlobalStreams>().dynamicUserInfoStream.value.cash;
-                    List<int> data = [widget.stockId, cash];
+                    List<int> data = [widget.company.id, cash];
                     Navigator.pushNamed(context, '/company', arguments: data);
                   },
                   child: const Text(
@@ -112,17 +110,15 @@ class _StockExchangeItemState extends State<StockExchangeItem> {
     );
   }
 
-  Widget _stockNames(Stock? company) {
+  Widget _stockNames(Stock company) {
     return Expanded(
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Text(
-          company?.shortName ?? 'Airtel',
-          style: const TextStyle(
-            fontSize: 18,
-          ),
+          company.shortName,
+          style: const TextStyle(fontSize: 18, color: white),
         ),
         Text(
-          company?.fullName ?? 'Airtel Pvt Ltd',
+          company.fullName,
           style: const TextStyle(
             fontSize: 14,
             color: whiteWithOpacity50,
@@ -148,10 +144,8 @@ class _StockExchangeItemState extends State<StockExchangeItem> {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Text(
-                  oCcy.format(stockPrice).toString(),
-                  style: const TextStyle(
-                    fontSize: 18,
-                  ),
+                  '₹' + oCcy.format(stockPrice).toString(),
+                  style: const TextStyle(fontSize: 18, color: white),
                 ),
                 Text(
                   updatedPriceChange >= 0
@@ -170,7 +164,7 @@ class _StockExchangeItemState extends State<StockExchangeItem> {
 
   Widget _stockExchangeDetails(
     int stockId,
-    Stock? company,
+    Stock company,
   ) =>
       BlocBuilder<ExchangeCubit, ExchangeState>(
         builder: (context, state) {
@@ -184,11 +178,29 @@ class _StockExchangeItemState extends State<StockExchangeItem> {
                     (mapOfStocks[stockId]?.stocksInExchange.toInt() ?? 0);
             mapOfStocks[stockId]?.stocksInExchange = Int64(stocksInExchange);
             return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text('Stocks in Market'),
+                    Wrap(
+                      spacing: 14,
+                      children: [
+                        SvgPicture.asset(
+                          AppIcons.stockMarket,
+                          width: 18,
+                        ),
+                        const Text(
+                          'Stocks in Market',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            color: white,
+                          ),
+                          textAlign: TextAlign.start,
+                        ),
+                      ],
+                    ),
                     Text(
                       stocksInMarket.toString(),
                       style: const TextStyle(color: bronze),
@@ -201,7 +213,24 @@ class _StockExchangeItemState extends State<StockExchangeItem> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text('Stocks in Exchange'),
+                    Wrap(
+                      spacing: 14,
+                      children: [
+                        SvgPicture.asset(
+                          AppIcons.stockExchange,
+                          width: 18,
+                        ),
+                        const Text(
+                          'Stocks in Exchange',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            color: white,
+                          ),
+                          textAlign: TextAlign.start,
+                        ),
+                      ],
+                    ),
                     Text(stocksInExchange.toString(),
                         style: const TextStyle(color: gold))
                   ],
@@ -210,13 +239,31 @@ class _StockExchangeItemState extends State<StockExchangeItem> {
             );
           }
           return Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text('Stocks in Market'),
-                  Text(company?.stocksInMarket.toString() ?? '0')
+                  Wrap(
+                    spacing: 14,
+                    children: [
+                      SvgPicture.asset(
+                        AppIcons.stockMarket,
+                        width: 18,
+                      ),
+                      const Text(
+                        'Stocks in Market',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                          color: white,
+                        ),
+                        textAlign: TextAlign.start,
+                      ),
+                    ],
+                  ),
+                  Text(company.stocksInMarket.toString(),
+                      style: const TextStyle(color: bronze))
                 ],
               ),
               const SizedBox(
@@ -225,8 +272,26 @@ class _StockExchangeItemState extends State<StockExchangeItem> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text('Stocks in Exchange'),
-                  Text(company?.stocksInExchange.toString() ?? '0')
+                  Wrap(
+                    spacing: 14,
+                    children: [
+                      SvgPicture.asset(
+                        AppIcons.stockMarket,
+                        width: 18,
+                      ),
+                      const Text(
+                        'Stocks in Exchange',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                          color: white,
+                        ),
+                        textAlign: TextAlign.start,
+                      ),
+                    ],
+                  ),
+                  Text(company.stocksInExchange.toString(),
+                      style: const TextStyle(color: gold))
                 ],
               )
             ],
@@ -234,7 +299,7 @@ class _StockExchangeItemState extends State<StockExchangeItem> {
         },
       );
 
-  void _showModalSheet(Stock? company) {
+  void _showModalSheet(Stock company) {
     showModalBottomSheet(
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(top: Radius.circular(25.0))),
@@ -242,7 +307,7 @@ class _StockExchangeItemState extends State<StockExchangeItem> {
         context: context,
         isScrollControlled: true,
         builder: (_) {
-          return ExchangeBottomSheet(company: company ?? Stock());
+          return ExchangeBottomSheet(company: company);
         });
   }
 }
