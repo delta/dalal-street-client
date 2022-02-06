@@ -29,7 +29,6 @@ class StockListItem extends StatefulWidget {
 class _StockListItemState extends State<StockListItem> {
   final stockMapStream = getIt<GlobalStreams>().stockMapStream;
 
-
   @override
   Widget build(BuildContext context) {
     int previousDayClose = widget.company.previousDayClose.toInt();

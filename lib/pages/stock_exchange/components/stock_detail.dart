@@ -372,7 +372,6 @@ class _StockDetailState extends State<StockDetail> {
                     create: (context) => ExchangeSheetCubit(),
                     child: BlocConsumer<ExchangeSheetCubit, ExchangeSheetState>(
                       listener: (context, state) {
-                         
                         if (state is ExchangeSheetSuccess) {
                           showSnackBar(context,
                               'Successfully bought $quantity ${company.fullName} stocks');
@@ -392,8 +391,7 @@ class _StockDetailState extends State<StockDetail> {
                           onPressed: () {
                             context
                                 .read<ExchangeSheetCubit>()
-                                .buyStocksFromExchange(
-                                    company.id, quantity);
+                                .buyStocksFromExchange(company.id, quantity);
                           },
                           child: const Text('Buy'),
                         );
