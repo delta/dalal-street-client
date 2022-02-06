@@ -18,7 +18,6 @@ import 'package:dalal_street_client/streams/generators/stock_stream_generator.da
 import 'package:dalal_street_client/utils/convert.dart';
 import 'package:equatable/equatable.dart';
 import 'package:rxdart/streams.dart';
-
 import '../config/log.dart';
 import '../grpc/subscription.dart';
 
