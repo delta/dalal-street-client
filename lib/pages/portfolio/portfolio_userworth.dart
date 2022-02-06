@@ -1,3 +1,4 @@
+import 'package:dalal_street_client/config/log.dart';
 import 'package:fixnum/fixnum.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -43,7 +44,6 @@ class _PortfolioUserWorthState extends State<PortfolioUserWorth> {
               reserveStockWorth +
               cash.toInt() +
               reservedCash.toInt();
-
           return Wrap(children: [
             Container(
                 padding:
@@ -189,97 +189,102 @@ class _PortfolioUserWorthState extends State<PortfolioUserWorth> {
           });
 
   Widget _eachStock(Int64? owned, Int64? reserved, Int64? cashSpent,
-          String name, Int64? price) =>
-      Wrap(children: [
-        Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-          Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(bottom: 15, left: 5, top: 10),
-                child: Text(
-                  name.toUpperCase(),
-                  style: const TextStyle(fontSize: 18),
-                ),
-              )
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Padding(
-                      padding: EdgeInsets.only(bottom: 10),
-                      child: Text(
-                        'Owned',
-                        style: TextStyle(color: blurredGray),
-                      )),
-                  Text(
-                    owned.toString(),
-                    style: TextStyle(
-                        color: (owned?.toInt() ?? 0) >= 0
-                            ? secondaryColor
-                            : heartRed),
-                  )
-                ],
+      String name, Int64? price) {
+    Int64 avgbuyprice = Int64(0);
+    Int64 totalStocks = owned! + reserved!;
+    cashSpent == null
+        ? {null}
+        : {
+            totalStocks == 0 ? {null} : {avgbuyprice = cashSpent ~/ totalStocks}
+          };
+    return Wrap(children: [
+      Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+        Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(bottom: 15, left: 5, top: 10),
+              child: Text(
+                name.toUpperCase(),
+                style: const TextStyle(fontSize: 18),
               ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Padding(
-                      padding: EdgeInsets.only(bottom: 10),
-                      child: Text(
-                        'Reserved',
-                        style: TextStyle(color: blurredGray),
-                      )),
-                  Text(
-                    reserved.toString(),
-                    style: TextStyle(
-                        color: (reserved?.toInt() ?? 0) >= 0
-                            ? secondaryColor
-                            : heartRed),
-                  )
-                ],
-              ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Padding(
-                      padding: EdgeInsets.only(bottom: 10),
-                      child: Text(
-                        'Current Price',
-                        style: TextStyle(color: blurredGray),
-                      )),
-                  Text(price.toString())
-                ],
-              ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Padding(
-                      padding: EdgeInsets.only(bottom: 10),
-                      child: Text(
-                        'Cash Spent',
-                        style: TextStyle(color: blurredGray),
-                      )),
-                  Text(
-                    cashSpent.toString(),
-                    style: TextStyle(
-                        color: (cashSpent?.toInt() ?? 0) >= 0
-                            ? secondaryColor
-                            : heartRed),
-                  )
-                ],
-              ),
-            ],
-          ),
-        ]),
-      ]);
+            )
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Padding(
+                    padding: EdgeInsets.only(bottom: 10),
+                    child: Text(
+                      'Owned',
+                      style: TextStyle(color: blurredGray),
+                    )),
+                Text(
+                  owned.toString(),
+                  style: TextStyle(
+                      color: (owned.toInt()) >= 0 ? secondaryColor : heartRed),
+                )
+              ],
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Padding(
+                    padding: EdgeInsets.only(bottom: 10),
+                    child: Text(
+                      'Reserved',
+                      style: TextStyle(color: blurredGray),
+                    )),
+                Text(
+                  reserved.toString(),
+                  style: TextStyle(
+                      color:
+                          (reserved.toInt()) >= 0 ? secondaryColor : heartRed),
+                )
+              ],
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Padding(
+                    padding: EdgeInsets.only(bottom: 10),
+                    child: Text(
+                      'Current Price',
+                      style: TextStyle(color: blurredGray),
+                    )),
+                Text(price.toString())
+              ],
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Padding(
+                    padding: EdgeInsets.only(bottom: 10),
+                    child: Text(
+                      'Avg Buy Price',
+                      style: TextStyle(color: blurredGray),
+                    )),
+                Text(
+                  avgbuyprice.toString(),
+                  style: TextStyle(
+                      color: (avgbuyprice.toInt()) >= 0
+                          ? secondaryColor
+                          : heartRed),
+                )
+              ],
+            ),
+          ],
+        ),
+      ]),
+    ]);
+  }
 
   Widget _eachField(String field, String value) {
     return Row(children: [
