@@ -24,9 +24,9 @@ class StockDetail extends StatefulWidget {
 
 class _StockDetailState extends State<StockDetail> {
   int quantity = 1;
+  Map<int, Stock> mapOfStocks = getIt<GlobalStreams>().latestStockMap;
   @override
   Widget build(BuildContext context) {
-    Map<int, Stock> mapOfStocks = getIt<GlobalStreams>().latestStockMap;
     return BlocBuilder<ListSelectedItemCubit, ListSelectedItemState>(
       builder: (context, state) {
         int stockId = state.selectedItem;
@@ -38,10 +38,36 @@ class _StockDetailState extends State<StockDetail> {
             color: background3,
           ),
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Row(
+              _companyStaticDetails(company),
+              const SizedBox(
+                height: 20,
+              ),
+              _marketStatus(company),
+              const SizedBox(
+                height: 20,
+              ),
+              _stockExchangeDetails(company,stockId),
+              const SizedBox(
+                height: 20,
+              ),
+              _buyFromExchangeFooter(company, stockId)
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _companyStaticDetails(Stock company) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+                      Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -94,10 +120,16 @@ class _StockDetailState extends State<StockDetail> {
                   textAlign: TextAlign.start,
                 ),
               ),
-              const SizedBox(
-                height: 20,
-              ),
-              const Text(
+      ],
+    );
+  }
+
+  Widget _marketStatus(Stock company) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+                 const Text(
                 'Market Status',
                 style: TextStyle(
                   fontSize: 24,
@@ -117,10 +149,16 @@ class _StockDetailState extends State<StockDetail> {
                   oCcy.format(company.allTimeHigh).toString(), false, true),
               marketStatusTile(AppIcons.alltimeHigh, 'All Time Low',
                   oCcy.format(company.allTimeLow).toString(), true, true),
-              const SizedBox(
-                height: 20,
-              ),
-              const Text(
+      ],
+    );
+  }
+
+  Widget _stockExchangeDetails(Stock company, int stockId) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+                  const Text(
                 'Exchange',
                 style: TextStyle(
                   fontSize: 24,
@@ -291,10 +329,16 @@ class _StockDetailState extends State<StockDetail> {
                   );
                 },
               ),
-              const SizedBox(
-                height: 20,
-              ),
-              const Text(
+      ],
+    );
+  }
+
+  Widget _buyFromExchangeFooter(Stock company, int stockId){
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        const Text(
                 'Buy from Exchange',
                 style: TextStyle(
                   fontSize: 24,
@@ -400,10 +444,7 @@ class _StockDetailState extends State<StockDetail> {
                   ),
                 ],
               )
-            ],
-          ),
-        );
-      },
+      ],
     );
   }
 }
