@@ -94,7 +94,7 @@ int calculateStockWorth(Map<int, int> stocksOwned, Map<int, Stock> stocks) {
   stocks.forEach(
     (id, stock) {
       if (stocksOwned.containsKey(id)) {
-        worth += stocksOwned[id]! + stock.currentPrice.toInt();
+        worth += stocksOwned[id]! * stock.currentPrice.toInt();
       }
     },
   );
@@ -107,7 +107,7 @@ int calculateReservedStockWorth(
   stocks.forEach(
     (id, stock) {
       if (stocksReserved.containsKey(id)) {
-        worth += stocksReserved[id]! + stock.currentPrice.toInt();
+        worth += stocksReserved[id]! * stock.currentPrice.toInt();
       }
     },
   );
