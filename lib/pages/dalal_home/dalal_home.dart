@@ -1,4 +1,6 @@
 import 'package:dalal_street_client/blocs/exchange/exchange_cubit.dart';
+import 'package:dalal_street_client/blocs/leaderboard/daily_leaderboard/daily_leaderboard_cubit.dart';
+import 'package:dalal_street_client/blocs/leaderboard/overall_leaderboard/overall_leaderboard_cubit.dart';
 import 'package:dalal_street_client/blocs/portfolio/userWorth/portfolio_cubit.dart';
 import 'package:dalal_street_client/components/stock_bar.dart';
 import 'package:dalal_street_client/config/log.dart';
@@ -6,6 +8,7 @@ import 'package:dalal_street_client/constants/icons.dart';
 import 'package:dalal_street_client/pages/dalal_home/dalal_home_bottom_sheet.dart';
 import 'package:dalal_street_client/pages/dalal_home/dalal_home_nav_bar.dart';
 import 'package:dalal_street_client/pages/home_page.dart';
+import 'package:dalal_street_client/pages/leaderboard_page/leaderboard_page.dart';
 import 'package:dalal_street_client/pages/portfolio/portfolio_page.dart';
 import 'package:dalal_street_client/pages/stock_exchange/exchange_page.dart';
 import 'package:dalal_street_client/proto_build/models/User.pb.dart';
@@ -65,7 +68,13 @@ class _DalalHomeState extends State<DalalHome> {
           create: (context) => ExchangeCubit(),
           child: const ExchangePage(),
         ),
-        const Center(child: Text('Leaderboard tbd')),
+        MultiBlocProvider(
+          providers: [
+            BlocProvider(create: (context) => OverallLeaderboardCubit()),
+            BlocProvider(create: (context) => DailyLeaderboardCubit())
+          ],
+          child: const LeaderboardPage(),
+        ),
       ];
 
   List<String> get _sheetPageRoutes => [
