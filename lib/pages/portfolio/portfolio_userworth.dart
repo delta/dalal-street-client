@@ -1,3 +1,4 @@
+import 'package:dalal_street_client/config/log.dart';
 import 'package:fixnum/fixnum.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -189,12 +190,16 @@ class _PortfolioUserWorthState extends State<PortfolioUserWorth> {
 
   Widget _eachStock(Int64? owned, Int64? reserved, Int64? cashSpent,
       String name, Int64? price) {
-    Int64 avgbuyprice = Int64(0);
+    double avgbuyprice = 0.toDouble();
     Int64 totalStocks = owned! + reserved!;
     cashSpent == null
         ? {null}
         : {
-            totalStocks == 0 ? {null} : {avgbuyprice = cashSpent ~/ totalStocks}
+            totalStocks == 0
+                ? {null}
+                : {
+                    avgbuyprice = cashSpent.toDouble() / totalStocks.toDouble(),
+                  }
           };
     return Wrap(children: [
       Column(mainAxisAlignment: MainAxisAlignment.start, children: [
@@ -271,11 +276,8 @@ class _PortfolioUserWorthState extends State<PortfolioUserWorth> {
                       style: TextStyle(color: blurredGray),
                     )),
                 Text(
-                  avgbuyprice.toString(),
-                  style: TextStyle(
-                      color: (avgbuyprice.toInt()) >= 0
-                          ? secondaryColor
-                          : heartRed),
+                  avgbuyprice.toStringAsFixed(2),
+                  style: const TextStyle(color: secondaryColor),
                 )
               ],
             ),
