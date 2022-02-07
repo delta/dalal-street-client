@@ -13,14 +13,16 @@ class MortgageDetailsCubit extends Cubit<MortgageDetailsState> {
   MortgageDetailsCubit() : super(MortgageDetailsLoading());
 
   Future<void> getMortgageDetails() async {
-    try{
-      final resp = await actionClient.getMortgageDetails(GetMortgageDetailsRequest(),options: sessionOptions(getIt<String>()));
-      if(resp.statusCode == GetMortgageDetailsResponse_StatusCode.OK){
+    try {
+      final resp = await actionClient.getMortgageDetails(
+          GetMortgageDetailsRequest(),
+          options: sessionOptions(getIt<String>()));
+      if (resp.statusCode == GetMortgageDetailsResponse_StatusCode.OK) {
         emit(MortgageDetailsLoaded(resp.mortgageDetails));
-      }else{
+      } else {
         emit(MortgageDetailsFailure(resp.statusMessage));
       }
-    }catch(e){
+    } catch (e) {
       logger.e(e);
       emit(const MortgageDetailsFailure(failedToReachServer));
     }
