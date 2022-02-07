@@ -34,7 +34,7 @@ class _LineGraphState extends State<LineGraph> {
     context.read<StockHistoryCubit>().getStockHistory(
         widget.stockId,
         StockHistoryResolution
-            .OneMinute); // using OneMinute resoulution for latest updates
+            .OneMinute); // using OneMinute resolution for latest updates
   }
 
   @override
@@ -52,14 +52,12 @@ class _LineGraphState extends State<LineGraph> {
               domainAxis: const charts.DateTimeAxisSpec(
                 renderSpec: charts.NoneRenderSpec(),
                 showAxisLine: false,
-                // viewport: charts.DateTimeExtents(start: start, end: end)
               ),
               primaryMeasureAxis: const charts.NumericAxisSpec(
                   renderSpec: charts.NoneRenderSpec()),
               customSeriesRenderers: [
                 charts.LineRendererConfig(
                     customRendererId: 'area',
-                    // includeArea: true,
                     areaOpacity: 0.5,
                     strokeWidthPx: 1.8,
                     includeLine: true)
@@ -68,16 +66,20 @@ class _LineGraphState extends State<LineGraph> {
           }
         } else if (state is StockHistoryError) {
           // error loading graph
-
           // TODO : do something better
           return const Text('error loading chart');
         }
 
         return const Center(
+          child: SizedBox(
+            height: 10,
+            width: 10,
             child: CircularProgressIndicator(
-          strokeWidth: 2,
-          color: primaryColor,
-        ));
+              strokeWidth: 1.5,
+              color: primaryColor,
+            ),
+          ),
+        );
       },
     );
   }
@@ -91,13 +93,14 @@ class _LineGraphState extends State<LineGraph> {
           stockHistory.close.toDouble())); // using close price
     });
 
-    // data from the server is sent in descending order of time
-    // TODO change the order in backend ? (same goes for company chart)
+    // sorting it in ascending order of createdAt
     data.sort((a, b) => a.time.compareTo(b.time));
 
+    /// TODO: check with previous day value
     /// checking lastest 2 values to find if the stock price is increasing or decreasing
     /// [data] List will always be of length >= 2
-    bool isIncreasing = true;
+    bool isIncreasing =
+        data[data.length - 1].stockPrice >= data[data.length - 2].stockPrice;
 
     return [
       charts.Series<TimeSeriesData, DateTime>(

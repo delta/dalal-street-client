@@ -6,7 +6,7 @@ import 'package:dalal_street_client/models/time_series_data.dart';
 import 'package:dalal_street_client/proto_build/actions/GetStockHistory.pbenum.dart';
 import 'package:dalal_street_client/proto_build/models/StockHistory.pb.dart';
 import 'package:dalal_street_client/theme/colors.dart';
-import 'package:dalal_street_client/utils/resolution_to_str.dart';
+import 'package:dalal_street_client/utils/resolution_conversion.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:interactive_chart/interactive_chart.dart';
@@ -91,6 +91,7 @@ class _CandleStickLayoutState extends State<CandleStickLayout> {
           } else if (state is StockHistorySuccess) {
             var stockHistoryMap = state.stockHistoryMap;
 
+            /// better to fill the db with dummy data or running the server for a hour will do
             if (stockHistoryMap.length <= 3) {
               return const SizedBox(
                 height: 250,
@@ -131,9 +132,11 @@ class _CandleStickLayoutState extends State<CandleStickLayout> {
     return BlocBuilder<StockHistoryStreamCubit, StockHistoryStreamState>(
       builder: (context, state) {
         if (state is StockHistoryStreamUpdate) {
-          // TODO check interval and add
-          // data.add(_extractCandleData(state.stockHistory));
-          // logger.d(state.stockHistory, 'candle-chart rl update');
+          if (state.stockHistory.interval ==
+              resolutionToInt(currentResolution)) {
+            data.add(_extractCandleData(state.stockHistory));
+            logger.d(state.stockHistory, 'candle-chart rl update');
+          }
         }
 
         return InteractiveChart(
@@ -151,7 +154,7 @@ class _CandleStickLayoutState extends State<CandleStickLayout> {
             'low': candle.low.toString(),
             'high': candle.high.toString(),
             'timestamp': DateTime.fromMillisecondsSinceEpoch(candle.timestamp)
-                .toString() // TODO better timestamps for different resolution
+                .toString() // TODO use IST format
           },
         );
       },
@@ -164,9 +167,13 @@ class _CandleStickLayoutState extends State<CandleStickLayout> {
     return BlocBuilder<StockHistoryStreamCubit, StockHistoryStreamState>(
       builder: (context, state) {
         if (state is StockHistoryStreamUpdate) {
-          // TODO check interval and add
-          // stockHistoryMap[state.stockHistory.createdAt] = state.stockHistory;
-          // data = _getLineChartData(stockHistoryMap);
+          if (state.stockHistory.interval ==
+              resolutionToInt(currentResolution)) {
+            // TODO dont sort data for stream updates
+            stockHistoryMap[state.stockHistory.createdAt] = state.stockHistory;
+            data = _getLineChartData(stockHistoryMap);
+            logger.d(state.stockHistory, 'line chart update');
+          }
         }
 
         return charts.TimeSeriesChart(
@@ -179,7 +186,6 @@ class _CandleStickLayoutState extends State<CandleStickLayout> {
             charts.LineRendererConfig(
                 customRendererId: 'area',
                 areaOpacity: 0.2,
-                includeArea: true,
                 strokeWidthPx: 2,
                 includeLine: true,
                 includePoints: false,

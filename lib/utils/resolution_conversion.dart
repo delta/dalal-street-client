@@ -45,3 +45,33 @@ Resolution resolutionToString(StockHistoryResolution stockHistory) {
 
   return resolution;
 }
+
+int resolutionToInt(StockHistoryResolution stockHistoryResolution) {
+  int resolution;
+  switch (stockHistoryResolution) {
+    case StockHistoryResolution.OneMinute:
+      resolution = 1;
+      break;
+
+    case StockHistoryResolution.FiveMinutes:
+      resolution = 5;
+      break;
+
+    case StockHistoryResolution.FifteenMinutes:
+      resolution = 15;
+      break;
+
+    case StockHistoryResolution.ThirtyMinutes:
+      resolution = 30;
+      break;
+
+    case StockHistoryResolution.SixtyMinutes:
+      resolution = 60;
+      break;
+
+    default:
+      resolution = 0;
+  }
+
+  return resolution;
+}
