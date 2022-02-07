@@ -1,5 +1,4 @@
 import 'package:dalal_street_client/blocs/exchange/exchange_cubit.dart';
-import 'package:dalal_street_client/blocs/list_selection/selectedIndex/selected_index_cubit.dart';
 import 'package:dalal_street_client/blocs/list_selection/list_selection_cubit.dart';
 import 'package:dalal_street_client/config/get_it.dart';
 import 'package:dalal_street_client/pages/stock_exchange/components/stock_detail.dart';
@@ -100,55 +99,50 @@ class _ExchangePageState extends State<ExchangePage>
     );
   }
 
-  Widget _exchangeBodyWeb() {
-    int initailSelectedItem = mapOfStocks.entries.first.key;
-    return BlocProvider(
-      create: (context) => ListSelectedItemCubit(initailSelectedItem),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Flexible(flex: 1, child: _companyListView()),
-          const SizedBox(
-            width: 10,
-          ),
-          const Flexible(flex: 1, child: StockDetail())
-        ],
-      ),
-    );
-  }
+  Widget _exchangeBodyWeb() => BlocProvider(
+        create: (context) => ListSelectionCubit(),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Builder(
+              builder: (context) =>
+                  Flexible(flex: 1, child: _companyListView(context)),
+            ),
+            const SizedBox(
+              width: 10,
+            ),
+            const Flexible(flex: 1, child: StockDetail())
+          ],
+        ),
+      );
 
-  Widget _companyListView() {
-    List<int> stockListItems =
-        mapOfStocks.entries.map((entry) => entry.value.id).toList();
-    List<bool> selectedItems = List.filled(mapOfStocks.length, false);
-    selectedItems[0] = true;
+  Widget _companyListView(BuildContext context) {
+    final cubit = context.read<ListSelectionCubit>();
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       decoration: const BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(10.0)),
         color: background3,
       ),
-      child: BlocProvider(
-        create: (context) => SelectedIndexCubit(selectedItems),
-        child: BlocBuilder<SelectedIndexCubit, SelectedIndexState>(
-          builder: (context, state) {
-            return ListView.separated(
-                physics: const BouncingScrollPhysics(),
-                scrollDirection: Axis.vertical,
-                shrinkWrap: true,
-                itemBuilder: (context, index) => StockListItem(
-                    company: mapOfStocks[stockListItems[index]] ?? Stock(),
-                    selectedItems: state.selectedItems,
-                    index: index),
-                separatorBuilder: (BuildContext context, int index) {
-                  return const SizedBox(
-                    height: 20,
-                  );
-                },
-                itemCount: mapOfStocks.length);
-          },
+      child: ListView.separated(
+        physics: const BouncingScrollPhysics(),
+        scrollDirection: Axis.vertical,
+        shrinkWrap: true,
+        itemBuilder: (context, index) => StreamBuilder<bool>(
+          stream: cubit.selectedIndexStream
+              .map((event) => event == index)
+              .distinct(),
+          initialData: index == 0,
+          builder: (context, snapshot) => StockListItem(
+            company: mapOfStocks.values.elementAt(index),
+            selected: snapshot.data!,
+            onClick: () => cubit.updateSelection(index),
+          ),
         ),
+        separatorBuilder: (BuildContext context, int index) =>
+            const SizedBox(height: 20),
+        itemCount: mapOfStocks.length,
       ),
     );
   }

@@ -1,12 +1,18 @@
 import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
 
 part 'list_selection_state.dart';
 
-class ListSelectedItemCubit extends Cubit<ListSelectedItemState> {
-  final int initialItem;
-  ListSelectedItemCubit(this.initialItem)
-      : super(ListSelectedItemState(selectedItem: initialItem));
+class ListSelectionCubit extends Cubit<ListSelectionState> {
+  ListSelectionCubit() : super(const ListSelectionState(0));
 
-  void setSelectedItem(int selected) =>
-      emit(ListSelectedItemState(selectedItem: selected));
+  void updateSelection(int newIndex) {
+    // Only update state if index is changed
+    if (newIndex != state.selectedIndex) {
+      emit(ListSelectionState(newIndex));
+    }
+  }
+
+  Stream<int> get selectedIndexStream =>
+      stream.map((state) => state.selectedIndex);
 }

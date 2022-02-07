@@ -27,10 +27,10 @@ class _StockDetailState extends State<StockDetail> {
   Map<int, Stock> mapOfStocks = getIt<GlobalStreams>().latestStockMap;
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ListSelectedItemCubit, ListSelectedItemState>(
+    return BlocBuilder<ListSelectionCubit, ListSelectionState>(
       builder: (context, state) {
-        int stockId = state.selectedItem;
-        Stock company = mapOfStocks[stockId] ?? Stock();
+        int stockId = mapOfStocks.keys.elementAt(state.selectedIndex);
+        Stock company = mapOfStocks[stockId]!;
         return Container(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
           decoration: const BoxDecoration(
