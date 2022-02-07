@@ -56,6 +56,7 @@ class UserInfoGenerator {
         // Update cash values
         int cash = dynamicUserInfo.cash,
             reservedCash = dynamicUserInfo.reservedCash;
+
         cash += transaction.total.toInt();
         reservedCash += transaction.reservedCashTotal.toInt();
 
