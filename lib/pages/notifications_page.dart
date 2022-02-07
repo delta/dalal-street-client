@@ -110,8 +110,8 @@ class _NotifsState extends State<NotifsPage> {
         child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
+            children: const [
+              Text(
                 'Notifications',
                 style: TextStyle(
                   fontSize: 22,
@@ -120,8 +120,9 @@ class _NotifsState extends State<NotifsPage> {
                 ),
                 textAlign: TextAlign.start,
               ),
-              context.read<NotificationsBloc>().getNotifications(),
-              const SizedBox(
+              //context.read<NotificationsBloc>().add(GetMoreNotifications(
+              //  notifEvents[notifEvents.length - 1].id - 1)),
+              SizedBox(
                 height: 20,
               ),
             ]));
