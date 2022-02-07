@@ -1,6 +1,5 @@
 import 'package:dalal_street_client/blocs/exchange/exchange_cubit.dart';
 import 'package:dalal_street_client/blocs/exchange/sheet/exchange_sheet_cubit.dart';
-import 'package:dalal_street_client/blocs/list_selection/list_selection_cubit.dart';
 import 'package:dalal_street_client/config/get_it.dart';
 import 'package:dalal_street_client/constants/format.dart';
 import 'package:dalal_street_client/constants/icons.dart';
@@ -16,7 +15,9 @@ import 'package:flutter_spinbox/flutter_spinbox.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class StockDetail extends StatefulWidget {
-  const StockDetail({Key? key}) : super(key: key);
+  final Stock company;
+
+  const StockDetail({Key? key, required this.company}) : super(key: key);
 
   @override
   _StockDetailState createState() => _StockDetailState();
@@ -25,40 +26,35 @@ class StockDetail extends StatefulWidget {
 class _StockDetailState extends State<StockDetail> {
   int quantity = 1;
   Map<int, Stock> mapOfStocks = getIt<GlobalStreams>().latestStockMap;
+
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ListSelectedItemCubit, ListSelectedItemState>(
-      builder: (context, state) {
-        int stockId = state.selectedItem;
-        Stock company = mapOfStocks[stockId] ?? Stock();
-        return Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-          decoration: const BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(10.0)),
-            color: background3,
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      decoration: const BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+        color: background3,
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          _companyStaticDetails(widget.company),
+          const SizedBox(
+            height: 20,
           ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              _companyStaticDetails(company),
-              const SizedBox(
-                height: 20,
-              ),
-              _marketStatus(company),
-              const SizedBox(
-                height: 20,
-              ),
-              _stockExchangeDetails(company, stockId),
-              const SizedBox(
-                height: 20,
-              ),
-              _buyFromExchangeFooter(company, stockId)
-            ],
+          _marketStatus(widget.company),
+          const SizedBox(
+            height: 20,
           ),
-        );
-      },
+          _stockExchangeDetails(widget.company),
+          const SizedBox(
+            height: 20,
+          ),
+          _buyFromExchangeFooter(widget.company)
+        ],
+      ),
     );
   }
 
@@ -153,7 +149,7 @@ class _StockDetailState extends State<StockDetail> {
     );
   }
 
-  Widget _stockExchangeDetails(Stock company, int stockId) {
+  Widget _stockExchangeDetails(Stock company) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
@@ -173,6 +169,7 @@ class _StockDetailState extends State<StockDetail> {
         BlocBuilder<ExchangeCubit, ExchangeState>(
           builder: (context, state) {
             if (state is ExchangeDataLoaded) {
+              int stockId = company.id;
               int stocksInMarket =
                   state.exchangeData[stockId]?.stocksInMarket.toInt() ??
                       (mapOfStocks[stockId]?.stocksInMarket.toInt() ?? 0);
@@ -330,7 +327,7 @@ class _StockDetailState extends State<StockDetail> {
     );
   }
 
-  Widget _buyFromExchangeFooter(Stock company, int stockId) {
+  Widget _buyFromExchangeFooter(Stock company) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
@@ -396,7 +393,7 @@ class _StockDetailState extends State<StockDetail> {
                 onPressed: () {
                   int cash =
                       getIt<GlobalStreams>().dynamicUserInfoStream.value.cash;
-                  List<int> data = [stockId, cash];
+                  List<int> data = [company.id, cash];
                   Navigator.pushNamed(context, '/company', arguments: data);
                 },
                 child: const Text('Know More')),
