@@ -100,19 +100,26 @@ class _ExchangePageState extends State<ExchangePage>
   }
 
   Widget _exchangeBodyWeb() => BlocProvider(
-        create: (context) => ListSelectionCubit(),
+        create: (_) => ListSelectionCubit(),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Builder(
-              builder: (context) =>
-                  Flexible(flex: 1, child: _companyListView(context)),
+            Flexible(
+              flex: 1,
+              child: Builder(builder: (context) => _companyListView(context)),
             ),
             const SizedBox(
               width: 10,
             ),
-            const Flexible(flex: 1, child: StockDetail())
+            Flexible(
+              flex: 1,
+              child: BlocBuilder<ListSelectionCubit, ListSelectionState>(
+                builder: (_, state) => StockDetail(
+                  company: mapOfStocks.values.elementAt(state.selectedIndex),
+                ),
+              ),
+            )
           ],
         ),
       );
