@@ -17,6 +17,13 @@ class GetNewsFeed extends NewsEvent {
   List<Object> get props => [subscriptionId];
 }
 
+class GetNewsById extends NewsEvent {
+  final int stockId;
+  const GetNewsById(this.stockId);
+  @override
+  List<Object> get props => [stockId];
+}
+
 class GetMoreNews extends NewsEvent {
   final int lasteventid;
   const GetMoreNews(this.lasteventid);

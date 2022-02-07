@@ -37,5 +37,19 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
         emit(GetNewsFailure(e.toString()));
       }
     });
+
+    on<GetNewsById>((event, emit) async {
+      try {
+        final GetMarketEventsResponse marketEventResponse =
+            await actionClient.getMarketEvents(
+          GetMarketEventsRequest(stockId: event.stockId),
+          options: sessionOptions(getIt()),
+        );
+
+        emit(GetNewsSucess(marketEventResponse));
+      } catch (e) {
+        emit(GetNewsFailure(e.toString()));
+      }
+    });
   }
 }

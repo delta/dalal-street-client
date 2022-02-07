@@ -1,3 +1,4 @@
+import 'package:dalal_street_client/blocs/news/news_bloc.dart';
 import 'package:dalal_street_client/blocs/subscribe/subscribe_cubit.dart';
 import 'package:dalal_street_client/components/stock_bar.dart';
 import 'package:dalal_street_client/config/get_it.dart';
@@ -32,6 +33,7 @@ class _CompanyPageState extends State<CompanyPage>
     super.initState();
     // Subscribe to the stream of Market Depth Updates
     context.read<SubscribeCubit>().subscribe(DataStreamType.MARKET_DEPTH);
+    context.read<NewsBloc>().add(const GetNews());
   }
 
   @override
@@ -48,26 +50,31 @@ class _CompanyPageState extends State<CompanyPage>
             body: Stack(
               alignment: Alignment.bottomCenter,
               children: [
-                SingleChildScrollView(
+                CustomScrollView(
                   physics: const BouncingScrollPhysics(
                       parent: AlwaysScrollableScrollPhysics()),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 10, horizontal: 10),
-                    child: Column(
-                      children: [
-                        const StockBar(),
-                        const SizedBox(
-                          height: 5,
+                  slivers: [
+                    SliverFillRemaining(
+                      hasScrollBody: false,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 10, horizontal: 10),
+                        child: Column(
+                          children: [
+                            const StockBar(),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            Expanded(child: companyPrices(company)),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Expanded(child: companyTabView(context, company))
+                          ],
                         ),
-                        companyPrices(company),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        companyTabView(context, company)
-                      ],
-                    ),
-                  ),
+                      ),
+                    )
+                  ],
                 ),
                 Container(
                   height: 70,
