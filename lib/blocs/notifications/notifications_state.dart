@@ -1,29 +1,23 @@
-part of 'notifications_cubit.dart';
+part of 'notifications_bloc.dart';
 
-abstract class NotificationsState extends Equatable {
-  const NotificationsState();
-
+abstract class NotifState extends Equatable {
+  const NotifState();
   @override
   List<Object> get props => [];
 }
 
-class NotificationsInitial extends NotificationsState {}
+class NotifInitial extends NotifState {}
 
-class NotificationsLoading extends NotificationsState {
-  const NotificationsLoading();
-}
-
-class NotificationsFailure extends NotificationsState {
-  final String msg;
-
-  const NotificationsFailure(this.msg);
-
+class GetNotifSuccess extends NotifState {
+  final GetNotificationsResponse notifList;
+  const GetNotifSuccess(this.notifList);
   @override
-  List<Object> get props => [msg];
+  List<Object> get props => [notifList];
 }
 
-class NotificationsSuccess extends NotificationsState {
-  final String msg;
-
-  const NotificationsSuccess(this.msg);
+class GetNotifFailure extends NotifState {
+  final String error;
+  const GetNotifFailure(this.error);
+  @override
+  List<Object> get props => [error];
 }

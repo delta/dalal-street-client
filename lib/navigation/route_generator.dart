@@ -4,7 +4,7 @@ import 'package:dalal_street_client/blocs/admin/tab3/tab3_cubit.dart';
 import 'package:dalal_street_client/blocs/auth/change_password/change_password_cubit.dart';
 import 'package:dalal_street_client/blocs/auth/forgot_password/forgot_password_cubit.dart';
 import 'package:dalal_street_client/blocs/auth/login/login_cubit.dart';
-import 'package:dalal_street_client/blocs/notifications/notifications_cubit.dart';
+import 'package:dalal_street_client/blocs/notifications/notifications_bloc.dart';
 import 'package:dalal_street_client/pages/admin_page/admin_page.dart';
 import 'package:dalal_street_client/blocs/auth/register/register_cubit.dart';
 import 'package:dalal_street_client/blocs/auth/verify_phone/enter_otp/enter_otp_cubit.dart';
@@ -59,25 +59,8 @@ class RouteGenerator {
         return const LandingPage();
       case '/notifications':
         return BlocProvider(
-          create: (context) => NotificationsCubit(),
+          create: (context) => NotificationsBloc(),
           child: const NotifsPage(),
-        );
-
-      //Admin Pages
-      case '/admin':
-        return MultiBlocProvider(
-          providers: [
-            BlocProvider(
-              create: (context) => Tab1Cubit(),
-            ),
-            BlocProvider(
-              create: (context) => Tab2Cubit(),
-            ),
-            BlocProvider(
-              create: (context) => Tab3Cubit(),
-            ),
-          ],
-          child: const AdminPage(),
         );
 
       //Admin Pages
