@@ -186,7 +186,7 @@ class StockItem extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
           child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
             _stockNames(stock),
-            _stockGraph(),
+            _stockGraph(stock.id),
             _stockPrices(),
           ])),
     );
@@ -212,10 +212,10 @@ class StockItem extends StatelessWidget {
     );
   }
 
-  Expanded _stockGraph() {
-    return const Expanded(
+  Expanded _stockGraph(int stockId) {
+    return Expanded(
       child: SizedBox(
-        child: LineAreaGraph(stockId: 1),
+        child: LineAreaGraph(stockId: stockId),
         height: 50,
         width: 10,
       ),

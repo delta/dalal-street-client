@@ -34,7 +34,7 @@ class _LineGraphState extends State<LineGraph> {
     context.read<StockHistoryCubit>().getStockHistory(
         widget.stockId,
         StockHistoryResolution
-            .SixtyMinutes); // using OneMinute resoulution for latest updates
+            .OneMinute); // using OneMinute resoulution for latest updates
   }
 
   @override
@@ -46,13 +46,6 @@ class _LineGraphState extends State<LineGraph> {
               state.stockHistoryMap;
 
           if (stockHistoryMap.length >= 2) {
-            // TODO for area data sent from server is not consitent for all company
-            /// finding the start and end timestamps
-            // final Iterable<String> timeStamps = stockHistoryMap.keys;
-            // final start = DateTime.parse(timeStamps.elementAt(0));
-            // final end = DateTime.parse(
-            //     timeStamps.elementAt(stockHistoryMap.length - 1));
-
             return charts.TimeSeriesChart(
               _getGraphData(stockHistoryMap),
               animate: true,
@@ -82,6 +75,7 @@ class _LineGraphState extends State<LineGraph> {
 
         return const Center(
             child: CircularProgressIndicator(
+          strokeWidth: 2,
           color: primaryColor,
         ));
       },
@@ -99,12 +93,11 @@ class _LineGraphState extends State<LineGraph> {
 
     // data from the server is sent in descending order of time
     // TODO change the order in backend ? (same goes for company chart)
-    data = List.from(data.reversed);
+    data.sort((a, b) => a.time.compareTo(b.time));
 
     /// checking lastest 2 values to find if the stock price is increasing or decreasing
     /// [data] List will always be of length >= 2
-    bool isIncreasing =
-        data[data.length - 1].stockPrice >= data[data.length - 2].stockPrice;
+    bool isIncreasing = true;
 
     return [
       charts.Series<TimeSeriesData, DateTime>(

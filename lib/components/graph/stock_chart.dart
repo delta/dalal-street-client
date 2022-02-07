@@ -34,7 +34,13 @@ class CandleStickLayout extends StatefulWidget {
 }
 
 class _CandleStickLayoutState extends State<CandleStickLayout> {
-  List<StockHistoryResolution> resolution = StockHistoryResolution.values;
+  List<StockHistoryResolution> resolution = [
+    StockHistoryResolution.OneMinute,
+    StockHistoryResolution.FiveMinutes,
+    StockHistoryResolution.FifteenMinutes,
+    StockHistoryResolution.ThirtyMinutes,
+    StockHistoryResolution.SixtyMinutes
+  ]; // StockHistoryResolution.OneDay is not implemented, hav to remove that from proto
 
   StockHistoryResolution currentResolution = StockHistoryResolution.OneMinute;
   ChartType chart = ChartType.candlestick;
@@ -120,12 +126,14 @@ class _CandleStickLayoutState extends State<CandleStickLayout> {
       data.add(_extractCandleData(stockHistory));
     });
 
+    data.sort((a, b) => a.timestamp.compareTo(b.timestamp));
+
     return BlocBuilder<StockHistoryStreamCubit, StockHistoryStreamState>(
       builder: (context, state) {
         if (state is StockHistoryStreamUpdate) {
           // TODO check interval and add
-          data.add(_extractCandleData(state.stockHistory));
-          logger.d(state.stockHistory, 'candle-chart rl update');
+          // data.add(_extractCandleData(state.stockHistory));
+          // logger.d(state.stockHistory, 'candle-chart rl update');
         }
 
         return InteractiveChart(
@@ -157,8 +165,8 @@ class _CandleStickLayoutState extends State<CandleStickLayout> {
       builder: (context, state) {
         if (state is StockHistoryStreamUpdate) {
           // TODO check interval and add
-          stockHistoryMap[state.stockHistory.createdAt] = state.stockHistory;
-          data = _getLineChartData(stockHistoryMap);
+          // stockHistoryMap[state.stockHistory.createdAt] = state.stockHistory;
+          // data = _getLineChartData(stockHistoryMap);
         }
 
         return charts.TimeSeriesChart(

@@ -91,5 +91,4 @@ Container companyPrices(Stock company) {
           ]));
 }
 
-// TODO : Add Graph
 Widget _companyGraph(int stockid) => StockChart(stockId: stockid);
