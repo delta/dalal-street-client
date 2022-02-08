@@ -17,7 +17,6 @@ class _RetrievePageState extends State<RetrievePage> {
   Map<int, Stock> mapOfStocks = getIt<GlobalStreams>().latestStockMap;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     context.read<MortgageDetailsCubit>().getMortgageDetails();
   }
