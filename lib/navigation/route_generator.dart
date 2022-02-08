@@ -4,6 +4,7 @@ import 'package:dalal_street_client/blocs/admin/tab3/tab3_cubit.dart';
 import 'package:dalal_street_client/blocs/auth/change_password/change_password_cubit.dart';
 import 'package:dalal_street_client/blocs/auth/forgot_password/forgot_password_cubit.dart';
 import 'package:dalal_street_client/blocs/auth/login/login_cubit.dart';
+import 'package:dalal_street_client/blocs/notifications/notifications_bloc.dart';
 import 'package:dalal_street_client/pages/admin_page/admin_page.dart';
 import 'package:dalal_street_client/blocs/auth/register/register_cubit.dart';
 import 'package:dalal_street_client/blocs/auth/verify_phone/enter_otp/enter_otp_cubit.dart';
@@ -26,6 +27,7 @@ import 'package:dalal_street_client/pages/company_page/company_page.dart';
 import 'package:dalal_street_client/pages/daily_challenges/daily_challenges_page.dart';
 import 'package:dalal_street_client/pages/mortgage/mortgage_home.dart';
 import 'package:dalal_street_client/pages/news_page.dart';
+import 'package:dalal_street_client/pages/notifications_page.dart';
 import 'package:dalal_street_client/pages/referral_page.dart';
 import 'package:dalal_street_client/pages/stock_exchange/exchange_page.dart';
 import 'package:dalal_street_client/pages/landing_page.dart';
@@ -55,6 +57,11 @@ class RouteGenerator {
         return const SplashPage();
       case '/landing':
         return const LandingPage();
+      case '/notifications':
+        return BlocProvider(
+          create: (context) => NotificationsBloc(),
+          child: const NotifsPage(),
+        );
 
       //Admin Pages
       case '/admin':
