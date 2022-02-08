@@ -15,7 +15,8 @@ class RetrieveSheetCubit extends Cubit<RetrieveSheetState> {
   Future<void> retrieveStocks(
       int stockId, int stockQuantity, int mortgagePrice) async {
     try {
-      final resp = await actionClient.retrieveMortgageStocks(RetrieveMortgageStocksRequest(
+      final resp = await actionClient.retrieveMortgageStocks(
+          RetrieveMortgageStocksRequest(
               stockId: stockId,
               stockQuantity: Int64(stockQuantity),
               retrievePrice: Int64(mortgagePrice)),
