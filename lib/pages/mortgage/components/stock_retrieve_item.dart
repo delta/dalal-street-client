@@ -13,7 +13,9 @@ import 'package:flutter/material.dart';
 class RetrieveStockItem extends StatefulWidget {
   final Stock company;
   final MortgageDetail mortgageDetail;
-  const RetrieveStockItem({ Key? key, required this.company, required this.mortgageDetail }) : super(key: key);
+  const RetrieveStockItem(
+      {Key? key, required this.company, required this.mortgageDetail})
+      : super(key: key);
 
   @override
   _RetrieveStockItemState createState() => _RetrieveStockItemState();
@@ -197,7 +199,9 @@ class _RetrieveStockItemState extends State<RetrieveStockItem> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             const Text('Amount per Stock(₹)'),
-            Text((mortgageDetail.mortgagePrice.toInt() * RETRIEVE_DEPOSIT_RATE).toDouble().toStringAsFixed(2))
+            Text((mortgageDetail.mortgagePrice.toInt() * RETRIEVE_DEPOSIT_RATE)
+                .toDouble()
+                .toStringAsFixed(2))
           ],
         )
       ],

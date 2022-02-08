@@ -95,7 +95,7 @@ Widget _mortgageTabView(BuildContext context) {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
               height: MediaQuery.of(context).size.height * 0.8,
-              child:  TabBarView(
+              child: TabBarView(
                   physics: const BouncingScrollPhysics(
                       parent: AlwaysScrollableScrollPhysics()),
                   children: [

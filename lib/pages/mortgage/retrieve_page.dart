@@ -21,6 +21,7 @@ class _RetrievePageState extends State<RetrievePage> {
     super.initState();
     context.read<MortgageDetailsCubit>().getMortgageDetails();
   }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -33,7 +34,7 @@ class _RetrievePageState extends State<RetrievePage> {
     return BlocBuilder<MortgageDetailsCubit, MortgageDetailsState>(
       builder: (context, state) {
         if (state is MortgageDetailsLoaded) {
-          if(state.mortgageDetails.isEmpty){
+          if (state.mortgageDetails.isEmpty) {
             return const Center(
               child: Text('No mortgaged Stocks'),
             );
@@ -61,7 +62,7 @@ class _RetrievePageState extends State<RetrievePage> {
               color: Colors.green,
             ),
           );
-        }else{
+        } else {
           return const Center(
             child: Text('Failed to load data'),
           );
