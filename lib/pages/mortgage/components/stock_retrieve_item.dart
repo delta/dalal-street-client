@@ -2,6 +2,7 @@ import 'package:dalal_street_client/config/get_it.dart';
 import 'package:dalal_street_client/constants/constants.dart';
 import 'package:dalal_street_client/constants/format.dart';
 import 'package:dalal_street_client/pages/mortgage/components/mortgage_bottom_sheet.dart';
+import 'package:dalal_street_client/pages/mortgage/components/retrieve_bottom_sheet.dart';
 import 'package:dalal_street_client/proto_build/models/MortgageDetail.pb.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
 import 'package:dalal_street_client/streams/global_streams.dart';
@@ -92,7 +93,8 @@ class _RetrieveStockItemState extends State<RetrieveStockItem> {
                         ),
                       )),
                       overlayColor: MaterialStateProperty.all(secondaryColor)),
-                  onPressed: () => _showModalSheet(widget.company),
+                  onPressed: () =>
+                      _showModalSheet(widget.company, widget.mortgageDetail),
                   child: const Text(
                     'Retrieve',
                     style: TextStyle(fontSize: 14),
@@ -208,7 +210,7 @@ class _RetrieveStockItemState extends State<RetrieveStockItem> {
     );
   }
 
-  void _showModalSheet(Stock company) {
+  void _showModalSheet(Stock company, MortgageDetail mortgageDetail) {
     showModalBottomSheet(
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(top: Radius.circular(25.0))),
@@ -216,7 +218,10 @@ class _RetrieveStockItemState extends State<RetrieveStockItem> {
         context: context,
         isScrollControlled: true,
         builder: (_) {
-          return MortgageBottomSheet(company: company);
+          return RetrieveBottomSheet(
+            company: company,
+            mortgageDetail: mortgageDetail,
+          );
         });
   }
 }
