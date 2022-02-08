@@ -1,7 +1,10 @@
+import 'package:dalal_street_client/blocs/mortgage/mortgage_details/mortgage_details_cubit.dart';
 import 'package:dalal_street_client/components/stock_bar.dart';
 import 'package:dalal_street_client/pages/mortgage/mortgage_page.dart';
+import 'package:dalal_street_client/pages/mortgage/retrieve_page.dart';
 import 'package:dalal_street_client/theme/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MortgageHome extends StatefulWidget {
   const MortgageHome({Key? key}) : super(key: key);
@@ -92,10 +95,16 @@ Widget _mortgageTabView(BuildContext context) {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
               height: MediaQuery.of(context).size.height * 0.8,
-              child: const TabBarView(
-                  physics: BouncingScrollPhysics(
+              child:  TabBarView(
+                  physics: const BouncingScrollPhysics(
                       parent: AlwaysScrollableScrollPhysics()),
-                  children: [MortgagePage(), MortgagePage()]),
+                  children: [
+                    const MortgagePage(),
+                    BlocProvider(
+                      create: (context) => MortgageDetailsCubit(),
+                      child: const RetrievePage(),
+                    )
+                  ]),
             )
           ],
         ),
