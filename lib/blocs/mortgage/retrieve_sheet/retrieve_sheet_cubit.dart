@@ -12,14 +12,14 @@ part 'retrieve_sheet_state.dart';
 class RetrieveSheetCubit extends Cubit<RetrieveSheetState> {
   RetrieveSheetCubit() : super(RetrieveSheetInitial());
 
-  Future<void> retrieveStocks(int stockId, int stockQuantity, int mortgagePrice) async {
+  Future<void> retrieveStocks(
+      int stockId, int stockQuantity, int mortgagePrice) async {
     try {
       final resp = await actionClient.retrieveStocks(
-         RetrieveMortgageStocksRequest(
-           stockId: stockId,
-           stockQuantity: Int64(stockQuantity),
-           retrievePrice: Int64(mortgagePrice)
-         ),
+          RetrieveMortgageStocksRequest(
+              stockId: stockId,
+              stockQuantity: Int64(stockQuantity),
+              retrievePrice: Int64(mortgagePrice)),
           options: sessionOptions(getIt<String>()));
       if (resp.statusCode == RetrieveMortgageStocksResponse_StatusCode.OK) {
         emit(const RetrieveSheetSuccess());
