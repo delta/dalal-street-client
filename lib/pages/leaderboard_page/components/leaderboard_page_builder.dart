@@ -49,14 +49,13 @@ class _LeaderboardPageBuilderState extends State<LeaderboardPageBuilder> {
               height: 50,
               child: OutlinedButton(
                 onPressed: () {
-                  if (widget.leaderboardType == 'daily') {
-                    context
-                        .read<LeaderboardCubit>()
-                        .getLeaderboard(1, 100, 'daily');
+                  if (widget.leaderboardType ==
+                      leaderboardTypes.Overall.toString()) {
+                    context.read<LeaderboardCubit>().getLeaderboard(
+                        1, 100, leaderboardTypes.Overall.toString());
                   } else {
-                    context
-                        .read<LeaderboardCubit>()
-                        .getLeaderboard(1, 100, 'overall');
+                    context.read<LeaderboardCubit>().getLeaderboard(
+                        1, 100, leaderboardTypes.Daily.toString());
                   }
                 },
                 child: const Text('Retry'),
