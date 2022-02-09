@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-Widget table(List<Map<String, String>> tableData,
-        ScrollController _scrollcontroller) =>
+Widget table(
+  List<Map<String, String>> tableData,
+) =>
     Expanded(
       child: ListView.builder(
           itemCount: tableData.length,
-          controller: _scrollcontroller,
           itemBuilder: (BuildContext context, int index) {
             return SizedBox(
               width: double.infinity,

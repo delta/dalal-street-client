@@ -12,20 +12,10 @@ class DailyLeaderboardPage extends StatefulWidget {
 
 class _DailyLeaderboardPageState extends State<DailyLeaderboardPage> {
   final List<Map<String, String>> tabledataDaily = [];
-  final ScrollController _scrollController = ScrollController();
-  int i = 10;
   @override
   initState() {
     super.initState();
-    context.read<LeaderboardCubit>().getDailyLeaderboard(1, 10);
-    _scrollController.addListener(() {
-      if (_scrollController.position.atEdge) {
-        if (_scrollController.position.pixels != 0) {
-          context.read<LeaderboardCubit>().getDailyLeaderboard(i + 1, 10);
-          i = i + 10;
-        }
-      }
-    });
+    context.read<LeaderboardCubit>().getDailyLeaderboard(1, 100);
   }
 
   @override
@@ -42,8 +32,7 @@ class _DailyLeaderboardPageState extends State<DailyLeaderboardPage> {
             });
           }
         }
-        return leaderboardPageData(
-            state.myRank, context, tabledataDaily, _scrollController);
+        return leaderboardPageData(state.myRank, context, tabledataDaily);
       } else if (state is DailyLeaderboardFailure) {
         return Center(
             child: Column(
@@ -56,7 +45,7 @@ class _DailyLeaderboardPageState extends State<DailyLeaderboardPage> {
               height: 50,
               child: OutlinedButton(
                 onPressed: () {
-                  context.read<LeaderboardCubit>().getDailyLeaderboard(1, 10);
+                  context.read<LeaderboardCubit>().getDailyLeaderboard(1, 100);
                 },
                 child: const Text('Retry'),
               ),

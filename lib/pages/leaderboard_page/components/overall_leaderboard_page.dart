@@ -13,20 +13,10 @@ class OverallLeaderboardPage extends StatefulWidget {
 class _OverallLeaderboardPageState extends State<OverallLeaderboardPage> {
   final List<Map<String, String>> tabledataOverall = [];
   final List<Map<String, String>> tabledataDaily = [];
-  final ScrollController _scrollController = ScrollController();
   @override
   initState() {
-    int i = 10;
     super.initState();
-    context.read<LeaderboardCubit>().getOverallLeaderboard(1, 10);
-    _scrollController.addListener(() {
-      if (_scrollController.position.atEdge) {
-        if (_scrollController.position.pixels != 0) {
-          context.read<LeaderboardCubit>().getOverallLeaderboard(i + 1, 10);
-          i = i + 10;
-        }
-      }
-    });
+    context.read<LeaderboardCubit>().getOverallLeaderboard(1, 100);
   }
 
   @override
@@ -43,8 +33,7 @@ class _OverallLeaderboardPageState extends State<OverallLeaderboardPage> {
             });
           }
         }
-        return leaderboardPageData(
-            state.myRank, context, tabledataOverall, _scrollController);
+        return leaderboardPageData(state.myRank, context, tabledataOverall);
       } else if (state is OverallLeaderboardFailure) {
         return Center(
             child: Column(
@@ -57,7 +46,9 @@ class _OverallLeaderboardPageState extends State<OverallLeaderboardPage> {
               height: 50,
               child: OutlinedButton(
                 onPressed: () {
-                  context.read<LeaderboardCubit>().getOverallLeaderboard(1, 10);
+                  context
+                      .read<LeaderboardCubit>()
+                      .getOverallLeaderboard(1, 100);
                 },
                 child: const Text('Retry'),
               ),
