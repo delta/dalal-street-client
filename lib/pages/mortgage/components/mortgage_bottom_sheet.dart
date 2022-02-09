@@ -1,14 +1,13 @@
 import 'package:dalal_street_client/blocs/mortgage/mortgage_sheet/cubit/mortgage_sheet_cubit.dart';
+import 'package:dalal_street_client/components/sheet_pop_over.dart';
 import 'package:dalal_street_client/constants/constants.dart';
 import 'package:dalal_street_client/constants/format.dart';
-import 'package:dalal_street_client/constants/icons.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
 import 'package:dalal_street_client/theme/colors.dart';
 import 'package:dalal_street_client/utils/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinbox/flutter_spinbox.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class MortgageBottomSheet extends StatefulWidget {
   final Stock company;
@@ -59,7 +58,7 @@ class _MortgageBottomSheetState extends State<MortgageBottomSheet> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  _buildPopOver(),
+                  const SheetPopOver(),
                   const SizedBox(
                     height: 20,
                   ),
@@ -100,37 +99,6 @@ class _MortgageBottomSheetState extends State<MortgageBottomSheet> {
           .read<MortgageSheetCubit>()
           .mortgageStocks(widget.company.id, quantity);
     }
-  }
-
-  Widget _buildPopOver() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Container(
-            width: 150,
-            height: 4.5,
-            decoration: const BoxDecoration(
-              color: lightGray,
-              borderRadius: BorderRadius.all(Radius.circular(12)),
-            )),
-        const SizedBox(
-          height: 3,
-        ),
-        Padding(
-          padding: const EdgeInsets.all(10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              InkWell(
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                  child: SvgPicture.asset(AppIcons.crossWhite)),
-            ],
-          ),
-        ),
-      ],
-    );
   }
 
   Widget _staticCompanyDetails() {

@@ -1,4 +1,5 @@
 import 'package:dalal_street_client/blocs/exchange/sheet/exchange_sheet_cubit.dart';
+import 'package:dalal_street_client/components/sheet_pop_over.dart';
 import 'package:dalal_street_client/config/get_it.dart';
 import 'package:dalal_street_client/constants/format.dart';
 import 'package:dalal_street_client/constants/icons.dart';
@@ -72,7 +73,7 @@ class _ExchangeBottomSheetState extends State<ExchangeBottomSheet> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  _buildPopOver(),
+                  const SheetPopOver(),
                   const SizedBox(
                     height: 20,
                   ),
@@ -95,37 +96,6 @@ class _ExchangeBottomSheetState extends State<ExchangeBottomSheet> {
           );
         },
       ),
-    );
-  }
-
-  Widget _buildPopOver() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Container(
-            width: 150,
-            height: 4.5,
-            decoration: const BoxDecoration(
-              color: lightGray,
-              borderRadius: BorderRadius.all(Radius.circular(12)),
-            )),
-        const SizedBox(
-          height: 3,
-        ),
-        Padding(
-          padding: const EdgeInsets.all(10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              InkWell(
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                  child: SvgPicture.asset(AppIcons.crossWhite)),
-            ],
-          ),
-        ),
-      ],
     );
   }
 
