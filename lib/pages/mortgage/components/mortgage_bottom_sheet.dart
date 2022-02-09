@@ -77,14 +77,7 @@ class _MortgageBottomSheetState extends State<MortgageBottomSheet> {
                         SizedBox(
                           width: double.infinity,
                           child: ElevatedButton(
-                            onPressed: () {
-                              if (quantity > 0) {
-                                context
-                                    .read<MortgageSheetCubit>()
-                                    .mortgageStocks(
-                                        widget.company.id, quantity);
-                              }
-                            },
+                            onPressed: () => _mortgageStocks(context),
                             child: const Text('Mortgage'),
                           ),
                         ),
@@ -99,6 +92,14 @@ class _MortgageBottomSheetState extends State<MortgageBottomSheet> {
         },
       ),
     );
+  }
+
+  void _mortgageStocks(BuildContext context) {
+    if (quantity > 0) {
+      context
+          .read<MortgageSheetCubit>()
+          .mortgageStocks(widget.company.id, quantity);
+    }
   }
 
   Widget _buildPopOver() {

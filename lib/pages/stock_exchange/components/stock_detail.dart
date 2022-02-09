@@ -393,12 +393,7 @@ class _StockDetailState extends State<StockDetail> {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             OutlinedButton(
-                onPressed: () {
-                  int cash =
-                      getIt<GlobalStreams>().dynamicUserInfoStream.value.cash;
-                  List<int> data = [stockId, cash];
-                  Navigator.pushNamed(context, '/company', arguments: data);
-                },
+                onPressed: () => _navigateToCompanyPage(context, stockId),
                 child: const Text('Know More')),
             const SizedBox(
               width: 40,
@@ -423,11 +418,8 @@ class _StockDetailState extends State<StockDetail> {
                     );
                   }
                   return ElevatedButton(
-                    onPressed: () {
-                      context
-                          .read<ExchangeSheetCubit>()
-                          .buyStocksFromExchange(company.id, quantity);
-                    },
+                    onPressed: () =>
+                        _buyStocksFromExchange(context, company.id, quantity),
                     child: const Text('Buy'),
                   );
                 },
@@ -437,5 +429,15 @@ class _StockDetailState extends State<StockDetail> {
         )
       ],
     );
+  }
+
+  void _navigateToCompanyPage(BuildContext context, int stockId) {
+    int cash = getIt<GlobalStreams>().dynamicUserInfoStream.value.cash;
+    List<int> data = [stockId, cash];
+    Navigator.pushNamed(context, '/company', arguments: data);
+  }
+
+  void _buyStocksFromExchange(BuildContext context, int stockId, int quantity) {
+    context.read<ExchangeSheetCubit>().buyStocksFromExchange(stockId, quantity);
   }
 }

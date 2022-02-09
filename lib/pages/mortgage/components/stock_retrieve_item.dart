@@ -67,12 +67,8 @@ class _RetrieveStockItemState extends State<RetrieveStockItem> {
                       overlayColor: MaterialStateProperty.all(secondaryColor),
                       backgroundColor: MaterialStateProperty.all(
                           primaryColor.withOpacity(0.2))),
-                  onPressed: () {
-                    int cash =
-                        getIt<GlobalStreams>().dynamicUserInfoStream.value.cash;
-                    List<int> data = [widget.company.id, cash];
-                    Navigator.pushNamed(context, '/company', arguments: data);
-                  },
+                  onPressed: () =>
+                      _navigateToCompanyPage(context),
                   child: const Text(
                     'View',
                     style: TextStyle(color: primaryColor, fontSize: 14),
@@ -105,6 +101,12 @@ class _RetrieveStockItemState extends State<RetrieveStockItem> {
         ],
       ),
     );
+  }
+
+  void _navigateToCompanyPage(BuildContext context) {
+    int cash = getIt<GlobalStreams>().dynamicUserInfoStream.value.cash;
+    List<int> data = [widget.company.id, cash];
+    Navigator.pushNamed(context, '/company', arguments: data);
   }
 
   Widget _stockNames(Stock company) {

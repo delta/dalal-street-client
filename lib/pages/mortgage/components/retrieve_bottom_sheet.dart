@@ -78,17 +78,7 @@ class _RetrieveBottomSheetState extends State<RetrieveBottomSheet> {
                         SizedBox(
                           width: double.infinity,
                           child: ElevatedButton(
-                            onPressed: () {
-                              if (quantity > 0) {
-                                context
-                                    .read<RetrieveSheetCubit>()
-                                    .retrieveStocks(
-                                        widget.company.id,
-                                        quantity,
-                                        widget.mortgageDetail.mortgagePrice
-                                            .toInt());
-                              }
-                            },
+                            onPressed: () => _retrieveStocks(context, quantity),
                             child: const Text('Retrieve'),
                           ),
                         ),
@@ -103,6 +93,13 @@ class _RetrieveBottomSheetState extends State<RetrieveBottomSheet> {
         },
       ),
     );
+  }
+
+  void _retrieveStocks(BuildContext context, int quantity) {
+    if (quantity > 0) {
+      context.read<RetrieveSheetCubit>().retrieveStocks(widget.company.id,
+          quantity, widget.mortgageDetail.mortgagePrice.toInt());
+    }
   }
 
   Widget _buildPopOver() {
