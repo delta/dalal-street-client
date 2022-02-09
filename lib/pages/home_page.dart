@@ -46,6 +46,8 @@ class _HomePageState extends State<HomePage>
       child: Scaffold(
         backgroundColor: Colors.black,
         body: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(
+              parent: AlwaysScrollableScrollPhysics()),
           child: Responsive(
             mobile: _mobileBody(),
             tablet: _tabletBody(),
@@ -140,16 +142,11 @@ class _HomePageState extends State<HomePage>
   Widget feedlist() =>
       BlocBuilder<NewsBloc, NewsState>(builder: (context, state) {
         if (state is GetNewsSucess) {
-          if (state.marketEventsList.moreExists) {
-            mapMarketEvents.addAll(state.marketEventsList.marketEvents);
-            if (i == 1) {
-              mapMarketEvents.remove(mapMarketEvents[0]);
-              i++;
-            }
-          }
+          mapMarketEvents.clear();
+          mapMarketEvents.addAll(state.marketEventsList.marketEvents);
           return ListView.separated(
             shrinkWrap: true,
-            physics: const ScrollPhysics(),
+            physics: const NeverScrollableScrollPhysics(),
             itemCount: mapMarketEvents.length,
             itemBuilder: (context, index) {
               MarketEvent marketEvent = mapMarketEvents[index];
@@ -246,6 +243,7 @@ class _HomePageState extends State<HomePage>
             stockPriceStream: stockMapStream.priceStream(entry.key)))
         .toList();
     return ListView(
+      physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
       children: stockItems,
     );

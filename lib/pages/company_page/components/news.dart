@@ -1,4 +1,6 @@
 import 'package:dalal_street_client/blocs/news/news_bloc.dart';
+import 'package:dalal_street_client/components/buttons/tertiary_button.dart';
+import 'package:dalal_street_client/config/log.dart';
 import 'package:dalal_street_client/pages/newsdetail_page.dart';
 import 'package:dalal_street_client/proto_build/models/MarketEvent.pb.dart';
 import 'package:dalal_street_client/theme/colors.dart';
@@ -7,160 +9,184 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 List<MarketEvent> mapMarketEvents = [];
 int i = 1;
-Container news(BuildContext context) {
-  return Container(
-    padding: const EdgeInsets.symmetric(vertical: 8),
-    decoration: BoxDecoration(
-      color: background2,
-      borderRadius: BorderRadius.circular(10),
-    ),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Recent News',
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.w500,
-            color: white.withOpacity(0.75),
-          ),
-          textAlign: TextAlign.start,
-        ),
-        const SizedBox(height: 20),
-        feedlist(context),
-      ],
-    ),
-  );
+
+class CompanyNewsPage extends StatefulWidget {
+  // ignore: prefer_typing_uninitialized_variables
+  final stockId;
+
+  const CompanyNewsPage({Key? key, required this.stockId}) : super(key: key);
+
+  @override
+  State<CompanyNewsPage> createState() => _CompanyNewsPageState();
 }
 
-Widget feedlist(BuildContext context) =>
-    BlocBuilder<NewsBloc, NewsState>(builder: (context, state) {
-      if (state is GetNewsSucess) {
-        if (state.marketEventsList.moreExists) {
-          mapMarketEvents.addAll(state.marketEventsList.marketEvents);
-          if (i == 1) {
-            mapMarketEvents.remove(mapMarketEvents[0]);
-            i++;
-          }
-        }
-        return ListView.separated(
-          scrollDirection: Axis.vertical,
-          shrinkWrap: true,
-          physics: const BouncingScrollPhysics(
-              parent: AlwaysScrollableScrollPhysics()),
-          itemCount: mapMarketEvents.length,
-          itemBuilder: (context, index) {
-            MarketEvent marketEvent = mapMarketEvents[index];
-            String headline = marketEvent.headline;
-            String imagePath = marketEvent.imagePath;
-            String createdAt = marketEvent.createdAt;
-            String text = marketEvent.text;
-            String dur = getdur(createdAt);
-            return GestureDetector(
-                child: newsItem(context, headline, imagePath, createdAt),
-                onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => NewsDetail(
-                          text: text,
-                          imagePath: imagePath,
-                          headline: headline,
-                          dur: dur),
-                    )));
-          },
-          separatorBuilder: (context, index) {
-            return const Divider();
-          },
-        );
-      } else if (state is GetNewsFailure) {
-        return Column(
-          children: [
-            const Text('Failed to reach server'),
-            const SizedBox(height: 20),
-            SizedBox(
-              width: 100,
-              height: 50,
-              child: OutlinedButton(
-                onPressed: () => context.read<NewsBloc>().add(GetMoreNews(
-                    mapMarketEvents[mapMarketEvents.length - 1].id - 1)),
-                child: const Text('Retry'),
-              ),
-            ),
-          ],
-        );
-      } else {
-        return const Center(
-          child: CircularProgressIndicator(
-            color: secondaryColor,
-          ),
-        );
-      }
-    });
+class _CompanyNewsPageState extends State<CompanyNewsPage> {
+  @override
+  initState() {
+    super.initState();
+    logger.i('CompanyNewsPage initState');
+    context.read<NewsBloc>().add(GetNewsById(widget.stockId));
+  }
 
-Widget newsItem(
-  BuildContext context,
-  String text,
-  String imagePath,
-  String createdAt,
-) {
-  String dur = getdur(createdAt);
-  return (Container(
-    padding: const EdgeInsets.symmetric(
-      vertical: 2,
-    ),
-    child: Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: <Widget>[
-        ClipRRect(
-          borderRadius: BorderRadius.circular(20),
-          child: Image(
-            width: 100,
-            height: 100,
-            fit: BoxFit.contain,
-            image: NetworkImage(imagePath),
+  Widget newsItem(
+    String text,
+    String imagePath,
+    String createdAt,
+  ) {
+    String dur = getdur(createdAt);
+    return (Container(
+      padding: const EdgeInsets.symmetric(vertical: 2),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          ClipRRect(
+            borderRadius: BorderRadius.circular(20),
+            child: Image(
+              width: 100,
+              height: 100,
+              fit: BoxFit.contain,
+              image: NetworkImage(imagePath),
+            ),
           ),
-        ),
-        Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              SizedBox(
-                width: (MediaQuery.of(context).size.width - 100) * 0.8,
-                child: Flexible(
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-                    child: Text(text,
-                        style:
-                            const TextStyle(color: Colors.white, fontSize: 15)),
+          Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                SizedBox(
+                  width: (MediaQuery.of(context).size.width - 100) * 0.8,
+                  child: Flexible(
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                      child: Text(text,
+                          style: const TextStyle(
+                              color: Colors.white, fontSize: 15)),
+                    ),
+                    fit: FlexFit.loose,
                   ),
-                  fit: FlexFit.loose,
+                ),
+                const SizedBox.square(
+                  dimension: 5,
+                ),
+                Padding(
+                    padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                    child: Text(dur,
+                        style: const TextStyle(color: lightGray, fontSize: 12)))
+              ]),
+        ],
+      ),
+    ));
+  }
+
+  String getdur(String createdAt) {
+    DateTime dt1 = DateTime.parse(createdAt);
+    DateTime dt2 = DateTime.now();
+    Duration diff = dt2.difference(dt1);
+    if (diff.inDays == 0) {
+      if (diff.inHours == 0) {
+        return (diff.inMinutes.toString() + ' minutes ago');
+      } else {
+        return (diff.inHours.toString() + ' hour ago');
+      }
+    } else {
+      return (diff.inDays.toString() + ' day ago');
+    }
+  }
+
+  Widget feedlist() =>
+      BlocBuilder<NewsBloc, NewsState>(builder: (context, state) {
+        if (state is GetNewsSucess) {
+          mapMarketEvents.clear();
+          mapMarketEvents.addAll(state.marketEventsList.marketEvents);
+          logger.i(mapMarketEvents);
+          return ListView.separated(
+            shrinkWrap: true,
+            physics: const ScrollPhysics(),
+            itemCount: mapMarketEvents.length,
+            itemBuilder: (context, index) {
+              MarketEvent marketEvent = mapMarketEvents[index];
+              String headline = marketEvent.headline;
+              String imagePath = marketEvent.imagePath;
+              String createdAt = marketEvent.createdAt;
+              String text = marketEvent.text;
+              String dur = getdur(createdAt);
+              return GestureDetector(
+                  child: newsItem(headline, imagePath, createdAt),
+                  onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => NewsDetail(
+                            text: text,
+                            imagePath: imagePath,
+                            headline: headline,
+                            dur: dur),
+                      )));
+            },
+            separatorBuilder: (context, index) {
+              return const Divider();
+            },
+          );
+        } else if (state is GetNewsFailure) {
+          return Column(
+            children: [
+              const Text('Failed to reach server'),
+              const SizedBox(height: 20),
+              SizedBox(
+                width: 100,
+                height: 50,
+                child: OutlinedButton(
+                  onPressed: () => context.read<NewsBloc>().add(GetMoreNews(
+                      mapMarketEvents[mapMarketEvents.length - 1].id - 1)),
+                  child: const Text('Retry'),
                 ),
               ),
-              const SizedBox.square(
-                dimension: 5,
+            ],
+          );
+        } else {
+          return const Center(
+            child: CircularProgressIndicator(
+              color: secondaryColor,
+            ),
+          );
+        }
+      });
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+        decoration: BoxDecoration(
+          color: background2,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'Company Related News',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                      color: white,
+                    ),
+                    textAlign: TextAlign.start,
+                  ),
+                  TertiaryButton(
+                    width: 80,
+                    height: 25,
+                    fontSize: 12,
+                    title: 'See All',
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/news');
+                    },
+                  ),
+                ],
               ),
-              Padding(
-                  padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-                  child: Text(dur,
-                      style: const TextStyle(color: lightGray, fontSize: 12)))
-            ]),
-      ],
-    ),
-  ));
-}
-
-String getdur(String createdAt) {
-  DateTime dt1 = DateTime.parse(createdAt);
-  DateTime dt2 = DateTime.now();
-  Duration diff = dt2.difference(dt1);
-  if (diff.inDays == 0) {
-    if (diff.inHours == 0) {
-      return (diff.inMinutes.toString() + ' minutes ago');
-    } else {
-      return (diff.inHours.toString() + ' hour ago');
-    }
-  } else {
-    return (diff.inDays.toString() + ' day ago');
+              feedlist()
+            ]));
   }
 }
