@@ -1,5 +1,5 @@
 import 'package:dalal_street_client/blocs/exchange/exchange_cubit.dart';
-import 'package:dalal_street_client/blocs/leaderboard/leaderboard/leaderboard_cubit.dart';
+import 'package:dalal_street_client/blocs/leaderboard/leaderboard_cubit.dart';
 import 'package:dalal_street_client/blocs/portfolio/userWorth/portfolio_cubit.dart';
 import 'package:dalal_street_client/components/stock_bar.dart';
 import 'package:dalal_street_client/config/log.dart';

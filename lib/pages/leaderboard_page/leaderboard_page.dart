@@ -1,5 +1,4 @@
-import 'package:dalal_street_client/pages/leaderboard_page/components/daily_leaderboard_page.dart';
-import 'package:dalal_street_client/pages/leaderboard_page/components/overall_leaderboard_page.dart';
+import 'package:dalal_street_client/pages/leaderboard_page/components/leaderboard_page_builder.dart';
 import 'package:dalal_street_client/utils/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:dalal_street_client/theme/colors.dart';
@@ -12,8 +11,6 @@ class LeaderboardPage extends StatefulWidget {
 }
 
 class _LeaderboardPageState extends State<LeaderboardPage> {
-  final List<Map<String, String>> tabledataOverall = [];
-  final List<Map<String, String>> tabledataDaily = [];
   @override
   initState() {
     super.initState();
@@ -125,8 +122,8 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                       physics: BouncingScrollPhysics(
                           parent: AlwaysScrollableScrollPhysics()),
                       children: [
-                        OverallLeaderboardPage(),
-                        DailyLeaderboardPage()
+                        LeaderboardPageBuilder(leaderboardType: 'overall'),
+                        LeaderboardPageBuilder(leaderboardType: 'daily')
                       ]),
                 )
               ],

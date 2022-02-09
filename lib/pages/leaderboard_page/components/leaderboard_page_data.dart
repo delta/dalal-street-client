@@ -5,7 +5,16 @@ import 'package:dalal_street_client/pages/leaderboard_page/components/top_contai
 import 'package:flutter/material.dart';
 
 Padding leaderboardPageData(
-    int myRank, BuildContext context, List<Map<String, String>> tableData) {
+    int myRank, BuildContext context, dynamic rankList) {
+  final List<Map<String, String>> tableData = [];
+
+  for (var e in rankList) {
+    tableData.add({
+      'rank': e.rank.toString(),
+      'username': e.userName,
+      'totalworth': e.totalWorth.toString()
+    });
+  }
   return Padding(
     padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
     child: Column(

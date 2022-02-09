@@ -16,12 +16,6 @@ abstract class DailyLeaderboardState extends Equatable {
   List<Object> get props => [];
 }
 
-class DailyLeaderboardInitial extends LeaderboardState {}
-
-class DailyLeaderboardLoading extends LeaderboardState {
-  const DailyLeaderboardLoading();
-}
-
 class DailyLeaderboardSuccess extends LeaderboardState {
   final int myRank;
   final Iterable<DailyLeaderboardRow> rankList;
@@ -31,14 +25,6 @@ class DailyLeaderboardSuccess extends LeaderboardState {
   List<Object> get props => [myRank, rankList];
 }
 
-class DailyLeaderboardFailure extends LeaderboardState {
-  final String statusMessage;
-  const DailyLeaderboardFailure(this.statusMessage);
-
-  @override
-  List<Object> get props => [statusMessage];
-}
-
 abstract class OverallLeaderboardState extends Equatable {
   const OverallLeaderboardState();
 
@@ -46,10 +32,8 @@ abstract class OverallLeaderboardState extends Equatable {
   List<Object> get props => [];
 }
 
-class OverallLeaderboardInitial extends LeaderboardState {}
-
-class OverallLeaderboardLoading extends LeaderboardState {
-  const OverallLeaderboardLoading();
+class LeaderboardLoading extends LeaderboardState {
+  const LeaderboardLoading();
 }
 
 class OverallLeaderboardSuccess extends LeaderboardState {
@@ -61,9 +45,9 @@ class OverallLeaderboardSuccess extends LeaderboardState {
   List<Object> get props => [myRank, rankList];
 }
 
-class OverallLeaderboardFailure extends LeaderboardState {
+class LeaderboardFailure extends LeaderboardState {
   final String statusMessage;
-  const OverallLeaderboardFailure(this.statusMessage);
+  const LeaderboardFailure(this.statusMessage);
 
   @override
   List<Object> get props => [statusMessage];

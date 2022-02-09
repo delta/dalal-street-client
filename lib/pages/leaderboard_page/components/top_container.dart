@@ -30,8 +30,8 @@ Container topContainer(List<Map<String, String>> tabledata) {
                             shape: BoxShape.circle,
                             border: Border.all(color: Colors.white, width: 3),
                             image: const DecorationImage(
-                                image: AssetImage(
-                                    '../../../assets/images/placeholder.png'),
+                                image:
+                                    AssetImage('assets/images/placeholder.png'),
                                 fit: BoxFit.fill))),
                   ),
                   Padding(
@@ -88,13 +88,13 @@ Container topContainer(List<Map<String, String>> tabledata) {
                             shape: BoxShape.circle,
                             border: Border.all(color: Colors.yellow, width: 3),
                             image: const DecorationImage(
-                                image: AssetImage(
-                                    '../../../assets/images/placeholder.png'),
+                                image:
+                                    AssetImage('assets/images/placeholder.png'),
                                 fit: BoxFit.fill))),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(bottom: 140),
-                    child: Image.asset('../../../assets/images/crown.png',
+                    child: Image.asset('assets/images/crown.png',
                         width: 50, height: 50),
                   ),
                   Padding(
@@ -152,8 +152,8 @@ Container topContainer(List<Map<String, String>> tabledata) {
                             shape: BoxShape.circle,
                             border: Border.all(color: Colors.red, width: 3),
                             image: const DecorationImage(
-                                image: AssetImage(
-                                    '../../../assets/images/placeholder.png'),
+                                image:
+                                    AssetImage('assets/images/placeholder.png'),
                                 fit: BoxFit.fill))),
                   ),
                   Padding(
