@@ -13,10 +13,16 @@ class StockHistoryError extends StockHistoryState {
   final String message;
 
   const StockHistoryError(this.message);
+
+  @override
+  List<Object> get props => [message];
 }
 
 class StockHistorySuccess extends StockHistoryState {
   final Map<String, StockHistory> stockHistoryMap;
 
   const StockHistorySuccess(this.stockHistoryMap);
+
+  @override
+  List<Object> get props => [stockHistoryMap];
 }

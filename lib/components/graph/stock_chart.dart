@@ -1,6 +1,6 @@
 import 'package:dalal_street_client/blocs/stock_history/history/stock_history_cubit.dart';
 import 'package:dalal_street_client/blocs/stock_history/stream/stock_history_stream_cubit.dart';
-import 'package:dalal_street_client/components/graph/chart_enum.dart';
+import 'package:dalal_street_client/components/graph/chart_type.dart';
 import 'package:dalal_street_client/config/log.dart';
 import 'package:dalal_street_client/models/time_series_data.dart';
 import 'package:dalal_street_client/proto_build/actions/GetStockHistory.pbenum.dart';
@@ -43,7 +43,7 @@ class _CandleStickLayoutState extends State<CandleStickLayout> {
   ]; // StockHistoryResolution.OneDay is not implemented, hav to remove that from proto
 
   StockHistoryResolution currentResolution = StockHistoryResolution.OneMinute;
-  ChartType chart = ChartType.candlestick;
+  ChartType chart = ChartType.line;
 
   @override
   void initState() {
@@ -52,12 +52,10 @@ class _CandleStickLayoutState extends State<CandleStickLayout> {
     // fetching stockHistory
     context
         .read<StockHistoryCubit>()
-        .getStockHistory(widget.stockId, currentResolution);
-
-    // subscribing to stockHistory stream
-    context
-        .read<StockHistoryStreamCubit>()
-        .getStockHistoryUpdates(widget.stockId);
+        .getStockHistory(widget.stockId, currentResolution)
+        .then((value) => context
+            .read<StockHistoryStreamCubit>()
+            .getStockHistoryUpdates(widget.stockId));
   }
 
   @override
@@ -178,7 +176,7 @@ class _CandleStickLayoutState extends State<CandleStickLayout> {
 
         return charts.TimeSeriesChart(
           data,
-          animate: true,
+          animate: false,
           domainAxis: const charts.EndPointsTimeAxisSpec(),
           dateTimeFactory: const charts.LocalDateTimeFactory(),
           // defaultRenderer: charts.BarRendererConfig<DateTime>(), uncomment this for bar chart :)
