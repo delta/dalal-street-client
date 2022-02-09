@@ -55,14 +55,11 @@ class _CompanyNewsPageState extends State<CompanyNewsPage> {
               children: <Widget>[
                 SizedBox(
                   width: (MediaQuery.of(context).size.width - 100) * 0.8,
-                  child: Flexible(
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-                      child: Text(text,
-                          style: const TextStyle(
-                              color: Colors.white, fontSize: 15)),
-                    ),
-                    fit: FlexFit.loose,
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                    child: Text(text,
+                        style:
+                            const TextStyle(color: Colors.white, fontSize: 15)),
                   ),
                 ),
                 const SizedBox.square(
