@@ -30,7 +30,7 @@ class StockStreamGenerator {
   /// A Read-only stream of Map<int, Stock>
   Stream<Map<int, Stock>> get stream => _controller.stream;
 
-  /// Updates [stocksMap] for every new [TransactionUpdate]
+  /// Updates [stocksMap] for every new [StockPriceUpdates]
   void _listenToPrices() => stockPricesStream.listen((newUpdate) {
         newUpdate.prices.forEach((id, newPrice) {
           var stock = stocksMap[id]!;

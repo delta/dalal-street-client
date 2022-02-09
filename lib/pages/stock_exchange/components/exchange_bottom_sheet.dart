@@ -1,12 +1,13 @@
 import 'package:dalal_street_client/blocs/exchange/sheet/exchange_sheet_cubit.dart';
+import 'package:dalal_street_client/components/sheet_pop_over.dart';
 import 'package:dalal_street_client/config/get_it.dart';
-import 'package:dalal_street_client/constants/constants.dart';
 import 'package:dalal_street_client/constants/format.dart';
 import 'package:dalal_street_client/constants/icons.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
 import 'package:dalal_street_client/streams/global_streams.dart';
 import 'package:dalal_street_client/streams/transformations.dart';
 import 'package:dalal_street_client/theme/colors.dart';
+import 'package:dalal_street_client/utils/calculations.dart';
 import 'package:dalal_street_client/utils/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -44,7 +45,7 @@ class _ExchangeBottomSheetState extends State<ExchangeBottomSheet> {
         (widget.company.currentPrice - widget.company.previousDayClose).toInt();
     quantity = 1;
     totalPrice = widget.company.currentPrice.toInt() * quantity;
-    orderFee = _calculateOrderFee(totalPrice);
+    orderFee = calculateOrderFee(totalPrice);
     return BlocProvider(
       create: (context) => ExchangeSheetCubit(),
       child: BlocConsumer<ExchangeSheetCubit, ExchangeSheetState>(
@@ -72,7 +73,7 @@ class _ExchangeBottomSheetState extends State<ExchangeBottomSheet> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  _buildPopOver(),
+                  const SheetPopOver(),
                   const SizedBox(
                     height: 20,
                   ),
@@ -95,37 +96,6 @@ class _ExchangeBottomSheetState extends State<ExchangeBottomSheet> {
           );
         },
       ),
-    );
-  }
-
-  Widget _buildPopOver() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Container(
-            width: 150,
-            height: 4.5,
-            decoration: const BoxDecoration(
-              color: lightGray,
-              borderRadius: BorderRadius.all(Radius.circular(12)),
-            )),
-        const SizedBox(
-          height: 3,
-        ),
-        Padding(
-          padding: const EdgeInsets.all(10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              InkWell(
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                  child: SvgPicture.asset(AppIcons.crossWhite)),
-            ],
-          ),
-        ),
-      ],
     );
   }
 
@@ -199,7 +169,7 @@ class _ExchangeBottomSheetState extends State<ExchangeBottomSheet> {
                   setBottomSheetState(() {
                     quantity = value.toInt();
                     totalPrice = widget.company.currentPrice.toInt() * quantity;
-                    orderFee = _calculateOrderFee(totalPrice);
+                    orderFee = calculateOrderFee(totalPrice);
                   });
                 },
                 readOnly: true,
@@ -313,13 +283,7 @@ class _ExchangeBottomSheetState extends State<ExchangeBottomSheet> {
         SizedBox(
           width: double.infinity,
           child: ElevatedButton(
-            onPressed: () {
-              if (quantity > 0) {
-                context
-                    .read<ExchangeSheetCubit>()
-                    .buyStocksFromExchange(widget.company.id, quantity);
-              }
-            },
+            onPressed: () => _buyStocksFromExchange(context),
             child: const Text('Buy Stocks from Exchange'),
           ),
         ),
@@ -329,9 +293,12 @@ class _ExchangeBottomSheetState extends State<ExchangeBottomSheet> {
       ],
     );
   }
-}
 
-int _calculateOrderFee(int totalPrice) {
-  var orderFee = (ORDER_FEE_RATE * totalPrice);
-  return orderFee.toInt();
+  void _buyStocksFromExchange(BuildContext context) {
+    if (quantity > 0) {
+      context
+          .read<ExchangeSheetCubit>()
+          .buyStocksFromExchange(widget.company.id, quantity);
+    }
+  }
 }

@@ -77,8 +77,8 @@ Widget _tradingBottomSheetBody(int priceChange, Stock company, int quantity,
       orderFee = calculateOrderFee(totalPrice);
       var selectedPriceType = 'Limit';
       OrderType priceType = OrderType.LIMIT;
-      bool isAsk = true;
-      if (orderType == 'Sell') isAsk = false;
+      bool isAsk = false;
+      if (orderType == 'Sell') isAsk = true;
       var orderPriceWindow = showPriceWindow(totalPrice);
       return StatefulBuilder(
           builder: (BuildContext context, StateSetter setBottomSheetState) {

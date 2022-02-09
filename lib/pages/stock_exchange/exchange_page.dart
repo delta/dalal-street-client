@@ -1,6 +1,9 @@
 import 'package:dalal_street_client/blocs/exchange/exchange_cubit.dart';
+import 'package:dalal_street_client/blocs/list_selection/list_selection_cubit.dart';
 import 'package:dalal_street_client/config/get_it.dart';
+import 'package:dalal_street_client/pages/stock_exchange/components/stock_detail.dart';
 import 'package:dalal_street_client/pages/stock_exchange/components/stock_exchange_item.dart';
+import 'package:dalal_street_client/pages/stock_exchange/components/stock_list_item.dart';
 import 'package:dalal_street_client/streams/global_streams.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
 import 'package:dalal_street_client/theme/colors.dart';
@@ -96,38 +99,58 @@ class _ExchangePageState extends State<ExchangePage>
     );
   }
 
-  Widget _exchangeBodyWeb() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Flexible(
-          flex: 1,
-          child: ListView.separated(
-              physics: const BouncingScrollPhysics(),
-              scrollDirection: Axis.vertical,
-              shrinkWrap: true,
-              itemBuilder: (context, index) {
-                Stock? company = mapOfStocks[index + 1];
-                int currentPrice =
-                    mapOfStocks[index + 1]?.currentPrice.toInt() ?? 0;
-                return StockExchangeItem(
-                    company: company ?? Stock(),
-                    stockId: index + 1,
-                    currentPrice: currentPrice);
-              },
-              separatorBuilder: (BuildContext context, int index) {
-                return const SizedBox(
-                  height: 20,
-                );
-              },
-              itemCount: mapOfStocks.length),
+  Widget _exchangeBodyWeb() => BlocProvider(
+        create: (_) => ListSelectionCubit(),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Flexible(
+              flex: 1,
+              child: Builder(builder: (context) => _companyListView(context)),
+            ),
+            const SizedBox(
+              width: 10,
+            ),
+            Flexible(
+              flex: 1,
+              child: BlocBuilder<ListSelectionCubit, ListSelectionState>(
+                builder: (_, state) => StockDetail(
+                  company: mapOfStocks.values.elementAt(state.selectedIndex),
+                ),
+              ),
+            )
+          ],
         ),
-        Flexible(
-          flex: 1,
-          child: Container(),
-        )
-      ],
+      );
+
+  Widget _companyListView(BuildContext context) {
+    final cubit = context.read<ListSelectionCubit>();
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      decoration: const BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+        color: background3,
+      ),
+      child: ListView.separated(
+        physics: const BouncingScrollPhysics(),
+        scrollDirection: Axis.vertical,
+        shrinkWrap: true,
+        itemBuilder: (context, index) => StreamBuilder<bool>(
+          stream: cubit.selectedIndexStream
+              .map((event) => event == index)
+              .distinct(),
+          initialData: index == 0,
+          builder: (context, snapshot) => StockListItem(
+            company: mapOfStocks.values.elementAt(index),
+            selected: snapshot.data!,
+            onClick: () => cubit.updateSelection(index),
+          ),
+        ),
+        separatorBuilder: (BuildContext context, int index) =>
+            const SizedBox(height: 20),
+        itemCount: mapOfStocks.length,
+      ),
     );
   }
 
@@ -196,23 +219,21 @@ class _ExchangePageState extends State<ExchangePage>
         ),
       );
 
-  Widget _exchangeBodyMobile() => ListView.separated(
-        physics: const BouncingScrollPhysics(),
-        scrollDirection: Axis.vertical,
-        shrinkWrap: true,
-        itemCount: mapOfStocks.length,
-        itemBuilder: (context, index) {
-          Stock? company = mapOfStocks[index + 1];
-          int currentPrice = mapOfStocks[index + 1]?.currentPrice.toInt() ?? 0;
-          return StockExchangeItem(
-              company: company ?? Stock(),
-              stockId: index + 1,
-              currentPrice: currentPrice);
-        },
-        separatorBuilder: (BuildContext context, int index) {
-          return const SizedBox(
-            height: 10,
-          );
-        },
-      );
+  Widget _exchangeBodyMobile() {
+    List<Widget> stockExchangeItems = mapOfStocks.entries
+        .map((entry) => StockExchangeItem(company: entry.value))
+        .toList();
+    return ListView.separated(
+      physics: const BouncingScrollPhysics(),
+      scrollDirection: Axis.vertical,
+      shrinkWrap: true,
+      itemCount: mapOfStocks.length,
+      itemBuilder: (context, index) => stockExchangeItems[index],
+      separatorBuilder: (BuildContext context, int index) {
+        return const SizedBox(
+          height: 10,
+        );
+      },
+    );
+  }
 }

@@ -1,7 +1,8 @@
-import 'package:dalal_street_client/blocs/mortgage/mortgage_sheet/cubit/mortgage_sheet_cubit.dart';
+import 'package:dalal_street_client/blocs/mortgage/retrieve_sheet/retrieve_sheet_cubit.dart';
 import 'package:dalal_street_client/components/sheet_pop_over.dart';
 import 'package:dalal_street_client/constants/constants.dart';
 import 'package:dalal_street_client/constants/format.dart';
+import 'package:dalal_street_client/proto_build/models/MortgageDetail.pb.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
 import 'package:dalal_street_client/theme/colors.dart';
 import 'package:dalal_street_client/utils/snackbar.dart';
@@ -9,43 +10,43 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinbox/flutter_spinbox.dart';
 
-class MortgageBottomSheet extends StatefulWidget {
+class RetrieveBottomSheet extends StatefulWidget {
   final Stock company;
-  const MortgageBottomSheet({Key? key, required this.company})
+  final MortgageDetail mortgageDetail;
+  const RetrieveBottomSheet(
+      {Key? key, required this.company, required this.mortgageDetail})
       : super(key: key);
 
   @override
-  _MortgageBottomSheetState createState() => _MortgageBottomSheetState();
+  _RetrieveBottomSheetState createState() => _RetrieveBottomSheetState();
 }
 
-class _MortgageBottomSheetState extends State<MortgageBottomSheet> {
+class _RetrieveBottomSheetState extends State<RetrieveBottomSheet> {
   late int priceChange;
   int quantity = 1;
   late double totalPrice;
-
   @override
   Widget build(BuildContext context) {
     priceChange =
         (widget.company.currentPrice - widget.company.previousDayClose).toInt();
     quantity = 1;
-    double mortgagePrice =
-        widget.company.currentPrice.toInt() * MORTGAGE_DEPOSIT_RATE;
-    totalPrice = mortgagePrice * quantity;
+    double mortgagePrice = widget.mortgageDetail.mortgagePrice.toDouble();
+    totalPrice = mortgagePrice * RETRIEVE_DEPOSIT_RATE * quantity;
     return BlocProvider(
-      create: (context) => MortgageSheetCubit(),
-      child: BlocConsumer<MortgageSheetCubit, MortgageSheetState>(
+      create: (context) => RetrieveSheetCubit(),
+      child: BlocConsumer<RetrieveSheetCubit, RetrieveSheetState>(
         listener: (context, state) {
-          if (state is MortgageSheetSuccess) {
+          if (state is RetrieveSheetSuccess) {
             showSnackBar(context,
-                'Successfully mortgaged $quantity ${widget.company.fullName} stocks');
+                'Successfully retrieved $quantity ${widget.company.fullName} stocks');
             Navigator.maybePop(context);
-          } else if (state is MortgageSheetFailure) {
+          } else if (state is RetrieveSheetFailure) {
             showSnackBar(context, state.msg);
             Navigator.maybePop(context);
           }
         },
         builder: (context, state) {
-          if (state is MortgageSheetLoading) {
+          if (state is RetrieveSheetLoading) {
             return const Center(
               child: CircularProgressIndicator(
                 color: Colors.green,
@@ -72,12 +73,12 @@ class _MortgageBottomSheetState extends State<MortgageBottomSheet> {
                         const SizedBox(
                           height: 20,
                         ),
-                        _dynamicMortgageDetails(),
+                        _dynamicRetrieveDetails(),
                         SizedBox(
                           width: double.infinity,
                           child: ElevatedButton(
-                            onPressed: () => _mortgageStocks(context),
-                            child: const Text('Mortgage'),
+                            onPressed: () => _retrieveStocks(context, quantity),
+                            child: const Text('Retrieve'),
                           ),
                         ),
                         const SizedBox(
@@ -93,11 +94,10 @@ class _MortgageBottomSheetState extends State<MortgageBottomSheet> {
     );
   }
 
-  void _mortgageStocks(BuildContext context) {
+  void _retrieveStocks(BuildContext context, int quantity) {
     if (quantity > 0) {
-      context
-          .read<MortgageSheetCubit>()
-          .mortgageStocks(widget.company.id, quantity);
+      context.read<RetrieveSheetCubit>().retrieveStocks(widget.company.id,
+          quantity, widget.mortgageDetail.mortgagePrice.toInt());
     }
   }
 
@@ -142,7 +142,7 @@ class _MortgageBottomSheetState extends State<MortgageBottomSheet> {
     );
   }
 
-  Widget _dynamicMortgageDetails() {
+  Widget _dynamicRetrieveDetails() {
     return StatefulBuilder(builder: (context, setBottomSheetState) {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -165,13 +165,13 @@ class _MortgageBottomSheetState extends State<MortgageBottomSheet> {
               ),
               child: SpinBox(
                 min: 1,
-                max: 20,
+                max: widget.mortgageDetail.stocksInBank.toDouble(),
                 value: 01,
                 onChanged: (value) {
                   setBottomSheetState(() {
                     quantity = value.toInt();
-                    totalPrice = (widget.company.currentPrice.toInt() *
-                        MORTGAGE_DEPOSIT_RATE *
+                    totalPrice = (widget.mortgageDetail.mortgagePrice.toInt() *
+                        RETRIEVE_DEPOSIT_RATE *
                         quantity);
                   });
                 },
