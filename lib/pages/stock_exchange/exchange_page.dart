@@ -119,7 +119,7 @@ class _ExchangePageState extends State<ExchangePage>
   }
 
   Widget _companyListView() {
-    List<int> stockListItems =
+    List<int> stockListItemIds =
         mapOfStocks.entries.map((entry) => entry.value.id).toList();
     List<bool> selectedItems = List.filled(mapOfStocks.length, false);
     selectedItems[0] = true;
@@ -138,7 +138,7 @@ class _ExchangePageState extends State<ExchangePage>
                 scrollDirection: Axis.vertical,
                 shrinkWrap: true,
                 itemBuilder: (context, index) => StockListItem(
-                    company: mapOfStocks[stockListItems[index]] ?? Stock(),
+                    company: mapOfStocks[stockListItemIds[index]]!,
                     selectedItems: state.selectedItems,
                     index: index),
                 separatorBuilder: (BuildContext context, int index) {

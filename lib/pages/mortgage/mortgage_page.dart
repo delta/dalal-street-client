@@ -1,5 +1,5 @@
 import 'package:dalal_street_client/config/get_it.dart';
-import 'package:dalal_street_client/pages/mortgage/components/stock_mortgage_item.dart';
+import 'package:dalal_street_client/pages/mortgage/components/mortgage_stock_item.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
 import 'package:dalal_street_client/streams/global_streams.dart';
 import 'package:flutter/material.dart';
