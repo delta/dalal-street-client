@@ -124,9 +124,10 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                           parent: AlwaysScrollableScrollPhysics()),
                       children: [
                         LeaderboardPageBuilder(
-                            leaderboardType: leaderboardTypes.first.toString()),
+                            leaderboardType:
+                                leaderboardTypes.Overall.toString()),
                         LeaderboardPageBuilder(
-                            leaderboardType: leaderboardTypes.last.toString())
+                            leaderboardType: leaderboardTypes.Daily.toString())
                       ]),
                 )
               ],

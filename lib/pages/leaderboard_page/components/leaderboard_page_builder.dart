@@ -16,16 +16,16 @@ class _LeaderboardPageBuilderState extends State<LeaderboardPageBuilder> {
   @override
   initState() {
     super.initState();
-    if (widget.leaderboardType == leaderboardTypes.first) {
+    if (widget.leaderboardType == leaderboardTypes.Overall.toString()) {
       //overall leaderboard
       context
           .read<LeaderboardCubit>()
-          .getLeaderboard(1, 100, leaderboardTypes.first);
+          .getLeaderboard(1, 100, leaderboardTypes.Overall.toString());
     } else {
       //daily leaderboard
       context
           .read<LeaderboardCubit>()
-          .getLeaderboard(1, 100, leaderboardTypes.last);
+          .getLeaderboard(1, 100, leaderboardTypes.Daily.toString());
     }
   }
 
