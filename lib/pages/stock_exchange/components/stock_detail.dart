@@ -390,7 +390,7 @@ class _StockDetailState extends State<StockDetail> {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             OutlinedButton(
-                onPressed: () => _navigateToCompanyPage(context, stockId),
+                onPressed: () => _navigateToCompanyPage(context),
                 child: const Text('Know More')),
             const SizedBox(
               width: 40,
@@ -428,9 +428,9 @@ class _StockDetailState extends State<StockDetail> {
     );
   }
 
-  void _navigateToCompanyPage(BuildContext context, int stockId) {
+  void _navigateToCompanyPage(BuildContext context) {
     int cash = getIt<GlobalStreams>().dynamicUserInfoStream.value.cash;
-    List<int> data = [stockId, cash];
+    List<int> data = [widget.company.id, cash];
     Navigator.pushNamed(context, '/company', arguments: data);
   }
 
