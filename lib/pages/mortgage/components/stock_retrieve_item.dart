@@ -67,8 +67,7 @@ class _RetrieveStockItemState extends State<RetrieveStockItem> {
                       overlayColor: MaterialStateProperty.all(secondaryColor),
                       backgroundColor: MaterialStateProperty.all(
                           primaryColor.withOpacity(0.2))),
-                  onPressed: () =>
-                      _navigateToCompanyPage(context),
+                  onPressed: () => _navigateToCompanyPage(context),
                   child: const Text(
                     'View',
                     style: TextStyle(color: primaryColor, fontSize: 14),
