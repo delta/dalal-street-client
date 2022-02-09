@@ -14,7 +14,7 @@ packages:
       name: async
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.8.1"
+    version: "2.8.2"
   bloc:
     dependency: "direct main"
     description:
@@ -42,7 +42,7 @@ packages:
       name: characters
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.1.0"
+    version: "1.2.0"
   charcode:
     dependency: transitive
     description:
@@ -190,7 +190,7 @@ packages:
       name: google_fonts
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.3.1"
+    version: "2.3.0"
   googleapis_auth:
     dependency: transitive
     description:
@@ -573,7 +573,7 @@ packages:
       name: url_launcher_web
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.8"
+    version: "2.0.7"
   url_launcher_windows:
     dependency: transitive
     description:
@@ -587,14 +587,14 @@ packages:
       name: vector_math
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.1.0"
+    version: "2.1.1"
   win32:
     dependency: transitive
     description:
       name: win32
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.3.10"
+    version: "2.3.6"
   xdg_directories:
     dependency: transitive
     description:
@@ -610,5 +610,5 @@ packages:
     source: hosted
     version: "5.3.1"
 sdks:
-  dart: ">=2.15.0 <3.0.0"
-  flutter: ">=2.10.0"
+  dart: ">=2.14.0 <3.0.0"
+  flutter: ">=2.5.0"
