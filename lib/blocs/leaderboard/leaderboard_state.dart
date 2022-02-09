@@ -9,27 +9,13 @@ abstract class LeaderboardState extends Equatable {
 
 class LeaderboardInitial extends LeaderboardState {}
 
-abstract class DailyLeaderboardState extends Equatable {
-  const DailyLeaderboardState();
-
-  @override
-  List<Object> get props => [];
-}
-
 class DailyLeaderboardSuccess extends LeaderboardState {
   final int myRank;
-  final Iterable<DailyLeaderboardRow> rankList;
+  final List<DailyLeaderboardRow> rankList;
   const DailyLeaderboardSuccess(this.myRank, this.rankList);
 
   @override
   List<Object> get props => [myRank, rankList];
-}
-
-abstract class OverallLeaderboardState extends Equatable {
-  const OverallLeaderboardState();
-
-  @override
-  List<Object> get props => [];
 }
 
 class LeaderboardLoading extends LeaderboardState {
@@ -38,7 +24,7 @@ class LeaderboardLoading extends LeaderboardState {
 
 class OverallLeaderboardSuccess extends LeaderboardState {
   final int myRank;
-  final Iterable<LeaderboardRow> rankList;
+  final List<LeaderboardRow> rankList;
   const OverallLeaderboardSuccess(this.myRank, this.rankList);
 
   @override

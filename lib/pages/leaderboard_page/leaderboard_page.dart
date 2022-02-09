@@ -2,6 +2,7 @@ import 'package:dalal_street_client/pages/leaderboard_page/components/leaderboar
 import 'package:dalal_street_client/utils/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:dalal_street_client/theme/colors.dart';
+import 'package:dalal_street_client/blocs/leaderboard/leaderboard_cubit.dart';
 
 class LeaderboardPage extends StatefulWidget {
   const LeaderboardPage({Key? key}) : super(key: key);
@@ -118,12 +119,14 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
                   height: MediaQuery.of(context).size.height * 0.8,
-                  child: const TabBarView(
-                      physics: BouncingScrollPhysics(
+                  child: TabBarView(
+                      physics: const BouncingScrollPhysics(
                           parent: AlwaysScrollableScrollPhysics()),
                       children: [
-                        LeaderboardPageBuilder(leaderboardType: 'overall'),
-                        LeaderboardPageBuilder(leaderboardType: 'daily')
+                        LeaderboardPageBuilder(
+                            leaderboardType: leaderboardTypes.first.toString()),
+                        LeaderboardPageBuilder(
+                            leaderboardType: leaderboardTypes.last.toString())
                       ]),
                 )
               ],

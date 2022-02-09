@@ -11,6 +11,8 @@ import 'package:equatable/equatable.dart';
 
 part 'leaderboard_state.dart';
 
+Set<String> leaderboardTypes = {'Overall', 'Daily'};
+
 class LeaderboardCubit extends Cubit<LeaderboardState> {
   LeaderboardCubit() : super(LeaderboardInitial());
 
@@ -18,7 +20,7 @@ class LeaderboardCubit extends Cubit<LeaderboardState> {
       int startingId, int count, String leaderboardType) async {
     emit(const LeaderboardLoading());
     try {
-      if (leaderboardType == 'overall') {
+      if (leaderboardType == leaderboardTypes.first) {
         final resp = await actionClient.getLeaderboard(
           GetLeaderboardRequest(startingId: startingId, count: count),
           options: sessionOptions(getIt()),

@@ -16,10 +16,16 @@ class _LeaderboardPageBuilderState extends State<LeaderboardPageBuilder> {
   @override
   initState() {
     super.initState();
-    if (widget.leaderboardType == 'daily') {
-      context.read<LeaderboardCubit>().getLeaderboard(1, 100, 'daily');
+    if (widget.leaderboardType == leaderboardTypes.first) {
+      //overall leaderboard
+      context
+          .read<LeaderboardCubit>()
+          .getLeaderboard(1, 100, leaderboardTypes.first);
     } else {
-      context.read<LeaderboardCubit>().getLeaderboard(1, 100, 'overall');
+      //daily leaderboard
+      context
+          .read<LeaderboardCubit>()
+          .getLeaderboard(1, 100, leaderboardTypes.last);
     }
   }
 

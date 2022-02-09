@@ -19,7 +19,7 @@ ListTile tableHeader() {
           ),
           Expanded(
             flex: 2,
-            child: Text('Total Worth',
+            child: Text('Net Worth',
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
           )
         ],
