@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:dalal_street_client/config/get_it.dart';
 import 'package:dalal_street_client/config/log.dart';
 import 'package:dalal_street_client/constants/error_messages.dart';
+import 'package:dalal_street_client/constants/leaderboard_type.dart';
 import 'package:dalal_street_client/grpc/client.dart';
 import 'package:dalal_street_client/proto_build/actions/GetDailyLeaderboard.pb.dart';
 import 'package:dalal_street_client/proto_build/actions/GetLeaderboard.pb.dart';
@@ -11,16 +12,14 @@ import 'package:equatable/equatable.dart';
 
 part 'leaderboard_state.dart';
 
-enum leaderboardTypes { Overall, Daily }
-
 class LeaderboardCubit extends Cubit<LeaderboardState> {
   LeaderboardCubit() : super(LeaderboardInitial());
 
   Future<void> getLeaderboard(
-      int startingId, int count, String leaderboardType) async {
+      int startingId, int count, LeaderboardType leaderboardType) async {
     emit(const LeaderboardLoading());
     try {
-      if (leaderboardType == leaderboardTypes.Overall.toString()) {
+      if (leaderboardType == LeaderboardType.Overall) {
         final resp = await actionClient.getLeaderboard(
           GetLeaderboardRequest(startingId: startingId, count: count),
           options: sessionOptions(getIt()),

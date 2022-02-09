@@ -24,7 +24,7 @@ Padding leaderboardPageData(
         ),
         topContainer(tableData),
         rankContainer(myRank),
-        const SizedBox(height: 5),
+        const SizedBox(height: 20),
         tableHeader(),
         table(tableData),
       ],

@@ -1,8 +1,8 @@
+import 'package:dalal_street_client/constants/leaderboard_type.dart';
 import 'package:dalal_street_client/pages/leaderboard_page/components/leaderboard_page_builder.dart';
 import 'package:dalal_street_client/utils/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:dalal_street_client/theme/colors.dart';
-import 'package:dalal_street_client/blocs/leaderboard/leaderboard_cubit.dart';
 
 class LeaderboardPage extends StatefulWidget {
   const LeaderboardPage({Key? key}) : super(key: key);
@@ -12,11 +12,6 @@ class LeaderboardPage extends StatefulWidget {
 }
 
 class _LeaderboardPageState extends State<LeaderboardPage> {
-  @override
-  initState() {
-    super.initState();
-  }
-
   @override
   Widget build(context) {
     return SafeArea(
@@ -119,15 +114,14 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
                   height: MediaQuery.of(context).size.height * 0.8,
-                  child: TabBarView(
-                      physics: const BouncingScrollPhysics(
+                  child: const TabBarView(
+                      physics: BouncingScrollPhysics(
                           parent: AlwaysScrollableScrollPhysics()),
                       children: [
                         LeaderboardPageBuilder(
-                            leaderboardType:
-                                leaderboardTypes.Overall.toString()),
+                            leaderboardType: LeaderboardType.Overall),
                         LeaderboardPageBuilder(
-                            leaderboardType: leaderboardTypes.Daily.toString())
+                            leaderboardType: LeaderboardType.Daily)
                       ]),
                 )
               ],

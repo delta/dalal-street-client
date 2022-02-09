@@ -1,4 +1,5 @@
 import 'package:dalal_street_client/blocs/leaderboard/leaderboard_cubit.dart';
+import 'package:dalal_street_client/constants/leaderboard_type.dart';
 import 'package:dalal_street_client/pages/leaderboard_page/components/leaderboard_page_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,7 +8,7 @@ class LeaderboardPageBuilder extends StatefulWidget {
   const LeaderboardPageBuilder({Key? key, required this.leaderboardType})
       : super(key: key);
 
-  final String leaderboardType;
+  final LeaderboardType leaderboardType;
   @override
   State<LeaderboardPageBuilder> createState() => _LeaderboardPageBuilderState();
 }
@@ -16,16 +17,16 @@ class _LeaderboardPageBuilderState extends State<LeaderboardPageBuilder> {
   @override
   initState() {
     super.initState();
-    if (widget.leaderboardType == leaderboardTypes.Overall.toString()) {
+    if (widget.leaderboardType == LeaderboardType.Overall) {
       //overall leaderboard
       context
           .read<LeaderboardCubit>()
-          .getLeaderboard(1, 100, leaderboardTypes.Overall.toString());
+          .getLeaderboard(1, 100, LeaderboardType.Overall);
     } else {
       //daily leaderboard
       context
           .read<LeaderboardCubit>()
-          .getLeaderboard(1, 100, leaderboardTypes.Daily.toString());
+          .getLeaderboard(1, 100, LeaderboardType.Daily);
     }
   }
 
@@ -49,13 +50,14 @@ class _LeaderboardPageBuilderState extends State<LeaderboardPageBuilder> {
               height: 50,
               child: OutlinedButton(
                 onPressed: () {
-                  if (widget.leaderboardType ==
-                      leaderboardTypes.Overall.toString()) {
-                    context.read<LeaderboardCubit>().getLeaderboard(
-                        1, 100, leaderboardTypes.Overall.toString());
+                  if (widget.leaderboardType == LeaderboardType.Overall) {
+                    context
+                        .read<LeaderboardCubit>()
+                        .getLeaderboard(1, 100, LeaderboardType.Overall);
                   } else {
-                    context.read<LeaderboardCubit>().getLeaderboard(
-                        1, 100, leaderboardTypes.Daily.toString());
+                    context
+                        .read<LeaderboardCubit>()
+                        .getLeaderboard(1, 100, LeaderboardType.Daily);
                   }
                 },
                 child: const Text('Retry'),
