@@ -19,7 +19,7 @@ class PortfolioCubit extends Cubit<PortfolioState> {
           options: sessionOptions(getIt()));
       if (res.statusCode == GetPortfolioResponse_StatusCode.OK) {
         emit(UserWorthLoaded(
-            res.user, res.stocksOwned, res.reservedStocksOwned));
+            res.user, res.stocksOwned, res.reservedStocksOwned, res.cashSpent));
       } else {
         emit(UserWorthFailure(res.statusMessage));
       }

@@ -1,7 +1,10 @@
 part of 'list_selection_cubit.dart';
 
-class ListSelectedItemState {
-  int selectedItem;
+class ListSelectionState extends Equatable {
+  final int selectedIndex;
 
-  ListSelectedItemState({required this.selectedItem});
+  const ListSelectionState(this.selectedIndex);
+
+  @override
+  List<Object> get props => [selectedIndex];
 }
