@@ -1,6 +1,5 @@
 import 'package:dalal_street_client/blocs/exchange/exchange_cubit.dart';
-import 'package:dalal_street_client/blocs/leaderboard/daily_leaderboard/daily_leaderboard_cubit.dart';
-import 'package:dalal_street_client/blocs/leaderboard/overall_leaderboard/overall_leaderboard_cubit.dart';
+import 'package:dalal_street_client/blocs/leaderboard/leaderboard/leaderboard_cubit.dart';
 import 'package:dalal_street_client/blocs/portfolio/userWorth/portfolio_cubit.dart';
 import 'package:dalal_street_client/components/stock_bar.dart';
 import 'package:dalal_street_client/config/log.dart';
@@ -68,11 +67,8 @@ class _DalalHomeState extends State<DalalHome> {
           create: (context) => ExchangeCubit(),
           child: const ExchangePage(),
         ),
-        MultiBlocProvider(
-          providers: [
-            BlocProvider(create: (context) => OverallLeaderboardCubit()),
-            BlocProvider(create: (context) => DailyLeaderboardCubit())
-          ],
+        BlocProvider(
+          create: (context) => LeaderboardCubit(),
           child: const LeaderboardPage(),
         ),
       ];

@@ -1,12 +1,13 @@
-import 'package:flutter/material.dart';
 import 'package:dalal_street_client/theme/colors.dart';
+import 'package:flutter/material.dart';
 
-Container topContainer(int myRank, List<Map<String, String>> tabledataOverall) {
+Container topContainer(List<Map<String, String>> tabledata) {
   return Container(
     padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-    decoration: BoxDecoration(
+    decoration: const BoxDecoration(
+      borderRadius: BorderRadius.only(
+          topRight: Radius.circular(10), topLeft: Radius.circular(10)),
       color: background2,
-      borderRadius: BorderRadius.circular(10),
     ),
     width: double.infinity,
     child: Center(
@@ -18,9 +19,10 @@ Container topContainer(int myRank, List<Map<String, String>> tabledataOverall) {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Stack(
+                alignment: Alignment.center,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(top: 35.0),
+                    padding: const EdgeInsets.only(bottom: 35.0),
                     child: Container(
                         height: 80,
                         width: 80,
@@ -33,7 +35,7 @@ Container topContainer(int myRank, List<Map<String, String>> tabledataOverall) {
                                 fit: BoxFit.fill))),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(top: 105.0, left: 30.0),
+                    padding: const EdgeInsets.only(top: 50.0),
                     child: Container(
                         height: 20,
                         width: 20,
@@ -53,13 +55,13 @@ Container topContainer(int myRank, List<Map<String, String>> tabledataOverall) {
                     child: Column(
                       children: [
                         Text(
-                          tabledataOverall[1]['username'].toString(),
+                          tabledata[1]['username'].toString(),
                           style: const TextStyle(color: Colors.white),
                           textAlign: TextAlign.center,
                         ),
                         const SizedBox(height: 10),
                         Text(
-                          tabledataOverall[1]['totalworth'].toString(),
+                          tabledata[1]['totalworth'].toString(),
                           style: const TextStyle(color: Colors.white),
                           textAlign: TextAlign.center,
                         )
@@ -75,9 +77,10 @@ Container topContainer(int myRank, List<Map<String, String>> tabledataOverall) {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Stack(
+                alignment: Alignment.center,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(top: 35.0),
+                    padding: const EdgeInsets.only(bottom: 35.0),
                     child: Container(
                         height: 80,
                         width: 80,
@@ -90,12 +93,12 @@ Container topContainer(int myRank, List<Map<String, String>> tabledataOverall) {
                                 fit: BoxFit.fill))),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(bottom: 150, left: 15.0),
+                    padding: const EdgeInsets.only(bottom: 140),
                     child: Image.asset('../../../assets/images/crown.png',
                         width: 50, height: 50),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(top: 105.0, left: 30.0),
+                    padding: const EdgeInsets.only(top: 50.0),
                     child: Container(
                         height: 20,
                         width: 20,
@@ -116,13 +119,13 @@ Container topContainer(int myRank, List<Map<String, String>> tabledataOverall) {
                     child: Column(
                       children: [
                         Text(
-                          tabledataOverall[0]['username'].toString(),
+                          tabledata[0]['username'].toString(),
                           style: const TextStyle(color: Colors.yellow),
                           textAlign: TextAlign.center,
                         ),
                         const SizedBox(height: 10),
                         Text(
-                          tabledataOverall[0]['totalworth'].toString(),
+                          tabledata[0]['totalworth'].toString(),
                           style: const TextStyle(color: Colors.yellow),
                           textAlign: TextAlign.center,
                         )
@@ -138,9 +141,10 @@ Container topContainer(int myRank, List<Map<String, String>> tabledataOverall) {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Stack(
+                alignment: Alignment.center,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(top: 35.0),
+                    padding: const EdgeInsets.only(bottom: 35.0),
                     child: Container(
                         height: 80,
                         width: 80,
@@ -153,7 +157,7 @@ Container topContainer(int myRank, List<Map<String, String>> tabledataOverall) {
                                 fit: BoxFit.fill))),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(top: 105.0, left: 30.0),
+                    padding: const EdgeInsets.only(top: 50.0),
                     child: Container(
                         height: 20,
                         width: 20,
@@ -173,13 +177,13 @@ Container topContainer(int myRank, List<Map<String, String>> tabledataOverall) {
                     child: Column(
                       children: [
                         Text(
-                          tabledataOverall[2]['username'].toString(),
+                          tabledata[2]['username'].toString(),
                           style: const TextStyle(color: Colors.red),
                           textAlign: TextAlign.center,
                         ),
                         const SizedBox(height: 10),
                         Text(
-                          tabledataOverall[2]['totalworth'].toString(),
+                          tabledata[2]['totalworth'].toString(),
                           style: const TextStyle(color: Colors.red),
                           textAlign: TextAlign.center,
                         )
