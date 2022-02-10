@@ -59,76 +59,70 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
     );
   }
 
-  Padding leaderboardPageUi() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            'Leaderboard',
-            style: TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.w700,
-              color: white,
-            ),
-            textAlign: TextAlign.start,
+  Column leaderboardPageUi() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Leaderboard',
+          style: TextStyle(
+            fontSize: 22,
+            fontWeight: FontWeight.w700,
+            color: white,
           ),
-          const SizedBox(
-            height: 5,
-          ),
-          DefaultTabController(
-            length: 2,
-            child: Column(
-              children: [
-                const TabBar(
-                  tabs: [
-                    Tab(
-                      child: Text(
-                        'Overall',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                          color: lightGray,
-                        ),
-                        textAlign: TextAlign.start,
+          textAlign: TextAlign.start,
+        ),
+        const SizedBox(
+          height: 5,
+        ),
+        DefaultTabController(
+          length: 2,
+          child: Column(
+            children: [
+              const TabBar(
+                tabs: [
+                  Tab(
+                    child: Text(
+                      'Overall',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: lightGray,
                       ),
+                      textAlign: TextAlign.start,
                     ),
-                    Tab(
-                      child: Text(
-                        'Daily',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                          color: lightGray,
-                        ),
-                        textAlign: TextAlign.start,
+                  ),
+                  Tab(
+                    child: Text(
+                      'Daily',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: lightGray,
                       ),
+                      textAlign: TextAlign.start,
                     ),
-                  ],
-                  indicatorColor: lightGray,
-                  indicatorPadding: EdgeInsets.symmetric(horizontal: 20),
-                ),
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                  height: MediaQuery.of(context).size.height * 0.8,
-                  child: const TabBarView(
-                      physics: BouncingScrollPhysics(
-                          parent: AlwaysScrollableScrollPhysics()),
-                      children: [
-                        LeaderboardPageBuilder(
-                            leaderboardType: LeaderboardType.Overall),
-                        LeaderboardPageBuilder(
-                            leaderboardType: LeaderboardType.Daily)
-                      ]),
-                )
-              ],
-            ),
+                  ),
+                ],
+                indicatorColor: lightGray,
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.8,
+                child: const TabBarView(
+                    physics: BouncingScrollPhysics(
+                        parent: AlwaysScrollableScrollPhysics()),
+                    children: [
+                      LeaderboardPageBuilder(
+                          leaderboardType: LeaderboardType.Overall),
+                      LeaderboardPageBuilder(
+                          leaderboardType: LeaderboardType.Daily)
+                    ]),
+              )
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
