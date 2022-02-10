@@ -15,7 +15,6 @@ import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
 import 'package:dalal_street_client/streams/generators/market_open_generator.dart';
 import 'package:dalal_street_client/streams/generators/user_info_generator.dart';
 import 'package:dalal_street_client/streams/generators/stock_stream_generator.dart';
-import 'package:dalal_street_client/utils/convert.dart';
 import 'package:equatable/equatable.dart';
 import 'package:rxdart/streams.dart';
 
