@@ -1,9 +1,7 @@
-import 'package:dalal_street_client/blocs/leaderboard/leaderboard_cubit.dart';
 import 'package:dalal_street_client/constants/leaderboard_type.dart';
 import 'package:dalal_street_client/pages/leaderboard_page/components/table_data.dart';
 import 'package:dalal_street_client/theme/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/src/provider.dart';
 
 Widget table(List<Map<String, String>> tableData,
     LeaderboardType leaderboardType, BuildContext context) {
@@ -18,12 +16,12 @@ Widget table(List<Map<String, String>> tableData,
       child: Theme(
         data: Theme.of(context).copyWith(cardColor: background2),
         child: PaginatedDataTable(
-            onPageChanged: (i) {
-              context
-                  .read<LeaderboardCubit>()
-                  .getLeaderboard((10 * i) + 1, 10, leaderboardType);
-              i++;
-            },
+            // onPageChanged: (i) {
+            //   context
+            //       .read<LeaderboardCubit>()
+            //       .getLeaderboard((10 * i) + 1, 10, leaderboardType);
+            //   i++;
+            // },
             source: _data,
             columnSpacing: 20,
             dataRowHeight: 40,

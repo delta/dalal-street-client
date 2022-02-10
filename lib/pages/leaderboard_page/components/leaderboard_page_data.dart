@@ -1,7 +1,6 @@
 import 'package:dalal_street_client/constants/leaderboard_type.dart';
 import 'package:dalal_street_client/pages/leaderboard_page/components/rank_container.dart';
 import 'package:dalal_street_client/pages/leaderboard_page/components/table_container.dart';
-import 'package:dalal_street_client/pages/leaderboard_page/components/table_header.dart';
 import 'package:dalal_street_client/pages/leaderboard_page/components/top_container.dart';
 import 'package:flutter/material.dart';
 
