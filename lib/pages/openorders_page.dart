@@ -1,4 +1,3 @@
-
 import 'package:dalal_street_client/blocs/open_orders/cubit/openorders_subscription_cubit.dart';
 import 'package:dalal_street_client/blocs/subscribe/subscribe_cubit.dart';
 import 'package:dalal_street_client/components/buttons/tertiary_button.dart';
@@ -17,6 +16,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../blocs/open_orders/open_orders_cubit.dart';
 import '../proto_build/datastreams/Subscribe.pbenum.dart';
+
 class OpenOrdersPage extends StatefulWidget {
   const OpenOrdersPage({Key? key}) : super(key: key);
 
@@ -54,43 +54,38 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
                     fontSize: 18,
                     fontWeight: FontWeight.w500),
               )),
-              BlocListener<SubscribeCubit,SubscribeState>(listener: ((context, state) {
+          // BlocListener<SubscribeCubit,SubscribeState>(listener: ((context, state) {
 
-                if(state is SubscriptionDataLoaded)
-                {
-                  context.read<OpenordersSubscriptionCubit>().getOpenOrdersStream(state.subscriptionId);
-                  BlocConsumer<OpenordersSubscriptionCubit,OpenordersSubscriptionState>(listener:(context, state) => {
-                    if(state is SubscriptionToOpenOrderSuccess)
-                    {
-                     MyOrderUpdate orderUpdate = state.orderUpdate
-      
-                    }
+          //   if(state is SubscriptionDataLoaded)
+          //   {
+          //     context.read<OpenordersSubscriptionCubit>().getOpenOrdersStream(state.subscriptionId);
+          //     BlocConsumer<OpenordersSubscriptionCubit,OpenordersSubscriptionState>(listener:(context, state) => {
+          //       if(state is SubscriptionToOpenOrderSuccess)
+          //       {
+          //        MyOrderUpdate orderUpdate = state.orderUpdate
 
-                  });
-                }
-                
-                
-              }),)
+          //       }
+
+          //     });
+          //   }
+
+          // }),)
           BlocConsumer<OpenOrdersCubit, OpenOrdersState>(
             listener: (context, state) {
               if (state is CancelorderSuccess) {
                 showSnackBar(context, 'Order Cancelled Sucessfully');
                 context.read<OpenOrdersCubit>().getOpenOrders();
               } else if (state is OrderFailure) {
-                if(state.ordertype == OpenOrderType.cancel)
-                {
-                showSnackBar(context, 'Failed To Cancel Order Retrying.....');
-                context.read<OpenOrdersCubit>().getOpenOrders();
-                logger.e(state.msg);
+                if (state.ordertype == OpenOrderType.cancel) {
+                  showSnackBar(context, 'Failed To Cancel Order Retrying.....');
+                  context.read<OpenOrdersCubit>().getOpenOrders();
+                  logger.e(state.msg);
+                } else {
+                  showSnackBar(context, 'Failed to Fetch Open Orders');
+                  context.read<OpenOrdersCubit>().getOpenOrders();
+                  logger.e(state.msg);
                 }
-                else
-                {
-                showSnackBar(context, 'Failed to Fetch Open Orders');
-                context.read<OpenOrdersCubit>().getOpenOrders();
-                logger.e(state.msg);
-                }
-               
-              } 
+              }
             },
             builder: (context, state) {
               if (state is GetOpenordersSuccess) {
@@ -200,9 +195,14 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
       DataCell(
         Text(price.toString(), style: const TextStyle(fontSize: 12)),
       ),
-      DataCell(
-        TertiaryButton(width:45,height:15,color:Colors.red,onPressed: ()=>buttonAsktap(element),title: 'cancel',fontSize: 8,)
-      )
+      DataCell(TertiaryButton(
+        width: 45,
+        height: 15,
+        color: Colors.red,
+        onPressed: () => buttonAsktap(element),
+        title: 'cancel',
+        fontSize: 8,
+      ))
     ]);
   }
 
@@ -232,30 +232,28 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
       DataCell(
         Text(price.toString(), style: const TextStyle(fontSize: 12)),
       ),
-      DataCell(
-        
-          TertiaryButton(width:45,height:15,color:Colors.red,onPressed: ()=>buttonBidtap(element),title: 'cancel',fontSize: 8,)
-         
-        ),
-      
+      DataCell(TertiaryButton(
+        width: 45,
+        height: 15,
+        color: Colors.red,
+        onPressed: () => buttonBidtap(element),
+        title: 'cancel',
+        fontSize: 8,
+      )),
     ]);
   }
+
   buttonBidtap(Bid element) {
-  if (!element.isClosed) {
-              logger.i(element.id);
-              context
-                  .read<OpenOrdersCubit>()
-                  .cancelOpenOrders(element.id, false);
-            }
-}
-buttonAsktap(Ask element) {
-  if (!element.isClosed) {
-              logger.i(element.id);
-              context
-                  .read<OpenOrdersCubit>()
-                  .cancelOpenOrders(element.id, true);
-            }
-}
-}
+    if (!element.isClosed) {
+      logger.i(element.id);
+      context.read<OpenOrdersCubit>().cancelOpenOrders(element.id, false);
+    }
+  }
 
-
+  buttonAsktap(Ask element) {
+    if (!element.isClosed) {
+      logger.i(element.id);
+      context.read<OpenOrdersCubit>().cancelOpenOrders(element.id, true);
+    }
+  }
+}
