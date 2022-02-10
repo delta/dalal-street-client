@@ -144,33 +144,45 @@ class _HomePageState extends State<HomePage>
         if (state is GetNewsSucess) {
           mapMarketEvents.clear();
           mapMarketEvents.addAll(state.marketEventsList.marketEvents);
-          return ListView.separated(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: mapMarketEvents.length,
-            itemBuilder: (context, index) {
-              MarketEvent marketEvent = mapMarketEvents[index];
-              String headline = marketEvent.headline;
-              String imagePath = marketEvent.imagePath;
-              String createdAt = marketEvent.createdAt;
-              String text = marketEvent.text;
-              String dur = getdur(createdAt);
-              return GestureDetector(
-                  child: newsItem(headline, imagePath, createdAt),
-                  onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => NewsDetail(
-                            text: text,
-                            imagePath: imagePath,
-                            headline: headline,
-                            dur: dur),
-                      )));
-            },
-            separatorBuilder: (context, index) {
-              return const Divider();
-            },
-          );
+          if (mapMarketEvents.isNotEmpty) {
+            return ListView.separated(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: mapMarketEvents.length,
+              itemBuilder: (context, index) {
+                MarketEvent marketEvent = mapMarketEvents[index];
+                String headline = marketEvent.headline;
+                String imagePath = marketEvent.imagePath;
+                String createdAt = marketEvent.createdAt;
+                String text = marketEvent.text;
+                String dur = getdur(createdAt);
+                return GestureDetector(
+                    child: newsItem(headline, imagePath, createdAt),
+                    onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => NewsDetail(
+                              text: text,
+                              imagePath: imagePath,
+                              headline: headline,
+                              dur: dur),
+                        )));
+              },
+              separatorBuilder: (context, index) {
+                return const Divider();
+              },
+            );
+          } else {
+            return const Center(
+              child: Text(
+                'No News',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: secondaryColor,
+                ),
+              ),
+            );
+          }
         } else if (state is GetNewsFailure) {
           return Column(
             children: [
