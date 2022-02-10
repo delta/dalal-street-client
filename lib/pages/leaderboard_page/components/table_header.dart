@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 
 ListTile tableHeader() {
   return ListTile(
-      // visualDensity: const VisualDensity(vertical: -3),
-      // tileColor: background2,
       title: Row(
     children: const <Widget>[
       Padding(padding: EdgeInsets.all(10)),
