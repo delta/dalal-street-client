@@ -17,17 +17,9 @@ class _LeaderboardPageBuilderState extends State<LeaderboardPageBuilder> {
   @override
   initState() {
     super.initState();
-    if (widget.leaderboardType == LeaderboardType.Overall) {
-      //overall leaderboard
-      context
-          .read<LeaderboardCubit>()
-          .getLeaderboard(1, 100, LeaderboardType.Overall);
-    } else {
-      //daily leaderboard
-      context
-          .read<LeaderboardCubit>()
-          .getLeaderboard(1, 100, LeaderboardType.Daily);
-    }
+    context
+        .read<LeaderboardCubit>()
+        .getLeaderboard(1, 100, widget.leaderboardType);
   }
 
   @override
@@ -50,15 +42,9 @@ class _LeaderboardPageBuilderState extends State<LeaderboardPageBuilder> {
               height: 50,
               child: OutlinedButton(
                 onPressed: () {
-                  if (widget.leaderboardType == LeaderboardType.Overall) {
-                    context
-                        .read<LeaderboardCubit>()
-                        .getLeaderboard(1, 100, LeaderboardType.Overall);
-                  } else {
-                    context
-                        .read<LeaderboardCubit>()
-                        .getLeaderboard(1, 100, LeaderboardType.Daily);
-                  }
+                  context
+                      .read<LeaderboardCubit>()
+                      .getLeaderboard(1, 100, widget.leaderboardType);
                 },
                 child: const Text('Retry'),
               ),
