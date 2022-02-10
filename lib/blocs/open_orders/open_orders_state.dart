@@ -1,9 +1,7 @@
 part of 'open_orders_cubit.dart';
-enum OpenOrderType
-{
-  open,
-  cancel
-}
+
+enum OpenOrderType { open, cancel }
+
 abstract class OpenOrdersState extends Equatable {
   const OpenOrdersState();
 
@@ -23,12 +21,11 @@ class GetOpenordersSuccess extends OpenOrdersState {
 class OrderFailure extends OpenOrdersState {
   final String msg;
   final OpenOrderType ordertype;
-  const OrderFailure(this.msg,this.ordertype);
+  const OrderFailure(this.msg, this.ordertype);
   @override
-  List<Object> get props => [msg,ordertype];
+  List<Object> get props => [msg, ordertype];
 }
 
 class CancelorderSuccess extends OpenOrdersState {
   const CancelorderSuccess();
 }
-

@@ -41,7 +41,6 @@ import 'package:dalal_street_client/blocs/portfolio/userWorth/portfolio_cubit.da
 import '../blocs/news/news_bloc.dart';
 import '../pages/news/news_page.dart';
 
-
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     try {
@@ -84,7 +83,7 @@ class RouteGenerator {
           child: LoginPage(),
         );
       case '/openOrders':
-       return MultiBlocProvider(providers: [
+        return MultiBlocProvider(providers: [
           BlocProvider(create: (context) => OpenOrdersCubit()),
           BlocProvider(create: (context) => SubscribeCubit()),
           BlocProvider(

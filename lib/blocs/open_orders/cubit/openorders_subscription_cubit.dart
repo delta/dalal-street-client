@@ -11,19 +11,16 @@ part 'openorders_subscription_state.dart';
 class OpenordersSubscriptionCubit extends Cubit<OpenordersSubscriptionState> {
   OpenordersSubscriptionCubit() : super(OpenordersSubscriptionInitial());
 
-
-   Future<void> getOpenOrdersStream(SubscriptionId subscriptionId) async {
+  Future<void> getOpenOrdersStream(SubscriptionId subscriptionId) async {
     try {
-      final orderupdatestream = streamClient.getMyOrderUpdates(
-          subscriptionId,
+      final orderupdatestream = streamClient.getMyOrderUpdates(subscriptionId,
           options: sessionOptions(getIt()));
       await for (final orderupdate in orderupdatestream) {
         emit(SubscriptionToOpenOrderSuccess(orderupdate));
       }
     } catch (e) {
-      logger.e(e); 
+      logger.e(e);
       emit(SubscriptionToOpenOrderFailed(subscriptionId));
     }
   }
-  
 }

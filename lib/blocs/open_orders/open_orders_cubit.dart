@@ -6,24 +6,22 @@ import 'package:dalal_street_client/grpc/client.dart';
 import 'package:dalal_street_client/proto_build/actions/CancelOrder.pb.dart';
 import 'package:dalal_street_client/proto_build/actions/GetMyOrders.pb.dart';
 import 'package:equatable/equatable.dart';
-part   'open_orders_state.dart';
+part 'open_orders_state.dart';
 
 class OpenOrdersCubit extends Cubit<OpenOrdersState> {
   OpenOrdersCubit() : super(OpenOrdersInitial());
   Future<void> getOpenOrders() async {
     try {
-      final resp = await actionClient.getMyOpenOrders(
-          GetMyOpenOrdersRequest(),
+      final resp = await actionClient.getMyOpenOrders(GetMyOpenOrdersRequest(),
           options: sessionOptions(getIt()));
       if (resp.statusCode == GetMyOpenOrdersResponse_StatusCode.OK) {
         emit(GetOpenordersSuccess(resp));
       } else {
-        emit(OrderFailure(resp.statusMessage,OpenOrderType.open));
+        emit(OrderFailure(resp.statusMessage, OpenOrderType.open));
       }
     } catch (e) {
       logger.e(e);
-      emit(const 
-     OrderFailure(failedToReachServer,OpenOrderType.open));
+      emit(const OrderFailure(failedToReachServer, OpenOrderType.open));
     }
   }
 
@@ -35,11 +33,11 @@ class OpenOrdersCubit extends Cubit<OpenOrdersState> {
       if (resp.statusCode == CancelOrderResponse_StatusCode.OK) {
         emit(const CancelorderSuccess());
       } else {
-        emit(OrderFailure(resp.statusMessage,OpenOrderType.cancel));
+        emit(OrderFailure(resp.statusMessage, OpenOrderType.cancel));
       }
     } catch (e) {
       logger.e(e);
-      emit(const OrderFailure(failedToReachServer,OpenOrderType.cancel));
+      emit(const OrderFailure(failedToReachServer, OpenOrderType.cancel));
     }
   }
 }
