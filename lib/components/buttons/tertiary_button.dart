@@ -5,11 +5,13 @@ class TertiaryButton extends StatelessWidget {
   final double height, width, fontSize;
   final VoidCallback? onPressed;
   final String title;
+  final Color color;
 
   const TertiaryButton(
       {Key? key,
       this.height = 40,
       this.width = 100,
+      this.color= primaryColor,
       this.onPressed,
       this.fontSize = 14,
       this.title = ''})
@@ -26,14 +28,14 @@ class TertiaryButton extends StatelessWidget {
               borderRadius: const BorderRadius.all(
                 Radius.circular(10.0),
               ),
-              color: primaryColor.withOpacity(0.2),
+              color: color.withOpacity(0.12),
             ),
             child: Center(
               child: Text(
                 title,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                    color: primaryColor,
+                    color: color,
                     fontWeight: FontWeight.w500,
                     fontSize: fontSize),
               ),
