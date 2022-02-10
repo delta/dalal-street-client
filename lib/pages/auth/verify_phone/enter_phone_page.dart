@@ -38,7 +38,7 @@ class EnterPhonePage extends StatelessWidget {
                   );
                 }
                 if (state is EnterPhoneFailure) {
-                  showSnackBar(context, state.msg);
+                  showSnackBar(context, state.msg, type: SnackBarType.error);
                 }
               },
               builder: (context, state) {

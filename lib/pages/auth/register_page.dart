@@ -38,7 +38,7 @@ class RegisterPage extends StatelessWidget {
                   arguments: state.mail,
                 );
               } else if (state is RegisterFailure) {
-                showSnackBar(context, state.msg);
+                showSnackBar(context, state.msg, type: SnackBarType.error);
               }
             },
             builder: (context, state) {

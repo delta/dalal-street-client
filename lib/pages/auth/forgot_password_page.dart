@@ -20,11 +20,12 @@ class ForgotPasswordPage extends StatelessWidget {
           child: BlocConsumer<ForgotPasswordCubit, ForgotPasswordState>(
             listener: (context, state) {
               if (state is ForgotPasswordFailure) {
-                showSnackBar(context, state.msg);
+                showSnackBar(context, state.msg, type: SnackBarType.error);
               } else if (state is ForgotPasswordSuccess) {
                 Navigator.maybePop(context);
                 showSnackBar(context,
-                    'A temporary password and Password reset link have been sent to your registered Email Id');
+                    'A temporary password and Password reset link have been sent to your registered Email Id',
+                    type: SnackBarType.success);
               }
             },
             builder: (context, state) {

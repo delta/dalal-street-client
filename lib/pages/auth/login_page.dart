@@ -20,7 +20,7 @@ class LoginPage extends StatelessWidget {
   Widget build(context) => BlocConsumer<LoginCubit, LoginState>(
         listener: (context, state) {
           if (state is LoginFailure) {
-            showSnackBar(context, state.msg);
+            showSnackBar(context, state.msg, type: SnackBarType.error);
           }
         },
         builder: (context, state) => Scaffold(

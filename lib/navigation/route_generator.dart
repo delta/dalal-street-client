@@ -79,7 +79,7 @@ class RouteGenerator {
           create: (context) => LoginCubit(context.read()),
           child: LoginPage(),
         );
-      case '/referral':
+      case '/referAndEarn':
         if (args is User) {
           return BlocProvider(
             create: (context) => ReferralCubit(),
