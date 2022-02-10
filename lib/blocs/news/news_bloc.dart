@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:dalal_street_client/constants/error_messages.dart';
 import 'package:dalal_street_client/grpc/client.dart';
 import 'package:dalal_street_client/proto_build/actions/GetMarketEvents.pb.dart';
 import 'package:equatable/equatable.dart';
@@ -21,7 +22,7 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
 
         emit(GetNewsSucess(marketEventResponse));
       } catch (e) {
-        emit(GetNewsFailure(e.toString()));
+        emit(const GetNewsFailure(failedToReachServer));
       }
     });
     on<GetMoreNews>((event, emit) async {
@@ -34,7 +35,7 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
 
         emit(GetNewsSucess(marketEventResponse));
       } catch (e) {
-        emit(GetNewsFailure(e.toString()));
+        emit(const GetNewsFailure(failedToReachServer));
       }
     });
 
@@ -48,7 +49,7 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
 
         emit(GetNewsSucess(marketEventResponse));
       } catch (e) {
-        emit(GetNewsFailure(e.toString()));
+        emit(const GetNewsFailure(failedToReachServer));
       }
     });
   }
