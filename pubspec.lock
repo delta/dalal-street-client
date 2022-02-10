@@ -176,7 +176,7 @@ packages:
       name: google_fonts
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.3.1"
+    version: "2.3.0"
   googleapis_auth:
     dependency: transitive
     description:
@@ -545,7 +545,7 @@ packages:
       name: url_launcher_web
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.8"
+    version: "2.0.6"
   url_launcher_windows:
     dependency: transitive
     description:
@@ -583,4 +583,4 @@ packages:
     version: "5.3.1"
 sdks:
   dart: ">=2.15.0 <3.0.0"
-  flutter: ">=2.10.0"
+  flutter: ">=2.5.0"
