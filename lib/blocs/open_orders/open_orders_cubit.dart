@@ -6,40 +6,40 @@ import 'package:dalal_street_client/grpc/client.dart';
 import 'package:dalal_street_client/proto_build/actions/CancelOrder.pb.dart';
 import 'package:dalal_street_client/proto_build/actions/GetMyOrders.pb.dart';
 import 'package:equatable/equatable.dart';
-
-part 'open_orders_state.dart';
+part   'open_orders_state.dart';
 
 class OpenOrdersCubit extends Cubit<OpenOrdersState> {
   OpenOrdersCubit() : super(OpenOrdersInitial());
   Future<void> getOpenOrders() async {
     try {
-      final GetMyOpenOrdersResponse resp = await actionClient.getMyOpenOrders(
+      final resp = await actionClient.getMyOpenOrders(
           GetMyOpenOrdersRequest(),
           options: sessionOptions(getIt()));
       if (resp.statusCode == GetMyOpenOrdersResponse_StatusCode.OK) {
-        emit(OpenordersSucess(resp));
+        emit(GetOpenordersSuccess(resp));
       } else {
-        emit(OpenorderFailure(resp.statusMessage));
+        emit(OrderFailure(resp.statusMessage,OpenOrderType.open));
       }
     } catch (e) {
-      logger.i(e.toString());
-      emit(const OpenorderFailure(failedToReachServer));
+      logger.e(e);
+      emit(const 
+     OrderFailure(failedToReachServer,OpenOrderType.open));
     }
   }
 
-  Future<void> cancelOpenOrders(int? orderId, bool? isAsk) async {
+  Future<void> cancelOpenOrders(int orderId, bool isAsk) async {
     try {
-      final CancelOrderResponse resp = await actionClient.cancelOrder(
+      final resp = await actionClient.cancelOrder(
           CancelOrderRequest(orderId: orderId, isAsk: isAsk),
           options: sessionOptions(getIt()));
       if (resp.statusCode == CancelOrderResponse_StatusCode.OK) {
-        emit(const CancelorderSucess());
+        emit(const CancelorderSuccess());
       } else {
-        emit(CancelorderFailure(resp.statusMessage));
+        emit(OrderFailure(resp.statusMessage,OpenOrderType.cancel));
       }
     } catch (e) {
-      logger.i(e.toString());
-      emit(const CancelorderFailure(failedToReachServer));
+      logger.e(e);
+      emit(const OrderFailure(failedToReachServer,OpenOrderType.cancel));
     }
   }
 }

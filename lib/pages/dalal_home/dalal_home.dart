@@ -19,10 +19,12 @@ class DalalHome extends StatefulWidget {
   const DalalHome({Key? key, required this.user}) : super(key: key);
 
   @override
-  State<DalalHome> createState() => _DalalHomeState();
+  State<DalalHome> createState() => _DalalHomeState(user);
 }
 
 class _DalalHomeState extends State<DalalHome> {
+  final User user;
+  _DalalHomeState(this.user);
   final _bottomMenu = {
     'Home': AppIcons.home,
     'Portfolio': AppIcons.portfolio,
@@ -104,8 +106,14 @@ class _DalalHomeState extends State<DalalHome> {
             borderRadius: BorderRadius.vertical(top: Radius.circular(10))),
         builder: (_) => DalalHomeBottomSheet(
           items: _sheetMenu,
-          onItemClick: (index) =>
-              Navigator.of(context).pushNamed(_sheetPageRoutes[index]),
+          onItemClick: (index) {
+            if (_sheetPageRoutes[index].compareTo('/referAndEarn') == 0) {
+              Navigator.of(context)
+                  .pushNamed(_sheetPageRoutes[index], arguments: user);
+            } else {
+              Navigator.of(context).pushNamed(_sheetPageRoutes[index]);
+            }
+          },
         ),
       );
 }

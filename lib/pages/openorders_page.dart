@@ -1,7 +1,11 @@
-import 'package:dalal_street_client/blocs/portfolio/open_orders/open_orders_cubit.dart';
+
+import 'package:dalal_street_client/blocs/open_orders/cubit/openorders_subscription_cubit.dart';
+import 'package:dalal_street_client/blocs/subscribe/subscribe_cubit.dart';
+import 'package:dalal_street_client/components/buttons/tertiary_button.dart';
 import 'package:dalal_street_client/config/get_it.dart';
 import 'package:dalal_street_client/config/log.dart';
 import 'package:dalal_street_client/proto_build/actions/GetMyOrders.pb.dart';
+import 'package:dalal_street_client/proto_build/datastreams/MyOrders.pb.dart';
 import 'package:dalal_street_client/proto_build/models/Ask.pb.dart';
 import 'package:dalal_street_client/proto_build/models/Bid.pb.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
@@ -11,18 +15,20 @@ import 'package:dalal_street_client/utils/snackbar.dart';
 import 'package:fixnum/fixnum.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-class PortfolioOpenOrders extends StatefulWidget {
-  const PortfolioOpenOrders({Key? key}) : super(key: key);
+import '../blocs/open_orders/open_orders_cubit.dart';
+import '../proto_build/datastreams/Subscribe.pbenum.dart';
+class OpenOrdersPage extends StatefulWidget {
+  const OpenOrdersPage({Key? key}) : super(key: key);
 
   @override
-  _PortfolioOpenOrdersState createState() => _PortfolioOpenOrdersState();
+  _OpenOrdersPageState createState() => _OpenOrdersPageState();
 }
 
-class _PortfolioOpenOrdersState extends State<PortfolioOpenOrders> {
+class _OpenOrdersPageState extends State<OpenOrdersPage> {
   @override
   void initState() {
     context.read<OpenOrdersCubit>().getOpenOrders();
+    context.read<SubscribeCubit>().subscribe(DataStreamType.MY_ORDERS);
     super.initState();
   }
 
@@ -48,22 +54,46 @@ class _PortfolioOpenOrdersState extends State<PortfolioOpenOrders> {
                     fontSize: 18,
                     fontWeight: FontWeight.w500),
               )),
+              BlocListener<SubscribeCubit,SubscribeState>(listener: ((context, state) {
+
+                if(state is SubscriptionDataLoaded)
+                {
+                  context.read<OpenordersSubscriptionCubit>().getOpenOrdersStream(state.subscriptionId);
+                  BlocConsumer<OpenordersSubscriptionCubit,OpenordersSubscriptionState>(listener:(context, state) => {
+                    if(state is SubscriptionToOpenOrderSuccess)
+                    {
+                     MyOrderUpdate orderUpdate = state.orderUpdate
+      
+                    }
+
+                  });
+                }
+                
+                
+              }),)
           BlocConsumer<OpenOrdersCubit, OpenOrdersState>(
             listener: (context, state) {
-              if (state is CancelorderSucess) {
+              if (state is CancelorderSuccess) {
                 showSnackBar(context, 'Order Cancelled Sucessfully');
                 context.read<OpenOrdersCubit>().getOpenOrders();
-              } else if (state is CancelorderFailure) {
+              } else if (state is OrderFailure) {
+                if(state.ordertype == OpenOrderType.cancel)
+                {
                 showSnackBar(context, 'Failed To Cancel Order Retrying.....');
-                logger.i(state.msg);
                 context.read<OpenOrdersCubit>().getOpenOrders();
-              } else if (state is OpenorderFailure) {
+                logger.e(state.msg);
+                }
+                else
+                {
                 showSnackBar(context, 'Failed to Fetch Open Orders');
                 context.read<OpenOrdersCubit>().getOpenOrders();
-              }
+                logger.e(state.msg);
+                }
+               
+              } 
             },
             builder: (context, state) {
-              if (state is OpenordersSucess) {
+              if (state is GetOpenordersSuccess) {
                 if (buildRowsOfOpenOrders(state.res).isNotEmpty) {
                   return SingleChildScrollView(
                       scrollDirection: Axis.vertical,
@@ -171,21 +201,7 @@ class _PortfolioOpenOrdersState extends State<PortfolioOpenOrders> {
         Text(price.toString(), style: const TextStyle(fontSize: 12)),
       ),
       DataCell(
-        InkWell(
-          child: Image.asset(
-            'assets/images/tertiary.png',
-            width: 50,
-            height: 50,
-          ),
-          onTap: () {
-            if (!element.isClosed) {
-              logger.i(element.id);
-              context
-                  .read<OpenOrdersCubit>()
-                  .cancelOpenOrders(element.id, true);
-            }
-          },
-        ),
+        TertiaryButton(width:45,height:15,color:Colors.red,onPressed: ()=>buttonAsktap(element),title: 'cancel',fontSize: 8,)
       )
     ]);
   }
@@ -217,22 +233,29 @@ class _PortfolioOpenOrdersState extends State<PortfolioOpenOrders> {
         Text(price.toString(), style: const TextStyle(fontSize: 12)),
       ),
       DataCell(
-        InkWell(
-          child: Image.asset(
-            'assets/images/tertiary.png',
-            width: 50,
-            height: 50,
-          ),
-          onTap: () {
-            if (!element.isClosed) {
+        
+          TertiaryButton(width:45,height:15,color:Colors.red,onPressed: ()=>buttonBidtap(element),title: 'cancel',fontSize: 8,)
+         
+        ),
+      
+    ]);
+  }
+  buttonBidtap(Bid element) {
+  if (!element.isClosed) {
               logger.i(element.id);
               context
                   .read<OpenOrdersCubit>()
                   .cancelOpenOrders(element.id, false);
             }
-          },
-        ),
-      )
-    ]);
-  }
 }
+buttonAsktap(Ask element) {
+  if (!element.isClosed) {
+              logger.i(element.id);
+              context
+                  .read<OpenOrdersCubit>()
+                  .cancelOpenOrders(element.id, true);
+            }
+}
+}
+
+

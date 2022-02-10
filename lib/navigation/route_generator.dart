@@ -4,6 +4,8 @@ import 'package:dalal_street_client/blocs/admin/tab3/tab3_cubit.dart';
 import 'package:dalal_street_client/blocs/auth/change_password/change_password_cubit.dart';
 import 'package:dalal_street_client/blocs/auth/forgot_password/forgot_password_cubit.dart';
 import 'package:dalal_street_client/blocs/auth/login/login_cubit.dart';
+import 'package:dalal_street_client/blocs/open_orders/cubit/openorders_subscription_cubit.dart';
+import 'package:dalal_street_client/blocs/open_orders/open_orders_cubit.dart';
 import 'package:dalal_street_client/pages/admin_page/admin_page.dart';
 import 'package:dalal_street_client/blocs/auth/register/register_cubit.dart';
 import 'package:dalal_street_client/blocs/auth/verify_phone/enter_otp/enter_otp_cubit.dart';
@@ -25,6 +27,7 @@ import 'package:dalal_street_client/pages/auth/verify_phone/enter_phone_page.dar
 import 'package:dalal_street_client/pages/company_page/company_page.dart';
 import 'package:dalal_street_client/pages/daily_challenges/daily_challenges_page.dart';
 import 'package:dalal_street_client/pages/mortgage/mortgage_home.dart';
+import 'package:dalal_street_client/pages/openorders_page.dart';
 import 'package:dalal_street_client/pages/referral_page.dart';
 import 'package:dalal_street_client/pages/stock_exchange/exchange_page.dart';
 import 'package:dalal_street_client/pages/landing_page.dart';
@@ -36,9 +39,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dalal_street_client/blocs/portfolio/userWorth/portfolio_cubit.dart';
 
 import '../blocs/news/news_bloc.dart';
-import '../blocs/portfolio/open_orders/open_orders_cubit.dart';
 import '../pages/news/news_page.dart';
-import '../pages/openorders_page.dart';
+
 
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -81,12 +83,15 @@ class RouteGenerator {
           create: (context) => LoginCubit(context.read()),
           child: LoginPage(),
         );
-      case '/openorders':
-        return BlocProvider(
-          create: (context) => OpenOrdersCubit(),
-          child: const PortfolioOpenOrders(),
-        );
-      case '/referral':
+      case '/openOrders':
+       return MultiBlocProvider(providers: [
+          BlocProvider(create: (context) => OpenOrdersCubit()),
+          BlocProvider(create: (context) => SubscribeCubit()),
+          BlocProvider(
+            create: (context) => OpenordersSubscriptionCubit(),
+          )
+        ], child: const OpenOrdersPage());
+      case '/referAndEarn':
         if (args is User) {
           return BlocProvider(
             create: (context) => ReferralCubit(),

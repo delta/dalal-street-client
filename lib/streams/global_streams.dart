@@ -32,7 +32,6 @@ class GlobalStreams extends Equatable {
   final ValueStream<StockExchangeUpdate> stockExchangeStream;
   final Stream<TransactionUpdate> transactionStream;
   final Stream<NotificationUpdate> notificationStream;
-  final Stream<MyOrderUpdate> myopenorderStream;
 
   // Custom streams generated from server streams
   final ValueStream<Map<int, Stock>> stockMapStream;
@@ -48,7 +47,6 @@ class GlobalStreams extends Equatable {
     this.stockExchangeStream,
     this.transactionStream,
     this.notificationStream,
-    this.myopenorderStream,
     this.isMaketOpenStream,
     this.stockMapStream,
     this.dynamicUserInfoStream,
@@ -68,7 +66,6 @@ class GlobalStreams extends Equatable {
         stockExchangeStream,
         transactionStream,
         notificationStream,
-        myopenorderStream,
         isMaketOpenStream,
         stockMapStream,
         dynamicUserInfoStream,
@@ -116,15 +113,13 @@ Future<GlobalStreams> subscribeToGlobalStreams(
     SubscribeRequest(dataStreamType: DataStreamType.NOTIFICATIONS),
     sessionId,
   );
-  final myopenordersSubscriptionId = await subscribe(
-      SubscribeRequest(dataStreamType: DataStreamType.MY_ORDERS), sessionId);
+
   final subscriptionIds = [
     gameStateSubscriptionId,
     stockPriceSubscriptionId,
     stockExchangeSubscriptionId,
     transactionSubscriptionId,
     notificationSubscriptionId,
-    myopenordersSubscriptionId
   ];
 
   // Get the streams using the subscription ids
@@ -157,12 +152,6 @@ Future<GlobalStreams> subscribeToGlobalStreams(
   final notificationStream = streamClient
       .getNotificationUpdates(
         notificationSubscriptionId,
-        options: sessionOptions(sessionId),
-      )
-      .asBroadcastStream();
-  final myopenOrderStream = streamClient
-      .getMyOrderUpdates(
-        myopenordersSubscriptionId,
         options: sessionOptions(sessionId),
       )
       .asBroadcastStream();
@@ -213,7 +202,6 @@ Future<GlobalStreams> subscribeToGlobalStreams(
     stockExchangeStream,
     transactionStream,
     notificationStream,
-    myopenOrderStream,
     isMaketOpenStream,
     stockMapStream,
     dynamicUserInfoStream,
