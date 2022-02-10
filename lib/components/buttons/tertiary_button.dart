@@ -11,7 +11,7 @@ class TertiaryButton extends StatelessWidget {
       {Key? key,
       this.height = 40,
       this.width = 100,
-      this.color= primaryColor,
+      this.color = primaryColor,
       this.onPressed,
       this.fontSize = 14,
       this.title = ''})

@@ -42,7 +42,6 @@ import 'package:dalal_street_client/blocs/portfolio/userWorth/portfolio_cubit.da
 import '../blocs/news/news_bloc.dart';
 import '../pages/news/news_page.dart';
 
-
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     try {
@@ -84,6 +83,14 @@ class RouteGenerator {
           create: (context) => LoginCubit(context.read()),
           child: LoginPage(),
         );
+      case '/openOrders':
+        return MultiBlocProvider(providers: [
+          BlocProvider(create: (context) => OpenOrdersCubit()),
+          BlocProvider(create: (context) => SubscribeCubit()),
+          BlocProvider(
+            create: (context) => OpenordersSubscriptionCubit(),
+          )
+        ], child: const OpenOrdersPage());
       case '/referAndEarn':
         if (args is User) {
           return BlocProvider(
