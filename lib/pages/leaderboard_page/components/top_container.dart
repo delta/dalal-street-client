@@ -28,7 +28,7 @@ Container topContainer(List<Map<String, String>> tabledata) {
                         width: 80,
                         decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            border: Border.all(color: Colors.white, width: 3),
+                            border: Border.all(color: silver, width: 4),
                             image: const DecorationImage(
                                 image:
                                     AssetImage('assets/images/placeholder.png'),
@@ -41,12 +41,12 @@ Container topContainer(List<Map<String, String>> tabledata) {
                         width: 20,
                         decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            border: Border.all(color: Colors.white, width: 2),
+                            border: Border.all(color: silver, width: 2),
                             color: background2),
                         child: const Text(
                           '2',
                           style: TextStyle(
-                              color: Colors.white, fontWeight: FontWeight.bold),
+                              color: silver, fontWeight: FontWeight.bold),
                           textAlign: TextAlign.center,
                         )),
                   ),
@@ -56,13 +56,13 @@ Container topContainer(List<Map<String, String>> tabledata) {
                       children: [
                         Text(
                           tabledata[1]['username'].toString(),
-                          style: const TextStyle(color: Colors.white),
+                          style: const TextStyle(color: silver),
                           textAlign: TextAlign.center,
                         ),
                         const SizedBox(height: 10),
                         Text(
                           tabledata[1]['totalworth'].toString(),
-                          style: const TextStyle(color: Colors.white),
+                          style: const TextStyle(color: silver),
                           textAlign: TextAlign.center,
                         )
                       ],
@@ -86,7 +86,7 @@ Container topContainer(List<Map<String, String>> tabledata) {
                         width: 80,
                         decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            border: Border.all(color: Colors.yellow, width: 3),
+                            border: Border.all(color: gold, width: 3),
                             image: const DecorationImage(
                                 image:
                                     AssetImage('assets/images/placeholder.png'),
@@ -104,13 +104,12 @@ Container topContainer(List<Map<String, String>> tabledata) {
                         width: 20,
                         decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            border: Border.all(color: Colors.yellow, width: 2),
+                            border: Border.all(color: gold, width: 2),
                             color: background2),
                         child: const Text(
                           '1',
                           style: TextStyle(
-                              color: Colors.yellow,
-                              fontWeight: FontWeight.bold),
+                              color: gold, fontWeight: FontWeight.bold),
                           textAlign: TextAlign.center,
                         )),
                   ),
@@ -120,13 +119,13 @@ Container topContainer(List<Map<String, String>> tabledata) {
                       children: [
                         Text(
                           tabledata[0]['username'].toString(),
-                          style: const TextStyle(color: Colors.yellow),
+                          style: const TextStyle(color: gold),
                           textAlign: TextAlign.center,
                         ),
                         const SizedBox(height: 10),
                         Text(
                           tabledata[0]['totalworth'].toString(),
-                          style: const TextStyle(color: Colors.yellow),
+                          style: const TextStyle(color: gold),
                           textAlign: TextAlign.center,
                         )
                       ],
@@ -150,7 +149,7 @@ Container topContainer(List<Map<String, String>> tabledata) {
                         width: 80,
                         decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            border: Border.all(color: Colors.red, width: 3),
+                            border: Border.all(color: bronze, width: 4),
                             image: const DecorationImage(
                                 image:
                                     AssetImage('assets/images/placeholder.png'),
@@ -163,12 +162,12 @@ Container topContainer(List<Map<String, String>> tabledata) {
                         width: 20,
                         decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            border: Border.all(color: Colors.red, width: 2),
+                            border: Border.all(color: bronze, width: 2),
                             color: background2),
                         child: const Text(
                           '3',
                           style: TextStyle(
-                              color: Colors.red, fontWeight: FontWeight.bold),
+                              color: bronze, fontWeight: FontWeight.bold),
                           textAlign: TextAlign.center,
                         )),
                   ),
@@ -178,13 +177,13 @@ Container topContainer(List<Map<String, String>> tabledata) {
                       children: [
                         Text(
                           tabledata[2]['username'].toString(),
-                          style: const TextStyle(color: Colors.red),
+                          style: const TextStyle(color: bronze),
                           textAlign: TextAlign.center,
                         ),
                         const SizedBox(height: 10),
                         Text(
                           tabledata[2]['totalworth'].toString(),
-                          style: const TextStyle(color: Colors.red),
+                          style: const TextStyle(color: bronze),
                           textAlign: TextAlign.center,
                         )
                       ],
