@@ -1,3 +1,4 @@
+import 'package:dalal_street_client/components/graph/line_area.dart';
 import 'package:dalal_street_client/blocs/news/news_bloc.dart';
 import 'package:dalal_street_client/components/buttons/tertiary_button.dart';
 import 'package:dalal_street_client/config/get_it.dart';
@@ -344,7 +345,7 @@ class StockItem extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
           child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
             _stockNames(stock),
-            _stockGraph(),
+            _stockGraph(stock.id),
             _stockPrices(),
           ])),
     );
@@ -370,11 +371,12 @@ class StockItem extends StatelessWidget {
     );
   }
 
-  Expanded _stockGraph() {
+  Expanded _stockGraph(int stockId) {
     return Expanded(
-      child: Image.network(
-        'https://i.imgur.com/lOQyGGe.png',
-        height: 23,
+      child: SizedBox(
+        child: LineAreaGraph(stockId: stockId),
+        height: 50,
+        width: 10,
       ),
     );
   }

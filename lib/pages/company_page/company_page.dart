@@ -32,7 +32,8 @@ class _CompanyPageState extends State<CompanyPage>
   initState() {
     super.initState();
     // Subscribe to the stream of Market Depth Updates
-    context.read<SubscribeCubit>().subscribe(DataStreamType.MARKET_DEPTH);
+    context.read<SubscribeCubit>().subscribe(DataStreamType.MARKET_DEPTH,
+        dataStreamId: widget.data[0].toString());
   }
 
   @override
