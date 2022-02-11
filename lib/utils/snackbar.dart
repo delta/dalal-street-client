@@ -1,9 +1,8 @@
-import 'package:dalal_street_client/models/snackbar_props.dart';
+import 'package:dalal_street_client/models/snackbar/snackbar_props.dart';
+import 'package:dalal_street_client/models/snackbar/snackbar_type.dart';
 import 'package:dalal_street_client/theme/colors.dart';
 import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
-
-enum SnackBarType { success, error, info, warning }
 
 /// Hides the current snackbar(if any) and shows new snackbar with [msg]
 void showSnackBar(BuildContext context, String msg,
@@ -11,6 +10,7 @@ void showSnackBar(BuildContext context, String msg,
   var snackBarProps = getSnackBarProps(type);
 
   Flushbar(
+    shouldIconPulse: false,
     title: snackBarProps.title,
     titleColor: snackBarProps.color,
     message: msg,
@@ -20,36 +20,27 @@ void showSnackBar(BuildContext context, String msg,
       size: 28,
     ),
     leftBarIndicatorColor: snackBarProps.color,
-    duration: const Duration(seconds: 5),
+    duration: const Duration(seconds: 3),
     borderRadius: BorderRadius.circular(12),
     flushbarStyle: FlushbarStyle.FLOATING,
-    backgroundColor: background2,
+    backgroundColor: background3,
     isDismissible: true,
     maxWidth: 400,
     padding: const EdgeInsets.all(10.0),
     margin: const EdgeInsets.all(8.0),
+    flushbarPosition: FlushbarPosition.TOP,
   ).show(context);
 }
 
 SnackBarProps getSnackBarProps(SnackBarType type) {
-  late SnackBarProps snackBarProps;
-
   switch (type) {
     case SnackBarType.success:
-      snackBarProps =
-          SnackBarProps('Success', primaryColor, Icons.check_circle);
-
-      break;
+      return SnackBarProps('Success', primaryColor, Icons.check_circle);
     case SnackBarType.info:
-      snackBarProps = SnackBarProps('Info', blue, Icons.info_outline);
-      break;
+      return SnackBarProps('Info', blue, Icons.info_outline);
     case SnackBarType.error:
-      snackBarProps = SnackBarProps('Error', red, Icons.error_outline);
-      break;
+      return SnackBarProps('Error', red, Icons.error_outline);
     case SnackBarType.warning:
-      snackBarProps = SnackBarProps('Warning', gold, Icons.warning);
-      break;
+      return SnackBarProps('Warning', gold, Icons.warning);
   }
-
-  return snackBarProps;
 }

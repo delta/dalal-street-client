@@ -9,6 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 
+import '../../models/snackbar/snackbar_type.dart';
+
 class RegisterPage extends StatelessWidget {
   RegisterPage({Key? key}) : super(key: key);
 

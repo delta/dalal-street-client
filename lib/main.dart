@@ -12,6 +12,8 @@ import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:dalal_street_client/config/log.dart';
 import 'package:path_provider/path_provider.dart';
 
+import 'models/snackbar/snackbar_type.dart';
+
 void main() async {
   // Something doesnt work without this line. Dont remember what
   WidgetsFlutterBinding.ensureInitialized();
@@ -34,7 +36,8 @@ void main() async {
       // Provide DalalBloc at the root of the App
       BlocProvider(
         create: (_) => DalalBloc(),
-        child: DalalApp(),
+        // TODO create 2 widget to move up the materialApp widget (context error)
+        child: MaterialApp(home: DalalApp()),
       ),
     ),
     storage: storage,
@@ -60,7 +63,8 @@ class DalalApp extends StatelessWidget {
         theme: appTheme,
         themeMode: ThemeMode.dark,
         // Show snackbar and navigate to Home or Login page whenever UserState changes
-        builder: (context, child) => BlocListener<DalalBloc, DalalState>(
+        builder: (context, Widget? child) =>
+            BlocListener<DalalBloc, DalalState>(
           listener: (context, state) {
             if (state is DalalDataLoaded) {
               // Register sessionId
@@ -69,11 +73,17 @@ class DalalApp extends StatelessWidget {
               getIt.registerSingleton(state.globalStreams);
 
               logger.i('user logged in');
+
               _navigator.pushNamedAndRemoveUntil(
                 '/home',
                 (route) => false,
                 arguments: state.user,
               );
+
+              showSnackBar(context, 'hello world 1',
+                  type: SnackBarType.success);
+              showSnackBar(context, 'hello world 2',
+                  type: SnackBarType.success);
             } else if (state is DalalVerificationPending) {
               // Register sessionId
               getIt.registerSingleton(state.sessionId);
