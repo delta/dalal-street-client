@@ -1,12 +1,14 @@
 //import 'package:dalal_street_client/blocs/notifications/notifications_bloc.dart';
 import 'package:dalal_street_client/blocs/notifications_cubit/notifications_cubit.dart';
 import 'package:dalal_street_client/config/get_it.dart';
+import 'package:dalal_street_client/config/log.dart';
 
 import 'package:dalal_street_client/pages/notifications_details.dart';
 import 'package:dalal_street_client/proto_build/models/Notification.pb.dart'
     as test;
 import 'package:dalal_street_client/streams/global_streams.dart';
 import 'package:dalal_street_client/theme/colors.dart';
+import 'package:dalal_street_client/utils/snackbar.dart';
 
 import 'package:flutter/material.dart';
 // ignore: implementation_imports
@@ -42,7 +44,8 @@ class _NotifsState extends State<NotificationsPage> {
 
   @override
   Widget build(context) => Scaffold(
-        body: Center(
+        resizeToAvoidBottomInset: false,
+        body: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
@@ -77,7 +80,7 @@ class _NotifsState extends State<NotificationsPage> {
       );
 
   /*_onGetNotifications() {
-    return BlocConsumer<NotificationsBloc, NotifState>(
+    return BlocConsumer<NotificationsCubitState, NotificationsCubitState>(
         listener: (context, state) {
       if (state is GetNotifSuccess) {
         logger.i('successful');
@@ -110,7 +113,7 @@ class _NotifsState extends State<NotificationsPage> {
                   fontWeight: FontWeight.w700,
                   color: white,
                 ),
-                textAlign: TextAlign.start,
+                textAlign: TextAlign.right,
               ),
               const SizedBox(
                 height: 20,
@@ -143,7 +146,7 @@ class _NotifsState extends State<NotificationsPage> {
               bool isBroadcast = notification.isBroadcast;
 
               return GestureDetector(
-                  child: notifItem(id, userid, createdAt, isBroadcast),
+                  child: notifItem(text, isBroadcast),
                   onTap: () => Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -181,9 +184,10 @@ class _NotifsState extends State<NotificationsPage> {
       });
 
   Widget notifItem(
-    int id,
-    int userid,
-    String createdAt,
+    String notif,
+    // int id,
+    //int userid,
+    //String createdAt,
     bool islatest,
   ) {
     if (!islatest) {
@@ -202,7 +206,7 @@ class _NotifsState extends State<NotificationsPage> {
                     child: Flexible(
                       child: Padding(
                         padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-                        child: Text(id.toString(),
+                        child: Text(notif.toString(),
                             style: const TextStyle(
                                 color: Colors.white, fontSize: 15)),
                       ),
@@ -230,7 +234,7 @@ class _NotifsState extends State<NotificationsPage> {
                       SizedBox(
                         width: MediaQuery.of(context).size.width * 0.8,
                         child: Flexible(
-                            child: Text(id.toString(),
+                            child: Text(notif.toString(),
                                 style: const TextStyle(
                                     color: Colors.white, fontSize: 15)),
                             fit: FlexFit.loose),

@@ -30,16 +30,6 @@ class NotifsDetail extends StatelessWidget {
               dimension: 5,
             ),
             const Padding(
-                padding: EdgeInsets.all(15),
-                child: Text(
-                  'Notifications',
-                  style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500,
-                      color: whiteWithOpacity75),
-                  textAlign: TextAlign.left,
-                )),
-            const Padding(
               padding: EdgeInsets.all(15),
             ),
             Padding(
@@ -53,17 +43,6 @@ class NotifsDetail extends StatelessWidget {
                 fit: FlexFit.loose,
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(15),
-              child: Flexible(
-                child: Text(
-                  text,
-                  textAlign: TextAlign.start,
-                  style: const TextStyle(fontSize: 16, color: lightGray),
-                ),
-                fit: FlexFit.loose,
-              ),
-            )
           ]),
     )));
   }
