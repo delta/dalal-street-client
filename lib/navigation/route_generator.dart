@@ -136,7 +136,12 @@ class RouteGenerator {
       // Home Pages
       case '/home':
         if (args is User) {
-          return DalalHome(user: args);
+          return BlocProvider(
+            create: (context) => NewsBloc(),
+            child: DalalHome(
+              user: args,
+            ),
+          );
         }
         throw Exception('Invalid user args');
 
@@ -163,6 +168,9 @@ class RouteGenerator {
               ),
               BlocProvider(
                 create: (context) => SubscribeCubit(),
+              ),
+              BlocProvider(
+                create: (context) => NewsBloc(),
               ),
             ],
             child: CompanyPage(data: args),

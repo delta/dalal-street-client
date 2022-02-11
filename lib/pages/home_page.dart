@@ -1,5 +1,10 @@
+import 'package:dalal_street_client/components/graph/line_area.dart';
+import 'package:dalal_street_client/blocs/news/news_bloc.dart';
+import 'package:dalal_street_client/components/buttons/tertiary_button.dart';
 import 'package:dalal_street_client/config/get_it.dart';
 import 'package:dalal_street_client/constants/format.dart';
+import 'package:dalal_street_client/pages/newsdetail_page.dart';
+import 'package:dalal_street_client/proto_build/models/MarketEvent.pb.dart';
 import 'package:dalal_street_client/streams/transformations.dart';
 import 'package:fixnum/fixnum.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
@@ -8,6 +13,7 @@ import 'package:dalal_street_client/streams/global_streams.dart';
 import 'package:dalal_street_client/utils/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:dalal_street_client/theme/colors.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key, required this.user}) : super(key: key);
@@ -20,11 +26,19 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage>
     with AutomaticKeepAliveClientMixin {
+  List<MarketEvent> mapMarketEvents = [];
+  int i = 1;
   final Map<int, Stock> stocks = getIt<GlobalStreams>().stockMapStream.value;
   final stockMapStream = getIt<GlobalStreams>().stockMapStream;
 
   @override
   bool get wantKeepAlive => true;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    context.read<NewsBloc>().add(const GetNews());
+  }
 
   @override
   Widget build(context) {
@@ -33,6 +47,8 @@ class _HomePageState extends State<HomePage>
       child: Scaffold(
         backgroundColor: Colors.black,
         body: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(
+              parent: AlwaysScrollableScrollPhysics()),
           child: Responsive(
             mobile: _mobileBody(),
             tablet: _tabletBody(),
@@ -88,7 +104,7 @@ class _HomePageState extends State<HomePage>
   Container _recentNews() {
     return Container(
         width: double.infinity,
-        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
         decoration: BoxDecoration(
           color: background2,
           borderRadius: BorderRadius.circular(10),
@@ -96,21 +112,102 @@ class _HomePageState extends State<HomePage>
         child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
-              Text(
-                'Recent News',
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.w700,
-                  color: white,
-                ),
-                textAlign: TextAlign.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'Recent News',
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.w700,
+                      color: white,
+                    ),
+                    textAlign: TextAlign.start,
+                  ),
+                  TertiaryButton(
+                    width: 80,
+                    height: 25,
+                    fontSize: 12,
+                    title: 'See All',
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/news');
+                    },
+                  ),
+                ],
               ),
-              SizedBox(
-                height: 20,
-              )
+              feedlist()
             ]));
   }
+
+  Widget feedlist() =>
+      BlocBuilder<NewsBloc, NewsState>(builder: (context, state) {
+        if (state is GetNewsSucess) {
+          mapMarketEvents.clear();
+          mapMarketEvents.addAll(state.marketEventsList.marketEvents);
+          if (mapMarketEvents.isNotEmpty) {
+            return ListView.separated(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: mapMarketEvents.length,
+              itemBuilder: (context, index) {
+                MarketEvent marketEvent = mapMarketEvents[index];
+                String headline = marketEvent.headline;
+                String imagePath = marketEvent.imagePath;
+                String createdAt = marketEvent.createdAt;
+                String text = marketEvent.text;
+                String dur = getdur(createdAt);
+                return GestureDetector(
+                    child: newsItem(headline, imagePath, createdAt),
+                    onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => NewsDetail(
+                              text: text,
+                              imagePath: imagePath,
+                              headline: headline,
+                              dur: dur),
+                        )));
+              },
+              separatorBuilder: (context, index) {
+                return const Divider();
+              },
+            );
+          } else {
+            return const Center(
+              child: Text(
+                'No News',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: secondaryColor,
+                ),
+              ),
+            );
+          }
+        } else if (state is GetNewsFailure) {
+          return Column(
+            children: [
+              const Text('Failed to reach server'),
+              const SizedBox(height: 20),
+              SizedBox(
+                width: 100,
+                height: 50,
+                child: OutlinedButton(
+                  onPressed: () => context.read<NewsBloc>().add(GetMoreNews(
+                      mapMarketEvents[mapMarketEvents.length - 1].id - 1)),
+                  child: const Text('Retry'),
+                ),
+              ),
+            ],
+          );
+        } else {
+          return const Center(
+            child: CircularProgressIndicator(
+              color: secondaryColor,
+            ),
+          );
+        }
+      });
 
   Container _companies() {
     return Container(
@@ -159,9 +256,72 @@ class _HomePageState extends State<HomePage>
             stockPriceStream: stockMapStream.priceStream(entry.key)))
         .toList();
     return ListView(
+      physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
       children: stockItems,
     );
+  }
+
+  Widget newsItem(
+    String text,
+    String imagePath,
+    String createdAt,
+  ) {
+    String dur = getdur(createdAt);
+    return (Container(
+      padding: const EdgeInsets.symmetric(vertical: 2),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          ClipRRect(
+            borderRadius: BorderRadius.circular(20),
+            child: Image(
+              width: 100,
+              height: 100,
+              fit: BoxFit.contain,
+              image: NetworkImage(imagePath),
+            ),
+          ),
+          Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                SizedBox(
+                  width: (MediaQuery.of(context).size.width - 100) * 0.8,
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                    child: Text(text,
+                        style:
+                            const TextStyle(color: Colors.white, fontSize: 15)),
+                  ),
+                ),
+                const SizedBox.square(
+                  dimension: 5,
+                ),
+                Padding(
+                    padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                    child: Text(dur,
+                        style: const TextStyle(color: lightGray, fontSize: 12)))
+              ]),
+        ],
+      ),
+    ));
+  }
+
+  String getdur(String createdAt) {
+    DateTime dt1 = DateTime.parse(createdAt);
+    DateTime dt2 = DateTime.now();
+    Duration diff = dt2.difference(dt1);
+    if (diff.inDays == 0) {
+      if (diff.inHours == 0) {
+        return (diff.inMinutes.toString() + ' minutes ago');
+      } else {
+        return (diff.inHours.toString() + ' hour ago');
+      }
+    } else {
+      return (diff.inDays.toString() + ' day ago');
+    }
   }
 }
 
@@ -185,7 +345,7 @@ class StockItem extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
           child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
             _stockNames(stock),
-            _stockGraph(),
+            _stockGraph(stock.id),
             _stockPrices(),
           ])),
     );
@@ -211,11 +371,12 @@ class StockItem extends StatelessWidget {
     );
   }
 
-  Expanded _stockGraph() {
+  Expanded _stockGraph(int stockId) {
     return Expanded(
-      child: Image.network(
-        'https://i.imgur.com/lOQyGGe.png',
-        height: 23,
+      child: SizedBox(
+        child: LineAreaGraph(stockId: stockId),
+        height: 50,
+        width: 10,
       ),
     );
   }
