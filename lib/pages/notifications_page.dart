@@ -1,16 +1,12 @@
-//import 'package:dalal_street_client/blocs/notifications/notifications_bloc.dart';
 import 'package:dalal_street_client/blocs/notifications_cubit/notifications_cubit.dart';
 import 'package:dalal_street_client/config/get_it.dart';
 
-import 'package:dalal_street_client/pages/notifications_details.dart';
 import 'package:dalal_street_client/proto_build/models/Notification.pb.dart'
     as test;
 import 'package:dalal_street_client/streams/global_streams.dart';
 import 'package:dalal_street_client/theme/colors.dart';
 
 import 'package:flutter/material.dart';
-// ignore: implementation_imports
-//import 'package:provider/src/provider.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class NotificationsPage extends StatefulWidget {
@@ -70,28 +66,11 @@ class _NotifsState extends State<NotificationsPage> {
                       return Text('State: ${snapshot.connectionState}');
                     }
                   }),
-              //_onGetNotifications(),
               notificationUI(context)
             ],
           ),
         ),
       );
-
-  /*_onGetNotifications() {
-    return BlocConsumer<NotificationsCubitState, NotificationsCubitState>(
-        listener: (context, state) {
-      if (state is GetNotifSuccess) {
-        logger.i('successful');
-        showSnackBar(context, 'Notifications set successfully');
-      } else if (state is GetNotifFailure) {
-        logger.i('unsuccessful');
-        showSnackBar(context, state.error);
-      }
-    }, builder: (context, state) {
-      return notificationUI(context);
-    });
-  }
-  */
 
   Widget notificationUI(BuildContext context) {
     return Container(
@@ -137,20 +116,14 @@ class _NotifsState extends State<NotificationsPage> {
             itemCount: notifEvents.length,
             itemBuilder: (context, index) {
               test.Notification notification = notifEvents[index];
-              int id = notification.id;
-              int userid = notification.userId;
+
               String text = notification.text;
-              // String createdAt = notification.createdAt;
+
               bool isBroadcast = notification.isBroadcast;
 
               return GestureDetector(
-                  child: notifItem(text, isBroadcast),
-                  onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            NotifsDetail(id: id, userId: userid, text: text),
-                      )));
+                child: notifItem(text, isBroadcast),
+              );
             },
             separatorBuilder: (context, index) {
               return const Divider();
@@ -183,9 +156,6 @@ class _NotifsState extends State<NotificationsPage> {
 
   Widget notifItem(
     String notif,
-    // int id,
-    //int userid,
-    //String createdAt,
     bool islatest,
   ) {
     if (!islatest) {
