@@ -311,9 +311,9 @@ class _NewsPageState extends State<NewsPage> {
     String dur = getdur(createdAt);
     if (!islatest) {
       return (Container(
-        padding: const EdgeInsets.all(10),
+        padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 10),
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             ClipRRect(
@@ -331,14 +331,11 @@ class _NewsPageState extends State<NewsPage> {
                 children: <Widget>[
                   SizedBox(
                     width: (MediaQuery.of(context).size.width - 100) * 0.8,
-                    child: Flexible(
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-                        child: Text(text,
-                            style: const TextStyle(
-                                color: Colors.white, fontSize: 15)),
-                      ),
-                      fit: FlexFit.loose,
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                      child: Text(text,
+                          style: const TextStyle(
+                              color: Colors.white, fontSize: 15)),
                     ),
                   ),
                   const SizedBox.square(
@@ -355,10 +352,10 @@ class _NewsPageState extends State<NewsPage> {
       ));
     } else {
       return Container(
-          padding: const EdgeInsets.all(10),
+          padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 10),
           child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Column(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -366,11 +363,9 @@ class _NewsPageState extends State<NewsPage> {
                     children: <Widget>[
                       SizedBox(
                         width: MediaQuery.of(context).size.width * 0.8,
-                        child: Flexible(
-                            child: Text(text,
-                                style: const TextStyle(
-                                    color: Colors.white, fontSize: 15)),
-                            fit: FlexFit.loose),
+                        child: Text(text,
+                            style: const TextStyle(
+                                color: Colors.white, fontSize: 15)),
                       ),
                       const SizedBox.square(
                         dimension: 5,
