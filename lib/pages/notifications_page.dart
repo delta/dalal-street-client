@@ -119,9 +119,7 @@ class _NotifsState extends State<NotificationsPage> {
 
               bool isBroadcast = notification.isBroadcast;
 
-              return GestureDetector(
-                child: notifItem(text, isBroadcast),
-              );
+              return notifItem(text, isBroadcast);
             },
             separatorBuilder: (context, index) {
               return const Divider();

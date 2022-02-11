@@ -37,7 +37,7 @@ class NotificationsCubit extends Cubit<NotificationsCubitState> {
 
       emit(GetNotifSuccess(notifResponse));
     } catch (e) {
-      emit(GetNotifFailure(e.toString()));
+      emit(const GetNotifFailure(failedToReachServer));
       logger.i('unsuccessful');
     }
   }
