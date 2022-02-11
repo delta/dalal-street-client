@@ -1,14 +1,12 @@
 //import 'package:dalal_street_client/blocs/notifications/notifications_bloc.dart';
 import 'package:dalal_street_client/blocs/notifications_cubit/notifications_cubit.dart';
 import 'package:dalal_street_client/config/get_it.dart';
-import 'package:dalal_street_client/config/log.dart';
 
 import 'package:dalal_street_client/pages/notifications_details.dart';
 import 'package:dalal_street_client/proto_build/models/Notification.pb.dart'
     as test;
 import 'package:dalal_street_client/streams/global_streams.dart';
 import 'package:dalal_street_client/theme/colors.dart';
-import 'package:dalal_street_client/utils/snackbar.dart';
 
 import 'package:flutter/material.dart';
 // ignore: implementation_imports
@@ -142,7 +140,7 @@ class _NotifsState extends State<NotificationsPage> {
               int id = notification.id;
               int userid = notification.userId;
               String text = notification.text;
-              String createdAt = notification.createdAt;
+              // String createdAt = notification.createdAt;
               bool isBroadcast = notification.isBroadcast;
 
               return GestureDetector(
