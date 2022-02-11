@@ -48,7 +48,7 @@ class _PortfolioUserWorthState extends State<PortfolioUserWorth> {
                 padding:
                     const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                 decoration: BoxDecoration(
-                  color: backgroundColor,
+                  color: background2,
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Column(
@@ -113,7 +113,7 @@ class _PortfolioUserWorthState extends State<PortfolioUserWorth> {
                     const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                 margin: const EdgeInsets.only(top: 15),
                 decoration: BoxDecoration(
-                  color: backgroundColor,
+                  color: background2,
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Column(

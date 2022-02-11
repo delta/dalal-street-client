@@ -1,6 +1,7 @@
 import 'package:dalal_street_client/blocs/subscribe/subscribe_cubit.dart';
 import 'package:dalal_street_client/components/stock_bar.dart';
 import 'package:dalal_street_client/config/get_it.dart';
+import 'package:dalal_street_client/pages/company_page/components/news.dart';
 import 'package:dalal_street_client/proto_build/datastreams/Subscribe.pb.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
 import 'package:dalal_street_client/pages/company_page/components/company_tab_view.dart';
@@ -31,7 +32,8 @@ class _CompanyPageState extends State<CompanyPage>
   initState() {
     super.initState();
     // Subscribe to the stream of Market Depth Updates
-    context.read<SubscribeCubit>().subscribe(DataStreamType.MARKET_DEPTH);
+    context.read<SubscribeCubit>().subscribe(DataStreamType.MARKET_DEPTH,
+        dataStreamId: widget.data[0].toString());
   }
 
   @override
@@ -49,26 +51,24 @@ class _CompanyPageState extends State<CompanyPage>
               alignment: Alignment.bottomCenter,
               children: [
                 SingleChildScrollView(
-                  physics: const BouncingScrollPhysics(
-                      parent: AlwaysScrollableScrollPhysics()),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 10, horizontal: 10),
-                    child: Column(
-                      children: [
-                        const StockBar(),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        companyPrices(company),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        companyTabView(context, company)
-                      ],
-                    ),
-                  ),
-                ),
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    physics: const BouncingScrollPhysics(
+                        parent: AlwaysScrollableScrollPhysics()),
+                    child: Column(children: [
+                      const StockBar(),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      companyPrices(company),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      CompanyTabView(company: company),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      CompanyNewsPage(stockId: widget.data.first)
+                    ])),
                 Container(
                   height: 70,
                   decoration: const BoxDecoration(

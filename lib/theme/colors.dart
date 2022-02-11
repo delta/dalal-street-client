@@ -18,7 +18,12 @@ const bronze = Color(0xffCD7532);
 const white = Color(0xffFFFFFF);
 const whiteWithOpacity75 = Color.fromRGBO(255, 255, 255, 0.75);
 const whiteWithOpacity50 = Color.fromRGBO(255, 255, 255, 0.5);
+<<<<<<< HEAD
 const blue = Color.fromARGB(255, 96, 171, 233);
+=======
+const redOpacity = Color.fromRGBO(255, 179, 179, 0.75);
+const blue = Color.fromRGBO(51, 153, 255, 1);
+>>>>>>> master
 
 const colorScheme = ColorScheme.dark(
   primary: primaryColor,

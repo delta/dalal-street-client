@@ -11,6 +11,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 Widget marketDepth(Stock company) {
   return Column(
     children: [
+      const SizedBox(
+        height: 5,
+      ),
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: const [
