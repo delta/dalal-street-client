@@ -1,27 +1,27 @@
 import 'package:dalal_street_client/blocs/notifications/notifications_bloc.dart';
 import 'package:dalal_street_client/config/get_it.dart';
-import 'package:dalal_street_client/config/log.dart';
+
+import 'package:dalal_street_client/pages/notifications_details.dart';
 import 'package:dalal_street_client/proto_build/models/Notification.pb.dart'
     as test;
 import 'package:dalal_street_client/streams/global_streams.dart';
 import 'package:dalal_street_client/theme/colors.dart';
-import 'package:dalal_street_client/utils/snackbar.dart';
+
 import 'package:flutter/material.dart';
 // ignore: implementation_imports
 //import 'package:provider/src/provider.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-final notifStream = getIt<GlobalStreams>().notificationStream;
-
-class NotifsPage extends StatefulWidget {
-  const NotifsPage({Key? key}) : super(key: key);
+class NotificationsPage extends StatefulWidget {
+  const NotificationsPage({Key? key}) : super(key: key);
 
   @override
-  State<NotifsPage> createState() => _NotifsState();
+  State<NotificationsPage> createState() => _NotifsState();
 }
 
-class _NotifsState extends State<NotifsPage> {
+class _NotifsState extends State<NotificationsPage> {
   final ScrollController _scrollController = ScrollController();
+  final notifStream = getIt<GlobalStreams>().notificationStream;
   List<test.Notification> notifEvents = [];
   int i = 1;
   @override
@@ -46,19 +46,12 @@ class _NotifsState extends State<NotifsPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Text(
-                'Notifications',
-                style: Theme.of(context)
-                    .textTheme
-                    .headline3
-                    ?.copyWith(color: Theme.of(context).colorScheme.primary),
-              ),
               const SizedBox(height: 23),
               StreamBuilder(
                   stream: notifStream,
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const CircularProgressIndicator();
+                      return const SizedBox();
                     } else if (snapshot.connectionState ==
                             ConnectionState.active ||
                         snapshot.connectionState == ConnectionState.done) {
@@ -76,29 +69,28 @@ class _NotifsState extends State<NotifsPage> {
                       return Text('State: ${snapshot.connectionState}');
                     }
                   }),
-              _onGetNotifications()
+              //_onGetNotifications(),
+              notificationUI(context)
             ],
           ),
         ),
       );
 
-  _onGetNotifications() {
+  /*_onGetNotifications() {
     return BlocConsumer<NotificationsBloc, NotifState>(
         listener: (context, state) {
       if (state is GetNotifSuccess) {
         logger.i('successful');
-        showSnackBar(context, 'Notif set successfully');
+        showSnackBar(context, 'Notifications set successfully');
       } else if (state is GetNotifFailure) {
         logger.i('unsuccessful');
         showSnackBar(context, state.error);
       }
     }, builder: (context, state) {
-      if (state is GetNotifFailure) {
-        logger.i('unsuccessful');
-      }
       return notificationUI(context);
     });
   }
+  */
 
   Widget notificationUI(BuildContext context) {
     return Container(
@@ -130,8 +122,8 @@ class _NotifsState extends State<NotifsPage> {
   Widget notifList() =>
       BlocBuilder<NotificationsBloc, NotifState>(builder: (context, state) {
         if (state is GetNotifSuccess) {
-          if (state.notifList.moreExists) {
-            notifEvents.addAll(state.notifList.notifications);
+          if (state.getNotifResponse.moreExists) {
+            notifEvents.addAll(state.getNotifResponse.notifications);
             if (i == 1) {
               notifEvents.remove(notifEvents[0]);
               i++;
@@ -182,7 +174,7 @@ class _NotifsState extends State<NotifsPage> {
         } else {
           return const Center(
             child: CircularProgressIndicator(
-              color: secondaryColor,
+              color: white,
             ),
           );
         }
@@ -252,73 +244,5 @@ class _NotifsState extends State<NotifsPage> {
                 ),
               ]));
     }
-  }
-}
-
-class NotifsDetail extends StatelessWidget {
-  final int id;
-  final int userId;
-  final String text;
-
-  const NotifsDetail({
-    Key? key,
-    required this.id,
-    required this.userId,
-    required this.text,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        body: SafeArea(
-            child: Container(
-      alignment: Alignment.topCenter,
-      decoration: BoxDecoration(
-          color: background2, borderRadius: BorderRadius.circular(10)),
-      margin: const EdgeInsets.all(10),
-      child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            const SizedBox.square(
-              dimension: 5,
-            ),
-            const Padding(
-                padding: EdgeInsets.all(15),
-                child: Text(
-                  'Notifications',
-                  style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500,
-                      color: whiteWithOpacity75),
-                  textAlign: TextAlign.left,
-                )),
-            const Padding(
-              padding: EdgeInsets.all(15),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(15),
-              child: Flexible(
-                child: Text(
-                  text,
-                  style: const TextStyle(
-                      fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                fit: FlexFit.loose,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(15),
-              child: Flexible(
-                child: Text(
-                  text,
-                  textAlign: TextAlign.start,
-                  style: const TextStyle(fontSize: 16, color: lightGray),
-                ),
-                fit: FlexFit.loose,
-              ),
-            )
-          ]),
-    )));
   }
 }

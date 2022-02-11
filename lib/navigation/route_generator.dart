@@ -57,11 +57,6 @@ class RouteGenerator {
         return const SplashPage();
       case '/landing':
         return const LandingPage();
-      case '/notifications':
-        return BlocProvider(
-          create: (context) => NotificationsBloc(),
-          child: const NotifsPage(),
-        );
 
       //Admin Pages
       case '/admin':
@@ -151,6 +146,13 @@ class RouteGenerator {
               DailyChallengesPageCubit()..getChallengesConfig(),
           child: const DailyChallengesPage(),
         );
+
+      case '/notifications':
+        return BlocProvider(
+          create: (context) => NotificationsBloc(),
+          child: const NotificationsPage(),
+        );
+
       // Company Page
       case '/company':
         if (args is List<int>) {

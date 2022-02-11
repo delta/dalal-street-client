@@ -9,10 +9,10 @@ abstract class NotifState extends Equatable {
 class NotifInitial extends NotifState {}
 
 class GetNotifSuccess extends NotifState {
-  final GetNotificationsResponse notifList;
-  const GetNotifSuccess(this.notifList);
+  final GetNotificationsResponse getNotifResponse;
+  const GetNotifSuccess(this.getNotifResponse);
   @override
-  List<Object> get props => [notifList];
+  List<Object> get props => [getNotifResponse];
 }
 
 class GetNotifFailure extends NotifState {
