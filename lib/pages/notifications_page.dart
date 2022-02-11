@@ -1,4 +1,5 @@
-import 'package:dalal_street_client/blocs/notifications/notifications_bloc.dart';
+//import 'package:dalal_street_client/blocs/notifications/notifications_bloc.dart';
+import 'package:dalal_street_client/blocs/notifications_cubit/notifications_cubit.dart';
 import 'package:dalal_street_client/config/get_it.dart';
 
 import 'package:dalal_street_client/pages/notifications_details.dart';
@@ -27,13 +28,12 @@ class _NotifsState extends State<NotificationsPage> {
   @override
   void initState() {
     super.initState();
-    context.read<NotificationsBloc>().add(const GetNotifications());
+    context.read<NotificationsCubit>().getNotifications();
     _scrollController.addListener(() {
       if (_scrollController.position.atEdge) {
         if (_scrollController.position.pixels != 0) {
           if (notifEvents[notifEvents.length - 1].id > 0) {
-            context.read<NotificationsBloc>().add(GetMoreNotifications(
-                notifEvents[notifEvents.length - 1].id - 1));
+            context.read<NotificationsCubit>().getMoreNotifications();
           }
         }
       }
@@ -120,7 +120,8 @@ class _NotifsState extends State<NotificationsPage> {
   }
 
   Widget notifList() =>
-      BlocBuilder<NotificationsBloc, NotifState>(builder: (context, state) {
+      BlocBuilder<NotificationsCubit, NotificationsCubitState>(
+          builder: (context, state) {
         if (state is GetNotifSuccess) {
           if (state.getNotifResponse.moreExists) {
             notifEvents.addAll(state.getNotifResponse.notifications);
@@ -163,9 +164,8 @@ class _NotifsState extends State<NotificationsPage> {
                 width: 100,
                 height: 50,
                 child: OutlinedButton(
-                  onPressed: () => context.read<NotificationsBloc>().add(
-                      GetMoreNotifications(
-                          notifEvents[notifEvents.length - 1].id - 1)),
+                  onPressed: () =>
+                      context.read<NotificationsCubit>().getMoreNotifications(),
                   child: const Text('Retry'),
                 ),
               ),
