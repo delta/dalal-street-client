@@ -6,9 +6,6 @@ import 'package:dalal_street_client/theme/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-final List<Map<String, String>> tableDataDaily = [];
-final List<Map<String, String>> tableDataOverall = [];
-
 class LeaderboardPageBuilder extends StatefulWidget {
   const LeaderboardPageBuilder({Key? key, required this.leaderboardType})
       : super(key: key);
@@ -19,6 +16,10 @@ class LeaderboardPageBuilder extends StatefulWidget {
 }
 
 class _LeaderboardPageBuilderState extends State<LeaderboardPageBuilder> {
+  final List<Map<String, String>> tableDataDaily = [];
+  final List<Map<String, String>> tableDataOverall = [];
+  final List<Map<String, String>> top3DataDaily = [];
+  final List<Map<String, String>> top3DataOverall = [];
   @override
   initState() {
     super.initState();
@@ -66,12 +67,11 @@ class _LeaderboardPageBuilderState extends State<LeaderboardPageBuilder> {
 
   Padding _leaderboardPageData(int myRank, BuildContext context,
       dynamic rankList, LeaderboardType leaderboardType) {
-    final List<Map<String, String>> top3Data = [];
     if (leaderboardType == LeaderboardType.Daily) {
       for (var e in rankList) {
         (e.id == 1 || e.id == 2 || e.id == 3)
             ? {
-                top3Data.add({
+                top3DataDaily.add({
                   'rank': e.rank.toString(),
                   'username': e.userName,
                   'totalworth': e.totalWorth.toString(),
@@ -88,11 +88,12 @@ class _LeaderboardPageBuilderState extends State<LeaderboardPageBuilder> {
               };
       }
       logger.i(tableDataDaily);
+      logger.i(top3DataDaily);
     } else {
       for (var e in rankList) {
         (e.id == 1 || e.id == 2 || e.id == 3)
             ? {
-                top3Data.add({
+                top3DataOverall.add({
                   'rank': e.rank.toString(),
                   'username': e.userName,
                   'totalworth': e.totalWorth.toString(),
@@ -109,6 +110,7 @@ class _LeaderboardPageBuilderState extends State<LeaderboardPageBuilder> {
               };
       }
       logger.i(tableDataOverall);
+      logger.i(top3DataOverall);
     }
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
@@ -117,7 +119,7 @@ class _LeaderboardPageBuilderState extends State<LeaderboardPageBuilder> {
           const SizedBox(
             height: 5,
           ),
-          _topContainer(top3Data),
+          _topContainer(leaderboardType),
           _rankContainer(myRank),
           const SizedBox(height: 20),
           // tableHeader(),
@@ -127,7 +129,11 @@ class _LeaderboardPageBuilderState extends State<LeaderboardPageBuilder> {
     );
   }
 
-  Container _topContainer(List<Map<String, String>> tabledata) {
+  Container _topContainer(LeaderboardType leaderboardType) {
+    List<Map<String, String>> tabledata = [];
+    leaderboardType == LeaderboardType.Overall
+        ? {tabledata = top3DataOverall}
+        : {tabledata = top3DataDaily};
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
       decoration: const BoxDecoration(
@@ -366,11 +372,11 @@ class _LeaderboardPageBuilderState extends State<LeaderboardPageBuilder> {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(10))))),
         child: PaginatedDataTable(
-            onPageChanged: (i) {
-              context
-                  .read<LeaderboardCubit>()
-                  .getLeaderboard((20 * (i ~/ 8)) + 1, 20, leaderboardType);
-            },
+            // onPageChanged: (i) {
+            //   context
+            //       .read<LeaderboardCubit>()
+            //       .getLeaderboard((20 * (i ~/ 8)) + 1, 20, leaderboardType);
+            // },
             source: MyData(
                 tableData: leaderboardType == LeaderboardType.Overall
                     ? tableDataOverall
