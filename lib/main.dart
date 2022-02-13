@@ -1,6 +1,7 @@
 import 'package:dalal_street_client/blocs/dalal/dalal_bloc.dart';
 import 'package:dalal_street_client/config/config.dart';
 import 'package:dalal_street_client/grpc/client.dart';
+import 'package:dalal_street_client/models/snackbar/snackbar_type.dart';
 import 'package:dalal_street_client/navigation/route_generator.dart';
 import 'package:dalal_street_client/theme/theme.dart';
 import 'package:dalal_street_client/utils/snackbar.dart';
@@ -60,7 +61,8 @@ class DalalApp extends StatelessWidget {
         theme: appTheme,
         themeMode: ThemeMode.dark,
         // Show snackbar and navigate to Home or Login page whenever UserState changes
-        builder: (context, child) => BlocListener<DalalBloc, DalalState>(
+        builder: (context, Widget? child) =>
+            BlocListener<DalalBloc, DalalState>(
           listener: (context, state) {
             if (state is DalalDataLoaded) {
               // Register sessionId
@@ -69,6 +71,7 @@ class DalalApp extends StatelessWidget {
               getIt.registerSingleton(state.globalStreams);
 
               logger.i('user logged in');
+
               _navigator.pushNamedAndRemoveUntil(
                 '/home',
                 (route) => false,
@@ -78,7 +81,8 @@ class DalalApp extends StatelessWidget {
               // Register sessionId
               getIt.registerSingleton(state.sessionId);
 
-              showSnackBar(context, 'Verify your phone to continue');
+              showSnackBar(context, 'Verify your phone to continue',
+                  type: SnackBarType.warning);
               _navigator.pushNamedAndRemoveUntil(
                   '/enterPhone', (route) => false);
             } else if (state is DalalLoggedOut) {
@@ -88,7 +92,8 @@ class DalalApp extends StatelessWidget {
               if (!state.fromSplash) {
                 // Show msg only when coming from a page other than splash
                 logger.i('user logged out');
-                showSnackBar(context, 'User Logged Out');
+                showSnackBar(context, 'User Logged Out',
+                    type: SnackBarType.success);
               }
               _navigator.pushNamedAndRemoveUntil('/landing', (route) => false);
             } else if (state is DalalLoginFailed) {

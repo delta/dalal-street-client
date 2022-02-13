@@ -2,6 +2,7 @@ import 'package:dalal_street_client/blocs/mortgage/mortgage_sheet/cubit/mortgage
 import 'package:dalal_street_client/components/sheet_pop_over.dart';
 import 'package:dalal_street_client/constants/constants.dart';
 import 'package:dalal_street_client/constants/format.dart';
+import 'package:dalal_street_client/models/snackbar/snackbar_type.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
 import 'package:dalal_street_client/theme/colors.dart';
 import 'package:dalal_street_client/utils/snackbar.dart';
@@ -37,10 +38,11 @@ class _MortgageBottomSheetState extends State<MortgageBottomSheet> {
         listener: (context, state) {
           if (state is MortgageSheetSuccess) {
             showSnackBar(context,
-                'Successfully mortgaged $quantity ${widget.company.fullName} stocks');
+                'Successfully mortgaged $quantity ${widget.company.fullName} stocks',
+                type: SnackBarType.success);
             Navigator.maybePop(context);
           } else if (state is MortgageSheetFailure) {
-            showSnackBar(context, state.msg);
+            showSnackBar(context, state.msg, type: SnackBarType.error);
             Navigator.maybePop(context);
           }
         },

@@ -3,6 +3,7 @@ import 'package:dalal_street_client/blocs/exchange/sheet/exchange_sheet_cubit.da
 import 'package:dalal_street_client/config/get_it.dart';
 import 'package:dalal_street_client/constants/format.dart';
 import 'package:dalal_street_client/constants/icons.dart';
+import 'package:dalal_street_client/models/snackbar/snackbar_type.dart';
 import 'package:dalal_street_client/pages/company_page/components/market_status_tile.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
 import 'package:dalal_street_client/streams/global_streams.dart';
@@ -401,9 +402,10 @@ class _StockDetailState extends State<StockDetail> {
                 listener: (context, state) {
                   if (state is ExchangeSheetSuccess) {
                     showSnackBar(context,
-                        'Successfully bought $quantity ${company.fullName} stocks');
+                        'Successfully bought $quantity ${company.fullName} stocks',
+                        type: SnackBarType.success);
                   } else if (state is ExchangeSheetFailure) {
-                    showSnackBar(context, state.msg);
+                    showSnackBar(context, state.msg, type: SnackBarType.error);
                   }
                 },
                 builder: (context, state) {
