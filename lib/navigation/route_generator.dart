@@ -42,7 +42,7 @@ class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     try {
       final page = _getPage(settings);
-      return MaterialPageRoute(builder: (_) => page, settings: settings);
+      return MaterialPageRoute(builder: (context) => page, settings: settings);
     } catch (e) {
       return _errorRoute(e.toString());
     }
@@ -79,7 +79,7 @@ class RouteGenerator {
           create: (context) => LoginCubit(context.read()),
           child: LoginPage(),
         );
-      case '/referral':
+      case '/referAndEarn':
         if (args is User) {
           return BlocProvider(
             create: (context) => ReferralCubit(),

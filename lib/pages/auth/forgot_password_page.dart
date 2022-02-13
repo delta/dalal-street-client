@@ -1,6 +1,7 @@
 import 'package:dalal_street_client/blocs/auth/forgot_password/forgot_password_cubit.dart';
 import 'package:dalal_street_client/components/dalal_back_button.dart';
 import 'package:dalal_street_client/components/fill_max_height_scroll_view.dart';
+import 'package:dalal_street_client/models/snackbar/snackbar_type.dart';
 import 'package:dalal_street_client/utils/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,11 +21,12 @@ class ForgotPasswordPage extends StatelessWidget {
           child: BlocConsumer<ForgotPasswordCubit, ForgotPasswordState>(
             listener: (context, state) {
               if (state is ForgotPasswordFailure) {
-                showSnackBar(context, state.msg);
+                showSnackBar(context, state.msg, type: SnackBarType.error);
               } else if (state is ForgotPasswordSuccess) {
                 Navigator.maybePop(context);
                 showSnackBar(context,
-                    'A temporary password and Password reset link have been sent to your registered Email Id');
+                    'A temporary password and Password reset link have been sent to your registered Email Id',
+                    type: SnackBarType.success);
               }
             },
             builder: (context, state) {

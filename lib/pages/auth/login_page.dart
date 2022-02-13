@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 
+import '../../models/snackbar/snackbar_type.dart';
+
 class LoginPage extends StatelessWidget {
   LoginPage({Key? key}) : super(key: key);
 
@@ -20,7 +22,7 @@ class LoginPage extends StatelessWidget {
   Widget build(context) => BlocConsumer<LoginCubit, LoginState>(
         listener: (context, state) {
           if (state is LoginFailure) {
-            showSnackBar(context, state.msg);
+            showSnackBar(context, state.msg, type: SnackBarType.error);
           }
         },
         builder: (context, state) => Scaffold(

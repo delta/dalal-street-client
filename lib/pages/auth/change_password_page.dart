@@ -2,6 +2,7 @@ import 'package:dalal_street_client/blocs/auth/change_password/change_password_c
 import 'package:dalal_street_client/components/dalal_back_button.dart';
 import 'package:dalal_street_client/components/fill_max_height_scroll_view.dart';
 import 'package:dalal_street_client/components/reactive_password_field.dart';
+import 'package:dalal_street_client/models/snackbar/snackbar_type.dart';
 import 'package:dalal_street_client/utils/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -26,10 +27,10 @@ class ChangePasswordPage extends StatelessWidget {
           child: BlocConsumer<ChangePasswordCubit, ChangePasswordState>(
             listener: (context, state) {
               if (state is ChangePasswordFailure) {
-                showSnackBar(context, state.msg);
+                showSnackBar(context, state.msg, type: SnackBarType.error);
               } else if (state is ChangePasswordSuccess) {
                 Navigator.maybePop(context);
-                showSnackBar(context, state.msg);
+                showSnackBar(context, state.msg, type: SnackBarType.success);
               }
             },
             builder: (context, state) {

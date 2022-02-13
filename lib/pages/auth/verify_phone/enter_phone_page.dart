@@ -1,5 +1,6 @@
 import 'package:dalal_street_client/blocs/auth/verify_phone/enter_phone/enter_phone_cubit.dart';
 import 'package:dalal_street_client/constants/app_info.dart';
+import 'package:dalal_street_client/models/snackbar/snackbar_type.dart';
 import 'package:dalal_street_client/utils/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -38,7 +39,7 @@ class EnterPhonePage extends StatelessWidget {
                   );
                 }
                 if (state is EnterPhoneFailure) {
-                  showSnackBar(context, state.msg);
+                  showSnackBar(context, state.msg, type: SnackBarType.error);
                 }
               },
               builder: (context, state) {
