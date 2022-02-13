@@ -12,7 +12,8 @@ class LeaderboardInitial extends LeaderboardState {}
 class DailyLeaderboardSuccess extends LeaderboardState {
   final int myRank;
   final List<DailyLeaderboardRow> rankList;
-  const DailyLeaderboardSuccess(this.myRank, this.rankList);
+  final int totalUsers;
+  const DailyLeaderboardSuccess(this.myRank, this.rankList, this.totalUsers);
 
   @override
   List<Object> get props => [myRank, rankList];
@@ -25,7 +26,8 @@ class LeaderboardLoading extends LeaderboardState {
 class OverallLeaderboardSuccess extends LeaderboardState {
   final int myRank;
   final List<LeaderboardRow> rankList;
-  const OverallLeaderboardSuccess(this.myRank, this.rankList);
+  final int totalUsers;
+  const OverallLeaderboardSuccess(this.myRank, this.rankList, this.totalUsers);
 
   @override
   List<Object> get props => [myRank, rankList];

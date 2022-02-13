@@ -25,7 +25,8 @@ class LeaderboardCubit extends Cubit<LeaderboardState> {
           options: sessionOptions(getIt()),
         );
         if (resp.statusCode == GetLeaderboardResponse_StatusCode.OK) {
-          emit(OverallLeaderboardSuccess(resp.myRank, resp.rankList));
+          emit(OverallLeaderboardSuccess(
+              resp.myRank, resp.rankList, resp.totalUsers));
         } else {
           emit(LeaderboardFailure(resp.statusMessage));
         }
@@ -35,7 +36,8 @@ class LeaderboardCubit extends Cubit<LeaderboardState> {
           options: sessionOptions(getIt()),
         );
         if (resp.statusCode == GetDailyLeaderboardResponse_StatusCode.OK) {
-          emit(DailyLeaderboardSuccess(resp.myRank, resp.rankList));
+          emit(DailyLeaderboardSuccess(
+              resp.myRank, resp.rankList, resp.totalUsers));
         } else {
           emit(LeaderboardFailure(resp.statusMessage));
         }

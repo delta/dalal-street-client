@@ -1,8 +1,13 @@
+import 'package:dalal_street_client/blocs/leaderboard/leaderboard_cubit.dart';
 import 'package:dalal_street_client/constants/leaderboard_type.dart';
 import 'package:dalal_street_client/pages/leaderboard_page/components/leaderboard_page_builder.dart';
 import 'package:dalal_street_client/utils/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:dalal_street_client/theme/colors.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
+
+final oCcy = NumberFormat('#,##0.00', 'en_US');
 
 class LeaderboardPage extends StatefulWidget {
   const LeaderboardPage({Key? key}) : super(key: key);
@@ -80,15 +85,15 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
           length: 2,
           child: Column(
             children: [
-              const TabBar(
-                tabs: [
+              TabBar(
+                tabs: const [
                   Tab(
                     child: Text(
                       'Overall',
                       style: TextStyle(
-                        fontSize: 14,
+                        fontSize: 16,
                         fontWeight: FontWeight.w500,
-                        color: lightGray,
+                        color: secondaryColor,
                       ),
                       textAlign: TextAlign.start,
                     ),
@@ -97,26 +102,34 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                     child: Text(
                       'Daily',
                       style: TextStyle(
-                        fontSize: 14,
+                        fontSize: 16,
                         fontWeight: FontWeight.w500,
-                        color: lightGray,
+                        color: secondaryColor,
                       ),
                       textAlign: TextAlign.start,
                     ),
                   ),
                 ],
-                indicatorColor: lightGray,
+                indicator: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10), // Creates border
+                    color: background2),
               ),
               SizedBox(
-                height: MediaQuery.of(context).size.height * 0.8,
-                child: const TabBarView(
-                    physics: BouncingScrollPhysics(
+                height: MediaQuery.of(context).size.height,
+                child: TabBarView(
+                    physics: const BouncingScrollPhysics(
                         parent: AlwaysScrollableScrollPhysics()),
                     children: [
-                      LeaderboardPageBuilder(
-                          leaderboardType: LeaderboardType.Overall),
-                      LeaderboardPageBuilder(
-                          leaderboardType: LeaderboardType.Daily)
+                      BlocProvider(
+                        create: (context) => LeaderboardCubit(),
+                        child: const LeaderboardPageBuilder(
+                            leaderboardType: LeaderboardType.Overall),
+                      ),
+                      BlocProvider(
+                        create: (context) => LeaderboardCubit(),
+                        child: const LeaderboardPageBuilder(
+                            leaderboardType: LeaderboardType.Daily),
+                      ),
                     ]),
               )
             ],
