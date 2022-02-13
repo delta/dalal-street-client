@@ -25,17 +25,18 @@ class OpenOrdersCubit extends Cubit<OpenOrdersState> {
     }
   }
 
-  Future<void> cancelOpenOrders(int orderId, bool isAsk) async {
+  Future<void> cancelOpenOrders(int orderId ,bool isAsk) async {
     try {
       final resp = await actionClient.cancelOrder(
-          CancelOrderRequest(orderId: orderId, isAsk: isAsk),
+          CancelOrderRequest(orderId: orderId,isAsk: isAsk),
           options: sessionOptions(getIt()));
       if (resp.statusCode == CancelOrderResponse_StatusCode.OK) {
         emit(const CancelorderSuccess());
       } else {
         emit(OrderFailure(resp.statusMessage, OpenOrderType.cancel));
       }
-    } catch (e) {
+    } catch (e) 
+    {
       logger.e(e);
       emit(const OrderFailure(failedToReachServer, OpenOrderType.cancel));
     }

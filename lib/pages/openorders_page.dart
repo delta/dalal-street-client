@@ -1,3 +1,4 @@
+import 'package:dalal_street_client/blocs/market_depth/market_depth_bloc.dart';
 import 'package:dalal_street_client/blocs/open_orders/cubit/openorders_subscription_cubit.dart';
 import 'package:dalal_street_client/blocs/subscribe/subscribe_cubit.dart';
 import 'package:dalal_street_client/components/buttons/tertiary_button.dart';
@@ -19,7 +20,6 @@ import '../proto_build/datastreams/Subscribe.pbenum.dart';
 
 class OpenOrdersPage extends StatefulWidget {
   const OpenOrdersPage({Key? key}) : super(key: key);
-
   @override
   _OpenOrdersPageState createState() => _OpenOrdersPageState();
 }
@@ -37,7 +37,7 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
     return SafeArea(
         child: Scaffold(
             body: Container(
-      margin: const EdgeInsets.all(10),
+      // margin: const EdgeInsets.all(10),
       width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10), color: background2),
@@ -54,90 +54,122 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
                     fontSize: 18,
                     fontWeight: FontWeight.w500),
               )),
-          // BlocListener<SubscribeCubit,SubscribeState>(listener: ((context, state) {
-
-          //   if(state is SubscriptionDataLoaded)
-          //   {
-          //     context.read<OpenordersSubscriptionCubit>().getOpenOrdersStream(state.subscriptionId);
-          //     BlocConsumer<OpenordersSubscriptionCubit,OpenordersSubscriptionState>(listener:(context, state) => {
-          //       if(state is SubscriptionToOpenOrderSuccess)
-          //       {
-          //        MyOrderUpdate orderUpdate = state.orderUpdate
-
-          //       }
-
-          //     });
-          //   }
-
-          // }),)
-          BlocConsumer<OpenOrdersCubit, OpenOrdersState>(
-            listener: (context, state) {
-              if (state is CancelorderSuccess) {
-                showSnackBar(context, 'Order Cancelled Sucessfully');
-                context.read<OpenOrdersCubit>().getOpenOrders();
-              } else if (state is OrderFailure) {
-                if (state.ordertype == OpenOrderType.cancel) {
-                  showSnackBar(context, 'Failed To Cancel Order Retrying.....');
-                  context.read<OpenOrdersCubit>().getOpenOrders();
-                  logger.e(state.msg);
-                } else {
-                  showSnackBar(context, 'Failed to Fetch Open Orders');
-                  context.read<OpenOrdersCubit>().getOpenOrders();
-                  logger.e(state.msg);
-                }
-              }
-            },
-            builder: (context, state) {
-              if (state is GetOpenordersSuccess) {
-                if (buildRowsOfOpenOrders(state.res).isNotEmpty) {
-                  return SingleChildScrollView(
-                      scrollDirection: Axis.vertical,
-                      child: DataTable(
-                          columnSpacing: 10,
-                          headingRowHeight: 40,
-                          columns: const <DataColumn>[
-                            DataColumn(
-                                label: Text('Company',
-                                    style: TextStyle(
-                                        color: lightGray, fontSize: 12))),
-                            DataColumn(
-                                label: Text(
-                              'Type',
-                              style: TextStyle(color: lightGray, fontSize: 12),
-                            )),
-                            DataColumn(
-                                label: Text('Volume',
-                                    style: TextStyle(
-                                        color: lightGray, fontSize: 12))),
-                            DataColumn(
-                                label: Text('Filled',
-                                    style: TextStyle(
-                                        color: lightGray, fontSize: 12))),
-                            DataColumn(
-                                label: Text('Price',
-                                    style: TextStyle(
-                                        color: lightGray, fontSize: 12))),
-                            DataColumn(
-                                label: Text('Action',
-                                    style: TextStyle(
-                                        color: lightGray, fontSize: 12))),
-                          ],
-                          rows: buildRowsOfOpenOrders(state.res)));
-                } else {
-                  return const Center(child: Text('No Open Orders'));
-                }
-              } else {
-                return const Center(
-                  child: CircularProgressIndicator(
-                    color: primaryColor,
-                  ),
+          BlocBuilder<SubscribeCubit, SubscribeState>(
+            builder: ((context, state) {
+              if (state is SubscriptionDataLoaded) {
+                context
+                    .read<OpenordersSubscriptionCubit>()
+                    .getOpenOrdersStream(state.subscriptionId);
+                return BlocBuilder<OpenordersSubscriptionCubit,
+                    OpenordersSubscriptionState>(
+                  builder: (context, state) {
+                    if (state is SubscriptionToOpenOrderSuccess) {
+                      MyOrderUpdate orderUpdate = state.orderUpdate;
+                      return buildOpenOrdersTableUpdate(orderUpdate);
+                    } else if (state is SubscriptionToMarketDepthFailed) {
+                      return Column(children: [
+                        const Text('Failed to reach server'),
+                        const SizedBox(height: 20),
+                        SizedBox(
+                          width: 100,
+                          height: 50,
+                          child: OutlinedButton(
+                            onPressed: () {
+                              context
+                                  .read<SubscribeCubit>()
+                                  .subscribe(DataStreamType.MY_ORDERS);
+                            },
+                            child: const Text('Retry'),
+                          ),
+                        )
+                      ]);
+                    } else {
+                      return buildOpenOrdersTable();
+                    }
+                  },
                 );
+              } else if (state is SubscriptonDataFailed) {
+                return Column(children: [
+                  const Text('Failed to reach server'),
+                  const SizedBox(height: 20),
+                  SizedBox(
+                    width: 100,
+                    height: 50,
+                    child: OutlinedButton(
+                      onPressed: () {
+                        context
+                            .read<SubscribeCubit>()
+                            .subscribe(DataStreamType.MY_ORDERS);
+                      },
+                      child: const Text('Retry'),
+                    ),
+                  )
+                ]);
+              } else {
+                return buildOpenOrdersTable();
               }
-            },
-          ),
+            }),
+          )
         ],
       ),
     )));
+  }
+
+  List<DataRow> buildRowsOfOpenOrdersUpdate(
+      GetMyOpenOrdersResponse response, MyOrderUpdate myOrderUpdate) {
+    List<Ask> openAskOrdersList = response.openAskOrders;
+    List<Bid> openBidOrdersList = response.openBidOrders;
+    List<DataRow> rows = [];
+    final stockList = getIt<GlobalStreams>().latestStockMap;
+    for (var element in openAskOrdersList) {
+      Stock? company = stockList[element.stockId];
+      if (element.id == myOrderUpdate.id) {
+        rows.add(buildOpenOrdersRow(
+            company?.fullName,
+            'Sell/' + myOrderUpdate.orderType.name,
+            myOrderUpdate.stockQuantity,
+            myOrderUpdate.tradeQuantity,
+            element.price,
+            myOrderUpdate.id,
+            myOrderUpdate.isClosed,
+            true));
+      } else {
+        rows.add(buildOpenOrdersRow(
+            company?.fullName,
+            'Sell/' + element.orderType.name,
+            element.stockQuantity,
+            element.stockQuantityFulfilled,
+            element.price,
+            element.id,
+            element.isClosed,
+            true));
+      }
+    }
+    for (var element in openBidOrdersList) {
+      Stock? company = stockList[element.stockId];
+      if (element.id == myOrderUpdate.id) {
+        rows.add(buildOpenOrdersRow(
+            company?.fullName,
+            'Buy/' + myOrderUpdate.orderType.name,
+            myOrderUpdate.stockQuantity,
+            myOrderUpdate.tradeQuantity,
+            element.price,
+            myOrderUpdate.id,
+            myOrderUpdate.isClosed,
+            false));
+      } else {
+        rows.add(buildOpenOrdersRow(
+            company?.fullName,
+            'Buy/' + element.orderType.name,
+            element.stockQuantity,
+            element.stockQuantityFulfilled,
+            element.price,
+            element.id,
+            element.isClosed,
+            false));
+      }
+    }
+    return rows;
   }
 
   List<DataRow> buildRowsOfOpenOrders(GetMyOpenOrdersResponse response) {
@@ -148,35 +180,41 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
     for (var element in openAskOrdersList) {
       Stock? company = stockList[element.stockId];
 
-      rows.add(buildOpenAskOrdersRow(
+      rows.add(buildOpenOrdersRow(
           company?.fullName,
           'Sell/' + element.orderType.name,
           element.stockQuantity,
           element.stockQuantityFulfilled,
           element.price,
-          element));
+          element.id,
+          element.isClosed,
+          true));
     }
     for (var element in openBidOrdersList) {
       Stock? company = stockList[element.stockId];
-      rows.add(buildOpenBidOrdersRow(
+
+      rows.add(buildOpenOrdersRow(
           company?.fullName,
           'Buy/' + element.orderType.name,
           element.stockQuantity,
           element.stockQuantityFulfilled,
           element.price,
-          element));
+          element.id,
+          element.isClosed,
+          false));
     }
     return rows;
   }
 
-  DataRow buildOpenAskOrdersRow(
-    String? fullName,
-    String orderTypeName,
-    Int64 stockQuantity,
-    Int64 stockQuantityFulfilled,
-    Int64 price,
-    Ask element,
-  ) {
+  DataRow buildOpenOrdersRow(
+      String? fullName,
+      String orderTypeName,
+      Int64 stockQuantity,
+      Int64 stockQuantityFulfilled,
+      Int64 price,
+      int id,
+      bool isClosed,
+      bool isAsk) {
     return DataRow(cells: <DataCell>[
       DataCell(Text(
         fullName!,
@@ -199,61 +237,156 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
         width: 45,
         height: 15,
         color: Colors.red,
-        onPressed: () => buttonAsktap(element),
+        onPressed: () => buttonCanceltap(id, isClosed, isAsk),
         title: 'cancel',
         fontSize: 8,
       ))
     ]);
   }
 
-  DataRow buildOpenBidOrdersRow(
-    String? fullName,
-    String orderTypeName,
-    Int64 stockQuantity,
-    Int64 stockQuantityFulfilled,
-    Int64 price,
-    Bid element,
-  ) {
-    return DataRow(cells: <DataCell>[
-      DataCell(Text(
-        fullName!,
-        style: const TextStyle(fontSize: 12),
-      )),
-      DataCell(
-        Text(orderTypeName, style: const TextStyle(fontSize: 12)),
-      ),
-      DataCell(
-        Text(stockQuantity.toString(), style: const TextStyle(fontSize: 12)),
-      ),
-      DataCell(
-        Text(stockQuantityFulfilled.toString(),
-            style: const TextStyle(fontSize: 12)),
-      ),
-      DataCell(
-        Text(price.toString(), style: const TextStyle(fontSize: 12)),
-      ),
-      DataCell(TertiaryButton(
-        width: 45,
-        height: 15,
-        color: Colors.red,
-        onPressed: () => buttonBidtap(element),
-        title: 'cancel',
-        fontSize: 8,
-      )),
-    ]);
+  Widget buildOpenOrdersTableUpdate(MyOrderUpdate myOrderUpdate) {
+    return BlocConsumer<OpenOrdersCubit, OpenOrdersState>(
+      listener: (context, state) {
+        if (state is CancelorderSuccess) {
+          showSnackBar(context, 'Order Cancelled Sucessfully');
+          context.read<OpenOrdersCubit>().getOpenOrders();
+        } else if (state is OrderFailure) {
+          if (state.ordertype == OpenOrderType.cancel) {
+            showSnackBar(context, 'Failed To Cancel Order Retrying.....');
+            context.read<OpenOrdersCubit>().getOpenOrders();
+            logger.e(state.msg);
+          } else {
+            showSnackBar(context, 'Failed to Fetch Open Orders');
+            context.read<OpenOrdersCubit>().getOpenOrders();
+            logger.e(state.msg);
+          }
+        }
+      },
+      builder: (context, state) {
+        if (state is GetOpenordersSuccess) {
+          if (buildRowsOfOpenOrders(state.res).isNotEmpty) {
+            return SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                child: DataTable(
+                    columnSpacing: 10,
+                    headingRowHeight: 40,
+                    columns: const <DataColumn>[
+                      DataColumn(
+                          label: Text('Company',
+                              style:
+                                  TextStyle(color: lightGray, fontSize: 12))),
+                      DataColumn(
+                          label: Text(
+                        'Type',
+                        style: TextStyle(color: lightGray, fontSize: 12),
+                      )),
+                      DataColumn(
+                          label: Text('Volume',
+                              style:
+                                  TextStyle(color: lightGray, fontSize: 12))),
+                      DataColumn(
+                          label: Text('Filled',
+                              style:
+                                  TextStyle(color: lightGray, fontSize: 12))),
+                      DataColumn(
+                          label: Text('Price',
+                              style:
+                                  TextStyle(color: lightGray, fontSize: 12))),
+                      DataColumn(
+                          label: Text('Action',
+                              style:
+                                  TextStyle(color: lightGray, fontSize: 12))),
+                    ],
+                    rows: buildRowsOfOpenOrders(state.res)));
+          } else {
+            return const Center(child: Text('No Open Orders'));
+          }
+        } else {
+          return const Center(
+            child: CircularProgressIndicator(
+              color: primaryColor,
+            ),
+          );
+        }
+      },
+    );
   }
 
-  buttonBidtap(Bid element) {
-    if (!element.isClosed) {
-      logger.i(element.id);
-      context.read<OpenOrdersCubit>().cancelOpenOrders(element.id, false);
+  buttonCanceltap(int id, bool isClosed, bool isAsk) {
+    if (!isClosed) {
+      logger.i(id);
+      logger.i('Cancel');
+      context.read<OpenOrdersCubit>().cancelOpenOrders(id, isAsk);
     }
   }
 
-  buttonAsktap(Ask element) {
-    if (!element.isClosed) {
-      logger.i(element.id);
-      context.read<OpenOrdersCubit>().cancelOpenOrders(element.id, true);
-    }
+  Widget buildOpenOrdersTable() {
+    return BlocConsumer<OpenOrdersCubit, OpenOrdersState>(
+      listener: (context, state) {
+        if (state is CancelorderSuccess) {
+          showSnackBar(context, 'Order Cancelled Sucessfully');
+          context.read<OpenOrdersCubit>().getOpenOrders();
+        } else if (state is OrderFailure) {
+          if (state.ordertype == OpenOrderType.cancel) {
+            showSnackBar(context, 'Failed To Cancel Order Retrying.....');
+            context.read<OpenOrdersCubit>().getOpenOrders();
+            logger.e(state.msg);
+          } else {
+            showSnackBar(context, 'Failed to Fetch Open Orders');
+            context.read<OpenOrdersCubit>().getOpenOrders();
+            logger.e(state.msg);
+          }
+        }
+      },
+      builder: (context, state) {
+        if (state is GetOpenordersSuccess) {
+          if (buildRowsOfOpenOrders(
+            state.res,
+          ).isNotEmpty) {
+            return SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                child: DataTable(
+                    columnSpacing: 10,
+                    headingRowHeight: 40,
+                    columns: const <DataColumn>[
+                      DataColumn(
+                          label: Text('Company',
+                              style:
+                                  TextStyle(color: lightGray, fontSize: 12))),
+                      DataColumn(
+                          label: Text(
+                        'Type',
+                        style: TextStyle(color: lightGray, fontSize: 12),
+                      )),
+                      DataColumn(
+                          label: Text('Volume',
+                              style:
+                                  TextStyle(color: lightGray, fontSize: 12))),
+                      DataColumn(
+                          label: Text('Filled',
+                              style:
+                                  TextStyle(color: lightGray, fontSize: 12))),
+                      DataColumn(
+                          label: Text('Price',
+                              style:
+                                  TextStyle(color: lightGray, fontSize: 12))),
+                      DataColumn(
+                          label: Text('Action',
+                              style:
+                                  TextStyle(color: lightGray, fontSize: 12))),
+                    ],
+                    rows: buildRowsOfOpenOrders(state.res)));
+          } else {
+            return const Center(child: Text('No Open Orders'));
+          }
+        } else {
+          return const Center(
+            child: CircularProgressIndicator(
+              color: primaryColor,
+            ),
+          );
+        }
+      },
+    );
   }
 }
