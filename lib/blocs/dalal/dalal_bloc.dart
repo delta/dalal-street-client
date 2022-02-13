@@ -27,8 +27,10 @@ class DalalBloc extends HydratedBloc<DalalEvent, DalalState> {
     on<CheckUser>((event, emit) async {
       if (state is DalalLoggedIn) {
         add(GetUserData((state as DalalLoggedIn).sessionId));
-      } else {
+      } else if (state is! DalalDataLoaded &&
+          state is! DalalVerificationPending) {
         // really quick transition to login page looks wierd
+        logger.d('Logout from splash');
         await Future.delayed(const Duration(milliseconds: 400));
         // go to login page
         emit(const DalalLoggedOut(fromSplash: true));

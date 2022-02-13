@@ -12,39 +12,36 @@ class DalalNavBuilder extends StatelessWidget {
   const DalalNavBuilder({Key? key, required this.child}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    logger.i('nav builder');
-    return BlocListener<DalalBloc, DalalState>(
-      listener: (context, state) {
-        if (state is DalalDataLoaded) {
-          // Register sessionId
-          getIt.registerSingleton(state.sessionId);
-          // Register Global Streams
-          getIt.registerSingleton(state.globalStreams);
+  Widget build(BuildContext context) => BlocListener<DalalBloc, DalalState>(
+        listener: (context, state) {
+          if (state is DalalDataLoaded) {
+            // Register sessionId
+            getIt.registerSingleton(state.sessionId);
+            // Register Global Streams
+            getIt.registerSingleton(state.globalStreams);
 
-          logger.i('user logged in');
-          context.replace('/home', extra: state.user);
-        } else if (state is DalalVerificationPending) {
-          // Register sessionId
-          getIt.registerSingleton(state.sessionId);
+            logger.i('user logged in');
+            context.replace('/home', extra: state.user);
+          } else if (state is DalalVerificationPending) {
+            // Register sessionId
+            getIt.registerSingleton(state.sessionId);
 
-          showSnackBar(context, 'Verify your phone to continue');
-          context.replace('/enterPhone');
-        } else if (state is DalalLoggedOut) {
-          // Unregister everything
-          getIt.reset();
+            showSnackBar(context, 'Verify your phone to continue');
+            context.replace('/enterPhone');
+          } else if (state is DalalLoggedOut) {
+            // Unregister everything
+            getIt.reset();
 
-          if (!state.fromSplash) {
-            // Show msg only when coming from a page other than splash
-            logger.i('user logged out');
-            showSnackBar(context, 'User Logged Out');
+            if (!state.fromSplash) {
+              // Show msg only when coming from a page other than splash
+              logger.i('user logged out');
+              showSnackBar(context, 'User Logged Out');
+            }
+            context.replace('/landing');
+          } else if (state is DalalLoginFailed) {
+            // Handled in SplashPage
           }
-          context.replace('/landing');
-        } else if (state is DalalLoginFailed) {
-          // Handled in SplashPage
-        }
-      },
-      child: child,
-    );
-  }
+        },
+        child: child,
+      );
 }

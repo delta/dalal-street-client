@@ -8,10 +8,7 @@ import 'package:dalal_street_client/blocs/dalal/dalal_bloc.dart';
 import 'package:dalal_street_client/blocs/market_depth/market_depth_bloc.dart';
 import 'package:dalal_street_client/blocs/news/news_bloc.dart';
 import 'package:dalal_street_client/blocs/subscribe/subscribe_cubit.dart';
-import 'package:dalal_street_client/config/get_it.dart';
-import 'package:dalal_street_client/config/log.dart';
 import 'package:dalal_street_client/navigation/dalal_nav_buidler.dart';
-import 'package:dalal_street_client/navigation/nav_utils.dart';
 import 'package:dalal_street_client/pages/admin_page/admin_page.dart';
 import 'package:dalal_street_client/blocs/auth/register/register_cubit.dart';
 import 'package:dalal_street_client/blocs/auth/verify_phone/enter_otp/enter_otp_cubit.dart';
@@ -27,7 +24,6 @@ import 'package:dalal_street_client/pages/auth/verify_phone/enter_otp_page.dart'
 import 'package:dalal_street_client/pages/auth/verify_phone/enter_phone_page.dart';
 import 'package:dalal_street_client/pages/landing_page.dart';
 import 'package:dalal_street_client/pages/splash_page.dart';
-import 'package:dalal_street_client/utils/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -36,6 +32,7 @@ GoRouter generateRouter(BuildContext context) {
   final dalalBloc = context.read<DalalBloc>();
   return GoRouter(
     initialLocation: '/splash',
+    debugLogDiagnostics: true,
     routes: [
       ..._initialRoutes,
       ..._authRoutes,
