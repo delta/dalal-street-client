@@ -354,15 +354,36 @@ class StockItem extends StatelessWidget {
   Expanded _stockNames(Stock company) {
     return Expanded(
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Text(
-          company.shortName,
-          style: const TextStyle(
-            fontSize: 18,
+        if (company.isBankrupt)
+          Text(
+            company.shortName,
+            style: const TextStyle(
+                color: Colors.red,
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+                decoration: TextDecoration.lineThrough),
+          )
+        else if (company.givesDividends)
+          Text(
+            company.shortName,
+            style: const TextStyle(
+              color: Colors.green,
+              fontWeight: FontWeight.w600,
+              fontSize: 18,
+            ),
+          )
+        else
+          Text(
+            company.shortName,
+            style: const TextStyle(
+              fontWeight: FontWeight.w600,
+              fontSize: 18,
+            ),
           ),
-        ),
         Text(
           company.fullName,
           style: const TextStyle(
+            fontWeight: FontWeight.w600,
             fontSize: 14,
             color: whiteWithOpacity50,
           ),

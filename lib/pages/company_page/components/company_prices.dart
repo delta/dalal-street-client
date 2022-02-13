@@ -1,8 +1,10 @@
 import 'package:dalal_street_client/components/buttons/secondary_button.dart';
 import 'package:dalal_street_client/components/graph/stock_chart.dart';
+import 'package:dalal_street_client/constants/icons.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
 import 'package:dalal_street_client/theme/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 
 final oCcy = NumberFormat('#,##0.00', 'en_US');
@@ -38,15 +40,34 @@ Container companyPrices(Stock company) {
                     const SizedBox(
                       height: 5,
                     ),
-                    Text(
-                      company.fullName,
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        color: white,
+                    if (company.givesDividends)
+                      Row(
+                        children: [
+                          Text(
+                            company.fullName,
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500,
+                              color: white,
+                            ),
+                            textAlign: TextAlign.start,
+                          ),
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          SvgPicture.asset(AppIcons.dollar)
+                        ],
+                      )
+                    else
+                      Text(
+                        company.fullName,
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                          color: white,
+                        ),
+                        textAlign: TextAlign.start,
                       ),
-                      textAlign: TextAlign.start,
-                    ),
                     const SizedBox(
                       height: 5,
                     ),
