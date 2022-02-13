@@ -250,9 +250,14 @@ class _HomePageState extends State<HomePage>
   }
 
   Widget _stockList() {
+    final gameStateStream = getIt<GlobalStreams>().gameStateStream;
     List<Widget> stockItems = stocks.entries
         .map((entry) => StockItem(
             stock: entry.value,
+            isBankruptStream: gameStateStream.isBankruptStream(
+                entry.value.id, entry.value.isBankrupt),
+            givesDividendStream: gameStateStream.givesDividents(
+                entry.value.id, entry.value.givesDividends),
             stockPriceStream: stockMapStream.priceStream(entry.key)))
         .toList();
     return ListView(
@@ -328,9 +333,15 @@ class _HomePageState extends State<HomePage>
 class StockItem extends StatelessWidget {
   final Stock stock;
   final Stream<Int64> stockPriceStream;
+  final Stream<bool> isBankruptStream;
+  final Stream<bool> givesDividendStream;
 
   const StockItem(
-      {Key? key, required this.stock, required this.stockPriceStream})
+      {Key? key,
+      required this.stock,
+      required this.isBankruptStream,
+      required this.givesDividendStream,
+      required this.stockPriceStream})
       : super(key: key);
 
   @override
@@ -353,21 +364,57 @@ class StockItem extends StatelessWidget {
 
   Expanded _stockNames(Stock company) {
     return Expanded(
-      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Text(
-          company.shortName,
-          style: const TextStyle(
-            fontSize: 18,
-          ),
-        ),
-        Text(
-          company.fullName,
-          style: const TextStyle(
-            fontSize: 14,
-            color: whiteWithOpacity50,
-          ),
-        ),
-      ]),
+      child: StreamBuilder<bool>(
+        stream: isBankruptStream,
+        initialData: company.isBankrupt,
+        builder: (context, state) {
+          bool isBankrupt = state.data!;
+          return StreamBuilder<bool>(
+              stream: givesDividendStream,
+              initialData: company.givesDividends,
+              builder: (context, state) {
+                bool givesDividends = state.data!;
+                return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if (isBankrupt)
+                        Text(
+                          company.shortName,
+                          style: const TextStyle(
+                              color: Colors.red,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w600,
+                              decoration: TextDecoration.lineThrough),
+                        )
+                      else if (givesDividends)
+                        Text(
+                          company.shortName,
+                          style: const TextStyle(
+                            color: Colors.green,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 18,
+                          ),
+                        )
+                      else
+                        Text(
+                          company.shortName,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 18,
+                          ),
+                        ),
+                      Text(
+                        company.fullName,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 14,
+                          color: whiteWithOpacity50,
+                        ),
+                      ),
+                    ]);
+              });
+        },
+      ),
     );
   }
 
