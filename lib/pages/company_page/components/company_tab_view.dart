@@ -1,28 +1,46 @@
-import 'package:dalal_street_client/pages/company_page/components/news.dart';
 import 'package:dalal_street_client/pages/company_page/components/overview.dart';
 import 'package:dalal_street_client/pages/company_page/components/market_depth.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
 import 'package:dalal_street_client/theme/colors.dart';
 import 'package:flutter/material.dart';
 
-Container companyTabView(BuildContext context, Stock company) {
-  return Container(
-      padding: const EdgeInsets.symmetric(vertical: 5),
-      decoration: BoxDecoration(
-        color: background2,
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: DefaultTabController(
-        length: 3,
+// ignore: must_be_immutable
+class CompanyTabView extends StatefulWidget {
+  Stock company;
+  CompanyTabView({Key? key, required this.company}) : super(key: key);
+
+  @override
+  State<CompanyTabView> createState() => _CompanyTabViewState();
+}
+
+class _CompanyTabViewState extends State<CompanyTabView>
+    with SingleTickerProviderStateMixin {
+  late TabController _controller;
+  @override
+  void initState() {
+    super.initState();
+    _controller = TabController(length: 2, vsync: this);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 12),
+        decoration: BoxDecoration(
+          color: background2,
+          borderRadius: BorderRadius.circular(10),
+        ),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            const TabBar(
-              tabs: [
+            TabBar(
+              controller: _controller,
+              tabs: const [
                 Tab(
                   child: Text(
                     'Overview',
                     style: TextStyle(
-                      fontSize: 14,
+                      fontSize: 18,
                       fontWeight: FontWeight.w500,
                       color: lightGray,
                     ),
@@ -33,18 +51,7 @@ Container companyTabView(BuildContext context, Stock company) {
                   child: Text(
                     'Market Depth',
                     style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                      color: lightGray,
-                    ),
-                    textAlign: TextAlign.start,
-                  ),
-                ),
-                Tab(
-                  child: Text(
-                    'News',
-                    style: TextStyle(
-                      fontSize: 14,
+                      fontSize: 18,
                       fontWeight: FontWeight.w500,
                       color: lightGray,
                     ),
@@ -53,17 +60,20 @@ Container companyTabView(BuildContext context, Stock company) {
                 ),
               ],
               indicatorColor: lightGray,
-              indicatorPadding: EdgeInsets.symmetric(horizontal: 20),
+              indicatorPadding: const EdgeInsets.symmetric(horizontal: 20),
             ),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-              height: MediaQuery.of(context).size.height * 0.8,
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.7,
               child: TabBarView(
+                  controller: _controller,
                   physics: const BouncingScrollPhysics(
                       parent: AlwaysScrollableScrollPhysics()),
-                  children: [overView(company), marketDepth(company), news()]),
-            )
+                  children: <Widget>[
+                    overView(widget.company),
+                    marketDepth(widget.company),
+                  ]),
+            ),
           ],
-        ),
-      ));
+        ));
+  }
 }

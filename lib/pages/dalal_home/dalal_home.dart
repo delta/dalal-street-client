@@ -27,7 +27,7 @@ class _DalalHomeState extends State<DalalHome> {
     'Home': AppIcons.home,
     'Portfolio': AppIcons.portfolio,
     'DSE': AppIcons.rupee,
-    'Leaderboard': AppIcons.trophy,
+    'Ranking': AppIcons.trophy,
     'More': AppIcons.hamburger,
   };
 

@@ -1,4 +1,5 @@
 import 'package:dalal_street_client/components/buttons/secondary_button.dart';
+import 'package:dalal_street_client/components/graph/stock_chart.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
 import 'package:dalal_street_client/theme/colors.dart';
 import 'package:flutter/material.dart';
@@ -86,9 +87,8 @@ Container companyPrices(Stock company) {
                 ),
               ],
             ),
-            _companyGraph()
+            _companyGraph(company.id)
           ]));
 }
 
-// TODO : Add Graph
-Image _companyGraph() => Image.network('https://i.imgur.com/Y6CBCX2.png');
+Widget _companyGraph(int stockid) => StockChart(stockId: stockid);
