@@ -1,3 +1,4 @@
+import 'package:dalal_street_client/blocs/dalal/dalal_bloc.dart';
 import 'package:dalal_street_client/components/graph/line_area.dart';
 import 'package:dalal_street_client/blocs/news/news_bloc.dart';
 import 'package:dalal_street_client/components/buttons/tertiary_button.dart';
@@ -88,6 +89,11 @@ class _HomePageState extends State<HomePage>
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
       child: Column(
         children: [
+          ElevatedButton(
+              onPressed: () {
+                context.read<DalalBloc>().add(const DalalLogOut());
+              },
+              child: const Text('Logout')),
           const SizedBox(
             height: 5,
           ),

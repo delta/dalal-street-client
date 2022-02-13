@@ -1,4 +1,5 @@
 import 'package:dalal_street_client/blocs/exchange/exchange_cubit.dart';
+import 'package:dalal_street_client/blocs/news/news_bloc.dart';
 import 'package:dalal_street_client/blocs/portfolio/userWorth/portfolio_cubit.dart';
 import 'package:dalal_street_client/components/stock_bar.dart';
 import 'package:dalal_street_client/config/log.dart';
@@ -15,8 +16,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DalalHome extends StatefulWidget {
   final User user;
+  final String page;
 
-  const DalalHome({Key? key, required this.user}) : super(key: key);
+  const DalalHome({Key? key, required this.user, required this.page})
+      : super(key: key);
 
   @override
   State<DalalHome> createState() => _DalalHomeState();
@@ -46,7 +49,28 @@ class _DalalHomeState extends State<DalalHome> {
   @override
   void initState() {
     super.initState();
-    _pageController = PageController(initialPage: 0);
+    _pageController = PageController(initialPage: indexForPage(widget.page));
+  }
+
+  int indexForPage(String page) {
+    switch (page) {
+      case 'home':
+        return 0;
+      case 'portfolio':
+        return 1;
+      case 'exchange':
+        return 2;
+      case 'ranking':
+        return 3;
+      default:
+        return 0;
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant DalalHome oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _pageController.jumpToPage(indexForPage(widget.page));
   }
 
   @override
@@ -56,7 +80,10 @@ class _DalalHomeState extends State<DalalHome> {
   }
 
   List<Widget> get _pageViewChildren => [
-        HomePage(user: widget.user),
+        BlocProvider(
+          create: (context) => NewsBloc(),
+          child: HomePage(user: widget.user),
+        ),
         BlocProvider(
           create: (context) => PortfolioCubit(),
           child: const PortfolioPage(),
