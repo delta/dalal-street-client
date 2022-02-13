@@ -4,7 +4,7 @@ import 'package:dalal_street_client/constants/leaderboard_type.dart';
 import 'package:dalal_street_client/theme/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
+import 'package:dalal_street_client/utils/paginated_data_table_2.dart';
 import '../leaderboard_page.dart';
 
 class LeaderboardTable extends StatefulWidget {
@@ -41,7 +41,7 @@ class _LeaderboardTableState extends State<LeaderboardTable> {
                             shape: RoundedRectangleBorder(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(10))))),
-                    child: PaginatedDataTable(
+                    child: PaginatedDataTable2(
                         handleNext: (i) {
                           int y = state.rankList[0].id;
                           int x = 8;
@@ -116,7 +116,7 @@ class _LeaderboardTableState extends State<LeaderboardTable> {
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(10))))),
                     child: Center(
-                      child: PaginatedDataTable(
+                      child: PaginatedDataTable2(
                           handleNext: (i) {
                             int y = state.rankList[0].rank;
                             int x = 8;

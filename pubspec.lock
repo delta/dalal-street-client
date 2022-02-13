@@ -197,7 +197,7 @@ packages:
       name: google_fonts
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.3.0"
+    version: "2.2.0"
   googleapis_auth:
     dependency: transitive
     description:
