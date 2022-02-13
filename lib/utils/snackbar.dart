@@ -16,41 +16,39 @@ void showSnackBar(BuildContext context, String msg,
       duration: const Duration(milliseconds: 1500),
       content: Wrap(
         children: [
-          Container(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Center(
-                  child: Icon(
-                    snackBarProps.icon,
-                    color: snackBarProps.color,
-                    size: 28,
-                  ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Center(
+                child: Icon(
+                  snackBarProps.icon,
+                  color: snackBarProps.color,
+                  size: 28,
                 ),
-                const SizedBox(
-                  width: 10,
+              ),
+              const SizedBox(
+                width: 10,
+              ),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(snackBarProps.title,
+                        style: TextStyle(
+                            fontSize: 20,
+                            color: snackBarProps.color,
+                            fontWeight: FontWeight.bold)),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    Text(
+                      msg,
+                      style: const TextStyle(color: white, fontSize: 16),
+                    ),
+                  ],
                 ),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(snackBarProps.title,
-                          style: TextStyle(
-                              fontSize: 20,
-                              color: snackBarProps.color,
-                              fontWeight: FontWeight.bold)),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      Text(
-                        msg,
-                        style: const TextStyle(color: white, fontSize: 16),
-                      ),
-                    ],
-                  ),
-                )
-              ],
-            ),
+              )
+            ],
           )
         ],
       )));
