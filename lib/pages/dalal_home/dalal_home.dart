@@ -104,10 +104,9 @@ class _DalalHomeState extends State<DalalHome> {
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(top: Radius.circular(10))),
         builder: (_) => DalalHomeBottomSheet(
-          items: _sheetMenu,
-          onItemClick: (index) {
+            items: _sheetMenu,
+            onItemClick: (index) {
               Navigator.of(context).pushNamed(_sheetPageRoutes[index]);
-            }
-        ),
+            }),
       );
 }
