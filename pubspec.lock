@@ -624,10 +624,5 @@ packages:
     source: hosted
     version: "5.3.1"
 sdks:
-<<<<<<< HEAD
   dart: ">=2.14.0 <3.0.0"
   flutter: ">=2.5.0"
-=======
-  dart: ">=2.15.0 <3.0.0"
-  flutter: ">=2.10.0"
->>>>>>> [feat]:Changes in UI
