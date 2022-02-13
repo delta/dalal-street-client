@@ -6,7 +6,6 @@ import 'package:dalal_street_client/proto_build/actions/GetPortfolio.pb.dart';
 import 'package:dalal_street_client/proto_build/actions/GetStockList.pb.dart';
 import 'package:dalal_street_client/proto_build/actions/Login.pb.dart';
 import 'package:dalal_street_client/proto_build/datastreams/GameState.pb.dart';
-import 'package:dalal_street_client/proto_build/datastreams/MyOrders.pb.dart';
 import 'package:dalal_street_client/proto_build/datastreams/Notifications.pb.dart';
 import 'package:dalal_street_client/proto_build/datastreams/StockExchange.pb.dart';
 import 'package:dalal_street_client/proto_build/datastreams/StockPrices.pb.dart';

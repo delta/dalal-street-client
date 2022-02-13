@@ -1,7 +1,7 @@
 import 'package:dalal_street_client/blocs/news/news_bloc.dart';
 import 'package:dalal_street_client/components/buttons/tertiary_button.dart';
 import 'package:dalal_street_client/config/log.dart';
-import 'package:dalal_street_client/pages/newsdetail_page.dart';
+import 'package:dalal_street_client/pages/news/newsdetail_page.dart';
 import 'package:dalal_street_client/proto_build/models/MarketEvent.pb.dart';
 import 'package:dalal_street_client/theme/colors.dart';
 import 'package:flutter/material.dart';
