@@ -22,13 +22,13 @@ extension StockMapStreamTransformations on Stream<Map<int, Stock>> {
 
 extension GameStateStreamTransformations on Stream<GameStateUpdate> {
   /// Transforms gameStateStream into a distinct game state stream
-  Stream<bool> isBankruptStream(int stockId) => map((gameState) =>
-      gameState.gameState.stockBankruptState.stockId == stockId
+  Stream<bool> isBankruptStream(int stockId, bool isBankrupt) => map(
+      (gameState) => gameState.gameState.stockBankruptState.stockId == stockId
           ? gameState.gameState.stockBankruptState.isBankrupt
-          : false).distinct();
+          : isBankrupt).distinct();
 
-  Stream<bool> givesDividents(int stockId) => map((gameState) =>
-      gameState.gameState.stockDividendState.stockId == stockId
+  Stream<bool> givesDividents(int stockId, bool givesDividends) => map(
+      (gameState) => gameState.gameState.stockDividendState.stockId == stockId
           ? gameState.gameState.stockDividendState.givesDividend
-          : false).distinct();
+          : givesDividends).distinct();
 }
