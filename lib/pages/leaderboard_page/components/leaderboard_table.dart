@@ -26,102 +26,30 @@ class _LeaderboardTableState extends State<LeaderboardTable> {
   }
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-      body: SafeArea(
-          child: Container(
-              color: Colors.black,
-              child: SingleChildScrollView(child:
-                  BlocBuilder<LeaderboardCubit, LeaderboardState>(
-                      builder: (context, state) {
-                if (state is OverallLeaderboardSuccess) {
-                  return Theme(
-                    data: Theme.of(context).copyWith(
-                        cardColor: background2,
-                        cardTheme: const CardTheme(
-                            shape: RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10))))),
-                    child: PaginatedDataTable2(
-                        handleNext: (i) {
-                          int y = state.rankList[0].id;
-                          int x = 8;
-                          y >= state.totalUsers - x
-                              ? {}
-                              : {
-                                  context
-                                      .read<LeaderboardCubit>()
-                                      .getLeaderboard(
-                                          x + y, 8, widget.leaderboardType)
-                                };
-                        },
-                        handlePrevious: (i) {
-                          int y = state.rankList[0].id;
-                          int x;
-                          y == 4
-                              ? {null}
-                              : {
-                                  x = 8,
-                                  context
-                                      .read<LeaderboardCubit>()
-                                      .getLeaderboard(
-                                          y - x, 8, widget.leaderboardType)
-                                };
-                        },
-                        source: MyData(tableData: state.rankList),
-                        columnSpacing: 20,
-                        dataRowHeight: 40,
-                        headingRowHeight: 40.0,
-                        rowsPerPage: 8,
-                        horizontalMargin: 30,
-                        columns: <DataColumn>[
-                          const DataColumn(
-                            label: Text('Rank',
-                                style: TextStyle(
-                                    fontSize: 14, fontWeight: FontWeight.bold),
-                                textAlign: TextAlign.center),
-                          ),
-                          DataColumn(
-                            label: ConstrainedBox(
-                              constraints: const BoxConstraints(
-                                minWidth: 120.0,
-                                maxWidth: 120.0,
-                              ),
-                              child: const Text('Name',
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold),
-                                  textAlign: TextAlign.center),
-                            ),
-                          ),
-                          const DataColumn(
-                            label: Text('Stock Worth (₹)',
-                                style: TextStyle(
-                                    fontSize: 14, fontWeight: FontWeight.bold),
-                                textAlign: TextAlign.center),
-                          ),
-                          const DataColumn(
-                            label: Text('Net Worth (₹)',
-                                style: TextStyle(
-                                    fontSize: 14, fontWeight: FontWeight.bold),
-                                textAlign: TextAlign.center),
-                          ),
-                        ]),
-                  );
-                } else if (state is DailyLeaderboardSuccess) {
-                  return Theme(
-                    data: Theme.of(context).copyWith(
-                        cardColor: background2,
-                        cardTheme: const CardTheme(
-                            shape: RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10))))),
-                    child: Center(
+  Widget build(BuildContext context) {
+    int x = 8;
+    int y = 4;
+    return Scaffold(
+        body: SafeArea(
+            child: Container(
+                color: Colors.black,
+                child: SingleChildScrollView(child:
+                    BlocBuilder<LeaderboardCubit, LeaderboardState>(
+                        builder: (context, state) {
+                  if (state is OverallLeaderboardSuccess) {
+                    y = state.rankList[0].id;
+                    x = 8;
+                    return Theme(
+                      data: Theme.of(context).copyWith(
+                          cardColor: background2,
+                          cardTheme: const CardTheme(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10))))),
                       child: PaginatedDataTable2(
                           handleNext: (i) {
-                            int y = state.rankList[0].rank;
-                            int x = 8;
-                            y >= state.totalUsers - x
-                                ? {}
+                            y >= (state.totalUsers - x)
+                                ? {null}
                                 : {
                                     context
                                         .read<LeaderboardCubit>()
@@ -130,12 +58,9 @@ class _LeaderboardTableState extends State<LeaderboardTable> {
                                   };
                           },
                           handlePrevious: (i) {
-                            int y = state.rankList[0].rank;
-                            int x;
                             y == 4
                                 ? {null}
                                 : {
-                                    x = 8,
                                     context
                                         .read<LeaderboardCubit>()
                                         .getLeaderboard(
@@ -147,7 +72,6 @@ class _LeaderboardTableState extends State<LeaderboardTable> {
                           dataRowHeight: 40,
                           headingRowHeight: 40.0,
                           rowsPerPage: 8,
-                          // horizontalMargin: 30,
                           columns: <DataColumn>[
                             const DataColumn(
                               label: Text('Rank',
@@ -184,34 +108,107 @@ class _LeaderboardTableState extends State<LeaderboardTable> {
                                   textAlign: TextAlign.center),
                             ),
                           ]),
-                    ),
-                  );
-                } else if (state is LeaderboardFailure) {
-                  return Center(
-                      child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text(
-                          'Failed to fetch the leaderboard. Please try again.'),
-                      const SizedBox(height: 20),
-                      SizedBox(
-                        width: 100,
-                        height: 50,
-                        child: OutlinedButton(
-                          onPressed: () {
-                            context
-                                .read<LeaderboardCubit>()
-                                .getLeaderboard(4, 8, widget.leaderboardType);
+                    );
+                  } else if (state is DailyLeaderboardSuccess) {
+                    y = state.rankList[0].id;
+                    x = 8;
+                    return Theme(
+                      data: Theme.of(context).copyWith(
+                          cardColor: background2,
+                          cardTheme: const CardTheme(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10))))),
+                      child: PaginatedDataTable2(
+                          handleNext: (i) {
+                            y >= (state.totalUsers - x)
+                                ? {null}
+                                : {
+                                    context
+                                        .read<LeaderboardCubit>()
+                                        .getLeaderboard(
+                                            x + y, 8, widget.leaderboardType)
+                                  };
                           },
-                          child: const Text('Retry'),
+                          handlePrevious: (i) {
+                            y == 4
+                                ? {null}
+                                : {
+                                    x = 8,
+                                    context
+                                        .read<LeaderboardCubit>()
+                                        .getLeaderboard(
+                                            y - x, 8, widget.leaderboardType)
+                                  };
+                          },
+                          source: MyData(tableData: state.rankList),
+                          columnSpacing: 20,
+                          dataRowHeight: 40,
+                          headingRowHeight: 40.0,
+                          rowsPerPage: 8,
+                          columns: <DataColumn>[
+                            const DataColumn(
+                              label: Text('Rank',
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold),
+                                  textAlign: TextAlign.center),
+                            ),
+                            DataColumn(
+                              label: ConstrainedBox(
+                                constraints: const BoxConstraints(
+                                  minWidth: 120.0,
+                                  maxWidth: 120.0,
+                                ),
+                                child: const Text('Name',
+                                    style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold),
+                                    textAlign: TextAlign.center),
+                              ),
+                            ),
+                            const DataColumn(
+                              label: Text('Stock Worth (₹)',
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold),
+                                  textAlign: TextAlign.center),
+                            ),
+                            const DataColumn(
+                              label: Text('Net Worth (₹)',
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold),
+                                  textAlign: TextAlign.center),
+                            ),
+                          ]),
+                    );
+                  } else if (state is LeaderboardFailure) {
+                    return Center(
+                        child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text(
+                            'Failed to fetch the leaderboard. Please try again.'),
+                        const SizedBox(height: 20),
+                        SizedBox(
+                          width: 100,
+                          height: 50,
+                          child: OutlinedButton(
+                            onPressed: () {
+                              context.read<LeaderboardCubit>().getLeaderboard(
+                                  x + y, 8, widget.leaderboardType);
+                            },
+                            child: const Text('Retry'),
+                          ),
                         ),
-                      ),
-                    ],
-                  ));
-                } else {
-                  return const Center(child: CircularProgressIndicator());
-                }
-              })))));
+                      ],
+                    ));
+                  } else {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                })))));
+  }
 }
 
 class MyData extends DataTableSource {

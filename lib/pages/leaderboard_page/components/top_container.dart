@@ -43,7 +43,7 @@ Widget topContainer(leaderboardType, BuildContext context) {
                                           Border.all(color: silver, width: 2),
                                       image: const DecorationImage(
                                           image: AssetImage(
-                                              'assets/images/placeholder.png'),
+                                              'assets/images/Avatar2.png'),
                                           fit: BoxFit.fill))),
                             ),
                             Padding(
@@ -110,12 +110,12 @@ Widget topContainer(leaderboardType, BuildContext context) {
                                       border: Border.all(color: gold, width: 3),
                                       image: const DecorationImage(
                                           image: AssetImage(
-                                              'assets/images/placeholder.png'),
+                                              'assets/images/Avatar1.png'),
                                           fit: BoxFit.fill))),
                             ),
                             Padding(
                               padding: const EdgeInsets.only(bottom: 140),
-                              child: Image.asset('assets/images/crown.png',
+                              child: Image.asset('assets/images/Crown.png',
                                   width: 50, height: 50),
                             ),
                             Padding(
@@ -183,7 +183,7 @@ Widget topContainer(leaderboardType, BuildContext context) {
                                           Border.all(color: bronze, width: 2),
                                       image: const DecorationImage(
                                           image: AssetImage(
-                                              'assets/images/placeholder.png'),
+                                              'assets/images/Avatar3.png'),
                                           fit: BoxFit.fill))),
                             ),
                             Padding(
@@ -238,32 +238,43 @@ Widget topContainer(leaderboardType, BuildContext context) {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const Text(
-                    'Your rank is ',
-                    style: TextStyle(fontSize: 14),
-                  ),
-                  Text(
-                    state.myRank.toString(),
-                    style: const TextStyle(
-                        color: secondaryColor,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  const Text(
-                    ' out of ',
-                    style: TextStyle(fontSize: 14),
-                  ),
-                  Text(
-                    state.totalUsers.toString(),
-                    style: const TextStyle(
-                        color: Colors.yellow,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  const Text(
-                    ' users. ',
-                    style: TextStyle(fontSize: 14),
-                  ),
+                  Container(
+                      decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                          color: baseColor),
+                      child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 10, horizontal: 20),
+                          child: Row(
+                            children: [
+                              const Text(
+                                'Your rank is ',
+                                style: TextStyle(fontSize: 14),
+                              ),
+                              Text(
+                                state.myRank.toString(),
+                                style: const TextStyle(
+                                    color: secondaryColor,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              const Text(
+                                ' out of ',
+                                style: TextStyle(fontSize: 14),
+                              ),
+                              Text(
+                                state.totalUsers.toString(),
+                                style: const TextStyle(
+                                    color: Colors.yellow,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              const Text(
+                                ' participants. ',
+                                style: TextStyle(fontSize: 14),
+                              ),
+                            ],
+                          )))
                 ],
               ),
               const SizedBox(height: 5),
@@ -302,7 +313,7 @@ Widget topContainer(leaderboardType, BuildContext context) {
                                           Border.all(color: silver, width: 2),
                                       image: const DecorationImage(
                                           image: AssetImage(
-                                              'assets/images/placeholder.png'),
+                                              'assets/images/Avatar1.png'),
                                           fit: BoxFit.fill))),
                             ),
                             Padding(
@@ -369,12 +380,12 @@ Widget topContainer(leaderboardType, BuildContext context) {
                                       border: Border.all(color: gold, width: 3),
                                       image: const DecorationImage(
                                           image: AssetImage(
-                                              'assets/images/placeholder.png'),
+                                              'assets/images/Avatar2.png'),
                                           fit: BoxFit.fill))),
                             ),
                             Padding(
                               padding: const EdgeInsets.only(bottom: 140),
-                              child: Image.asset('assets/images/crown.png',
+                              child: Image.asset('assets/images/Crown.png',
                                   width: 50, height: 50),
                             ),
                             Padding(
@@ -441,7 +452,7 @@ Widget topContainer(leaderboardType, BuildContext context) {
                                           Border.all(color: bronze, width: 2),
                                       image: const DecorationImage(
                                           image: AssetImage(
-                                              'assets/images/placeholder.png'),
+                                              'assets/images/Avatar3.png'),
                                           fit: BoxFit.fill))),
                             ),
                             Padding(
@@ -496,32 +507,43 @@ Widget topContainer(leaderboardType, BuildContext context) {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const Text(
-                    'Your rank is ',
-                    style: TextStyle(fontSize: 14),
-                  ),
-                  Text(
-                    state.myRank.toString(),
-                    style: const TextStyle(
-                        color: secondaryColor,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  const Text(
-                    ' out of ',
-                    style: TextStyle(fontSize: 14),
-                  ),
-                  Text(
-                    state.totalUsers.toString(),
-                    style: const TextStyle(
-                        color: Colors.yellow,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  const Text(
-                    ' users. ',
-                    style: TextStyle(fontSize: 14),
-                  ),
+                  Container(
+                      decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                          color: baseColor),
+                      child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 10, horizontal: 20),
+                          child: Row(
+                            children: [
+                              const Text(
+                                'Your rank is ',
+                                style: TextStyle(fontSize: 14),
+                              ),
+                              Text(
+                                state.myRank.toString(),
+                                style: const TextStyle(
+                                    color: secondaryColor,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              const Text(
+                                ' out of ',
+                                style: TextStyle(fontSize: 14),
+                              ),
+                              Text(
+                                state.totalUsers.toString(),
+                                style: const TextStyle(
+                                    color: Colors.yellow,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              const Text(
+                                ' participants. ',
+                                style: TextStyle(fontSize: 14),
+                              ),
+                            ],
+                          )))
                 ],
               ),
               const SizedBox(height: 5),

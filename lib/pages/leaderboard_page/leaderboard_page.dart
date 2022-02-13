@@ -79,7 +79,7 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
           textAlign: TextAlign.start,
         ),
         const SizedBox(
-          height: 5,
+          height: 10,
         ),
         DefaultTabController(
           length: 2,
