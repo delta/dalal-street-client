@@ -1,7 +1,6 @@
 import 'package:dalal_street_client/models/snackbar/snackbar_props.dart';
 import 'package:dalal_street_client/models/snackbar/snackbar_type.dart';
 import 'package:dalal_street_client/theme/colors.dart';
-import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 
 /// Hides the current snackbar(if any) and shows new snackbar with [msg]
@@ -9,27 +8,52 @@ void showSnackBar(BuildContext context, String msg,
     {SnackBarType type = SnackBarType.info}) {
   var snackBarProps = getSnackBarProps(type);
 
-  Flushbar(
-    shouldIconPulse: false,
-    title: snackBarProps.title,
-    titleColor: snackBarProps.color,
-    message: msg,
-    icon: Icon(
-      snackBarProps.icon,
-      color: snackBarProps.color,
-      size: 28,
-    ),
-    leftBarIndicatorColor: snackBarProps.color,
-    duration: const Duration(seconds: 3),
-    borderRadius: BorderRadius.circular(12),
-    flushbarStyle: FlushbarStyle.FLOATING,
-    backgroundColor: background3,
-    isDismissible: true,
-    maxWidth: 400,
-    padding: const EdgeInsets.all(10.0),
-    margin: const EdgeInsets.all(8.0),
-    flushbarPosition: FlushbarPosition.TOP,
-  ).show(context);
+  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      backgroundColor: baseColor,
+      behavior: SnackBarBehavior.floating,
+      margin: const EdgeInsets.all(10),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      duration: const Duration(milliseconds: 1500),
+      content: Wrap(
+        children: [
+          Container(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Center(
+                  child: Icon(
+                    snackBarProps.icon,
+                    color: snackBarProps.color,
+                    size: 28,
+                  ),
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(snackBarProps.title,
+                          style: TextStyle(
+                              fontSize: 20,
+                              color: snackBarProps.color,
+                              fontWeight: FontWeight.bold)),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      Text(
+                        msg,
+                        style: const TextStyle(color: white, fontSize: 16),
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
+          )
+        ],
+      )));
 }
 
 SnackBarProps getSnackBarProps(SnackBarType type) {

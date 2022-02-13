@@ -2,6 +2,7 @@ import 'package:dalal_street_client/blocs/mortgage/retrieve_sheet/retrieve_sheet
 import 'package:dalal_street_client/components/sheet_pop_over.dart';
 import 'package:dalal_street_client/constants/constants.dart';
 import 'package:dalal_street_client/constants/format.dart';
+import 'package:dalal_street_client/models/snackbar/snackbar_type.dart';
 import 'package:dalal_street_client/proto_build/models/MortgageDetail.pb.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
 import 'package:dalal_street_client/theme/colors.dart';
@@ -38,10 +39,11 @@ class _RetrieveBottomSheetState extends State<RetrieveBottomSheet> {
         listener: (context, state) {
           if (state is RetrieveSheetSuccess) {
             showSnackBar(context,
-                'Successfully retrieved $quantity ${widget.company.fullName} stocks');
+                'Successfully retrieved $quantity ${widget.company.fullName} stocks',
+                type: SnackBarType.success);
             Navigator.maybePop(context);
           } else if (state is RetrieveSheetFailure) {
-            showSnackBar(context, state.msg);
+            showSnackBar(context, state.msg, type: SnackBarType.error);
             Navigator.maybePop(context);
           }
         },

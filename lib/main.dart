@@ -1,6 +1,7 @@
 import 'package:dalal_street_client/blocs/dalal/dalal_bloc.dart';
 import 'package:dalal_street_client/config/config.dart';
 import 'package:dalal_street_client/grpc/client.dart';
+import 'package:dalal_street_client/models/snackbar/snackbar_type.dart';
 import 'package:dalal_street_client/navigation/route_generator.dart';
 import 'package:dalal_street_client/theme/theme.dart';
 import 'package:dalal_street_client/utils/snackbar.dart';
@@ -11,8 +12,6 @@ import 'package:dalal_street_client/config/get_it.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:dalal_street_client/config/log.dart';
 import 'package:path_provider/path_provider.dart';
-
-import 'models/snackbar/snackbar_type.dart';
 
 void main() async {
   // Something doesnt work without this line. Dont remember what
@@ -36,8 +35,7 @@ void main() async {
       // Provide DalalBloc at the root of the App
       BlocProvider(
         create: (_) => DalalBloc(),
-        // TODO create 2 widget to move up the materialApp widget (context error)
-        child: MaterialApp(home: DalalApp()),
+        child: DalalApp(),
       ),
     ),
     storage: storage,
@@ -79,16 +77,12 @@ class DalalApp extends StatelessWidget {
                 (route) => false,
                 arguments: state.user,
               );
-
-              showSnackBar(context, 'hello world 1',
-                  type: SnackBarType.success);
-              showSnackBar(context, 'hello world 2',
-                  type: SnackBarType.success);
             } else if (state is DalalVerificationPending) {
               // Register sessionId
               getIt.registerSingleton(state.sessionId);
 
-              showSnackBar(context, 'Verify your phone to continue');
+              showSnackBar(context, 'Verify your phone to continue',
+                  type: SnackBarType.warning);
               _navigator.pushNamedAndRemoveUntil(
                   '/enterPhone', (route) => false);
             } else if (state is DalalLoggedOut) {
@@ -98,7 +92,8 @@ class DalalApp extends StatelessWidget {
               if (!state.fromSplash) {
                 // Show msg only when coming from a page other than splash
                 logger.i('user logged out');
-                showSnackBar(context, 'User Logged Out');
+                showSnackBar(context, 'User Logged Out',
+                    type: SnackBarType.success);
               }
               _navigator.pushNamedAndRemoveUntil('/landing', (route) => false);
             } else if (state is DalalLoginFailed) {

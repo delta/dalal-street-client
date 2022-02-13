@@ -1,5 +1,6 @@
 import 'package:dalal_street_client/config/log.dart';
 import 'package:dalal_street_client/constants/constants.dart';
+import 'package:dalal_street_client/models/snackbar/snackbar_type.dart';
 import 'package:dalal_street_client/proto_build/models/OrderType.pb.dart';
 import 'package:dalal_street_client/utils/calculations.dart';
 import 'package:fixnum/fixnum.dart';
@@ -40,11 +41,13 @@ void tradingBottomSheet(
                 logger.i('order placed');
                 Navigator.pop(context);
                 showSnackBar(context,
-                    'Order successfully placed with Order ID: ${state.orderId}');
+                    'Order successfully placed with Order ID: ${state.orderId}',
+                    type: SnackBarType.success);
               } else if (state is PlaceOrderFailure) {
                 logger.i('unsuccessful');
                 Navigator.pop(context);
-                showSnackBar(context, state.statusMessage);
+                showSnackBar(context, state.statusMessage,
+                    type: SnackBarType.error);
               }
             },
             builder: (context, state) {
