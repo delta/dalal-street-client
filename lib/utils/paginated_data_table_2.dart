@@ -6,7 +6,6 @@ import 'dart:math' as math;
 
 import 'package:flutter/gestures.dart' show DragStartBehavior;
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 /// A material design data table that shows data using multiple pages.
 ///
@@ -81,28 +80,17 @@ class PaginatedDataTable2 extends StatefulWidget {
     this.handlePrevious,
     required this.source,
     this.checkboxHorizontalMargin,
-  })  : assert(actions == null || (actions != null && header != null)),
-        assert(columns != null),
-        assert(dragStartBehavior != null),
+  })  : assert(actions == null || (header != null)),
         assert(columns.isNotEmpty),
         assert(sortColumnIndex == null ||
             (sortColumnIndex >= 0 && sortColumnIndex < columns.length)),
-        assert(sortAscending != null),
-        assert(dataRowHeight != null),
-        assert(headingRowHeight != null),
-        assert(horizontalMargin != null),
-        assert(columnSpacing != null),
-        assert(showCheckboxColumn != null),
-        assert(showFirstLastButtons != null),
-        assert(rowsPerPage != null),
         assert(rowsPerPage > 0),
         assert(() {
-          if (onRowsPerPageChanged != null)
-            assert(availableRowsPerPage != null &&
-                availableRowsPerPage.contains(rowsPerPage));
+          if (onRowsPerPageChanged != null) {
+            assert(availableRowsPerPage.contains(rowsPerPage));
+          }
           return true;
         }()),
-        assert(source != null),
         super(key: key);
 
   /// The table card's optional header.
@@ -293,8 +281,10 @@ class PaginatedDataTable2State extends State<PaginatedDataTable2> {
       final int rowsPerPage = widget.rowsPerPage;
       _firstRowIndex = (rowIndex ~/ rowsPerPage) * rowsPerPage;
     });
-    if ((widget.onPageChanged != null) && (oldFirstRowIndex != _firstRowIndex))
+    if ((widget.onPageChanged != null) &&
+        (oldFirstRowIndex != _firstRowIndex)) {
       widget.onPageChanged!(_firstRowIndex);
+    }
   }
 
   DataRow _getBlankRowFor(int index) {
@@ -379,6 +369,7 @@ class PaginatedDataTable2State extends State<PaginatedDataTable2> {
 
   @override
   Widget build(BuildContext context) {
+    // ignore: todo
     // TODO(ianh): This whole build function doesn't handle RTL yet.
     assert(debugCheckHasMaterialLocalizations(context));
     final ThemeData themeData = Theme.of(context);
@@ -555,6 +546,7 @@ class PaginatedDataTable2State extends State<PaginatedDataTable2> {
                     opacity: 0.54,
                   ),
                   child: SizedBox(
+                    // ignore: todo
                     // TODO(bkonyi): this won't handle text zoom correctly,
                     //  https://github.com/flutter/flutter/issues/48522
                     height: 56.0,
