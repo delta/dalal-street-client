@@ -21,8 +21,8 @@ Container companyPrices(Stock company) {
         borderRadius: BorderRadius.circular(10),
       ),
       child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -80,23 +80,28 @@ Container companyPrices(Stock company) {
                       ),
                       textAlign: TextAlign.start,
                     ),
-                    Text(
-                      priceChange >= 0
-                          ? '+' +
-                              oCcy.format(priceChange).toString() +
-                              '  (+' +
-                              (priceChangePercentage * 100).toStringAsFixed(2) +
-                              '%)'
-                          : oCcy.format(priceChange).toString() +
-                              '  (' +
-                              (priceChangePercentage * 100).toStringAsFixed(2) +
-                              '%)',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        color: priceChange > 0 ? secondaryColor : heartRed,
-                      ),
-                    ),
+                    !company.isBankrupt
+                        ? Text(
+                            priceChange >= 0
+                                ? '+' +
+                                    oCcy.format(priceChange).toString() +
+                                    '  (+' +
+                                    (priceChangePercentage * 100)
+                                        .toStringAsFixed(2) +
+                                    '%)'
+                                : oCcy.format(priceChange).toString() +
+                                    '  (' +
+                                    (priceChangePercentage * 100)
+                                        .toStringAsFixed(2) +
+                                    '%)',
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                              color:
+                                  priceChange > 0 ? secondaryColor : heartRed,
+                            ),
+                          )
+                        : const SizedBox(),
                   ],
                 ),
                 SecondaryButton(
@@ -108,8 +113,28 @@ Container companyPrices(Stock company) {
                 ),
               ],
             ),
-            _companyGraph(company.id)
+            _companyGraph(company)
           ]));
 }
 
-Widget _companyGraph(int stockid) => StockChart(stockId: stockid);
+Widget _companyGraph(Stock stock) {
+  if (stock.isBankrupt) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        const Text(
+          'This Company is Bankrupt',
+          style: TextStyle(
+              color: heartRed, fontSize: 14, fontWeight: FontWeight.w600),
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        Image.asset('assets/images/sad_bull.png', height: 200)
+      ],
+    );
+  } else {
+    return StockChart(stockId: stock.id);
+  }
+}
