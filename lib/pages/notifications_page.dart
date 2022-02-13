@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:dalal_street_client/blocs/notifications_cubit/notifications_cubit.dart';
 import 'package:dalal_street_client/config/get_it.dart';
 import 'package:dalal_street_client/proto_build/models/Notification.pb.dart'
@@ -6,6 +8,7 @@ import 'package:dalal_street_client/streams/global_streams.dart';
 import 'package:dalal_street_client/theme/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 
 class NotificationsPage extends StatefulWidget {
   const NotificationsPage({Key? key}) : super(key: key);
@@ -116,10 +119,11 @@ class _NotifsState extends State<NotificationsPage> {
               test.Notification notification = notifEvents[index];
 
               String text = notification.text;
+              String isCreatedAt = notification.createdAt;
 
               bool isBroadcast = notification.isBroadcast;
 
-              return notifItem(text, isBroadcast);
+              return notifItem(text, isBroadcast, isCreatedAt);
             },
             separatorBuilder: (context, index) {
               return const Divider();
@@ -150,10 +154,33 @@ class _NotifsState extends State<NotificationsPage> {
         }
       });
 
-  Widget notifItem(
-    String notif,
-    bool islatest,
-  ) {
+  // ignore: non_constant_identifier_names
+  String ISOtoDateTime(String createdAt) {
+    DateTime createdAtTime = DateTime.parse(createdAt);
+    DateTime currentTime = DateTime.now();
+    Duration diff = currentTime.difference(createdAtTime);
+    int hourDifference = diff.inHours - (diff.inDays * 24);
+    if (diff.inDays == 0) {
+      if (diff.inHours == 0) {
+        return (diff.inMinutes.toString() + ' minutes ago');
+      } else if (diff.inHours == 1) {
+        return (diff.inHours.toString() + ' hour ago');
+      } else {
+        return (diff.inHours.toString() + ' hours ago');
+      }
+    } else {
+      return (diff.inDays.toString() +
+          ' days' +
+          '  ' +
+          hourDifference.toString() +
+          '  '
+              'hours ago');
+    }
+  }
+
+  Widget notifItem(String notif, bool islatest, String createdAt) {
+    Color iconColor =
+        Colors.primaries[Random().nextInt(Colors.primaries.length)];
     if (!islatest) {
       return (Container(
         padding: const EdgeInsets.all(10),
@@ -185,32 +212,72 @@ class _NotifsState extends State<NotificationsPage> {
         ),
       ));
     } else {
-      return Container(
-          padding: const EdgeInsets.all(10),
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.8,
-                        child: Flexible(
-                            child: Text(notif.toString(),
-                                style: const TextStyle(
-                                    color: Colors.white, fontSize: 15)),
-                            fit: FlexFit.loose),
-                      ),
-                      const SizedBox.square(
-                        dimension: 5,
-                      ),
-                    ]),
-                const SizedBox.square(
-                  dimension: 20,
-                ),
-              ]));
+      return Card(
+        color: const Color.fromARGB(255, 20, 22, 22),
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.zero,
+            side: BorderSide(
+              color: Colors.grey.withOpacity(0.2),
+              width: 1,
+            )),
+        child: Container(
+            padding: const EdgeInsets.all(10),
+            child: Column(
+                // mainAxisAlignment: MainAxisAlignment.start,
+                // crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Row(
+                          children: [
+                            SizedBox(
+                                width: 45,
+                                height: 45,
+                                child: Stack(children: <Widget>[
+                                  Positioned(
+                                      top: 0,
+                                      left: 0,
+                                      child: Container(
+                                          width: 45,
+                                          height: 45,
+                                          decoration: const BoxDecoration(
+                                            color:
+                                                Color.fromRGBO(43, 52, 52, 1),
+                                            borderRadius: BorderRadius.all(
+                                                Radius.elliptical(45, 45)),
+                                          ))),
+                                  Positioned(
+                                      top: 9.5,
+                                      left: 11.9,
+                                      child: SvgPicture.asset(
+                                          'assets/icon/notification-icon.svg',
+                                          semanticsLabel: 'notification',
+                                          color: iconColor)),
+                                ])),
+                            const Positioned(child: SizedBox(width: 20)),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.8,
+                              child: Flexible(
+                                  child: Text(notif.toString(),
+                                      style: const TextStyle(
+                                          color: Colors.white, fontSize: 15)),
+                                  fit: FlexFit.loose),
+                            ),
+                          ],
+                        ),
+                        Container(
+                          alignment: Alignment.bottomRight,
+                          child: Flexible(
+                              child: Text(ISOtoDateTime(createdAt),
+                                  textAlign: TextAlign.right,
+                                  style: TextStyle(color: iconColor)),
+                              fit: FlexFit.loose),
+                        ),
+                      ]),
+                ])),
+      );
     }
   }
 }
