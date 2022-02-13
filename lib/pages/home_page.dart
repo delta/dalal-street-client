@@ -265,6 +265,7 @@ class _HomePageState extends State<HomePage>
       children: stockItems,
     );
   }
+
   Widget newsItem(
     String text,
     String imagePath,
