@@ -219,27 +219,45 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
       DataCell(Text(
         fullName!,
         style: const TextStyle(fontSize: 12),
+        textAlign: TextAlign.center,
       )),
       DataCell(
-        Text(orderTypeName, style: const TextStyle(fontSize: 12)),
+        Text(
+          orderTypeName,
+          style: const TextStyle(fontSize: 12),
+          textAlign: TextAlign.center,
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+        ),
       ),
       DataCell(
-        Text(stockQuantity.toString(), style: const TextStyle(fontSize: 12)),
+        Text(
+          stockQuantity.toString(),
+          style: const TextStyle(fontSize: 12),
+          textAlign: TextAlign.center,
+        ),
       ),
       DataCell(
-        Text(stockQuantityFulfilled.toString(),
-            style: const TextStyle(fontSize: 12)),
+        Text(
+          stockQuantityFulfilled.toString(),
+          style: const TextStyle(fontSize: 12),
+          textAlign: TextAlign.center,
+        ),
       ),
       DataCell(
-        Text(price.toString(), style: const TextStyle(fontSize: 12)),
+        Text(
+          price.toString(),
+          style: const TextStyle(fontSize: 12),
+          textAlign: TextAlign.center,
+        ),
       ),
       DataCell(TertiaryButton(
-        width: 45,
-        height: 15,
+        width: 60,
+        height: 20,
         color: Colors.red,
         onPressed: () => buttonCanceltap(id, isClosed, isAsk),
         title: 'cancel',
-        fontSize: 8,
+        fontSize: 12,
       ))
     ]);
   }
@@ -269,20 +287,31 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
                 scrollDirection: Axis.vertical,
                 child: DataTable(
                     border: const TableBorder(
+                        horizontalInside: BorderSide(
+                            width: 0,
+                            color: Colors.black,
+                            style: BorderStyle.solid),
+                        top: BorderSide(
+                            width: 1,
+                            color: lightGray,
+                            style: BorderStyle.solid),
                         verticalInside: BorderSide(
                             width: 1,
                             color: lightGray,
                             style: BorderStyle.solid)),
-                    // border:TableBorder,
-                    columnSpacing: 10,
+                    columnSpacing: 6,
                     headingRowHeight: 40,
                     columns: const <DataColumn>[
                       DataColumn(
-                          label: Text('Company',
-                              style: TextStyle(
-                                  color: lightGray,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w800))),
+                          label: Text(
+                        'Company',
+                        style: TextStyle(
+                          color: lightGray,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w800,
+                        ),
+                        textAlign: TextAlign.center,
+                      )),
                       DataColumn(
                           label: Text(
                         'Type',
@@ -290,31 +319,44 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
                             color: lightGray,
                             fontSize: 12,
                             fontWeight: FontWeight.w800),
+                        textAlign: TextAlign.center,
                       )),
                       DataColumn(
-                          label: Text('Volume',
-                              style: TextStyle(
-                                  color: lightGray,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w800))),
+                          label: Text(
+                        'Volume',
+                        style: TextStyle(
+                            color: lightGray,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w800),
+                        textAlign: TextAlign.center,
+                      )),
                       DataColumn(
-                          label: Text('Filled',
-                              style: TextStyle(
-                                  color: lightGray,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w800))),
+                          label: Text(
+                        'Filled',
+                        style: TextStyle(
+                            color: lightGray,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w800),
+                        textAlign: TextAlign.center,
+                      )),
                       DataColumn(
-                          label: Text('Price',
-                              style: TextStyle(
-                                  color: lightGray,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w800))),
+                          label: Text(
+                        'Price',
+                        style: TextStyle(
+                            color: lightGray,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w800),
+                        textAlign: TextAlign.center,
+                      )),
                       DataColumn(
-                          label: Text('Action',
-                              style: TextStyle(
-                                  color: lightGray,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w800))),
+                          label: Text(
+                        'Action',
+                        style: TextStyle(
+                            color: lightGray,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w800),
+                        textAlign: TextAlign.center,
+                      )),
                     ],
                     rows: buildRowsOfOpenOrders(state.res)));
           } else {
@@ -365,18 +407,32 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
             return SingleChildScrollView(
                 scrollDirection: Axis.vertical,
                 child: DataTable(
-                    // border: const TableBorder(verticalInside: BorderSide(width: 1, color: lightGray, style: BorderStyle.solid),outside: BorderSide(width: 3, color: Colors.blue)),
-                    // border:TableBorder.all(color: lightGray),
-
-                    columnSpacing: 10,
+                    border: const TableBorder(
+                        horizontalInside: BorderSide(
+                            width: 0,
+                            color: Colors.black,
+                            style: BorderStyle.solid),
+                        top: BorderSide(
+                            width: 1,
+                            color: lightGray,
+                            style: BorderStyle.solid),
+                        verticalInside: BorderSide(
+                            width: 1,
+                            color: lightGray,
+                            style: BorderStyle.solid)),
+                    columnSpacing: 6,
                     headingRowHeight: 40,
                     columns: const <DataColumn>[
                       DataColumn(
-                          label: Text('Company',
-                              style: TextStyle(
-                                  color: lightGray,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w800))),
+                          label: Text(
+                        'Company',
+                        style: TextStyle(
+                          color: lightGray,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w800,
+                        ),
+                        textAlign: TextAlign.center,
+                      )),
                       DataColumn(
                           label: Text(
                         'Type',
@@ -384,31 +440,44 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
                             color: lightGray,
                             fontSize: 12,
                             fontWeight: FontWeight.w800),
+                        textAlign: TextAlign.center,
                       )),
                       DataColumn(
-                          label: Text('Volume',
-                              style: TextStyle(
-                                  color: lightGray,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w800))),
+                          label: Text(
+                        'Volume',
+                        style: TextStyle(
+                            color: lightGray,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w800),
+                        textAlign: TextAlign.center,
+                      )),
                       DataColumn(
-                          label: Text('Filled',
-                              style: TextStyle(
-                                  color: lightGray,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w800))),
+                          label: Text(
+                        'Filled',
+                        style: TextStyle(
+                            color: lightGray,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w800),
+                        textAlign: TextAlign.center,
+                      )),
                       DataColumn(
-                          label: Text('Price',
-                              style: TextStyle(
-                                  color: lightGray,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w800))),
+                          label: Text(
+                        'Price',
+                        style: TextStyle(
+                            color: lightGray,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w800),
+                        textAlign: TextAlign.center,
+                      )),
                       DataColumn(
-                          label: Text('Action',
-                              style: TextStyle(
-                                  color: lightGray,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w800))),
+                          label: Text(
+                        'Action',
+                        style: TextStyle(
+                            color: lightGray,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w800),
+                        textAlign: TextAlign.center,
+                      )),
                     ],
                     rows: buildRowsOfOpenOrders(state.res)));
           } else {
