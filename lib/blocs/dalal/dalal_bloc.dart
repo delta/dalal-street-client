@@ -92,7 +92,9 @@ class DalalBloc extends HydratedBloc<DalalEvent, DalalState> {
     on<DalalLogOut>((event, emit) {
       try {
         actionClient.logout(LogoutRequest(), options: sessionOptions(getIt()));
-        unsubscribeFromGlobalStreams(getIt(), getIt());
+        if (getIt.isRegistered<GlobalStreams>()) {
+          unsubscribeFromGlobalStreams(getIt(), getIt());
+        }
       } catch (e) {
         // Cant do anything
         logger.e(e);
