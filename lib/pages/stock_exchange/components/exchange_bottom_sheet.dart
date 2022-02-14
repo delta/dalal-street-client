@@ -1,4 +1,5 @@
 import 'package:dalal_street_client/blocs/exchange/sheet/exchange_sheet_cubit.dart';
+import 'package:dalal_street_client/components/loading.dart';
 import 'package:dalal_street_client/components/sheet_pop_over.dart';
 import 'package:dalal_street_client/config/get_it.dart';
 import 'package:dalal_street_client/constants/format.dart';
@@ -64,9 +65,7 @@ class _ExchangeBottomSheetState extends State<ExchangeBottomSheet> {
         builder: (context, state) {
           if (state is ExchangeSheetLoading) {
             return const Center(
-              child: CircularProgressIndicator(
-                color: Colors.green,
-              ),
+              child: DalalLoadingBar(),
             );
           }
           return Padding(

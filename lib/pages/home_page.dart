@@ -1,6 +1,7 @@
 import 'package:dalal_street_client/components/graph/line_area.dart';
 import 'package:dalal_street_client/blocs/news/news_bloc.dart';
 import 'package:dalal_street_client/components/buttons/tertiary_button.dart';
+import 'package:dalal_street_client/components/loading.dart';
 import 'package:dalal_street_client/config/get_it.dart';
 import 'package:dalal_street_client/constants/format.dart';
 import 'package:dalal_street_client/pages/newsdetail_page.dart';
@@ -202,9 +203,7 @@ class _HomePageState extends State<HomePage>
           );
         } else {
           return const Center(
-            child: CircularProgressIndicator(
-              color: secondaryColor,
-            ),
+            child: DalalLoadingBar(),
           );
         }
       });
