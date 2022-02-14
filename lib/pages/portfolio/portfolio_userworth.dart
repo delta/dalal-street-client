@@ -1,3 +1,4 @@
+import 'package:dalal_street_client/components/loading.dart';
 import 'package:fixnum/fixnum.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -29,9 +30,7 @@ class _PortfolioUserWorthState extends State<PortfolioUserWorth> {
       BlocBuilder<PortfolioCubit, PortfolioState>(builder: (context, state) {
         if (state is PortfolioLoading) {
           return const Center(
-            child: CircularProgressIndicator(
-              color: Colors.green,
-            ),
+            child: DalalLoadingBar(),
           );
         } else if (state is UserWorthLoaded) {
           int stockWorth = calculateUserStockWorth(state.stocks);

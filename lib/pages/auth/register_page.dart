@@ -1,6 +1,7 @@
 import 'package:dalal_street_client/blocs/auth/register/register_cubit.dart';
 import 'package:dalal_street_client/components/dalal_back_button.dart';
 import 'package:dalal_street_client/components/fill_max_height_scroll_view.dart';
+import 'package:dalal_street_client/components/loading.dart';
 import 'package:dalal_street_client/components/reactive_password_field.dart';
 import 'package:dalal_street_client/utils/snackbar.dart';
 import 'package:dalal_street_client/utils/tooltip.dart';
@@ -45,7 +46,7 @@ class RegisterPage extends StatelessWidget {
             },
             builder: (context, state) {
               if (state is RegisterLoading) {
-                return const Center(child: CircularProgressIndicator());
+                return const Center(child: DalalLoadingBar());
               } else {
                 return buildBody();
               }

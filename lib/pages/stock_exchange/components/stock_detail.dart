@@ -1,5 +1,6 @@
 import 'package:dalal_street_client/blocs/exchange/exchange_cubit.dart';
 import 'package:dalal_street_client/blocs/exchange/sheet/exchange_sheet_cubit.dart';
+import 'package:dalal_street_client/components/loading.dart';
 import 'package:dalal_street_client/config/get_it.dart';
 import 'package:dalal_street_client/constants/format.dart';
 import 'package:dalal_street_client/constants/icons.dart';
@@ -410,11 +411,7 @@ class _StockDetailState extends State<StockDetail> {
                 },
                 builder: (context, state) {
                   if (state is ExchangeSheetLoading) {
-                    return const Center(
-                      child: CircularProgressIndicator(
-                        color: Colors.green,
-                      ),
-                    );
+                    return const Center(child: DalalLoadingBar());
                   }
                   return ElevatedButton(
                     onPressed: () =>

@@ -1,4 +1,5 @@
 import 'package:dalal_street_client/blocs/mortgage/mortgage_details/mortgage_details_cubit.dart';
+import 'package:dalal_street_client/components/loading.dart';
 import 'package:dalal_street_client/config/get_it.dart';
 import 'package:dalal_street_client/pages/mortgage/components/retrieve_stock_item.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
@@ -57,9 +58,7 @@ class _RetrievePageState extends State<RetrievePage> {
           );
         } else if (state is MortgageDetailsLoading) {
           return const Center(
-            child: CircularProgressIndicator(
-              color: Colors.green,
-            ),
+            child: DalalLoadingBar(),
           );
         } else {
           return const Center(
