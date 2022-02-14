@@ -61,7 +61,7 @@ class _NotifsState extends State<NotificationsPage> {
                           style: const TextStyle(color: white, fontSize: 16),
                         );
                       } else {
-                        return const Text('empty data');
+                        return const Text('No new notifications');
                       }
                     } else {
                       return Text('State: ${snapshot.connectionState}');
@@ -194,14 +194,11 @@ class _NotifsState extends State<NotificationsPage> {
                 children: <Widget>[
                   SizedBox(
                     width: (MediaQuery.of(context).size.width - 100) * 0.8,
-                    child: Flexible(
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-                        child: Text(notif.toString(),
-                            style: const TextStyle(
-                                color: Colors.white, fontSize: 15)),
-                      ),
-                      fit: FlexFit.loose,
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                      child: Text(notif.toString(),
+                          style: const TextStyle(
+                              color: Colors.white, fontSize: 15)),
                     ),
                   ),
                   const SizedBox.square(
@@ -257,21 +254,17 @@ class _NotifsState extends State<NotificationsPage> {
                         const Positioned(child: SizedBox(width: 20)),
                         SizedBox(
                           width: MediaQuery.of(context).size.width * 0.8,
-                          child: Flexible(
-                              child: Text(notif.toString(),
-                                  style: const TextStyle(
-                                      color: Colors.white, fontSize: 15)),
-                              fit: FlexFit.loose),
+                          child: Text(notif.toString(),
+                              style: const TextStyle(
+                                  color: Colors.white, fontSize: 15)),
                         ),
                       ],
                     ),
                     Container(
                       alignment: Alignment.bottomRight,
-                      child: Flexible(
-                          child: Text(ISOtoDateTime(createdAt),
-                              textAlign: TextAlign.right,
-                              style: TextStyle(color: iconColor)),
-                          fit: FlexFit.loose),
+                      child: Text(ISOtoDateTime(createdAt),
+                          textAlign: TextAlign.right,
+                          style: TextStyle(color: iconColor)),
                     ),
                   ]),
             ])),

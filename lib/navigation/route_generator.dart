@@ -152,6 +152,7 @@ class RouteGenerator {
           child: const DailyChallengesPage(),
         );
 
+      //Notifications Page
       case '/notifications':
         return BlocProvider(
           create: (context) => NotificationsCubit(),
