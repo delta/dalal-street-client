@@ -52,12 +52,12 @@ class NewsDetail extends StatelessWidget {
               ),
             )),
             Padding(
-              padding: const EdgeInsets.all(15),
-              child: Text(
-                dur,
-                style: const TextStyle(fontSize: 12, color: lightGray),
-              ),
-            ),
+                padding: const EdgeInsets.all(15),
+                child: Text('Published on ' + dur,
+                    style: const TextStyle(
+                        fontStyle: FontStyle.italic,
+                        color: lightGray,
+                        fontSize: 12))),
             Padding(
               padding: const EdgeInsets.all(15),
               child: Text(
