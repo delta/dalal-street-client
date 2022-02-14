@@ -150,7 +150,7 @@ Widget _companyGraph(Stock stock) {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         const Text(
-          'This Company is Bankrupt',
+          'This Company went Bankrupt',
           style: TextStyle(
               color: heartRed, fontSize: 14, fontWeight: FontWeight.w600),
         ),

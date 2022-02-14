@@ -8,7 +8,6 @@ import 'package:dalal_street_client/proto_build/models/MarketEvent.pb.dart';
 import 'package:dalal_street_client/theme/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lottie/lottie.dart';
 
 class NewsPage extends StatefulWidget {
   const NewsPage({Key? key}) : super(key: key);
@@ -128,11 +127,7 @@ class _NewsPageState extends State<NewsPage> {
             ],
           );
         } else {
-          return Center(
-              child: SizedBox(
-                  height: 200,
-                  width: 200,
-                  child: Lottie.asset('assets/lottie/loading.json')));
+          return const Center(child: DalalLoadingBar());
         }
       });
 

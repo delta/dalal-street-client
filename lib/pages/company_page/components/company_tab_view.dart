@@ -69,7 +69,7 @@ class _CompanyTabViewState extends State<CompanyTabView>
                   physics: const BouncingScrollPhysics(
                       parent: AlwaysScrollableScrollPhysics()),
                   children: <Widget>[
-                    overView(widget.company),
+                    overView(widget.company, context),
                     marketDepth(widget.company),
                   ]),
             ),
