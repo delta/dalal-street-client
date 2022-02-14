@@ -5,6 +5,7 @@ import 'package:dalal_street_client/config/log.dart';
 import 'package:dalal_street_client/pages/newsdetail_page.dart';
 import 'package:dalal_street_client/proto_build/models/MarketEvent.pb.dart';
 import 'package:dalal_street_client/theme/colors.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -68,8 +69,11 @@ class _CompanyNewsPageState extends State<CompanyNewsPage> {
                 ),
                 Padding(
                     padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-                    child: Text(dur,
-                        style: const TextStyle(color: lightGray, fontSize: 12)))
+                    child: Text('Published on ' + dur,
+                        style: const TextStyle(
+                            fontStyle: FontStyle.italic,
+                            color: lightGray,
+                            fontSize: 12)))
               ]),
         ],
       ),
@@ -96,6 +100,8 @@ class _CompanyNewsPageState extends State<CompanyNewsPage> {
         if (state is GetNewsSucess) {
           mapMarketEvents.clear();
           mapMarketEvents.addAll(state.marketEventsList.marketEvents);
+          // Sort MarketEvents according to there created time
+          mapMarketEvents.sort((a, b) => b.createdAt.compareTo(a.createdAt));
           logger.i(mapMarketEvents);
           if (mapMarketEvents.isNotEmpty) {
             return ListView.separated(
@@ -113,7 +119,7 @@ class _CompanyNewsPageState extends State<CompanyNewsPage> {
                     child: newsItem(headline, imagePath, createdAt),
                     onTap: () => Navigator.push(
                         context,
-                        MaterialPageRoute(
+                        CupertinoPageRoute(
                           builder: (context) => NewsDetail(
                               text: text,
                               imagePath: imagePath,
