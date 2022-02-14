@@ -13,6 +13,7 @@ import 'package:dalal_street_client/proto_build/models/User.pb.dart';
 import 'package:dalal_street_client/theme/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class DalalHome extends StatefulWidget {
   final User user;
@@ -26,6 +27,13 @@ class DalalHome extends StatefulWidget {
 }
 
 class _DalalHomeState extends State<DalalHome> {
+  final _homeRoutes = [
+    '/home',
+    '/portfolio',
+    '/exchange',
+    '/ranking',
+  ];
+
   final _bottomMenu = {
     'Home': AppIcons.home,
     'Portfolio': AppIcons.portfolio,
@@ -46,25 +54,19 @@ class _DalalHomeState extends State<DalalHome> {
 
   late PageController _pageController;
 
+  int indexForPage(String page) {
+    final index = _homeRoutes.indexOf(page);
+    if (index == -1) {
+      logger.e('Invalid page route sent to DalalHome');
+      return 0;
+    }
+    return index;
+  }
+
   @override
   void initState() {
     super.initState();
     _pageController = PageController(initialPage: indexForPage(widget.page));
-  }
-
-  int indexForPage(String page) {
-    switch (page) {
-      case 'home':
-        return 0;
-      case 'portfolio':
-        return 1;
-      case 'exchange':
-        return 2;
-      case 'ranking':
-        return 3;
-      default:
-        return 0;
-    }
   }
 
   @override
@@ -116,12 +118,16 @@ class _DalalHomeState extends State<DalalHome> {
           ),
           bottomNavigationBar: DalalHomeNavBar(
             menu: _bottomMenu,
-            onItemSelect: (index) => _pageController.jumpToPage(index),
-            onItemReselect: (index) => logger.d('$index reselected'),
+            onItemSelect: _onHomeItemSelect,
+            // TODO: can let the page know of reselection, and do some behaviour
+            // Example: scroll to top of list, like in insta
+            onItemReselect: (index) => {},
             onMoreClick: _showHomeBottomSheet,
           ),
         ),
       );
+
+  void _onHomeItemSelect(int index) => context.go(_homeRoutes[index]);
 
   void _showHomeBottomSheet() => showModalBottomSheet(
         context: context,
@@ -131,8 +137,7 @@ class _DalalHomeState extends State<DalalHome> {
             borderRadius: BorderRadius.vertical(top: Radius.circular(10))),
         builder: (_) => DalalHomeBottomSheet(
           items: _sheetMenu,
-          onItemClick: (index) =>
-              Navigator.of(context).pushNamed(_sheetPageRoutes[index]),
+          onItemClick: (index) => context.push(_sheetPageRoutes[index]),
         ),
       );
 }

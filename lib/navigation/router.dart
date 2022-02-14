@@ -42,7 +42,7 @@ GoRouter generateRouter(BuildContext context) {
         path: '/:p(home|portfolio|exchange|ranking)',
         builder: (_, state) {
           final userState = dalalBloc.state as DalalDataLoaded;
-          final page = state.params['p']!;
+          final page = '/' + state.params['p']!;
           return DalalHome(
             user: userState.user,
             page: page,
