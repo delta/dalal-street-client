@@ -13,6 +13,7 @@ import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
 import 'package:dalal_street_client/proto_build/models/User.pb.dart';
 import 'package:dalal_street_client/streams/global_streams.dart';
 import 'package:dalal_street_client/utils/responsive.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:dalal_street_client/theme/colors.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -152,6 +153,8 @@ class _HomePageState extends State<HomePage>
         if (state is GetNewsSucess) {
           mapMarketEvents.clear();
           mapMarketEvents.addAll(state.marketEventsList.marketEvents);
+          // Sort MarketEvents according to there created time
+          mapMarketEvents.sort((a, b) => b.createdAt.compareTo(a.createdAt));
           if (mapMarketEvents.isNotEmpty) {
             return ListView.separated(
               shrinkWrap: true,
@@ -168,7 +171,7 @@ class _HomePageState extends State<HomePage>
                     child: newsItem(headline, imagePath, createdAt),
                     onTap: () => Navigator.push(
                         context,
-                        MaterialPageRoute(
+                        CupertinoPageRoute(
                           builder: (context) => NewsDetail(
                               text: text,
                               imagePath: imagePath,
@@ -311,8 +314,11 @@ class _HomePageState extends State<HomePage>
                 ),
                 Padding(
                     padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-                    child: Text(dur,
-                        style: const TextStyle(color: lightGray, fontSize: 12)))
+                    child: Text('Published on ' + dur,
+                        style: const TextStyle(
+                            fontStyle: FontStyle.italic,
+                            color: lightGray,
+                            fontSize: 12)))
               ]),
         ],
       ),
