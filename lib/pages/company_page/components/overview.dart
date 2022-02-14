@@ -11,7 +11,7 @@ import 'package:intl/intl.dart';
 
 final oCcy = NumberFormat('#,##0.00', 'en_US');
 
-Column overView(Stock company) {
+Column overView(Stock company, BuildContext context) {
   final Stream<Int64> priceStream =
       getIt<GlobalStreams>().stockMapStream.priceStream(company.id);
   final Stream<Int64> dayHighStream =
@@ -40,14 +40,35 @@ Column overView(Stock company) {
       const SizedBox(
         height: 10,
       ),
-      Text(
-        company.description.toString(),
-        style: const TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.w500,
-          color: lightGray,
-        ),
-        textAlign: TextAlign.start,
+      Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            company.description.toString(),
+            softWrap: true,
+            maxLines: 4,
+            overflow: TextOverflow.ellipsis,
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+              color: lightGray,
+            ),
+            textAlign: TextAlign.start,
+          ),
+          InkWell(
+            onTap: () => _showDescriptionBottomSheet(company, context),
+            child: const Text(
+              'Read more',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+                color: secondaryColor,
+              ),
+              textAlign: TextAlign.start,
+            ),
+          ),
+        ],
       ),
       const SizedBox(
         height: 30,
@@ -96,4 +117,57 @@ Column overView(Stock company) {
           }),
     ],
   );
+}
+
+_showDescriptionBottomSheet(Stock company, BuildContext context) {
+  showModalBottomSheet(
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(25.0))),
+      backgroundColor: background2,
+      context: context,
+      isScrollControlled: true,
+      builder: (ctx) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                      width: 150,
+                      height: 4.5,
+                      decoration: const BoxDecoration(
+                        color: lightGray,
+                        borderRadius: BorderRadius.all(Radius.circular(12)),
+                      )),
+                ],
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              const Text(
+                'About Company',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+              ),
+              const SizedBox(
+                height: 15,
+              ),
+              Text(
+                company.description,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  color: lightGray,
+                ),
+              ),
+              const SizedBox(
+                height: 15,
+              ),
+            ],
+          ),
+        );
+      });
 }
