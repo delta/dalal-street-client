@@ -22,7 +22,7 @@ class _SplashPageState extends State<SplashPage> {
   Widget build(context) => Scaffold(
         body: Center(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Image.asset(
                 'assets/images/army_bull.png',
@@ -39,7 +39,6 @@ class _SplashPageState extends State<SplashPage> {
                   style: Theme.of(context).textTheme.subtitle1,
                 )
               ]),
-              const SizedBox(height: 40),
               BlocBuilder<DalalBloc, DalalState>(
                 builder: (context, state) {
                   if (state is DalalLoginFailed) {
