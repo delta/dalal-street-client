@@ -27,6 +27,7 @@ void tradingBottomSheet(
   int totalPrice = company.currentPrice.toInt() * quantity;
   int orderFee = calculateOrderFee(totalPrice);
   String error = 'false';
+  int flag = 0;
   showModalBottomSheet(
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(25.0))),
@@ -59,15 +60,23 @@ void tradingBottomSheet(
                 logger.i('unsuccessful');
               }
               return _tradingBottomSheetBody(priceChange, company, quantity,
-                  totalPrice, orderFee, orderType, error, cash);
+                  totalPrice, orderFee, orderType, error, cash, flag);
             },
           ),
         );
       });
 }
 
-Widget _tradingBottomSheetBody(int priceChange, Stock company, int quantity,
-    int totalPrice, int orderFee, String orderType, String error, int cash) {
+Widget _tradingBottomSheetBody(
+    int priceChange,
+    Stock company,
+    int quantity,
+    int totalPrice,
+    int orderFee,
+    String orderType,
+    String error,
+    int cash,
+    int flag) {
   return StatefulBuilder(
     builder: (context, setBottomSheetState) {
       List<String> priceTypeMap = [
@@ -258,6 +267,7 @@ Widget _tradingBottomSheetBody(int priceChange, Stock company, int quantity,
                                               .onUserInteraction,
                                           validator: (text) {
                                             if (text == null || text.isEmpty) {
+                                              error = 'true';
                                               return 'Can\'t be empty';
                                             }
                                             if (int.parse(text).toDouble() <
@@ -278,13 +288,13 @@ Widget _tradingBottomSheetBody(int priceChange, Stock company, int quantity,
                                               return 'Out of range';
                                             }
                                             {
+                                              flag = 1;
                                               error = 'false';
                                               return null;
                                             }
                                           },
                                         )),
                                     Text(
-                                      // orderPriceWindow,
                                       showPriceWindow(
                                           company.currentPrice.toInt()),
                                       textAlign: TextAlign.center,
