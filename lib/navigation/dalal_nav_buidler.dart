@@ -21,13 +21,13 @@ class DalalNavBuilder extends StatelessWidget {
             getIt.registerSingleton(state.globalStreams);
 
             logger.i('user logged in');
-            context.replace('/home', extra: state.user);
+            context.webGo('/home', extra: state.user);
           } else if (state is DalalVerificationPending) {
             // Register sessionId
             getIt.registerSingleton(state.sessionId);
 
             showSnackBar(context, 'Verify your phone to continue');
-            context.replace('/enterPhone');
+            context.webGo('/enterPhone');
           } else if (state is DalalLoggedOut) {
             // Unregister everything
             getIt.reset();
@@ -37,7 +37,7 @@ class DalalNavBuilder extends StatelessWidget {
               logger.i('user logged out');
               showSnackBar(context, 'User Logged Out');
             }
-            context.replace('/landing');
+            context.webGo('/landing');
           } else if (state is DalalLoginFailed) {
             // Handled in SplashPage
           }

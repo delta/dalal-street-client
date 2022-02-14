@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class CheckMailPage extends StatelessWidget {
   final String mail;
@@ -67,6 +68,5 @@ class CheckMailPage extends StatelessWidget {
         ],
       );
 
-  void onLoginClick(BuildContext context) =>
-      Navigator.of(context).pushNamed('/login');
+  void onLoginClick(BuildContext context) => context.push('/login');
 }

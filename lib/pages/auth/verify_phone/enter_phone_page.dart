@@ -1,5 +1,6 @@
 import 'package:dalal_street_client/blocs/auth/verify_phone/enter_phone/enter_phone_cubit.dart';
 import 'package:dalal_street_client/constants/app_info.dart';
+import 'package:dalal_street_client/navigation/nav_utils.dart';
 import 'package:dalal_street_client/utils/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -32,9 +33,9 @@ class EnterPhonePage extends StatelessWidget {
             child: BlocConsumer<EnterPhoneCubit, EnterPhoneState>(
               listener: (context, state) {
                 if (state is EnterPhoneSuccess) {
-                  Navigator.of(context).pushNamed(
+                  context.webGo(
                     '/enterOtp',
-                    arguments: state.phone,
+                    extra: state.phone,
                   );
                 }
                 if (state is EnterPhoneFailure) {

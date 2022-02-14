@@ -35,7 +35,7 @@ void main() async {
       // Provide DalalBloc at the root of the App
       BlocProvider(
         create: (_) => DalalBloc(),
-        child: DalalApp(),
+        child: const DalalApp(),
       ),
     ),
     storage: storage,
