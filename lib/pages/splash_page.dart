@@ -1,5 +1,6 @@
 import 'package:dalal_street_client/blocs/dalal/dalal_bloc.dart';
 import 'package:dalal_street_client/components/loading.dart';
+import 'package:dalal_street_client/constants/app_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -23,14 +24,22 @@ class _SplashPageState extends State<SplashPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
-                'Dalal Street',
-                style: Theme.of(context)
-                    .textTheme
-                    .headline3
-                    ?.copyWith(color: Theme.of(context).colorScheme.primary),
+              Image.asset(
+                'assets/images/army_bull.png',
+                height: 300,
               ),
-              const SizedBox(height: 80),
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                Text(
+                  appTitle,
+                  style: Theme.of(context).textTheme.headline4,
+                ),
+                const SizedBox(height: 30),
+                Text(
+                  appDesc,
+                  style: Theme.of(context).textTheme.subtitle1,
+                )
+              ]),
+              const SizedBox(height: 40),
               BlocBuilder<DalalBloc, DalalState>(
                 builder: (context, state) {
                   if (state is DalalLoginFailed) {
