@@ -1,5 +1,6 @@
 import 'package:dalal_street_client/blocs/market_depth/market_depth_bloc.dart';
 import 'package:dalal_street_client/blocs/subscribe/subscribe_cubit.dart';
+import 'package:dalal_street_client/components/loading.dart';
 import 'package:dalal_street_client/constants/constants.dart';
 import 'package:dalal_street_client/models/market_orders.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
@@ -79,9 +80,7 @@ Widget marketDepth(Stock company) {
                   );
                 } else {
                   return const Center(
-                    child: CircularProgressIndicator(
-                      color: primaryColor,
-                    ),
+                    child: DalalLoadingBar(),
                   );
                 }
               },
@@ -98,9 +97,7 @@ Widget marketDepth(Stock company) {
             );
           } else {
             return const Center(
-              child: CircularProgressIndicator(
-                color: primaryColor,
-              ),
+              child: DalalLoadingBar(),
             );
           }
         },

@@ -1,6 +1,7 @@
 import 'package:dalal_street_client/blocs/dalal/dalal_bloc.dart';
 import 'package:dalal_street_client/config/get_it.dart';
 import 'package:dalal_street_client/config/log.dart';
+import 'package:dalal_street_client/models/snackbar/snackbar_type.dart';
 import 'package:dalal_street_client/navigation/nav_utils.dart';
 import 'package:dalal_street_client/utils/snackbar.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +27,8 @@ class DalalNavBuilder extends StatelessWidget {
             // Register sessionId
             getIt.registerSingleton(state.sessionId);
 
-            showSnackBar(context, 'Verify your phone to continue');
+            showSnackBar(context, 'Verify your phone to continue',
+                type: SnackBarType.warning);
             context.webGo('/enterPhone');
           } else if (state is DalalLoggedOut) {
             // Unregister everything
@@ -35,7 +37,8 @@ class DalalNavBuilder extends StatelessWidget {
             if (!state.fromSplash) {
               // Show msg only when coming from a page other than splash
               logger.i('user logged out');
-              showSnackBar(context, 'User Logged Out');
+              showSnackBar(context, 'User Logged Out',
+                  type: SnackBarType.success);
             }
             context.webGo('/landing');
           } else if (state is DalalLoginFailed) {

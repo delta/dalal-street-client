@@ -1,6 +1,7 @@
 import 'package:dalal_street_client/blocs/auth/login/login_cubit.dart';
 import 'package:dalal_street_client/components/dalal_back_button.dart';
 import 'package:dalal_street_client/components/fill_max_height_scroll_view.dart';
+import 'package:dalal_street_client/components/loading.dart';
 import 'package:dalal_street_client/components/reactive_password_field.dart';
 import 'package:dalal_street_client/utils/snackbar.dart';
 import 'package:flutter/gestures.dart';
@@ -8,6 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:reactive_forms/reactive_forms.dart';
+
+import '../../models/snackbar/snackbar_type.dart';
 
 class LoginPage extends StatelessWidget {
   LoginPage({Key? key}) : super(key: key);
@@ -21,14 +24,14 @@ class LoginPage extends StatelessWidget {
   Widget build(context) => BlocConsumer<LoginCubit, LoginState>(
         listener: (context, state) {
           if (state is LoginFailure) {
-            showSnackBar(context, state.msg);
+            showSnackBar(context, state.msg, type: SnackBarType.error);
           }
         },
         builder: (context, state) => Scaffold(
           body: SafeArea(
             child: (() {
               if (state is LoginLoading) {
-                return const Center(child: CircularProgressIndicator());
+                return const Center(child: DalalLoadingBar());
               }
               return buildBody();
             })(),

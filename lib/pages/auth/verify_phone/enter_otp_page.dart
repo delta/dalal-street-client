@@ -1,6 +1,7 @@
 import 'package:dalal_street_client/blocs/auth/verify_phone/enter_otp/enter_otp_cubit.dart';
 import 'package:dalal_street_client/components/fill_max_height_scroll_view.dart';
 import 'package:dalal_street_client/navigation/nav_utils.dart';
+import 'package:dalal_street_client/models/snackbar/snackbar_type.dart';
 import 'package:dalal_street_client/theme/theme.dart';
 import 'package:dalal_street_client/utils/snackbar.dart';
 import 'package:flutter/material.dart';
@@ -23,11 +24,13 @@ class _EnterOtpPageState extends State<EnterOtpPage> {
           child: BlocConsumer<EnterOtpCubit, OtpState>(
             listener: (context, state) {
               if (state is OtpFailure) {
-                showSnackBar(context, state.msg);
+                showSnackBar(context, state.msg, type: SnackBarType.error);
               } else if (state is OtpResent) {
-                showSnackBar(context, 'Otp resent succesfully');
+                showSnackBar(context, 'Otp resent succesfully',
+                    type: SnackBarType.info);
               } else if (state is OtpSuccess) {
-                showSnackBar(context, 'Phone Verified');
+                showSnackBar(context, 'Phone Verified',
+                    type: SnackBarType.success);
               }
             },
             builder: (context, state) {

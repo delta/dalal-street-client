@@ -1,4 +1,5 @@
 import 'package:dalal_street_client/blocs/daily_challenges/challenge_reward.dart/challenge_reward_cubit.dart';
+import 'package:dalal_street_client/models/snackbar/snackbar_type.dart';
 import 'package:dalal_street_client/proto_build/models/DailyChallenge.pb.dart';
 import 'package:dalal_street_client/proto_build/models/UserState.pb.dart';
 import 'package:dalal_street_client/theme/colors.dart';
@@ -20,9 +21,10 @@ class ChallengeReward extends StatelessWidget {
   build(context) => BlocConsumer<ChallengeRewardCubit, ChallengeRewardState>(
         listener: (context, state) {
           if (state is ChallengeRewardFailure) {
-            showSnackBar(context, state.msg);
+            showSnackBar(context, state.msg, type: SnackBarType.error);
           } else if (state is ChallengeRewardClaimed) {
-            showSnackBar(context, 'Reward of ₹${state.reward} Claimed!');
+            showSnackBar(context, 'Reward of ₹${state.reward} Claimed!',
+                type: SnackBarType.success);
           }
         },
         builder: (context, state) {

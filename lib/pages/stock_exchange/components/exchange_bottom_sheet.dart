@@ -1,8 +1,10 @@
 import 'package:dalal_street_client/blocs/exchange/sheet/exchange_sheet_cubit.dart';
+import 'package:dalal_street_client/components/loading.dart';
 import 'package:dalal_street_client/components/sheet_pop_over.dart';
 import 'package:dalal_street_client/config/get_it.dart';
 import 'package:dalal_street_client/constants/format.dart';
 import 'package:dalal_street_client/constants/icons.dart';
+import 'package:dalal_street_client/models/snackbar/snackbar_type.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
 import 'package:dalal_street_client/streams/global_streams.dart';
 import 'package:dalal_street_client/streams/transformations.dart';
@@ -52,19 +54,18 @@ class _ExchangeBottomSheetState extends State<ExchangeBottomSheet> {
         listener: (context, state) {
           if (state is ExchangeSheetSuccess) {
             showSnackBar(context,
-                'Successfully bought $quantity ${widget.company.fullName} stocks');
+                'Successfully bought $quantity ${widget.company.fullName} stocks',
+                type: SnackBarType.success);
             Navigator.maybePop(context);
           } else if (state is ExchangeSheetFailure) {
-            showSnackBar(context, state.msg);
+            showSnackBar(context, state.msg, type: SnackBarType.error);
             Navigator.maybePop(context);
           }
         },
         builder: (context, state) {
           if (state is ExchangeSheetLoading) {
             return const Center(
-              child: CircularProgressIndicator(
-                color: Colors.green,
-              ),
+              child: DalalLoadingBar(),
             );
           }
           return Padding(

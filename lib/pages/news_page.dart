@@ -1,6 +1,7 @@
 import 'package:dalal_street_client/blocs/news/news_bloc.dart';
 import 'package:dalal_street_client/blocs/news_subscription/news_subscription_cubit.dart';
 import 'package:dalal_street_client/blocs/subscribe/subscribe_cubit.dart';
+import 'package:dalal_street_client/components/loading.dart';
 import 'package:dalal_street_client/pages/newsdetail_page.dart';
 import 'package:dalal_street_client/proto_build/datastreams/Subscribe.pb.dart';
 import 'package:dalal_street_client/proto_build/models/MarketEvent.pb.dart';
@@ -126,11 +127,7 @@ class _NewsPageState extends State<NewsPage> {
             ],
           );
         } else {
-          return const Center(
-            child: CircularProgressIndicator(
-              color: secondaryColor,
-            ),
-          );
+          return const Center(child: DalalLoadingBar());
         }
       });
 
@@ -268,9 +265,7 @@ class _NewsPageState extends State<NewsPage> {
                   );
                 } else {
                   return const Center(
-                    child: CircularProgressIndicator(
-                      color: secondaryColor,
-                    ),
+                    child: DalalLoadingBar(),
                   );
                 }
               });
@@ -295,9 +290,7 @@ class _NewsPageState extends State<NewsPage> {
           );
         } else {
           return const Center(
-            child: CircularProgressIndicator(
-              color: secondaryColor,
-            ),
+            child: DalalLoadingBar(),
           );
         }
       });

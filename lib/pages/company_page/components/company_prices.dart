@@ -1,17 +1,23 @@
 import 'package:dalal_street_client/components/buttons/secondary_button.dart';
 import 'package:dalal_street_client/components/graph/stock_chart.dart';
+import 'package:dalal_street_client/config/get_it.dart';
+import 'package:dalal_street_client/constants/icons.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
+import 'package:dalal_street_client/streams/global_streams.dart';
+import 'package:dalal_street_client/streams/transformations.dart';
 import 'package:dalal_street_client/theme/colors.dart';
+import 'package:fixnum/fixnum.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 
 final oCcy = NumberFormat('#,##0.00', 'en_US');
 
 Container companyPrices(Stock company) {
-  var priceChange =
-      company.currentPrice.toInt() - company.previousDayClose.toInt();
-  var priceChangePercentage =
-      priceChange.toInt() / company.previousDayClose.toInt();
+  Int64 previousDayClose = company.previousDayClose;
+  Int64 priceChange = company.currentPrice - previousDayClose;
+  Stream<Int64> priceStream =
+      getIt<GlobalStreams>().stockMapStream.priceStream(company.id);
   return Container(
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
       decoration: BoxDecoration(
@@ -19,8 +25,8 @@ Container companyPrices(Stock company) {
         borderRadius: BorderRadius.circular(10),
       ),
       child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -38,44 +44,90 @@ Container companyPrices(Stock company) {
                     const SizedBox(
                       height: 5,
                     ),
-                    Text(
-                      company.fullName,
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        color: white,
+                    if (company.givesDividends)
+                      Row(
+                        children: [
+                          Text(
+                            company.fullName,
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500,
+                              color: white,
+                            ),
+                            textAlign: TextAlign.start,
+                          ),
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          SvgPicture.asset(AppIcons.dollar)
+                        ],
+                      )
+                    else
+                      Text(
+                        company.fullName,
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                          color: white,
+                        ),
+                        textAlign: TextAlign.start,
                       ),
-                      textAlign: TextAlign.start,
-                    ),
                     const SizedBox(
                       height: 5,
                     ),
-                    Text(
-                      '₹ ' + oCcy.format(company.currentPrice).toString(),
-                      style: const TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.w700,
-                        color: white,
-                      ),
-                      textAlign: TextAlign.start,
-                    ),
-                    Text(
-                      priceChange >= 0
-                          ? '+' +
-                              oCcy.format(priceChange).toString() +
-                              '  (+' +
-                              (priceChangePercentage * 100).toStringAsFixed(2) +
-                              '%)'
-                          : oCcy.format(priceChange).toString() +
-                              '  (' +
-                              (priceChangePercentage * 100).toStringAsFixed(2) +
-                              '%)',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        color: priceChange > 0 ? secondaryColor : heartRed,
-                      ),
-                    ),
+                    StreamBuilder<Int64>(
+                        stream: priceStream,
+                        builder: (context, state) {
+                          Int64 stockPrice = state.data!;
+                          priceChange = stockPrice - previousDayClose;
+                          bool isLowOrHigh = stockPrice > previousDayClose;
+
+                          double percentageHighOrLow;
+
+                          if (previousDayClose == 0) {
+                            percentageHighOrLow = stockPrice.toDouble();
+                          } else {
+                            percentageHighOrLow = ((stockPrice.toDouble() -
+                                    previousDayClose.toDouble()) /
+                                previousDayClose.toDouble());
+                          }
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                '₹ ' + oCcy.format(state.data).toString(),
+                                style: const TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.w700,
+                                  color: white,
+                                ),
+                                textAlign: TextAlign.start,
+                              ),
+                              !company.isBankrupt
+                                  ? Row(
+                                      children: [
+                                        Text(
+                                            '+${oCcy.format(priceChange.abs()).toString()} ',
+                                            style: TextStyle(
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w500,
+                                                color: isLowOrHigh
+                                                    ? secondaryColor
+                                                    : heartRed)),
+                                        Text(
+                                            '( ${oCcy.format(percentageHighOrLow.abs()).toString()}% ) ',
+                                            style: TextStyle(
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w500,
+                                                color: isLowOrHigh
+                                                    ? secondaryColor
+                                                    : heartRed)),
+                                      ],
+                                    )
+                                  : const SizedBox()
+                            ],
+                          );
+                        }),
                   ],
                 ),
                 SecondaryButton(
@@ -87,8 +139,28 @@ Container companyPrices(Stock company) {
                 ),
               ],
             ),
-            _companyGraph(company.id)
+            _companyGraph(company)
           ]));
 }
 
-Widget _companyGraph(int stockid) => StockChart(stockId: stockid);
+Widget _companyGraph(Stock stock) {
+  if (stock.isBankrupt) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        const Text(
+          'This Company went Bankrupt',
+          style: TextStyle(
+              color: heartRed, fontSize: 14, fontWeight: FontWeight.w600),
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        Image.asset('assets/images/sad_bull.png', height: 200)
+      ],
+    );
+  } else {
+    return StockChart(stockId: stock.id);
+  }
+}
