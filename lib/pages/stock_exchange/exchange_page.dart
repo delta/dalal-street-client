@@ -10,6 +10,7 @@ import 'package:dalal_street_client/theme/colors.dart';
 import 'package:dalal_street_client/utils/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:dalal_street_client/config/log.dart';
 
 class ExchangePage extends StatefulWidget {
   const ExchangePage({Key? key}) : super(key: key);
@@ -27,7 +28,9 @@ class _ExchangePageState extends State<ExchangePage>
 
   @override
   void initState() {
+    logger.i('Called exchange');
     super.initState();
+
     context.read<ExchangeCubit>().listenToExchangeStream(mapOfStocks);
   }
 
