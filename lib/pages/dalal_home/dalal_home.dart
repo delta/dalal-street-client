@@ -4,7 +4,7 @@ import 'package:dalal_street_client/blocs/portfolio/userWorth/portfolio_cubit.da
 import 'package:dalal_street_client/components/stock_bar.dart';
 import 'package:dalal_street_client/config/log.dart';
 import 'package:dalal_street_client/constants/icons.dart';
-import 'package:dalal_street_client/navigation/home_pages.dart';
+import 'package:dalal_street_client/navigation/home_routes.dart';
 import 'package:dalal_street_client/pages/dalal_home/dalal_home_bottom_sheet.dart';
 import 'package:dalal_street_client/pages/dalal_home/dalal_home_nav_bar.dart';
 import 'package:dalal_street_client/pages/home_page.dart';
@@ -13,15 +13,16 @@ import 'package:dalal_street_client/pages/portfolio/portfolio_page.dart';
 import 'package:dalal_street_client/pages/stock_exchange/exchange_page.dart';
 import 'package:dalal_street_client/proto_build/models/User.pb.dart';
 import 'package:dalal_street_client/theme/colors.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 class DalalHome extends StatefulWidget {
   final User user;
-  final String page;
+  final String route;
 
-  const DalalHome({Key? key, required this.user, required this.page})
+  const DalalHome({Key? key, required this.user, required this.route})
       : super(key: key);
 
   @override
@@ -29,20 +30,11 @@ class DalalHome extends StatefulWidget {
 }
 
 class _DalalHomeState extends State<DalalHome> {
-  final _homeRoutes = [
-    '/home',
-    '/portfolio',
-    '/exchange',
-    '/ranking',
-  ];
+  List<String> get _homeRoutes => kIsWeb ? homeRoutesWeb : homeRoutesMobile;
 
-  final _bottomMenu = {
-    'Home': AppIcons.home,
-    'Portfolio': AppIcons.portfolio,
-    'DSE': AppIcons.rupee,
-    'Ranking': AppIcons.trophy,
-    'More': AppIcons.hamburger,
-  };
+  List<String> get _sheetPageRoutes => moreRoutesMobile;
+
+  final _bottomMenu = homeMenuMobile;
 
   final _sheetMenu = {
     'News': AppIcons.news,
@@ -56,8 +48,8 @@ class _DalalHomeState extends State<DalalHome> {
 
   late PageController _pageController;
 
-  int indexForPage(String page) {
-    final index = _homeRoutes.indexOf(page);
+  int pageViewIndexForRoute(String route) {
+    final index = _homeRoutes.indexOf(route);
     if (index == -1) {
       logger.e('Invalid page route sent to DalalHome');
       return 0;
@@ -68,13 +60,14 @@ class _DalalHomeState extends State<DalalHome> {
   @override
   void initState() {
     super.initState();
-    _pageController = PageController(initialPage: indexForPage(widget.page));
+    _pageController =
+        PageController(initialPage: pageViewIndexForRoute(widget.route));
   }
 
   @override
   void didUpdateWidget(covariant DalalHome oldWidget) {
     super.didUpdateWidget(oldWidget);
-    _pageController.jumpToPage(indexForPage(widget.page));
+    _pageController.jumpToPage(pageViewIndexForRoute(widget.route));
   }
 
   @override
@@ -98,16 +91,6 @@ class _DalalHomeState extends State<DalalHome> {
         ),
         const LeaderboardPage(),
         ...mobileExtraHomePages(widget.user).values,
-      ];
-
-  List<String> get _sheetPageRoutes => [
-        '/news',
-        '/mortgage',
-        '/dailyChallenges',
-        '/openOrders',
-        '/referAndEarn',
-        '/mediaPartners',
-        '/notifications'
       ];
 
   @override

@@ -139,7 +139,7 @@ class RouteGenerator {
             create: (context) => NewsBloc(),
             child: DalalHome(
               user: args,
-              page: 'home',
+              route: 'home',
             ),
           );
         }

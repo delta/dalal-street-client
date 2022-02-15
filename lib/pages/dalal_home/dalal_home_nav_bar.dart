@@ -1,9 +1,11 @@
+import 'package:dalal_street_client/constants/icons.dart';
+import 'package:dalal_street_client/models/menu_item.dart';
 import 'package:dalal_street_client/theme/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class DalalHomeNavBar extends StatefulWidget {
-  final Map<String, String> menu;
+  final Map<String, MenuItem> menu;
   final void Function(int index) onItemSelect;
   final void Function(int index) onItemReselect;
   final void Function() onMoreClick;
@@ -21,22 +23,30 @@ class DalalHomeNavBar extends StatefulWidget {
 }
 
 class _DalalHomeNavBarState extends State<DalalHomeNavBar> {
-  List<BottomNavigationBarItem> get _menuItems => widget.menu
-      .map((label, asset) => MapEntry(
-          label,
-          BottomNavigationBarItem(
-            icon: SvgPicture.asset(
-              asset,
-              color: (label == widget.menu.keys.toList()[currentIndex])
-                  ? primaryColor
-                  : null,
-            ),
-            label: label,
-          )))
-      .values
-      .toList();
-
   int currentIndex = 0;
+
+  late List<BottomNavigationBarItem> _menuItems;
+
+  @override
+  void initState() {
+    super.initState();
+    final menu = widget.menu;
+    menu.addAll({'/more': MenuItem('More', AppIcons.hamburger)});
+    _menuItems = widget.menu
+        .map((route, menuItem) => MapEntry(
+            route,
+            BottomNavigationBarItem(
+              icon: SvgPicture.asset(
+                menuItem.icon,
+                color: (route == widget.menu.keys.toList()[currentIndex])
+                    ? primaryColor
+                    : null,
+              ),
+              label: menuItem.name,
+            )))
+        .values
+        .toList();
+  }
 
   @override
   build(context) => BottomNavigationBar(

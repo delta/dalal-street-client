@@ -9,7 +9,7 @@ import 'package:dalal_street_client/blocs/market_depth/market_depth_bloc.dart';
 import 'package:dalal_street_client/blocs/news/news_bloc.dart';
 import 'package:dalal_street_client/blocs/subscribe/subscribe_cubit.dart';
 import 'package:dalal_street_client/navigation/dalal_nav_buidler.dart';
-import 'package:dalal_street_client/navigation/home_pages.dart';
+import 'package:dalal_street_client/navigation/home_routes.dart';
 import 'package:dalal_street_client/pages/admin_page/admin_page.dart';
 import 'package:dalal_street_client/blocs/auth/register/register_cubit.dart';
 import 'package:dalal_street_client/blocs/auth/verify_phone/enter_otp/enter_otp_cubit.dart';
@@ -50,7 +50,7 @@ GoRouter generateRouter(BuildContext context) {
           if (kIsWeb || !mobileExtras.containsKey(location)) {
             return DalalHome(
               user: userState.user,
-              page: location,
+              route: location,
             );
           }
           // If device is mobile, and the route is from bottom sheet
