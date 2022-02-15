@@ -1,11 +1,12 @@
 import 'dart:math';
 
-import 'package:dalal_street_client/blocs/notifications_cubit/notifications_cubit.dart';
+import 'package:dalal_street_client/blocs/notification/notifications_cubit.dart';
 import 'package:dalal_street_client/config/get_it.dart';
 import 'package:dalal_street_client/proto_build/models/Notification.pb.dart'
-    as test;
+    as notifications;
 import 'package:dalal_street_client/streams/global_streams.dart';
 import 'package:dalal_street_client/theme/colors.dart';
+import 'package:dalal_street_client/utils/iso_to_datetime.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -20,12 +21,13 @@ class NotificationsPage extends StatefulWidget {
 class _NotifsState extends State<NotificationsPage> {
   final ScrollController _scrollController = ScrollController();
   final notifStream = getIt<GlobalStreams>().notificationStream;
-  List<test.Notification> notifEvents = [];
+  List<notifications.Notification> notifEvents = [];
   int i = 1;
+  int? lastnotificationId;
   @override
   void initState() {
     super.initState();
-    context.read<NotificationsCubit>().getNotifications();
+    context.read<NotificationsCubit>().getNotifications(lastnotificationId!);
     _scrollController.addListener(() {
       if (_scrollController.position.atEdge) {
         if (_scrollController.position.pixels != 0) {
@@ -116,7 +118,7 @@ class _NotifsState extends State<NotificationsPage> {
             physics: const ScrollPhysics(),
             itemCount: notifEvents.length,
             itemBuilder: (context, index) {
-              test.Notification notification = notifEvents[index];
+              notifications.Notification notification = notifEvents[index];
 
               String text = notification.text;
               String isCreatedAt = notification.createdAt;
@@ -147,36 +149,10 @@ class _NotifsState extends State<NotificationsPage> {
           );
         } else {
           return const Center(
-            child: CircularProgressIndicator(
-              color: white,
-            ),
+            child: CircularProgressIndicator(),
           );
         }
       });
-
-  // ignore: non_constant_identifier_names
-  String ISOtoDateTime(String createdAt) {
-    DateTime createdAtTime = DateTime.parse(createdAt);
-    DateTime currentTime = DateTime.now();
-    Duration diff = currentTime.difference(createdAtTime);
-    int hourDifference = diff.inHours - (diff.inDays * 24);
-    if (diff.inDays == 0) {
-      if (diff.inHours == 0) {
-        return (diff.inMinutes.toString() + ' minutes ago');
-      } else if (diff.inHours == 1) {
-        return (diff.inHours.toString() + ' hour ago');
-      } else {
-        return (diff.inHours.toString() + ' hours ago');
-      }
-    } else {
-      return (diff.inDays.toString() +
-          ' days' +
-          '  ' +
-          hourDifference.toString() +
-          '  '
-              'hours ago');
-    }
-  }
 
   Widget notifItem(String notif, bool islatest, String createdAt) {
     Color iconColor =

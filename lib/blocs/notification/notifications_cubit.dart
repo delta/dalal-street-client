@@ -12,15 +12,18 @@ part 'notifications_state.dart';
 class NotificationsCubit extends Cubit<NotificationsCubitState> {
   NotificationsCubit() : super(NotificationsCubitInitial());
 
-  Future<void> getNotifications() async {
+  Future<void> getNotifications(int lastnotificationId) async {
     try {
       final GetNotificationsResponse notifResponse =
           await actionClient.getNotifications(
-        GetNotificationsRequest(),
+        GetNotificationsRequest(lastNotificationId: lastnotificationId),
         options: sessionOptions(getIt()),
       );
-
-      emit(GetNotifSuccess(notifResponse));
+      if (notifResponse.statusCode == GetNotificationsResponse_StatusCode.OK) {
+        emit(GetNotifSuccess(notifResponse));
+      } else {
+        emit(GetNotifFailure(notifResponse.statusMessage));
+      }
     } catch (e) {
       emit(const GetNotifFailure(failedToReachServer));
       logger.i('unsuccessful');
@@ -38,16 +41,6 @@ class NotificationsCubit extends Cubit<NotificationsCubitState> {
       emit(GetNotifSuccess(notifResponse));
     } catch (e) {
       emit(const GetNotifFailure(failedToReachServer));
-      logger.i('unsuccessful');
-    }
-  }
-
-  @override
-  void onChange(Change<NotificationsCubitState> change) {
-    super.onChange(change);
-    if (state is GetNotifSuccess) {
-      logger.i('successful');
-    } else if (state is GetNotifFailure) {
       logger.i('unsuccessful');
     }
   }
