@@ -23,7 +23,6 @@ class _NotifsState extends State<NotificationsPage> {
   final ScrollController _scrollController = ScrollController();
   final notifStream = getIt<GlobalStreams>().notificationStream;
   List<notifications.Notification> notifEvents = [];
-  // int i = 1;
   int lastnotificationId = 0;
   int count = 1;
   @override
@@ -47,32 +46,7 @@ class _NotifsState extends State<NotificationsPage> {
         body: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              const SizedBox(height: 23),
-              StreamBuilder(
-                  stream: notifStream,
-                  builder: (BuildContext context, AsyncSnapshot snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const DalalLoadingBar();
-                    } else if (snapshot.connectionState ==
-                            ConnectionState.active ||
-                        snapshot.connectionState == ConnectionState.done) {
-                      if (snapshot.hasError) {
-                        return const Text('error');
-                      } else if (snapshot.hasData) {
-                        return Text(
-                          snapshot.data.toString(),
-                          style: const TextStyle(color: white, fontSize: 16),
-                        );
-                      } else {
-                        return const Text('No new notifications');
-                      }
-                    } else {
-                      return Text('State: ${snapshot.connectionState}');
-                    }
-                  }),
-              notificationUI(context)
-            ],
+            children: [const SizedBox(height: 23), notificationUI(context)],
           ),
         ),
       );
@@ -110,11 +84,6 @@ class _NotifsState extends State<NotificationsPage> {
         if (state is GetNotifSuccess) {
           if (state.getNotifResponse.moreExists) {
             notifEvents.addAll(state.getNotifResponse.notifications);
-            /*if (i == 1) {
-              notifEvents.remove(notifEvents[0]);
-              i++;
-            }
-            */
           }
           return ListView.separated(
             shrinkWrap: true,
@@ -160,94 +129,66 @@ class _NotifsState extends State<NotificationsPage> {
   Widget notifItem(String notif, bool islatest, String createdAt) {
     Color iconColor =
         Colors.primaries[Random().nextInt(Colors.primaries.length)];
-    if (!islatest) {
-      return (Container(
-        padding: const EdgeInsets.all(10),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
+
+    return Card(
+      color: const Color.fromRGBO(19, 22, 20, 1),
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(5),
+          side: BorderSide(
+            color: Colors.grey.withOpacity(0.2),
+            width: 1,
+          )),
+      child: Container(
+          padding: const EdgeInsets.all(10),
+          child: Column(children: <Widget>[
             Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  SizedBox(
-                    width: (MediaQuery.of(context).size.width - 100) * 0.8,
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-                      child: Text(notif.toString(),
-                          style: const TextStyle(
-                              color: Colors.white, fontSize: 15)),
-                    ),
+                  Row(
+                    children: [
+                      SizedBox(
+                          width: 45,
+                          height: 45,
+                          child: Stack(children: <Widget>[
+                            Positioned(
+                                top: 0,
+                                left: 0,
+                                child: Container(
+                                    width: 45,
+                                    height: 45,
+                                    decoration: const BoxDecoration(
+                                      color: Color.fromRGBO(43, 52, 52, 1),
+                                      borderRadius: BorderRadius.all(
+                                          Radius.elliptical(45, 45)),
+                                    ))),
+                            Positioned(
+                                top: 9.7,
+                                left: 12.9,
+                                child: SvgPicture.asset(
+                                    'assets/icon/notification-icon.svg',
+                                    semanticsLabel: 'notification',
+                                    width: 22,
+                                    height: 24,
+                                    color: iconColor)),
+                          ])),
+                      const Positioned(child: SizedBox(width: 20)),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.6,
+                        child: Text(notif.toString(),
+                            style: const TextStyle(
+                                color: Colors.white, fontSize: 15)),
+                      ),
+                    ],
                   ),
-                  const SizedBox.square(
-                    dimension: 5,
+                  Container(
+                    alignment: Alignment.bottomRight,
+                    child: Text(ISOtoDateTime(createdAt),
+                        textAlign: TextAlign.right,
+                        style: TextStyle(color: iconColor)),
                   ),
                 ]),
-          ],
-        ),
-      ));
-    } else {
-      return Card(
-        color: const Color.fromRGBO(19, 22, 20, 1),
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(5),
-            side: BorderSide(
-              color: Colors.grey.withOpacity(0.2),
-              width: 1,
-            )),
-        child: Container(
-            padding: const EdgeInsets.all(10),
-            child: Column(children: <Widget>[
-              Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Row(
-                      children: [
-                        SizedBox(
-                            width: 45,
-                            height: 45,
-                            child: Stack(children: <Widget>[
-                              Positioned(
-                                  top: 0,
-                                  left: 0,
-                                  child: Container(
-                                      width: 45,
-                                      height: 45,
-                                      decoration: const BoxDecoration(
-                                        color: Color.fromRGBO(43, 52, 52, 1),
-                                        borderRadius: BorderRadius.all(
-                                            Radius.elliptical(45, 45)),
-                                      ))),
-                              Positioned(
-                                  top: 9.7,
-                                  left: 12.9,
-                                  child: SvgPicture.asset(
-                                      'assets/icon/notification-icon.svg',
-                                      semanticsLabel: 'notification',
-                                      width: 22,
-                                      height: 24,
-                                      color: iconColor)),
-                            ])),
-                        const Positioned(child: SizedBox(width: 20)),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.8,
-                          child: Text(notif.toString(),
-                              style: const TextStyle(
-                                  color: Colors.white, fontSize: 15)),
-                        ),
-                      ],
-                    ),
-                    Container(
-                      alignment: Alignment.bottomRight,
-                      child: Text(ISOtoDateTime(createdAt),
-                          textAlign: TextAlign.right,
-                          style: TextStyle(color: iconColor)),
-                    ),
-                  ]),
-            ])),
-      );
-    }
+          ])),
+    );
   }
 }
