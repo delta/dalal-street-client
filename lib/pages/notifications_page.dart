@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:dalal_street_client/blocs/notification/notifications_cubit.dart';
+import 'package:dalal_street_client/components/loading.dart';
 import 'package:dalal_street_client/config/get_it.dart';
 import 'package:dalal_street_client/proto_build/models/Notification.pb.dart'
     as notifications;
@@ -51,7 +52,7 @@ class _NotifsState extends State<NotificationsPage> {
                   stream: notifStream,
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const LinearProgressIndicator();
+                      return const DalalLoadingBar();
                     } else if (snapshot.connectionState ==
                             ConnectionState.active ||
                         snapshot.connectionState == ConnectionState.done) {
@@ -149,7 +150,7 @@ class _NotifsState extends State<NotificationsPage> {
           );
         } else {
           return const Center(
-            child: CircularProgressIndicator(),
+            child: DalalLoadingBar(),
           );
         }
       });
