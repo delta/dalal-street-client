@@ -1,5 +1,4 @@
 import 'package:dalal_street_client/models/dynamic_user_info.dart';
-import 'package:dalal_street_client/proto_build/datastreams/GameState.pb.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
 import 'package:fixnum/fixnum.dart';
 
@@ -26,17 +25,9 @@ extension StockMapStreamTransformations on Stream<Map<int, Stock>> {
       map((stocks) => stocks[stockId]?.allTimeHigh ?? Int64(0)).distinct();
   Stream<Int64> allTimeLowStream(int stockId) =>
       map((stocks) => stocks[stockId]?.allTimeLow ?? Int64(0)).distinct();
-}
+  Stream<bool> isBankruptStream(int stockId) =>
+      map((stocks) => stocks[stockId]!.isBankrupt).distinct();
 
-extension GameStateStreamTransformations on Stream<GameStateUpdate> {
-  /// Transforms gameStateStream into a distinct game state stream
-  Stream<bool> isBankruptStream(int stockId, bool isBankrupt) => map(
-      (gameState) => gameState.gameState.stockBankruptState.stockId == stockId
-          ? gameState.gameState.stockBankruptState.isBankrupt
-          : isBankrupt).distinct();
-
-  Stream<bool> givesDividents(int stockId, bool givesDividends) => map(
-      (gameState) => gameState.gameState.stockDividendState.stockId == stockId
-          ? gameState.gameState.stockDividendState.givesDividend
-          : givesDividends).distinct();
+  Stream<bool> givesDividents(int stockId) =>
+      map((stocks) => stocks[stockId]!.givesDividends).distinct();
 }
