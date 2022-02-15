@@ -82,9 +82,8 @@ class _NotifsState extends State<NotificationsPage> {
       BlocBuilder<NotificationsCubit, NotificationsCubitState>(
           builder: (context, state) {
         if (state is GetNotifSuccess) {
-          if (state.getNotifResponse.moreExists) {
-            notifEvents.addAll(state.getNotifResponse.notifications);
-          }
+          notifEvents.addAll(state.getNotifResponse.notifications);
+
           return ListView.separated(
             shrinkWrap: true,
             physics: const ScrollPhysics(),
