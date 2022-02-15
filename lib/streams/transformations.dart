@@ -25,10 +25,9 @@ extension StockMapStreamTransformations on Stream<Map<int, Stock>> {
       map((stocks) => stocks[stockId]?.allTimeHigh ?? Int64(0)).distinct();
   Stream<Int64> allTimeLowStream(int stockId) =>
       map((stocks) => stocks[stockId]?.allTimeLow ?? Int64(0)).distinct();
-  Stream<bool> isBankruptStream(int stockId, bool isBankrupt) =>
-      map((stocks) => stocks[stockId]?.isBankrupt ?? isBankrupt).distinct();
+  Stream<bool> isBankruptStream(int stockId) =>
+      map((stocks) => stocks[stockId]!.isBankrupt).distinct();
 
-  Stream<bool> givesDividents(int stockId, bool givesDividends) =>
-      map((stocks) => stocks[stockId]?.givesDividends ?? givesDividends)
-          .distinct();
+  Stream<bool> givesDividents(int stockId) =>
+      map((stocks) => stocks[stockId]!.givesDividends).distinct();
 }
