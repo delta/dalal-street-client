@@ -1,0 +1,37 @@
+import 'package:dalal_street_client/blocs/daily_challenges/daily_challenges_page_cubit.dart';
+import 'package:dalal_street_client/blocs/news/news_bloc.dart';
+import 'package:dalal_street_client/blocs/news_subscription/news_subscription_cubit.dart';
+import 'package:dalal_street_client/blocs/referral/referral_cubit.dart';
+import 'package:dalal_street_client/blocs/subscribe/subscribe_cubit.dart';
+import 'package:dalal_street_client/pages/daily_challenges/daily_challenges_page.dart';
+import 'package:dalal_street_client/pages/mortgage/mortgage_page.dart';
+import 'package:dalal_street_client/pages/news_page.dart';
+import 'package:dalal_street_client/pages/referral_page.dart';
+import 'package:dalal_street_client/proto_build/models/User.pb.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+Map<String, Widget> mobileExtraHomePages(User extra) => {
+      '/news': MultiBlocProvider(
+        providers: [
+          BlocProvider(create: (context) => NewsBloc()),
+          BlocProvider(create: (context) => SubscribeCubit()),
+          BlocProvider(
+            create: (context) => NewsSubscriptionCubit(),
+          )
+        ],
+        child: const NewsPage(),
+      ),
+      '/mortgage': const MortgagePage(),
+      '/dailyChallenges': BlocProvider(
+        create: (context) => DailyChallengesPageCubit()..getChallengesConfig(),
+        child: const DailyChallengesPage(),
+      ),
+      '/openOrders': const Text('OpenOrders tbd'),
+      '/referAndEarn': BlocProvider(
+        create: (context) => ReferralCubit(),
+        child: ReferralPage(user: extra),
+      ),
+      '/mediaPartners': const Text('Media partners tbd'),
+      '/notifications': const Text('Notifications tbd'),
+    };

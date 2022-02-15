@@ -4,6 +4,7 @@ import 'package:dalal_street_client/blocs/portfolio/userWorth/portfolio_cubit.da
 import 'package:dalal_street_client/components/stock_bar.dart';
 import 'package:dalal_street_client/config/log.dart';
 import 'package:dalal_street_client/constants/icons.dart';
+import 'package:dalal_street_client/navigation/home_pages.dart';
 import 'package:dalal_street_client/pages/dalal_home/dalal_home_bottom_sheet.dart';
 import 'package:dalal_street_client/pages/dalal_home/dalal_home_nav_bar.dart';
 import 'package:dalal_street_client/pages/home_page.dart';
@@ -95,7 +96,8 @@ class _DalalHomeState extends State<DalalHome> {
           create: (context) => ExchangeCubit(),
           child: const ExchangePage(),
         ),
-        const LeaderboardPage()
+        const LeaderboardPage(),
+        ...mobileExtraHomePages(widget.user).values,
       ];
 
   List<String> get _sheetPageRoutes => [
