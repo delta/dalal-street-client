@@ -23,17 +23,18 @@ class _NotifsState extends State<NotificationsPage> {
   final ScrollController _scrollController = ScrollController();
   final notifStream = getIt<GlobalStreams>().notificationStream;
   List<notifications.Notification> notifEvents = [];
-  int i = 1;
-  int? lastnotificationId;
+  // int i = 1;
+  int lastnotificationId = 0;
+  int count = 1;
   @override
   void initState() {
     super.initState();
-    context.read<NotificationsCubit>().getNotifications(lastnotificationId!);
+    context.read<NotificationsCubit>().getNotifications();
     _scrollController.addListener(() {
       if (_scrollController.position.atEdge) {
         if (_scrollController.position.pixels != 0) {
-          if (notifEvents[notifEvents.length - 1].id > 0) {
-            context.read<NotificationsCubit>().getMoreNotifications();
+          if (notifEvents[notifEvents.length].id > 0) {
+            context.read<NotificationsCubit>().getNotifications();
           }
         }
       }
@@ -109,10 +110,11 @@ class _NotifsState extends State<NotificationsPage> {
         if (state is GetNotifSuccess) {
           if (state.getNotifResponse.moreExists) {
             notifEvents.addAll(state.getNotifResponse.notifications);
-            if (i == 1) {
+            /*if (i == 1) {
               notifEvents.remove(notifEvents[0]);
               i++;
             }
+            */
           }
           return ListView.separated(
             shrinkWrap: true,
@@ -142,7 +144,7 @@ class _NotifsState extends State<NotificationsPage> {
                 height: 50,
                 child: OutlinedButton(
                   onPressed: () =>
-                      context.read<NotificationsCubit>().getMoreNotifications(),
+                      context.read<NotificationsCubit>().getNotifications(),
                   child: const Text('Retry'),
                 ),
               ),
