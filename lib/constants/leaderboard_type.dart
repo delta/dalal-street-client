@@ -1,0 +1,1 @@
+enum LeaderboardType { Overall, Daily }
