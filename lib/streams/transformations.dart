@@ -1,5 +1,4 @@
 import 'package:dalal_street_client/models/dynamic_user_info.dart';
-import 'package:dalal_street_client/proto_build/datastreams/GameState.pb.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
 import 'package:fixnum/fixnum.dart';
 
