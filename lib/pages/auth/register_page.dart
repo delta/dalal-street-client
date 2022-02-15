@@ -1,6 +1,7 @@
 import 'package:dalal_street_client/blocs/auth/register/register_cubit.dart';
 import 'package:dalal_street_client/components/dalal_back_button.dart';
 import 'package:dalal_street_client/components/fill_max_height_scroll_view.dart';
+import 'package:dalal_street_client/components/loading.dart';
 import 'package:dalal_street_client/components/reactive_password_field.dart';
 import 'package:dalal_street_client/utils/snackbar.dart';
 import 'package:dalal_street_client/utils/tooltip.dart';
@@ -8,6 +9,8 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:reactive_forms/reactive_forms.dart';
+
+import '../../models/snackbar/snackbar_type.dart';
 
 class RegisterPage extends StatelessWidget {
   RegisterPage({Key? key}) : super(key: key);
@@ -38,12 +41,12 @@ class RegisterPage extends StatelessWidget {
                   arguments: state.mail,
                 );
               } else if (state is RegisterFailure) {
-                showSnackBar(context, state.msg);
+                showSnackBar(context, state.msg, type: SnackBarType.error);
               }
             },
             builder: (context, state) {
               if (state is RegisterLoading) {
-                return const Center(child: CircularProgressIndicator());
+                return const Center(child: DalalLoadingBar());
               } else {
                 return buildBody();
               }

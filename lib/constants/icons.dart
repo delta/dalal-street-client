@@ -14,6 +14,7 @@ class AppIcons {
   static const String referAndEarn = _iconsDir + 'refer-and-earn.svg';
   static const String mobileAd = _iconsDir + 'mobile-ad.svg';
   static const String notificationBell = _iconsDir + 'notification-bell.svg';
+  static const String dollar = _iconsDir + 'dollar.svg';
 
   static const String currentPrice = _iconsDir + 'currentprice.svg';
   static const String alltimeHigh = _iconsDir + 'alltimehigh.svg';

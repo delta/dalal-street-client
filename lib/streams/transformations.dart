@@ -17,4 +17,17 @@ extension StockMapStreamTransformations on Stream<Map<int, Stock>> {
   /// Transforms stockMapStream into a distinct stock price stream for the given [stockId]
   Stream<Int64> priceStream(int stockId) =>
       map((stocks) => stocks[stockId]?.currentPrice ?? Int64(0)).distinct();
+  Stream<Int64> dayHighStream(int stockId) =>
+      map((stocks) => stocks[stockId]?.dayHigh ?? Int64(0)).distinct();
+  Stream<Int64> dayLowStream(int stockId) =>
+      map((stocks) => stocks[stockId]?.dayLow ?? Int64(0)).distinct();
+  Stream<Int64> allTimeHighStream(int stockId) =>
+      map((stocks) => stocks[stockId]?.allTimeHigh ?? Int64(0)).distinct();
+  Stream<Int64> allTimeLowStream(int stockId) =>
+      map((stocks) => stocks[stockId]?.allTimeLow ?? Int64(0)).distinct();
+  Stream<bool> isBankruptStream(int stockId) =>
+      map((stocks) => stocks[stockId]!.isBankrupt).distinct();
+
+  Stream<bool> givesDividents(int stockId) =>
+      map((stocks) => stocks[stockId]!.givesDividends).distinct();
 }

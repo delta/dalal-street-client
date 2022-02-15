@@ -1,6 +1,7 @@
 import 'package:dalal_street_client/components/graph/line_area.dart';
 import 'package:dalal_street_client/blocs/news/news_bloc.dart';
 import 'package:dalal_street_client/components/buttons/tertiary_button.dart';
+import 'package:dalal_street_client/components/loading.dart';
 import 'package:dalal_street_client/config/get_it.dart';
 import 'package:dalal_street_client/constants/format.dart';
 import 'package:dalal_street_client/pages/newsdetail_page.dart';
@@ -11,6 +12,7 @@ import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
 import 'package:dalal_street_client/proto_build/models/User.pb.dart';
 import 'package:dalal_street_client/streams/global_streams.dart';
 import 'package:dalal_street_client/utils/responsive.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:dalal_street_client/theme/colors.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -145,6 +147,8 @@ class _HomePageState extends State<HomePage>
         if (state is GetNewsSucess) {
           mapMarketEvents.clear();
           mapMarketEvents.addAll(state.marketEventsList.marketEvents);
+          // Sort MarketEvents according to there created time
+          mapMarketEvents.sort((a, b) => b.createdAt.compareTo(a.createdAt));
           if (mapMarketEvents.isNotEmpty) {
             return ListView.separated(
               shrinkWrap: true,
@@ -161,7 +165,7 @@ class _HomePageState extends State<HomePage>
                     child: newsItem(headline, imagePath, createdAt),
                     onTap: () => Navigator.push(
                         context,
-                        MaterialPageRoute(
+                        CupertinoPageRoute(
                           builder: (context) => NewsDetail(
                               text: text,
                               imagePath: imagePath,
@@ -202,9 +206,7 @@ class _HomePageState extends State<HomePage>
           );
         } else {
           return const Center(
-            child: CircularProgressIndicator(
-              color: secondaryColor,
-            ),
+            child: DalalLoadingBar(),
           );
         }
       });
@@ -253,6 +255,8 @@ class _HomePageState extends State<HomePage>
     List<Widget> stockItems = stocks.entries
         .map((entry) => StockItem(
             stock: entry.value,
+            isBankruptStream: stockMapStream.isBankruptStream(entry.value.id),
+            givesDividendStream: stockMapStream.givesDividents(entry.value.id),
             stockPriceStream: stockMapStream.priceStream(entry.key)))
         .toList();
     return ListView(
@@ -301,8 +305,11 @@ class _HomePageState extends State<HomePage>
                 ),
                 Padding(
                     padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-                    child: Text(dur,
-                        style: const TextStyle(color: lightGray, fontSize: 12)))
+                    child: Text('Published on ' + dur,
+                        style: const TextStyle(
+                            fontStyle: FontStyle.italic,
+                            color: lightGray,
+                            fontSize: 12)))
               ]),
         ],
       ),
@@ -328,9 +335,15 @@ class _HomePageState extends State<HomePage>
 class StockItem extends StatelessWidget {
   final Stock stock;
   final Stream<Int64> stockPriceStream;
+  final Stream<bool> isBankruptStream;
+  final Stream<bool> givesDividendStream;
 
   const StockItem(
-      {Key? key, required this.stock, required this.stockPriceStream})
+      {Key? key,
+      required this.stock,
+      required this.isBankruptStream,
+      required this.givesDividendStream,
+      required this.stockPriceStream})
       : super(key: key);
 
   @override
@@ -353,21 +366,57 @@ class StockItem extends StatelessWidget {
 
   Expanded _stockNames(Stock company) {
     return Expanded(
-      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Text(
-          company.shortName,
-          style: const TextStyle(
-            fontSize: 18,
-          ),
-        ),
-        Text(
-          company.fullName,
-          style: const TextStyle(
-            fontSize: 14,
-            color: whiteWithOpacity50,
-          ),
-        ),
-      ]),
+      child: StreamBuilder<bool>(
+        stream: isBankruptStream,
+        initialData: company.isBankrupt,
+        builder: (context, state) {
+          bool isBankrupt = state.data!;
+          return StreamBuilder<bool>(
+              stream: givesDividendStream,
+              initialData: company.givesDividends,
+              builder: (context, state) {
+                bool givesDividends = state.data!;
+                return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if (isBankrupt)
+                        Text(
+                          company.shortName,
+                          style: const TextStyle(
+                              color: Colors.red,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w600,
+                              decoration: TextDecoration.lineThrough),
+                        )
+                      else if (givesDividends)
+                        Text(
+                          company.shortName,
+                          style: const TextStyle(
+                            color: Colors.green,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 18,
+                          ),
+                        )
+                      else
+                        Text(
+                          company.shortName,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 18,
+                          ),
+                        ),
+                      Text(
+                        company.fullName,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 14,
+                          color: whiteWithOpacity50,
+                        ),
+                      ),
+                    ]);
+              });
+        },
+      ),
     );
   }
 

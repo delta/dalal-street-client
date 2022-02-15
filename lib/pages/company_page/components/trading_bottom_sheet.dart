@@ -1,5 +1,7 @@
+import 'package:dalal_street_client/components/loading.dart';
 import 'package:dalal_street_client/config/log.dart';
 import 'package:dalal_street_client/constants/constants.dart';
+import 'package:dalal_street_client/models/snackbar/snackbar_type.dart';
 import 'package:dalal_street_client/proto_build/models/OrderType.pb.dart';
 import 'package:dalal_street_client/utils/calculations.dart';
 import 'package:fixnum/fixnum.dart';
@@ -25,6 +27,7 @@ void tradingBottomSheet(
   int totalPrice = company.currentPrice.toInt() * quantity;
   int orderFee = calculateOrderFee(totalPrice);
   String error = 'false';
+  int flag = 0;
   showModalBottomSheet(
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(25.0))),
@@ -40,30 +43,40 @@ void tradingBottomSheet(
                 logger.i('order placed');
                 Navigator.pop(context);
                 showSnackBar(context,
-                    'Order successfully placed with Order ID: ${state.orderId}');
+                    'Order successfully placed with Order ID: ${state.orderId}',
+                    type: SnackBarType.success);
               } else if (state is PlaceOrderFailure) {
                 logger.i('unsuccessful');
                 Navigator.pop(context);
-                showSnackBar(context, state.statusMessage);
+                showSnackBar(context, state.statusMessage,
+                    type: SnackBarType.error);
               }
             },
             builder: (context, state) {
               if (state is PlaceOrderLoading) {
                 logger.i('loading');
-                return const Center(child: CircularProgressIndicator());
+                return const Center(child: DalalLoadingBar());
               } else if (state is PlaceOrderFailure) {
                 logger.i('unsuccessful');
               }
               return _tradingBottomSheetBody(priceChange, company, quantity,
-                  totalPrice, orderFee, orderType, error, cash);
+                  totalPrice, orderFee, orderType, error, cash, flag);
             },
           ),
         );
       });
 }
 
-Widget _tradingBottomSheetBody(int priceChange, Stock company, int quantity,
-    int totalPrice, int orderFee, String orderType, String error, int cash) {
+Widget _tradingBottomSheetBody(
+    int priceChange,
+    Stock company,
+    int quantity,
+    int totalPrice,
+    int orderFee,
+    String orderType,
+    String error,
+    int cash,
+    int flag) {
   return StatefulBuilder(
     builder: (context, setBottomSheetState) {
       List<String> priceTypeMap = [
@@ -254,6 +267,7 @@ Widget _tradingBottomSheetBody(int priceChange, Stock company, int quantity,
                                               .onUserInteraction,
                                           validator: (text) {
                                             if (text == null || text.isEmpty) {
+                                              error = 'true';
                                               return 'Can\'t be empty';
                                             }
                                             if (int.parse(text).toDouble() <
@@ -274,13 +288,13 @@ Widget _tradingBottomSheetBody(int priceChange, Stock company, int quantity,
                                               return 'Out of range';
                                             }
                                             {
+                                              flag = 1;
                                               error = 'false';
                                               return null;
                                             }
                                           },
                                         )),
                                     Text(
-                                      // orderPriceWindow,
                                       showPriceWindow(
                                           company.currentPrice.toInt()),
                                       textAlign: TextAlign.center,
@@ -324,8 +338,30 @@ Widget _tradingBottomSheetBody(int priceChange, Stock company, int quantity,
                         const SizedBox(
                           height: 15,
                         ),
-                        _placeOrderButton(error, cash, context, isAsk, company,
-                            priceType, totalPrice, quantity)
+                        SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              error == 'true'
+                                  ? null
+                                  : [
+                                      logger.i(cash),
+                                      context
+                                          .read<PlaceOrderCubit>()
+                                          .placeOrder(
+                                              isAsk,
+                                              company.id,
+                                              priceType,
+                                              Int64(totalPrice),
+                                              Int64(quantity)),
+                                      logger.i(cash),
+                                      logger.i(
+                                          '$isAsk, ${company.id}, ${company.shortName}, $quantity, $totalPrice, $priceType.toString()'),
+                                    ];
+                            },
+                            child: const Text('Place Order'),
+                          ),
+                        )
                       ],
                     ),
                   ),
@@ -336,35 +372,6 @@ Widget _tradingBottomSheetBody(int priceChange, Stock company, int quantity,
         );
       });
     },
-  );
-}
-
-Widget _placeOrderButton(
-    String error,
-    int cash,
-    BuildContext context,
-    bool isAsk,
-    Stock company,
-    OrderType priceType,
-    int totalPrice,
-    int quantity) {
-  return SizedBox(
-    width: double.infinity,
-    child: ElevatedButton(
-      onPressed: () {
-        error == 'true'
-            ? null
-            : [
-                logger.i(cash),
-                context.read<PlaceOrderCubit>().placeOrder(isAsk, company.id,
-                    priceType, Int64(totalPrice), Int64(quantity)),
-                logger.i(cash),
-                logger.i(
-                    '$isAsk, ${company.id}, ${company.shortName}, $quantity, $totalPrice, $priceType.toString()'),
-              ];
-      },
-      child: const Text('Place Order'),
-    ),
   );
 }
 

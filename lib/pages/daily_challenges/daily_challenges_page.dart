@@ -1,6 +1,7 @@
 import 'package:dalal_street_client/blocs/daily_challenges/daily_challenges_page_cubit.dart';
 import 'package:dalal_street_client/blocs/daily_challenges/single_day_challenges/single_day_challenges_cubit.dart';
 import 'package:dalal_street_client/components/failure_message.dart';
+import 'package:dalal_street_client/components/loading.dart';
 import 'package:dalal_street_client/pages/daily_challenges/single_day_challenges.dart';
 import 'package:dalal_street_client/theme/colors.dart';
 import 'package:dalal_street_client/utils/range.dart';
@@ -34,7 +35,7 @@ class DailyChallengesPage extends StatelessWidget {
                     );
                   }
                 }
-                return const Center(child: CircularProgressIndicator());
+                return const Center(child: DalalLoadingBar());
               },
             ),
           ),

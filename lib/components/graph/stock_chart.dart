@@ -1,6 +1,7 @@
 import 'package:dalal_street_client/blocs/stock_history/history/stock_history_cubit.dart';
 import 'package:dalal_street_client/blocs/stock_history/stream/stock_history_stream_cubit.dart';
 import 'package:dalal_street_client/components/graph/chart_type.dart';
+import 'package:dalal_street_client/components/loading.dart';
 import 'package:dalal_street_client/config/log.dart';
 import 'package:dalal_street_client/models/time_series_data.dart';
 import 'package:dalal_street_client/proto_build/actions/GetStockHistory.pbenum.dart';
@@ -81,11 +82,7 @@ class _CandleStickLayoutState extends State<CandleStickLayout> {
         builder: (context, state) {
           if (state is StockHistoryInitial) {
             return const SizedBox(
-                height: 250,
-                child: Center(
-                    child: CircularProgressIndicator(
-                  color: primaryColor,
-                )));
+                height: 250, child: Center(child: DalalLoadingBar()));
           } else if (state is StockHistorySuccess) {
             var stockHistoryMap = state.stockHistoryMap;
 

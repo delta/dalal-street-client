@@ -1,7 +1,9 @@
 import 'package:clipboard/clipboard.dart';
 import 'package:dalal_street_client/blocs/referral/referral_cubit.dart';
+import 'package:dalal_street_client/models/snackbar/snackbar_type.dart';
 import 'package:dalal_street_client/proto_build/models/User.pb.dart';
 import 'package:dalal_street_client/theme/colors.dart';
+import 'package:dalal_street_client/utils/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -135,8 +137,8 @@ class ReferralPage extends StatelessWidget {
                       ]),
                   onTap: () async {
                     await FlutterClipboard.copy(referralcode);
-                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                        content: Text('✓   Copied to Clipboard')));
+                    showSnackBar(context, '✓   Copied to Clipboard',
+                        type: SnackBarType.success);
                   }),
             ],
           ));

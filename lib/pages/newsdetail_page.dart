@@ -52,35 +52,26 @@ class NewsDetail extends StatelessWidget {
               ),
             )),
             Padding(
+                padding: const EdgeInsets.all(15),
+                child: Text('Published on ' + dur,
+                    style: const TextStyle(
+                        fontStyle: FontStyle.italic,
+                        color: lightGray,
+                        fontSize: 12))),
+            Padding(
               padding: const EdgeInsets.all(15),
-              child: Flexible(
-                child: Text(
-                  dur,
-                  style: const TextStyle(fontSize: 12, color: lightGray),
-                ),
-                fit: FlexFit.loose,
+              child: Text(
+                headline,
+                style:
+                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
             ),
             Padding(
               padding: const EdgeInsets.all(15),
-              child: Flexible(
-                child: Text(
-                  headline,
-                  style: const TextStyle(
-                      fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                fit: FlexFit.loose,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(15),
-              child: Flexible(
-                child: Text(
-                  text,
-                  textAlign: TextAlign.start,
-                  style: const TextStyle(fontSize: 16, color: lightGray),
-                ),
-                fit: FlexFit.loose,
+              child: Text(
+                text,
+                textAlign: TextAlign.start,
+                style: const TextStyle(fontSize: 16, color: lightGray),
               ),
             )
           ]),

@@ -34,6 +34,7 @@ import 'package:dalal_street_client/pages/landing_page.dart';
 import 'package:dalal_street_client/pages/splash_page.dart';
 import 'package:dalal_street_client/pages/portfolio/portfolio_page.dart';
 import 'package:dalal_street_client/proto_build/models/User.pb.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dalal_street_client/blocs/portfolio/userWorth/portfolio_cubit.dart';
@@ -44,7 +45,7 @@ class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     try {
       final page = _getPage(settings);
-      return MaterialPageRoute(builder: (_) => page, settings: settings);
+      return CupertinoPageRoute(builder: (context) => page, settings: settings);
     } catch (e) {
       return _errorRoute(e.toString());
     }
@@ -81,7 +82,7 @@ class RouteGenerator {
           create: (context) => LoginCubit(context.read()),
           child: LoginPage(),
         );
-      case '/referral':
+      case '/referAndEarn':
         if (args is User) {
           return BlocProvider(
             create: (context) => ReferralCubit(),
