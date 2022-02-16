@@ -1,5 +1,5 @@
 import 'package:dalal_street_client/blocs/open_orders/open_orders_cubit.dart';
-import 'package:dalal_street_client/blocs/open_orders_subscription/openorders_subscription_cubit.dart';
+import 'package:dalal_street_client/blocs/open_orders_subscription/open_orders_subscription_cubit.dart';
 import 'package:dalal_street_client/blocs/subscribe/subscribe_cubit.dart';
 import 'package:dalal_street_client/config/log.dart';
 import 'package:dalal_street_client/proto_build/actions/GetMyOrders.pb.dart';

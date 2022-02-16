@@ -6,7 +6,7 @@ import 'package:dalal_street_client/proto_build/datastreams/MyOrders.pb.dart';
 import 'package:dalal_street_client/proto_build/datastreams/Subscribe.pb.dart';
 import 'package:equatable/equatable.dart';
 
-part 'openorders_subscription_state.dart';
+part 'open_orders_subscription_state.dart';
 
 class OpenordersSubscriptionCubit extends Cubit<OpenordersSubscriptionState> {
   OpenordersSubscriptionCubit() : super(OpenordersSubscriptionInitial());

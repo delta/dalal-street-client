@@ -5,7 +5,7 @@ import 'package:dalal_street_client/blocs/auth/change_password/change_password_c
 import 'package:dalal_street_client/blocs/auth/forgot_password/forgot_password_cubit.dart';
 import 'package:dalal_street_client/blocs/auth/login/login_cubit.dart';
 import 'package:dalal_street_client/blocs/open_orders/open_orders_cubit.dart';
-import 'package:dalal_street_client/blocs/open_orders_subscription/openorders_subscription_cubit.dart';
+import 'package:dalal_street_client/blocs/open_orders_subscription/open_orders_subscription_cubit.dart';
 import 'package:dalal_street_client/pages/admin_page/admin_page.dart';
 import 'package:dalal_street_client/blocs/auth/register/register_cubit.dart';
 import 'package:dalal_street_client/blocs/auth/verify_phone/enter_otp/enter_otp_cubit.dart';

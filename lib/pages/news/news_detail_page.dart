@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 
 import '../../theme/colors.dart';
 
-class NewsDetail extends StatelessWidget {
+class NewsDetailPage extends StatelessWidget {
   final String text;
   final String imagePath;
   final String headline;
   final String dur;
-  const NewsDetail(
+  const NewsDetailPage(
       {Key? key,
       required this.text,
       required this.imagePath,

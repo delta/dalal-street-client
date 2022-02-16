@@ -1,4 +1,4 @@
-part of 'openorders_subscription_cubit.dart';
+part of 'open_orders_subscription_cubit.dart';
 
 abstract class OpenordersSubscriptionState extends Equatable {
   const OpenordersSubscriptionState();
