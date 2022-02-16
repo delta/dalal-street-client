@@ -30,9 +30,9 @@ class DalalHome extends StatefulWidget {
 }
 
 class _DalalHomeState extends State<DalalHome> {
-  final _bottomMenu = homeMenuMobile;
+  final _bottomMenu = homeMenuMobile.values.toList();
 
-  final _sideMenu = homeMenuWeb;
+  final _sideMenu = homeMenuWeb.values.toList();
 
   final _sheetMenu = moreMenuMobile.values.toList();
 
