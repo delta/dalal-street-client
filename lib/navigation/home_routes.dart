@@ -36,7 +36,7 @@ final moreRoutesMobile = moreMenuMobile.keys.toList();
 
 final homeRoutesWeb = homeRoutesMobile + moreRoutesMobile;
 
-Map<String, Widget> mobileExtraHomePages(User extra) => {
+Map<String, Widget> mobileHomePagesMore(User extra) => {
       '/news': MultiBlocProvider(
         providers: [
           BlocProvider(create: (context) => NewsBloc()),

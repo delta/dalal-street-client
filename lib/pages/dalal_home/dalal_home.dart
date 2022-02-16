@@ -34,6 +34,8 @@ class _DalalHomeState extends State<DalalHome> {
 
   List<String> get _sheetPageRoutes => moreRoutesMobile;
 
+  int get currentMenuItem => pageViewIndexForRoute(widget.route);
+
   final _bottomMenu = homeMenuMobile;
 
   final _sheetMenu = {
@@ -60,14 +62,13 @@ class _DalalHomeState extends State<DalalHome> {
   @override
   void initState() {
     super.initState();
-    _pageController =
-        PageController(initialPage: pageViewIndexForRoute(widget.route));
+    _pageController = PageController(initialPage: currentMenuItem);
   }
 
   @override
   void didUpdateWidget(covariant DalalHome oldWidget) {
     super.didUpdateWidget(oldWidget);
-    _pageController.jumpToPage(pageViewIndexForRoute(widget.route));
+    _pageController.jumpToPage(currentMenuItem);
   }
 
   @override
@@ -90,7 +91,7 @@ class _DalalHomeState extends State<DalalHome> {
           child: const ExchangePage(),
         ),
         const LeaderboardPage(),
-        ...mobileExtraHomePages(widget.user).values,
+        ...mobileHomePagesMore(widget.user).values,
       ];
 
   @override
@@ -104,6 +105,7 @@ class _DalalHomeState extends State<DalalHome> {
           ),
           bottomNavigationBar: DalalHomeNavBar(
             menu: _bottomMenu,
+            currentIndex: currentMenuItem,
             onItemSelect: _onHomeItemSelect,
             // TODO: can let the page know of reselection, and do some behaviour
             // Example: scroll to top of list, like in insta

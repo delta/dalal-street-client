@@ -46,7 +46,7 @@ GoRouter generateRouter(BuildContext context) {
         builder: (_, state) {
           final userState = dalalBloc.state as DalalDataLoaded;
           final location = state.location;
-          final mobileExtras = mobileExtraHomePages(userState.user);
+          final mobileExtras = mobileHomePagesMore(userState.user);
           if (kIsWeb || !mobileExtras.containsKey(location)) {
             return DalalHome(
               user: userState.user,

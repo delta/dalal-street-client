@@ -6,6 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 class DalalHomeNavBar extends StatefulWidget {
   final Map<String, MenuItem> menu;
+  final int currentIndex;
   final void Function(int index) onItemSelect;
   final void Function(int index) onItemReselect;
   final void Function() onMoreClick;
@@ -13,6 +14,7 @@ class DalalHomeNavBar extends StatefulWidget {
   const DalalHomeNavBar({
     Key? key,
     required this.menu,
+    required this.currentIndex,
     required this.onItemSelect,
     required this.onItemReselect,
     required this.onMoreClick,
@@ -23,24 +25,22 @@ class DalalHomeNavBar extends StatefulWidget {
 }
 
 class _DalalHomeNavBarState extends State<DalalHomeNavBar> {
-  int currentIndex = 0;
-
   late List<BottomNavigationBarItem> _menuItems;
 
   @override
   void initState() {
     super.initState();
     final menu = widget.menu;
+    // The key '/more' doesn't matter
     menu.addAll({'/more': MenuItem('More', AppIcons.hamburger)});
     _menuItems = widget.menu
-        .map((route, menuItem) => MapEntry(
-            route,
+        .map((key, menuItem) => MapEntry(
+            key,
             BottomNavigationBarItem(
-              icon: SvgPicture.asset(
+              icon: SvgPicture.asset(menuItem.icon),
+              activeIcon: SvgPicture.asset(
                 menuItem.icon,
-                color: (route == widget.menu.keys.toList()[currentIndex])
-                    ? primaryColor
-                    : null,
+                color: primaryColor,
               ),
               label: menuItem.name,
             )))
@@ -50,7 +50,7 @@ class _DalalHomeNavBarState extends State<DalalHomeNavBar> {
 
   @override
   build(context) => BottomNavigationBar(
-        currentIndex: currentIndex,
+        currentIndex: widget.currentIndex,
         fixedColor: primaryColor,
         backgroundColor: background2,
         type: BottomNavigationBarType.fixed,
@@ -61,9 +61,8 @@ class _DalalHomeNavBarState extends State<DalalHomeNavBar> {
             widget.onMoreClick();
             return;
           }
-          if (value != currentIndex) {
+          if (value != widget.currentIndex) {
             widget.onItemSelect(value);
-            setState(() => currentIndex = value);
           } else {
             widget.onItemReselect(value);
           }
