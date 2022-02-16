@@ -35,16 +35,7 @@ class _DalalHomeState extends State<DalalHome> {
 
   final _sideMenu = homeMenuWeb;
 
-  // TODO: update to use MenuItem class
-  final _sheetMenu = {
-    'News': AppIcons.news,
-    'Mortgage': AppIcons.mortgage,
-    'Daily Challenges': AppIcons.dailyChallenges,
-    'Open Orders': AppIcons.openOrders,
-    'Refer and Earn': AppIcons.referAndEarn,
-    'Media Partners': AppIcons.mobileAd,
-    'Notifications': AppIcons.notificationBell,
-  };
+  final _sheetMenu = moreMenuMobile.values.toList();
 
   List<String> get _homeRoutes => kIsWeb ? homeRoutesWeb : homeRoutesMobile;
 
