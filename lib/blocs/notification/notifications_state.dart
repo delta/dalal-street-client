@@ -5,8 +5,6 @@ abstract class NotificationsCubitState extends Equatable {
 
   @override
   List<Object> get props => [];
-
-  get lastnotificationid => null;
 }
 
 class NotificationsCubitInitial extends NotificationsCubitState {}
@@ -26,7 +24,6 @@ class GetNotifFailure extends NotificationsCubitState {
 }
 
 class GetMoreNotifications extends NotificationsCubitState {
-  @override
   final int lastnotificationid;
   const GetMoreNotifications(this.lastnotificationid);
   @override

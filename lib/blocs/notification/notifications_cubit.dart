@@ -12,11 +12,11 @@ part 'notifications_state.dart';
 class NotificationsCubit extends Cubit<NotificationsCubitState> {
   NotificationsCubit() : super(NotificationsCubitInitial());
 
-  Future<void> getNotifications() async {
+  Future<void> getNotifications(int lastnotificationId) async {
     try {
       final GetNotificationsResponse notifResponse =
           await actionClient.getNotifications(
-        GetNotificationsRequest(),
+        GetNotificationsRequest(lastNotificationId: lastnotificationId),
         options: sessionOptions(getIt()),
       );
       if (notifResponse.statusCode == GetNotificationsResponse_StatusCode.OK) {

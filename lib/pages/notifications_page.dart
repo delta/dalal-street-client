@@ -24,16 +24,17 @@ class _NotifsState extends State<NotificationsPage> {
   final notifStream = getIt<GlobalStreams>().notificationStream;
   List<notifications.Notification> notifEvents = [];
   int lastnotificationId = 0;
-  int count = 1;
   @override
   void initState() {
     super.initState();
-    context.read<NotificationsCubit>().getNotifications();
+    context.read<NotificationsCubit>().getNotifications(lastnotificationId);
     _scrollController.addListener(() {
       if (_scrollController.position.atEdge) {
         if (_scrollController.position.pixels != 0) {
           if (notifEvents[notifEvents.length].id > 0) {
-            context.read<NotificationsCubit>().getNotifications();
+            context
+                .read<NotificationsCubit>()
+                .getNotifications(lastnotificationId);
           }
         }
       }
@@ -94,9 +95,7 @@ class _NotifsState extends State<NotificationsPage> {
               String text = notification.text;
               String isCreatedAt = notification.createdAt;
 
-              bool isBroadcast = notification.isBroadcast;
-
-              return notifItem(text, isBroadcast, isCreatedAt);
+              return notifItem(text, isCreatedAt);
             },
             separatorBuilder: (context, index) {
               return const Divider();
@@ -111,8 +110,9 @@ class _NotifsState extends State<NotificationsPage> {
                 width: 100,
                 height: 50,
                 child: OutlinedButton(
-                  onPressed: () =>
-                      context.read<NotificationsCubit>().getNotifications(),
+                  onPressed: () => context
+                      .read<NotificationsCubit>()
+                      .getNotifications(lastnotificationId),
                   child: const Text('Retry'),
                 ),
               ),
@@ -125,7 +125,7 @@ class _NotifsState extends State<NotificationsPage> {
         }
       });
 
-  Widget notifItem(String notif, bool islatest, String createdAt) {
+  Widget notifItem(String notif, String createdAt) {
     Color iconColor =
         Colors.primaries[Random().nextInt(Colors.primaries.length)];
 
