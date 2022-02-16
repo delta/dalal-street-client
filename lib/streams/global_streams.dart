@@ -38,7 +38,7 @@ class GlobalStreams extends Equatable {
   final ValueStream<DynamicUserInfo> dynamicUserInfoStream;
   final ValueStream<bool> isMaketOpenStream;
 
-  // Only used to unsubscribe from global streams. Don't use these to subscribe again
+  /// Only used to unsubscribe from global streams. Don't use these to subscribe again
   final List<SubscriptionId> subscriptionIds;
 
   const GlobalStreams(
@@ -93,50 +93,45 @@ Future<GlobalStreams> subscribeToGlobalStreams(
   final initialStocks = stockResponse.stockList;
 
   // Subscribe to all the streams
-  final gameStateSubscriptionId = await subscribe(
-    SubscribeRequest(dataStreamType: DataStreamType.GAME_STATE),
-    sessionId,
-  );
-  final stockPriceSubscriptionId = await subscribe(
-    SubscribeRequest(dataStreamType: DataStreamType.STOCK_PRICES),
-    sessionId,
-  );
-  final stockExchangeSubscriptionId = await subscribe(
-    SubscribeRequest(dataStreamType: DataStreamType.STOCK_EXCHANGE),
-    sessionId,
-  );
-  final transactionSubscriptionId = await subscribe(
-    SubscribeRequest(dataStreamType: DataStreamType.TRANSACTIONS),
-    sessionId,
-  );
-  final notificationSubscriptionId = await subscribe(
-    SubscribeRequest(dataStreamType: DataStreamType.NOTIFICATIONS),
-    sessionId,
-  );
-  final subscriptionIds = [
-    gameStateSubscriptionId,
-    stockPriceSubscriptionId,
-    stockExchangeSubscriptionId,
-    transactionSubscriptionId,
-    notificationSubscriptionId,
-  ];
+  final subIds = await Future.wait([
+    subscribe(
+      SubscribeRequest(dataStreamType: DataStreamType.GAME_STATE),
+      sessionId,
+    ),
+    subscribe(
+      SubscribeRequest(dataStreamType: DataStreamType.STOCK_PRICES),
+      sessionId,
+    ),
+    subscribe(
+      SubscribeRequest(dataStreamType: DataStreamType.STOCK_EXCHANGE),
+      sessionId,
+    ),
+    subscribe(
+      SubscribeRequest(dataStreamType: DataStreamType.TRANSACTIONS),
+      sessionId,
+    ),
+    subscribe(
+      SubscribeRequest(dataStreamType: DataStreamType.NOTIFICATIONS),
+      sessionId,
+    ),
+  ]);
 
   // Get the streams using the subscription ids
   final gameStateStream = streamClient
       .getGameStateUpdates(
-        gameStateSubscriptionId,
+        subIds[0],
         options: sessionOptions(sessionId),
       )
       .asBroadcastStream();
   final stockPricesStream = streamClient
       .getStockPricesUpdates(
-        stockPriceSubscriptionId,
+        subIds[1],
         options: sessionOptions(sessionId),
       )
       .shareValueSeeded(StockPricesUpdate(prices: initialStocks.toPricesMap()));
   final stockExchangeStream = streamClient
       .getStockExchangeUpdates(
-        stockExchangeSubscriptionId,
+        subIds[2],
         options: sessionOptions(sessionId),
       )
       .shareValueSeeded(
@@ -144,13 +139,13 @@ Future<GlobalStreams> subscribeToGlobalStreams(
       );
   final transactionStream = streamClient
       .getTransactionUpdates(
-        transactionSubscriptionId,
+        subIds[3],
         options: sessionOptions(sessionId),
       )
       .asBroadcastStream();
   final notificationStream = streamClient
       .getNotificationUpdates(
-        notificationSubscriptionId,
+        subIds[4],
         options: sessionOptions(sessionId),
       )
       .asBroadcastStream();
@@ -204,7 +199,7 @@ Future<GlobalStreams> subscribeToGlobalStreams(
     isMaketOpenStream,
     stockMapStream,
     dynamicUserInfoStream,
-    subscriptionIds,
+    subIds,
   );
 }
 
