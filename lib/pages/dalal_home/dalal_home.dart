@@ -3,7 +3,6 @@ import 'package:dalal_street_client/blocs/news/news_bloc.dart';
 import 'package:dalal_street_client/blocs/portfolio/userWorth/portfolio_cubit.dart';
 import 'package:dalal_street_client/components/stock_bar.dart';
 import 'package:dalal_street_client/config/log.dart';
-import 'package:dalal_street_client/constants/icons.dart';
 import 'package:dalal_street_client/navigation/home_routes.dart';
 import 'package:dalal_street_client/pages/dalal_home/dalal_home_bottom_sheet.dart';
 import 'package:dalal_street_client/pages/dalal_home/dalal_home_nav_bar.dart';
