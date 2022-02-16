@@ -399,6 +399,7 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
       },
     );
   }
+
   Widget buildOpenOrdersTable() {
     return BlocConsumer<OpenOrdersCubit, OpenOrdersState>(
       listener: (context, state) {
