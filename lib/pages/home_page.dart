@@ -258,14 +258,11 @@ class _HomePageState extends State<HomePage>
   }
 
   Widget _stockList() {
-    final gameStateStream = getIt<GlobalStreams>().gameStateStream;
     List<Widget> stockItems = stocks.entries
         .map((entry) => StockItem(
             stock: entry.value,
-            isBankruptStream: gameStateStream.isBankruptStream(
-                entry.value.id, entry.value.isBankrupt),
-            givesDividendStream: gameStateStream.givesDividents(
-                entry.value.id, entry.value.givesDividends),
+            isBankruptStream: stockMapStream.isBankruptStream(entry.value.id),
+            givesDividendStream: stockMapStream.givesDividents(entry.value.id),
             stockPriceStream: stockMapStream.priceStream(entry.key)))
         .toList();
     return ListView(
