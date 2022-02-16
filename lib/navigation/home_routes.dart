@@ -30,6 +30,15 @@ final moreMenuMobile = {
   '/notifications': MenuItem('Notifications', AppIcons.notificationBell),
 };
 
+// Sorry for wierd hack. Dart sucks
+final _homeMenuMobileCopy = {
+  '/home': MenuItem('Home', AppIcons.home),
+  '/portfolio': MenuItem('Portfolio', AppIcons.portfolio),
+  '/exchange': MenuItem('DSE', AppIcons.rupee),
+  '/ranking': MenuItem('Ranking', AppIcons.trophy),
+};
+final homeMenuWeb = _homeMenuMobileCopy..addAll(moreMenuMobile);
+
 final homeRoutesMobile = homeMenuMobile.keys.toList();
 
 final moreRoutesMobile = moreMenuMobile.keys.toList();

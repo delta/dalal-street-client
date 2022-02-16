@@ -7,6 +7,7 @@ import 'package:dalal_street_client/constants/icons.dart';
 import 'package:dalal_street_client/navigation/home_routes.dart';
 import 'package:dalal_street_client/pages/dalal_home/dalal_home_bottom_sheet.dart';
 import 'package:dalal_street_client/pages/dalal_home/dalal_home_nav_bar.dart';
+import 'package:dalal_street_client/pages/dalal_home/dalal_home_side_drawer.dart';
 import 'package:dalal_street_client/pages/home_page.dart';
 import 'package:dalal_street_client/pages/leaderboard_page/leaderboard_page.dart';
 import 'package:dalal_street_client/pages/portfolio/portfolio_page.dart';
@@ -30,14 +31,11 @@ class DalalHome extends StatefulWidget {
 }
 
 class _DalalHomeState extends State<DalalHome> {
-  List<String> get _homeRoutes => kIsWeb ? homeRoutesWeb : homeRoutesMobile;
-
-  List<String> get _sheetPageRoutes => moreRoutesMobile;
-
-  int get currentMenuItem => pageViewIndexForRoute(widget.route);
-
   final _bottomMenu = homeMenuMobile;
 
+  final _sideMenu = homeMenuWeb;
+
+  // TODO: update to use MenuItem class
   final _sheetMenu = {
     'News': AppIcons.news,
     'Mortgage': AppIcons.mortgage,
@@ -48,7 +46,11 @@ class _DalalHomeState extends State<DalalHome> {
     'Notifications': AppIcons.notificationBell,
   };
 
-  late PageController _pageController;
+  List<String> get _homeRoutes => kIsWeb ? homeRoutesWeb : homeRoutesMobile;
+
+  List<String> get _sheetRoutes => moreRoutesMobile;
+
+  int get currentMenuItem => pageViewIndexForRoute(widget.route);
 
   int pageViewIndexForRoute(String route) {
     final index = _homeRoutes.indexOf(route);
@@ -58,6 +60,8 @@ class _DalalHomeState extends State<DalalHome> {
     }
     return index;
   }
+
+  late PageController _pageController;
 
   @override
   void initState() {
@@ -103,19 +107,31 @@ class _DalalHomeState extends State<DalalHome> {
             physics: const NeverScrollableScrollPhysics(),
             children: _pageViewChildren,
           ),
-          bottomNavigationBar: DalalHomeNavBar(
-            menu: _bottomMenu,
-            currentIndex: currentMenuItem,
-            onItemSelect: _onHomeItemSelect,
-            // TODO: can let the page know of reselection, and do some behaviour
-            // Example: scroll to top of list, like in insta
-            onItemReselect: (index) => {},
-            onMoreClick: _showHomeBottomSheet,
-          ),
+          drawer: kIsWeb
+              ? DalalHomeSideDrawer(
+                  menu: _sideMenu,
+                  currentIndex: currentMenuItem,
+                  onItemSelect: (index) =>
+                      _onMenuItemSelect(_homeRoutes[index]),
+                  onItemReselect: (index) {},
+                )
+              : null,
+          bottomNavigationBar: !kIsWeb
+              ? DalalHomeNavBar(
+                  menu: _bottomMenu,
+                  currentIndex: currentMenuItem,
+                  onItemSelect: (index) =>
+                      _onMenuItemSelect(_homeRoutes[index]),
+                  // TODO: can let the page know of reselection, and do some behaviour
+                  // Example: scroll to top of list, like in insta
+                  onItemReselect: (index) => {},
+                  onMoreClick: _showHomeBottomSheet,
+                )
+              : null,
         ),
       );
 
-  void _onHomeItemSelect(int index) => context.go(_homeRoutes[index]);
+  void _onMenuItemSelect(String route) => context.go(route);
 
   void _showHomeBottomSheet() => showModalBottomSheet(
         context: context,
@@ -125,7 +141,7 @@ class _DalalHomeState extends State<DalalHome> {
             borderRadius: BorderRadius.vertical(top: Radius.circular(10))),
         builder: (_) => DalalHomeBottomSheet(
           items: _sheetMenu,
-          onItemClick: (index) => context.push(_sheetPageRoutes[index]),
+          onItemClick: (index) => context.push(_sheetRoutes[index]),
         ),
       );
 }
