@@ -17,6 +17,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:dalal_street_client/theme/colors.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key, required this.user}) : super(key: key);
@@ -139,7 +140,7 @@ class _HomePageState extends State<HomePage>
                     fontSize: 12,
                     title: 'See All',
                     onPressed: () {
-                      Navigator.pushNamed(context, '/news');
+                      context.go('/news');
                     },
                   ),
                 ],
@@ -358,7 +359,10 @@ class StockItem extends StatelessWidget {
     List<int> data = [stock.id, cash];
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, '/company', arguments: data);
+        context.push(
+          '/company',
+          extra: data,
+        );
       },
       child: Container(
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),

@@ -45,7 +45,7 @@ class _DalalHomeState extends State<DalalHome> {
   int pageViewIndexForRoute(String route) {
     final index = _homeRoutes.indexOf(route);
     if (index == -1) {
-      logger.e('Invalid page route sent to DalalHome');
+      logger.e('Invalid page route sent to DalalHome: $route');
       return 0;
     }
     return index;
