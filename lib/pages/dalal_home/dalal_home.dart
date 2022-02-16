@@ -5,8 +5,8 @@ import 'package:dalal_street_client/components/stock_bar.dart';
 import 'package:dalal_street_client/config/log.dart';
 import 'package:dalal_street_client/navigation/home_routes.dart';
 import 'package:dalal_street_client/pages/dalal_home/dalal_home_bottom_sheet.dart';
-import 'package:dalal_street_client/pages/dalal_home/dalal_home_nav_bar.dart';
-import 'package:dalal_street_client/pages/dalal_home/dalal_home_side_drawer.dart';
+import 'package:dalal_street_client/pages/dalal_home/dalal_bottom_bar.dart';
+import 'package:dalal_street_client/pages/dalal_home/dalal_side_drawer.dart';
 import 'package:dalal_street_client/pages/home_page.dart';
 import 'package:dalal_street_client/pages/leaderboard_page/leaderboard_page.dart';
 import 'package:dalal_street_client/pages/portfolio/portfolio_page.dart';
@@ -98,7 +98,7 @@ class _DalalHomeState extends State<DalalHome> {
             children: _pageViewChildren,
           ),
           drawer: kIsWeb
-              ? DalalHomeSideDrawer(
+              ? DalalSideDrawer(
                   menu: _sideMenu,
                   currentIndex: currentMenuItem,
                   onItemSelect: (index) =>
@@ -107,7 +107,7 @@ class _DalalHomeState extends State<DalalHome> {
                 )
               : null,
           bottomNavigationBar: !kIsWeb
-              ? DalalHomeNavBar(
+              ? DalalBottomBar(
                   menu: _bottomMenu,
                   currentIndex: currentMenuItem,
                   onItemSelect: (index) =>

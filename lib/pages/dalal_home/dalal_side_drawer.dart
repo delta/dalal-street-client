@@ -3,13 +3,13 @@ import 'package:dalal_street_client/theme/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class DalalHomeSideDrawer extends StatelessWidget {
+class DalalSideDrawer extends StatelessWidget {
   final List<MenuItem> menu;
   final int currentIndex;
   final void Function(int index) onItemSelect;
   final void Function(int index) onItemReselect;
 
-  const DalalHomeSideDrawer(
+  const DalalSideDrawer(
       {Key? key,
       required this.menu,
       required this.currentIndex,
