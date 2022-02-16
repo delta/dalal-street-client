@@ -5,10 +5,7 @@ import 'package:dalal_street_client/constants/error_messages.dart';
 import 'package:dalal_street_client/grpc/client.dart';
 import 'package:dalal_street_client/proto_build/actions/CancelOrder.pb.dart';
 import 'package:dalal_street_client/proto_build/actions/GetMyOrders.pb.dart';
-import 'package:dalal_street_client/proto_build/datastreams/MyOrders.pb.dart';
 import 'package:equatable/equatable.dart';
-
-import '../../proto_build/datastreams/Subscribe.pb.dart';
 part 'open_orders_state.dart';
 
 class OpenOrdersCubit extends Cubit<OpenOrdersState> {
