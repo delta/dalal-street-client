@@ -9,6 +9,8 @@ abstract class DalalState extends Equatable {
 
 /// User is logged out
 class DalalLoggedOut extends DalalState {
+  /// Wether logged out by user action, or automatically because of some session
+  /// issue
   final bool manualLogout;
 
   const DalalLoggedOut({this.manualLogout = true});
