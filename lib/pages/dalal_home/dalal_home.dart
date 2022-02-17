@@ -25,7 +25,7 @@ import 'package:go_router/go_router.dart';
 /// without any scrolling animation
 ///
 /// The current menu item is determined using [route] field
-/// Example: In dalalstreet.com/portfolio, route is '/portfolio' 
+/// Example: In dalalstreet.com/portfolio, route is '/portfolio'
 class DalalHome extends StatefulWidget {
   final User user;
   final String route;
@@ -41,7 +41,7 @@ class DalalHome extends StatefulWidget {
 ///
 /// Checkout https://gorouter.dev/nested-navigation to understand how url is
 /// changed and web history is maintained when switching between pages
-/// 
+///
 /// In short:
 /// - Whenever a new item is selected, we do `context.go(newRoute)`
 /// - When the page is rebuilt with change in route, [didUpdateWidget] is called

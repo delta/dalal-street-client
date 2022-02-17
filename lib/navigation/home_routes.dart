@@ -39,6 +39,7 @@ final _homeMenuMobileCopy = {
   '/exchange': MenuItem('DSE', AppIcons.rupee),
   '/ranking': MenuItem('Ranking', AppIcons.trophy),
 };
+
 /// Home Menu items for web
 final homeMenuWeb = _homeMenuMobileCopy..addAll(moreMenuMobile);
 
