@@ -253,7 +253,7 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
                 const SizedBox.square(dimension: 20),
                 Text(
                   fullName!.toUpperCase(),
-                  style: const TextStyle(fontSize: 12,color: lightGray),
+                  style: const TextStyle(fontSize: 12, color: lightGray),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox.square(dimension: 10),
@@ -303,16 +303,15 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
             Text(
               getdur(createdAt),
               style: const TextStyle(fontSize: 12, color: Colors.white),
-              maxLines: 1,
             )
           ])),
         ],
         onLongPress: () {
           showDialog(
-              context: context,
-              builder: (BuildContext context) => _buildPopupDialog(context,isClosed,id,isAsk),
-            );
-          
+            context: context,
+            builder: (BuildContext context) =>
+                _buildPopupDialog(context, isClosed, id, isAsk),
+          );
         });
   }
 
@@ -349,7 +348,7 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
                                       width: 0,
                                       style: BorderStyle.solid,
                                       color: lightGray)),
-                              dataRowHeight: 120,
+                              dataRowHeight: 140,
                               columnSpacing: 15,
                               columns: const <DataColumn>[
                                 DataColumn(
@@ -365,18 +364,18 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
                                     label: Text(
                                   'DETAIL',
                                   style: TextStyle(
-                                      color: blurredGray,
-                                      fontSize: 11,
-                                      ),
+                                    color: blurredGray,
+                                    fontSize: 11,
+                                  ),
                                   textAlign: TextAlign.center,
                                 )),
                                 DataColumn(
                                     label: Text(
                                   'STATUS',
                                   style: TextStyle(
-                                      color: blurredGray,
-                                      fontSize: 11,
-                                      ),
+                                    color: blurredGray,
+                                    fontSize: 11,
+                                  ),
                                   textAlign: TextAlign.center,
                                 )),
                               ],
@@ -438,7 +437,7 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
                                       width: 0,
                                       style: BorderStyle.solid,
                                       color: lightGray)),
-                              dataRowHeight: 120,
+                              dataRowHeight: 140,
                               columnSpacing: 15,
                               columns: const <DataColumn>[
                                 DataColumn(
@@ -454,8 +453,8 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
                                     label: Text(
                                   'DETAIL',
                                   style: TextStyle(
-                                      color: blurredGray,
-                                      fontSize: 11,
+                                    color: blurredGray,
+                                    fontSize: 11,
                                   ),
                                   textAlign: TextAlign.center,
                                 )),
@@ -463,8 +462,8 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
                                     label: Text(
                                   'STATUS',
                                   style: TextStyle(
-                                      color: blurredGray,
-                                      fontSize: 11,
+                                    color: blurredGray,
+                                    fontSize: 11,
                                   ),
                                   textAlign: TextAlign.center,
                                 )),
@@ -506,61 +505,73 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
     }
   }
 
-  Widget _buildPopupDialog(BuildContext context,bool isClosed, int id, bool isAsk,) {
-  return  AlertDialog(
-    backgroundColor: Colors.black,
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.all(Radius.circular(10))),
-     content: SizedBox(
-       height: 200,
-       width: 300,
-       child: Column(
-         crossAxisAlignment: CrossAxisAlignment.center,
-         mainAxisAlignment: MainAxisAlignment.center,
-         children: [
-         
-       const Text('Are you sure you want to close the order ?',style: TextStyle(fontSize: 20,color: Colors.white,fontWeight: FontWeight.w400),textAlign: TextAlign.center,),
-      const SizedBox.square(dimension: 40,),
-       Row(
-           mainAxisAlignment:MainAxisAlignment.center,
-           children: [
-             SizedBox(
-              width: 95,
-              height: 40,
-              child: ElevatedButton(
-                onPressed: () => Navigator.of(context).pop(),
-                child: const Text('No',style: TextStyle(fontSize: 13),),
-                
-                style: primaryButtonStyle
+  Widget _buildPopupDialog(
+    BuildContext context,
+    bool isClosed,
+    int id,
+    bool isAsk,
+  ) {
+    return AlertDialog(
+      backgroundColor: Colors.black,
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10))),
+      content: SizedBox(
+        height: 200,
+        width: 300,
+        child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text(
+                'Are you sure you want to close the order ?',
+                style: TextStyle(
+                    fontSize: 20,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w400),
+                textAlign: TextAlign.center,
               ),
-            ),
-            const SizedBox.square(dimension: 30,),
-
-            SizedBox(
-              width: 95,
-              height: 40,
-              child: ElevatedButton(
-                onPressed: (){
-                   if (!isClosed) {
-            logger.i(id);
-            logger.i('Cancel');
-            context.read<OpenOrdersCubit>().cancelOpenOrders(id, isAsk);
-            Navigator.of(context).pop();
-          }
-          
-                },
-                child: const Text('Yes',style: TextStyle(fontSize: 13)),
-                
-                style: outlinedButtonStyle
+              const SizedBox.square(
+                dimension: 40,
               ),
-            ),
-          
-            
-           ],)
-       ]),
-     )
-     ,
-    
-  );
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    width: 95,
+                    height: 40,
+                    child: ElevatedButton(
+                        onPressed: () => Navigator.of(context).pop(),
+                        child: const Text(
+                          'No',
+                          style: TextStyle(fontSize: 13),
+                        ),
+                        style: primaryButtonStyle),
+                  ),
+                  const SizedBox.square(
+                    dimension: 30,
+                  ),
+                  SizedBox(
+                    width: 95,
+                    height: 40,
+                    child: ElevatedButton(
+                        onPressed: () {
+                          if (!isClosed) {
+                            logger.i(id);
+                            logger.i('Cancel');
+                            context
+                                .read<OpenOrdersCubit>()
+                                .cancelOpenOrders(id, isAsk);
+                            Navigator.of(context).pop();
+                          }
+                        },
+                        child:
+                            const Text('Yes', style: TextStyle(fontSize: 13)),
+                        style: outlinedButtonStyle),
+                  ),
+                ],
+              )
+            ]),
+      ),
+    );
   }
 }
