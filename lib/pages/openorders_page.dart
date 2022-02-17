@@ -5,9 +5,11 @@ import 'package:dalal_street_client/config/log.dart';
 import 'package:dalal_street_client/proto_build/actions/GetMyOrders.pb.dart';
 import 'package:dalal_street_client/proto_build/datastreams/MyOrders.pb.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
+import 'package:dalal_street_client/theme/buttons.dart';
 import 'package:dalal_street_client/theme/colors.dart';
 import 'package:dalal_street_client/utils/snackbar.dart';
 import 'package:fixnum/fixnum.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../config/get_it.dart';
@@ -34,86 +36,82 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-            body: Container(
-                margin: const EdgeInsets.all(10),
-                width: MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: background2),
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: <Widget>[
-                      const Padding(
-                          padding: EdgeInsets.all(10),
-                          child: Text(
-                            'Open Orders',
-                            style: TextStyle(
-                                color: lightGray,
-                                fontSize: 18,
-                                fontWeight: FontWeight.w800),
-                          )),
-                      Center(child: BlocBuilder<SubscribeCubit, SubscribeState>(
-                          builder: (context, state) {
-                        if (state is SubscriptionDataLoaded) {
-                          context
-                              .read<OpenordersSubscriptionCubit>()
-                              .getOpenOrdersStream(state.subscriptionId);
-                          return BlocBuilder<OpenordersSubscriptionCubit,
-                              OpenordersSubscriptionState>(
-                            builder: ((context, state) {
-                              if (state is SubscriptionToOpenOrderSuccess) {
-                                return updateTable(state.orderUpdate);
-                              } else if (state
-                                  is SubscriptionToOpenOrderFailed) {
-                                return Column(children: [
-                                  const Text('Failed to reach server'),
-                                  const SizedBox(height: 20),
-                                  SizedBox(
-                                    width: 100,
-                                    height: 50,
-                                    child: OutlinedButton(
-                                      onPressed: () {
-                                        context
-                                            .read<OpenordersSubscriptionCubit>()
-                                            .getOpenOrdersStream(
-                                                state.subscriptionId);
-                                      },
-                                      child: const Text('Retry'),
-                                    ),
-                                  )
-                                ]);
-                              } else {
-                                return buildTable();
-                              }
-                            }),
-                          );
-                        } else if (state is SubscriptonDataFailed) {
-                          return Column(children: [
-                            const Text('Failed to reach server'),
-                            const SizedBox(height: 20),
-                            SizedBox(
-                              width: 100,
-                              height: 50,
-                              child: OutlinedButton(
-                                onPressed: () {
-                                  context
-                                      .read<SubscribeCubit>()
-                                      .subscribe(DataStreamType.MY_ORDERS);
-                                },
-                                child: const Text('Retry'),
-                              ),
-                            )
-                          ]);
-                        } else {
-                          return buildTable();
-                        }
-                      }))
-                    ]))));
+            appBar: AppBar(
+              title: const Text(
+                'Open Orders',
+                style: TextStyle(
+                    color: lightGray,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w800),
+                textAlign: TextAlign.left,
+              ),
+            ),
+            body: SingleChildScrollView(
+                child: Container(
+                    margin: const EdgeInsets.all(10),
+                    width: MediaQuery.of(context).size.width,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: background2),
+                    child: BlocBuilder<SubscribeCubit, SubscribeState>(
+                        builder: (context, state) {
+                      if (state is SubscriptionDataLoaded) {
+                        context
+                            .read<OpenordersSubscriptionCubit>()
+                            .getOpenOrdersStream(state.subscriptionId);
+                        return BlocBuilder<OpenordersSubscriptionCubit,
+                            OpenordersSubscriptionState>(
+                          builder: ((context, state) {
+                            if (state is SubscriptionToOpenOrderSuccess) {
+                              return updateTable(state.orderUpdate, context);
+                            } else if (state is SubscriptionToOpenOrderFailed) {
+                              return Column(children: [
+                                const Text('Failed to reach server'),
+                                const SizedBox(height: 20),
+                                SizedBox(
+                                  width: 100,
+                                  height: 50,
+                                  child: OutlinedButton(
+                                    onPressed: () {
+                                      context
+                                          .read<OpenordersSubscriptionCubit>()
+                                          .getOpenOrdersStream(
+                                              state.subscriptionId);
+                                    },
+                                    child: const Text('Retry'),
+                                  ),
+                                )
+                              ]);
+                            } else {
+                              return buildTable(context);
+                            }
+                          }),
+                        );
+                      } else if (state is SubscriptonDataFailed) {
+                        return Column(children: [
+                          const Text('Failed to reach server'),
+                          const SizedBox(height: 20),
+                          SizedBox(
+                            width: 100,
+                            height: 50,
+                            child: OutlinedButton(
+                              onPressed: () {
+                                context
+                                    .read<SubscribeCubit>()
+                                    .subscribe(DataStreamType.MY_ORDERS);
+                              },
+                              child: const Text('Retry'),
+                            ),
+                          )
+                        ]);
+                      } else {
+                        return buildTable(context);
+                      }
+                    })))));
   }
 
-  List<DataRow> updateRows(
-      GetMyOpenOrdersResponse response, MyOrderUpdate myOrderUpdate) {
+  List<DataRow> updateRows(GetMyOpenOrdersResponse response,
+      MyOrderUpdate myOrderUpdate, BuildContext context) {
     List<Ask> openAskOrdersList = response.openAskOrders;
     List<Bid> openBidOrdersList = response.openBidOrders;
     List<DataRow> rows = [];
@@ -132,7 +130,8 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
               element.id,
               myOrderUpdate.isClosed,
               true,
-              element.createdAt));
+              element.createdAt,
+              context));
         }
       } else {
         rows.add(addRow(
@@ -145,7 +144,8 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
             element.id,
             element.isClosed,
             true,
-            element.createdAt));
+            element.createdAt,
+            context));
       }
     }
     for (var element in openBidOrdersList) {
@@ -161,8 +161,9 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
               element.price,
               element.id,
               myOrderUpdate.isClosed,
-              true,
-              element.createdAt));
+              false,
+              element.createdAt,
+              context));
         }
       } else {
         rows.add(addRow(
@@ -174,14 +175,16 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
             element.price,
             element.id,
             element.isClosed,
-            true,
-            element.createdAt));
+            false,
+            element.createdAt,
+            context));
       }
     }
     return rows;
   }
 
-  List<DataRow> buildRows(GetMyOpenOrdersResponse response) {
+  List<DataRow> buildRows(
+      GetMyOpenOrdersResponse response, BuildContext context) {
     List<Ask> openAskOrdersList = response.openAskOrders;
     List<Bid> openBidOrdersList = response.openBidOrders;
     List<DataRow> rows = [];
@@ -199,7 +202,8 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
           element.id,
           element.isClosed,
           true,
-          element.createdAt));
+          element.createdAt,
+          context));
     }
     for (var element in openBidOrdersList) {
       Stock? company = stockList[element.stockId];
@@ -214,7 +218,8 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
           element.id,
           element.isClosed,
           false,
-          element.createdAt));
+          element.createdAt,
+          context));
     }
     return rows;
   }
@@ -229,7 +234,8 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
       int id,
       bool isClosed,
       bool isAsk,
-      String createdAt) {
+      String createdAt,
+      BuildContext context) {
     return DataRow(
         cells: <DataCell>[
           DataCell(Row(
@@ -246,13 +252,13 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                 const SizedBox.square(dimension: 20),
                 Text(
-                  fullName!,
-                  style: const TextStyle(fontSize: 12),
+                  fullName!.toUpperCase(),
+                  style: const TextStyle(fontSize: 12,color: lightGray),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox.square(dimension: 10),
                 Text(
-                  shortName!,
+                  shortName!.toUpperCase(),
                   style: const TextStyle(fontSize: 12),
                   textAlign: TextAlign.center,
                 ),
@@ -302,15 +308,15 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
           ])),
         ],
         onLongPress: () {
-          if (!isClosed) {
-            logger.i(id);
-            logger.i('Cancel');
-            context.read<OpenOrdersCubit>().cancelOpenOrders(id, isAsk);
-          }
+          showDialog(
+              context: context,
+              builder: (BuildContext context) => _buildPopupDialog(context,isClosed,id,isAsk),
+            );
+          
         });
   }
 
-  Widget updateTable(MyOrderUpdate myOrderUpdate) {
+  Widget updateTable(MyOrderUpdate myOrderUpdate, BuildContext context) {
     return BlocConsumer<OpenOrdersCubit, OpenOrdersState>(
       listener: (context, state) {
         if (state is CancelorderSuccess) {
@@ -330,7 +336,7 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
       },
       builder: (context, state) {
         if (state is GetOpenordersSuccess) {
-          if (updateRows(state.res, myOrderUpdate).isNotEmpty) {
+          if (updateRows(state.res, myOrderUpdate, context).isNotEmpty) {
             return SingleChildScrollView(
                 scrollDirection: Axis.vertical,
                 child: Column(
@@ -344,15 +350,14 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
                                       style: BorderStyle.solid,
                                       color: lightGray)),
                               dataRowHeight: 120,
-                              columnSpacing: 25,
+                              columnSpacing: 15,
                               columns: const <DataColumn>[
                                 DataColumn(
                                     label: Text(
                                   'ACTION',
                                   style: TextStyle(
-                                    color: lightGray,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w800,
+                                    color: blurredGray,
+                                    fontSize: 11,
                                   ),
                                   textAlign: TextAlign.center,
                                 )),
@@ -360,27 +365,28 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
                                     label: Text(
                                   'DETAIL',
                                   style: TextStyle(
-                                      color: lightGray,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w800),
+                                      color: blurredGray,
+                                      fontSize: 11,
+                                      ),
                                   textAlign: TextAlign.center,
                                 )),
                                 DataColumn(
                                     label: Text(
                                   'STATUS',
                                   style: TextStyle(
-                                      color: lightGray,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w800),
+                                      color: blurredGray,
+                                      fontSize: 11,
+                                      ),
                                   textAlign: TextAlign.center,
                                 )),
                               ],
-                              rows: updateRows(state.res, myOrderUpdate))),
+                              rows: updateRows(
+                                  state.res, myOrderUpdate, context))),
                       const Padding(
                           padding: EdgeInsets.all(10),
                           child: Text(
                             'Long press a order to close it',
-                            style: TextStyle(color: lightGray, fontSize: 11),
+                            style: TextStyle(color: blurredGray, fontSize: 11),
                           ))
                     ]));
           } else {
@@ -397,10 +403,12 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
     );
   }
 
-  Widget buildTable() {
+  Widget buildTable(BuildContext context) {
     return BlocConsumer<OpenOrdersCubit, OpenOrdersState>(
       listener: (context, state) {
+        logger.i('listening');
         if (state is CancelorderSuccess) {
+          logger.i('Cancel Order Sucess');
           showSnackBar(context, 'Order Cancelled Sucessfully');
           context.read<OpenOrdersCubit>().getOpenOrders();
         } else if (state is OrderFailure) {
@@ -417,9 +425,7 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
       },
       builder: (context, state) {
         if (state is GetOpenordersSuccess) {
-          if (buildRows(
-            state.res,
-          ).isNotEmpty) {
+          if (buildRows(state.res, context).isNotEmpty) {
             return SingleChildScrollView(
                 scrollDirection: Axis.vertical,
                 child: Column(
@@ -433,15 +439,14 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
                                       style: BorderStyle.solid,
                                       color: lightGray)),
                               dataRowHeight: 120,
-                              columnSpacing: 25,
+                              columnSpacing: 15,
                               columns: const <DataColumn>[
                                 DataColumn(
                                     label: Text(
                                   'ACTION',
                                   style: TextStyle(
-                                    color: lightGray,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w800,
+                                    color: blurredGray,
+                                    fontSize: 11,
                                   ),
                                   textAlign: TextAlign.center,
                                 )),
@@ -449,27 +454,27 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
                                     label: Text(
                                   'DETAIL',
                                   style: TextStyle(
-                                      color: lightGray,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w800),
+                                      color: blurredGray,
+                                      fontSize: 11,
+                                  ),
                                   textAlign: TextAlign.center,
                                 )),
                                 DataColumn(
                                     label: Text(
                                   'STATUS',
                                   style: TextStyle(
-                                      color: lightGray,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w800),
+                                      color: blurredGray,
+                                      fontSize: 11,
+                                  ),
                                   textAlign: TextAlign.center,
                                 )),
                               ],
-                              rows: buildRows(state.res))),
+                              rows: buildRows(state.res, context))),
                       const Padding(
                           padding: EdgeInsets.all(10),
                           child: Text(
                             'Long press a order to close it',
-                            style: TextStyle(color: lightGray, fontSize: 11),
+                            style: TextStyle(color: blurredGray, fontSize: 11),
                           ))
                     ]));
           } else {
@@ -499,5 +504,63 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
     } else {
       return (diff.inDays.toString() + ' day ago');
     }
+  }
+
+  Widget _buildPopupDialog(BuildContext context,bool isClosed, int id, bool isAsk,) {
+  return  AlertDialog(
+    backgroundColor: Colors.black,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.all(Radius.circular(10))),
+     content: SizedBox(
+       height: 200,
+       width: 300,
+       child: Column(
+         crossAxisAlignment: CrossAxisAlignment.center,
+         mainAxisAlignment: MainAxisAlignment.center,
+         children: [
+         
+       const Text('Are you sure you want to close the order ?',style: TextStyle(fontSize: 20,color: Colors.white,fontWeight: FontWeight.w400),textAlign: TextAlign.center,),
+      const SizedBox.square(dimension: 40,),
+       Row(
+           mainAxisAlignment:MainAxisAlignment.center,
+           children: [
+             SizedBox(
+              width: 95,
+              height: 40,
+              child: ElevatedButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: const Text('No',style: TextStyle(fontSize: 13),),
+                
+                style: primaryButtonStyle
+              ),
+            ),
+            const SizedBox.square(dimension: 30,),
+
+            SizedBox(
+              width: 95,
+              height: 40,
+              child: ElevatedButton(
+                onPressed: (){
+                   if (!isClosed) {
+            logger.i(id);
+            logger.i('Cancel');
+            context.read<OpenOrdersCubit>().cancelOpenOrders(id, isAsk);
+            Navigator.of(context).pop();
+          }
+          
+                },
+                child: const Text('Yes',style: TextStyle(fontSize: 13)),
+                
+                style: outlinedButtonStyle
+              ),
+            ),
+          
+            
+           ],)
+       ]),
+     )
+     ,
+    
+  );
   }
 }
