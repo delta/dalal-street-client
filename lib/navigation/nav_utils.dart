@@ -4,6 +4,8 @@ import 'package:go_router/go_router.dart';
 /// Useful extensions for gorouter navigation
 extension NavUtils on BuildContext {
   /// Executes `context.go()` inside `Router.neglect()`
+  ///
+  /// See https://gorouter.dev/web-history to understand `Router.neglect()`
   void webGo(String location, {Object? extra}) {
     Router.neglect(
       this,

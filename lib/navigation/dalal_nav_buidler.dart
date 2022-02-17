@@ -3,6 +3,7 @@ import 'package:dalal_street_client/components/loading.dart';
 import 'package:dalal_street_client/config/get_it.dart';
 import 'package:dalal_street_client/config/log.dart';
 import 'package:dalal_street_client/models/snackbar/snackbar_type.dart';
+import 'package:dalal_street_client/navigation/home_routes.dart';
 import 'package:dalal_street_client/navigation/nav_utils.dart';
 import 'package:dalal_street_client/utils/snackbar.dart';
 import 'package:flutter/material.dart';
@@ -43,7 +44,20 @@ class _DalalNavBuilderState extends State<DalalNavBuilder> {
 
             logger.i('user logged in');
 
-            context.webGo('/home', extra: state.user);
+            if (!homeRoutesWeb.contains(widget.routerState.location)) {
+              context.webGo('/home');
+            } else {
+              // Redirect to the same route, without adding to web history
+              // Originally state will not be DalalDataLoaded, so exception will happen
+              // But we covered over it by showing loading ui
+              // Now the state has required data, so router can again direct to the required page
+              //
+              // Hacky fix, but no other way possible unless the routing lib gives a dedicated api for async loading of data
+              context.webGo(
+                widget.routerState.location,
+                extra: widget.routerState.extra,
+              );
+            }
           } else if (state is DalalVerificationPending) {
             // Register sessionId
             getIt.registerSingleton(state.sessionId);
