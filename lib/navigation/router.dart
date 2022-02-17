@@ -30,52 +30,62 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-GoRouter generateRouter(BuildContext context) {
-  final dalalBloc = context.read<DalalBloc>();
-  return GoRouter(
-    initialLocation: '/splash',
-    debugLogDiagnostics: true,
-    routes: [
-      ..._initialRoutes,
-      ..._authRoutes,
-      _adminRoute,
-      GoRoute(
-        // TODO: do this without hardcoding
-        path:
-            '/:p(home|portfolio|exchange|ranking|news|mortgage|dailyChallenges|openOrders|referAndEarn|mediaPartners|notifications)',
-        builder: (_, state) {
-          final userState = dalalBloc.state as DalalDataLoaded;
-          final location = state.location;
-          final mobileExtras = mobileHomePagesMore(userState.user);
-          if (kIsWeb || !mobileExtras.containsKey(location)) {
-            return DalalHome(
-              user: userState.user,
-              route: location,
-            );
-          }
-          // If device is mobile, and the route is from bottom sheet
-          return mobileExtras[location]!;
-        },
-      ),
-      // TODO: handle for invalid extra
-      // TODO: can do sub routes
-      // Example: /company/1
-      GoRoute(
-        path: '/company',
-        builder: (_, state) => MultiBlocProvider(
-          providers: [
-            BlocProvider(create: (context) => MarketDepthBloc()),
-            BlocProvider(create: (context) => SubscribeCubit()),
-            BlocProvider(create: (context) => NewsBloc()),
-          ],
-          child: CompanyPage(data: state.extra! as List<int>),
+/// Creates [GoRouter] object from all the routes.
+/// 
+/// [context] is required because some routes need to access [DalalState] for
+/// displaying ui.
+GoRouter generateRouter(BuildContext context) => GoRouter(
+      initialLocation: '/splash',
+      debugLogDiagnostics: true,
+      routes: [
+        ..._initialRoutes,
+        ..._authRoutes,
+        _adminRoute,
+        GoRoute(
+          /// A regular expression to match all home routes
+          /// Note: Sorry for hardcoding everything, i am noob in regex
+          ///
+          /// Since this is important routing logic, always test in online regex
+          /// sites, like https://regex101.com/, before changing anything. When
+          /// testing regex pattern, get rid of ':p' at the beginning. It is
+          /// only required by gorouter, and will give incorrect regex results
+          path:
+              // TODO: do this without hardcoding
+              '/:p(home|portfolio|exchange|ranking|news|mortgage|dailyChallenges|openOrders|referAndEarn|mediaPartners|notifications)',
+          builder: (_, state) {
+            final userState =
+                context.read<DalalBloc>().state as DalalDataLoaded;
+            final location = state.location;
+            final mobileExtras = mobileHomePagesMore(userState.user);
+            if (kIsWeb || !mobileExtras.containsKey(location)) {
+              return DalalHome(
+                user: userState.user,
+                route: location,
+              );
+            }
+            // If device is mobile, and the route is from bottom sheet
+            return mobileExtras[location]!;
+          },
         ),
-      )
-    ],
-    // Show snackbar and navigate to Home or Login page whenever UserState changes
-    navigatorBuilder: (context, state, child) => DalalNavBuilder(child: child),
-  );
-}
+        // TODO: can do params
+        // Example: /company/1
+        // Link: https://gorouter.dev/parameters
+        GoRoute(
+          path: '/company',
+          builder: (_, state) => MultiBlocProvider(
+            providers: [
+              BlocProvider(create: (_) => MarketDepthBloc()),
+              BlocProvider(create: (_) => SubscribeCubit()),
+              BlocProvider(create: (_) => NewsBloc()),
+            ],
+            child: CompanyPage(data: state.extra! as List<int>),
+          ),
+        )
+      ],
+      // Show snackbar and navigate to Home or Login page whenever UserState changes
+      navigatorBuilder: (context, state, child) =>
+          DalalNavBuilder(child: child),
+    );
 
 final _initialRoutes = [
   GoRoute(
@@ -117,7 +127,6 @@ final _authRoutes = [
       child: RegisterPage(),
     ),
   ),
-  // TODO: handle for invalid extra
   GoRoute(
     path: '/checkMail',
     builder: (_, state) => CheckMailPage(mail: state.extra! as String),
@@ -133,7 +142,6 @@ final _verifyRoutes = [
       child: EnterPhonePage(),
     ),
   ),
-  // TODO: handle for invalid extra
   GoRoute(
     path: '/enterOtp',
     builder: (_, state) => BlocProvider(

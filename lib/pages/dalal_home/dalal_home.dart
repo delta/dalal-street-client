@@ -18,6 +18,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
+/// The main home widget, with bottom bar or side bar based on mobile or web, to
+/// navigate between different screens in Dalal Street.
+///
+/// The different screens based on selected item are shown using [PageView],
+/// without any scrolling animation
+///
+/// The current menu item is determined using [route] field
+/// Example: In dalalstreet.com/portfolio, route is '/portfolio' 
 class DalalHome extends StatefulWidget {
   final User user;
   final String route;
@@ -29,6 +37,15 @@ class DalalHome extends StatefulWidget {
   State<DalalHome> createState() => _DalalHomeState();
 }
 
+/// State for [DalalHome]
+///
+/// Checkout https://gorouter.dev/nested-navigation to understand how url is
+/// changed and web history is maintained when switching between pages
+/// 
+/// In short:
+/// - Whenever a new item is selected, we do `context.go(newRoute)`
+/// - When the page is rebuilt with change in route, [didUpdateWidget] is called
+/// - So in [didUpdateWidget], update the bottom/side bar selection and the [PageView] item
 class _DalalHomeState extends State<DalalHome> {
   final _bottomMenu = homeMenuMobile.values.toList();
 

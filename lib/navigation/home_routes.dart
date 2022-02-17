@@ -13,6 +13,7 @@ import 'package:dalal_street_client/proto_build/models/User.pb.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+/// Home Menu items for mobile
 final homeMenuMobile = {
   '/home': MenuItem('Home', AppIcons.home),
   '/portfolio': MenuItem('Portfolio', AppIcons.portfolio),
@@ -20,6 +21,7 @@ final homeMenuMobile = {
   '/ranking': MenuItem('Ranking', AppIcons.trophy),
 };
 
+/// Home Menu items in more section for mobile
 final moreMenuMobile = {
   '/news': MenuItem('News', AppIcons.news),
   '/mortgage': MenuItem('Mortgage', AppIcons.mortgage),
@@ -37,14 +39,19 @@ final _homeMenuMobileCopy = {
   '/exchange': MenuItem('DSE', AppIcons.rupee),
   '/ranking': MenuItem('Ranking', AppIcons.trophy),
 };
+/// Home Menu items for web
 final homeMenuWeb = _homeMenuMobileCopy..addAll(moreMenuMobile);
 
+/// Home routes for mobile
 final homeRoutesMobile = homeMenuMobile.keys.toList();
 
+/// More section routes for mobile
 final moreRoutesMobile = moreMenuMobile.keys.toList();
 
+/// Home routes for web
 final homeRoutesWeb = homeRoutesMobile + moreRoutesMobile;
 
+/// Widgets for routes in more section in mobile
 Map<String, Widget> mobileHomePagesMore(User extra) => {
       '/news': MultiBlocProvider(
         providers: [
