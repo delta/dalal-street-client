@@ -63,8 +63,7 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
                               OpenordersSubscriptionState>(
                             builder: ((context, state) {
                               if (state is SubscriptionToOpenOrderSuccess) {
-                                return buildOpenOrdersTableUpdate(
-                                    state.orderUpdate);
+                                return updateTable(state.orderUpdate);
                               } else if (state
                                   is SubscriptionToOpenOrderFailed) {
                                 return Column(children: [
@@ -85,7 +84,7 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
                                   )
                                 ]);
                               } else {
-                                return buildOpenOrdersTable();
+                                return buildTable();
                               }
                             }),
                           );
@@ -107,13 +106,13 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
                             )
                           ]);
                         } else {
-                          return buildOpenOrdersTable();
+                          return buildTable();
                         }
                       }))
                     ]))));
   }
 
-  List<DataRow> buildRowsOfOpenOrdersUpdate(
+  List<DataRow> updateRows(
       GetMyOpenOrdersResponse response, MyOrderUpdate myOrderUpdate) {
     List<Ask> openAskOrdersList = response.openAskOrders;
     List<Bid> openBidOrdersList = response.openBidOrders;
@@ -123,7 +122,7 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
       Stock? company = stockList[element.stockId];
       if (element.id == myOrderUpdate.id) {
         if (!myOrderUpdate.isClosed) {
-          rows.add(buildOpenOrdersRow(
+          rows.add(addRow(
               company?.fullName,
               company?.shortName,
               'https://upload.wikimedia.org/wikipedia/en/1/18/Airtel_logo.svg',
@@ -136,7 +135,7 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
               element.createdAt));
         }
       } else {
-        rows.add(buildOpenOrdersRow(
+        rows.add(addRow(
             company?.fullName,
             company?.shortName,
             'https://upload.wikimedia.org/wikipedia/en/1/18/Airtel_logo.svg',
@@ -153,7 +152,7 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
       Stock? company = stockList[element.stockId];
       if (element.id == myOrderUpdate.id) {
         if (!myOrderUpdate.isClosed) {
-          rows.add(buildOpenOrdersRow(
+          rows.add(addRow(
               company?.fullName,
               company?.shortName,
               'https://upload.wikimedia.org/wikipedia/en/1/18/Airtel_logo.svg',
@@ -166,7 +165,7 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
               element.createdAt));
         }
       } else {
-        rows.add(buildOpenOrdersRow(
+        rows.add(addRow(
             company?.fullName,
             company?.shortName,
             'https://upload.wikimedia.org/wikipedia/en/1/18/Airtel_logo.svg',
@@ -182,7 +181,7 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
     return rows;
   }
 
-  List<DataRow> buildRowsOfOpenOrders(GetMyOpenOrdersResponse response) {
+  List<DataRow> buildRows(GetMyOpenOrdersResponse response) {
     List<Ask> openAskOrdersList = response.openAskOrders;
     List<Bid> openBidOrdersList = response.openBidOrders;
     List<DataRow> rows = [];
@@ -190,7 +189,7 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
     for (var element in openAskOrdersList) {
       Stock? company = stockList[element.stockId];
 
-      rows.add(buildOpenOrdersRow(
+      rows.add(addRow(
           company?.fullName,
           company?.shortName,
           'https://upload.wikimedia.org/wikipedia/en/1/18/Airtel_logo.svg',
@@ -205,7 +204,7 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
     for (var element in openBidOrdersList) {
       Stock? company = stockList[element.stockId];
 
-      rows.add(buildOpenOrdersRow(
+      rows.add(addRow(
           company?.fullName,
           company?.shortName,
           'https://upload.wikimedia.org/wikipedia/en/1/18/Airtel_logo.svg',
@@ -220,7 +219,7 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
     return rows;
   }
 
-  DataRow buildOpenOrdersRow(
+  DataRow addRow(
       String? fullName,
       String? shortName,
       String imagePath,
@@ -311,7 +310,7 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
         });
   }
 
-  Widget buildOpenOrdersTableUpdate(MyOrderUpdate myOrderUpdate) {
+  Widget updateTable(MyOrderUpdate myOrderUpdate) {
     return BlocConsumer<OpenOrdersCubit, OpenOrdersState>(
       listener: (context, state) {
         if (state is CancelorderSuccess) {
@@ -331,8 +330,7 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
       },
       builder: (context, state) {
         if (state is GetOpenordersSuccess) {
-          if (buildRowsOfOpenOrdersUpdate(state.res, myOrderUpdate)
-              .isNotEmpty) {
+          if (updateRows(state.res, myOrderUpdate).isNotEmpty) {
             return SingleChildScrollView(
                 scrollDirection: Axis.vertical,
                 child: Column(
@@ -377,8 +375,7 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
                                   textAlign: TextAlign.center,
                                 )),
                               ],
-                              rows: buildRowsOfOpenOrdersUpdate(
-                                  state.res, myOrderUpdate))),
+                              rows: updateRows(state.res, myOrderUpdate))),
                       const Padding(
                           padding: EdgeInsets.all(10),
                           child: Text(
@@ -400,7 +397,7 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
     );
   }
 
-  Widget buildOpenOrdersTable() {
+  Widget buildTable() {
     return BlocConsumer<OpenOrdersCubit, OpenOrdersState>(
       listener: (context, state) {
         if (state is CancelorderSuccess) {
@@ -420,7 +417,7 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
       },
       builder: (context, state) {
         if (state is GetOpenordersSuccess) {
-          if (buildRowsOfOpenOrders(
+          if (buildRows(
             state.res,
           ).isNotEmpty) {
             return SingleChildScrollView(
@@ -467,7 +464,7 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
                                   textAlign: TextAlign.center,
                                 )),
                               ],
-                              rows: buildRowsOfOpenOrders(state.res))),
+                              rows: buildRows(state.res))),
                       const Padding(
                           padding: EdgeInsets.all(10),
                           child: Text(
