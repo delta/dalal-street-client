@@ -29,7 +29,7 @@ import 'package:dalal_street_client/pages/news_page.dart';
 import 'package:dalal_street_client/pages/referral_page.dart';
 import 'package:dalal_street_client/pages/stock_exchange/exchange_page.dart';
 import 'package:dalal_street_client/pages/landing_page.dart';
-import 'package:dalal_street_client/pages/splash_page.dart';
+// import 'package:dalal_street_client/pages/splash_page.dart';
 import 'package:dalal_street_client/pages/portfolio/portfolio_page.dart';
 import 'package:dalal_street_client/proto_build/models/User.pb.dart';
 import 'package:flutter/cupertino.dart';
@@ -52,8 +52,8 @@ class RouteGenerator {
   static Widget _getPage(RouteSettings settings) {
     final args = settings.arguments;
     switch (settings.name) {
-      case '/splash':
-        return const SplashPage();
+      // case '/splash':
+      //   return const SplashPage();
       case '/landing':
         return const LandingPage();
 

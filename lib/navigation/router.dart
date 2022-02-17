@@ -24,18 +24,16 @@ import 'package:dalal_street_client/pages/auth/register_page.dart';
 import 'package:dalal_street_client/pages/auth/verify_phone/enter_otp_page.dart';
 import 'package:dalal_street_client/pages/auth/verify_phone/enter_phone_page.dart';
 import 'package:dalal_street_client/pages/landing_page.dart';
-import 'package:dalal_street_client/pages/splash_page.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 /// Creates [GoRouter] object from all the routes.
-/// 
+///
 /// [context] is required because some routes need to access [DalalState] for
 /// displaying ui.
 GoRouter generateRouter(BuildContext context) => GoRouter(
-      initialLocation: '/splash',
       debugLogDiagnostics: true,
       routes: [
         ..._initialRoutes,
@@ -83,17 +81,15 @@ GoRouter generateRouter(BuildContext context) => GoRouter(
         )
       ],
       // Show snackbar and navigate to Home or Login page whenever UserState changes
-      navigatorBuilder: (context, state, child) =>
-          DalalNavBuilder(child: child),
+      navigatorBuilder: (context, state, child) => DalalNavBuilder(
+        routerState: state,
+        child: child,
+      ),
     );
 
 final _initialRoutes = [
   GoRoute(
-    path: '/splash',
-    builder: (_, __) => const SplashPage(),
-  ),
-  GoRoute(
-    path: '/landing',
+    path: '/',
     builder: (_, __) => const LandingPage(),
   ),
 ];

@@ -9,6 +9,7 @@ abstract class DalalState extends Equatable {
 
 /// User is logged out
 class DalalLoggedOut extends DalalState {
+  // TODO: give a better name
   final bool fromSplash;
 
   const DalalLoggedOut({this.fromSplash = false});

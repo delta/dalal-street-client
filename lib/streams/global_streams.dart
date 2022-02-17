@@ -136,8 +136,6 @@ Future<GlobalStreams> subscribeToGlobalStreams(
       .asBroadcastStream();
 
   // Generate custom streams
-  logger.i('Generating custom streams from server streams');
-
   // is maket open stream
   final isMaketOpenStream = MarketOpenGenerator(isMaketOpen, gameStateStream)
       .stream
