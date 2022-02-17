@@ -32,7 +32,7 @@ class DalalBloc extends HydratedBloc<DalalEvent, DalalState> {
         // really quick transition to login page looks wierd
         await Future.delayed(const Duration(milliseconds: 400));
         // go to login page
-        emit(const DalalLoggedOut(fromSplash: true));
+        emit(const DalalLoggedOut(manualLogout: false));
       }
     });
 
@@ -63,7 +63,7 @@ class DalalBloc extends HydratedBloc<DalalEvent, DalalState> {
           logger.e(e);
           // Unauthenticated
           logger.i('Logged out becuase of invalid sessionId');
-          emit(const DalalLoggedOut(fromSplash: true));
+          emit(const DalalLoggedOut(manualLogout: false));
         } else {
           logger.e(e);
           await Future.delayed(const Duration(milliseconds: 200));

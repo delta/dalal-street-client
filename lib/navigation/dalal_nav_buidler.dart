@@ -69,15 +69,17 @@ class _DalalNavBuilderState extends State<DalalNavBuilder> {
             // Unregister everything
             getIt.reset();
 
-            // TODO: how to change this if splash screen is removed?
-            if (!state.fromSplash) {
-              // Show msg only when coming from a page other than splash
-              logger.i('user logged out');
+            if (state.manualLogout) {
+              logger.i('user logged out manually');
               showSnackBar(context, 'User Logged Out',
                   type: SnackBarType.success);
+            } else {
+              logger.i('user logged out because of issue with session id');
             }
             if (widget.routerState.location != '/') context.webGo('/');
-          } else if (state is DalalLoginFailed) {}
+          } else if (state is DalalLoginFailed) {
+            // Nothing to do. Just show button to retry
+          }
         },
         builder: (context, state) {
           if (state is DalalDataLoaded ||
