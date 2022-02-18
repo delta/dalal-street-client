@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:dalal_street_client/theme/colors.dart';
 import 'package:dalal_street_client/components/shimmers/list_image_view.dart';
-import 'package:dalal_street_client/components/shimmers/text_view.dart';
+import 'package:dalal_street_client/components/shimmers/text_shimmer.dart';
 
 /// A widget to display all shimmers, (useful for testing)
 class AllTheShimmers extends StatelessWidget {
