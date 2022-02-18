@@ -5,7 +5,6 @@ import 'package:dalal_street_client/config/log.dart';
 import 'package:dalal_street_client/proto_build/actions/GetMyOrders.pb.dart';
 import 'package:dalal_street_client/proto_build/datastreams/MyOrders.pb.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
-import 'package:dalal_street_client/theme/buttons.dart';
 import 'package:dalal_street_client/theme/colors.dart';
 import 'package:dalal_street_client/utils/snackbar.dart';
 import 'package:fixnum/fixnum.dart';
