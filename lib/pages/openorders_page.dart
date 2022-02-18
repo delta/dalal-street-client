@@ -510,73 +510,73 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
     }
   }
 
-  Widget _buildPopupDialog(
-    BuildContext context,
-    bool isClosed,
-    int id,
-    bool isAsk,
-  ) {
-    return AlertDialog(
-      backgroundColor: Colors.black,
-      shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(10))),
-      content: SizedBox(
-        height: 200,
-        width: 300,
-        child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text(
-                'Are you sure you want to close the order ?',
-                style: TextStyle(
-                    fontSize: 20,
-                    color: Colors.white,
-                    fontWeight: FontWeight.w400),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox.square(
-                dimension: 40,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    width: 95,
-                    height: 40,
-                    child: ElevatedButton(
-                        onPressed: () => Navigator.of(context).pop(),
-                        child: const Text(
-                          'No',
-                          style: TextStyle(fontSize: 13),
-                        ),
-                        style: primaryButtonStyle),
-                  ),
-                  const SizedBox.square(
-                    dimension: 30,
-                  ),
-                  SizedBox(
-                    width: 95,
-                    height: 40,
-                    child: ElevatedButton(
-                        onPressed: () {
-                          if (!isClosed) {
-                            logger.i(id);
-                            logger.i('Cancel');
-                            context
-                                .read<OpenOrdersCubit>()
-                                .cancelOpenOrders(id, isAsk);
-                            Navigator.of(context).pop();
-                          }
-                        },
-                        child:
-                            const Text('Yes', style: TextStyle(fontSize: 13)),
-                        style: outlinedButtonStyle),
-                  ),
-                ],
-              )
-            ]),
-      ),
-    );
-  }
+  // Widget _buildPopupDialog(
+  //   BuildContext context,
+  //   bool isClosed,
+  //   int id,
+  //   bool isAsk,
+  // ) {
+  //   return AlertDialog(
+  //     backgroundColor: Colors.black,
+  //     shape: const RoundedRectangleBorder(
+  //         borderRadius: BorderRadius.all(Radius.circular(10))),
+  //     content: SizedBox(
+  //       height: 200,
+  //       width: 300,
+  //       child: Column(
+  //           crossAxisAlignment: CrossAxisAlignment.center,
+  //           mainAxisAlignment: MainAxisAlignment.center,
+  //           children: [
+  //             const Text(
+  //               'Are you sure you want to close the order ?',
+  //               style: TextStyle(
+  //                   fontSize: 20,
+  //                   color: Colors.white,
+  //                   fontWeight: FontWeight.w400),
+  //               textAlign: TextAlign.center,
+  //             ),
+  //             const SizedBox.square(
+  //               dimension: 40,
+  //             ),
+  //             Row(
+  //               mainAxisAlignment: MainAxisAlignment.center,
+  //               children: [
+  //                 SizedBox(
+  //                   width: 95,
+  //                   height: 40,
+  //                   child: ElevatedButton(
+  //                       onPressed: () => Navigator.of(context).pop(),
+  //                       child: const Text(
+  //                         'No',
+  //                         style: TextStyle(fontSize: 13),
+  //                       ),
+  //                       style: primaryButtonStyle),
+  //                 ),
+  //                 const SizedBox.square(
+  //                   dimension: 30,
+  //                 ),
+  //                 SizedBox(
+  //                   width: 95,
+  //                   height: 40,
+  //                   child: ElevatedButton(
+  //                       onPressed: () {
+  //                         if (!isClosed) {
+  //                           logger.i(id);
+  //                           logger.i('Cancel');
+  //                           context
+  //                               .read<OpenOrdersCubit>()
+  //                               .cancelOpenOrders(id, isAsk);
+  //                           Navigator.of(context).pop();
+  //                         }
+  //                       },
+  //                       child:
+  //                           const Text('Yes', style: TextStyle(fontSize: 13)),
+  //                       style: outlinedButtonStyle),
+  //                 ),
+  //               ],
+  //             )
+  //           ]),
+  //     ),
+  //   );
+  // }
 }
