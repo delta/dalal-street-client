@@ -53,14 +53,15 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
                         borderRadius: BorderRadius.circular(10),
                         color: background2),
                     child: BlocBuilder<SubscribeCubit, SubscribeState>(
-                        builder: (context, state) {
+                        builder: (contextbloc, state) {
                       if (state is SubscriptionDataLoaded) {
                         context
                             .read<OpenordersSubscriptionCubit>()
                             .getOpenOrdersStream(state.subscriptionId);
                         return BlocBuilder<OpenordersSubscriptionCubit,
                             OpenordersSubscriptionState>(
-                          builder: ((context, state) {
+                          builder: 
+                            (contextbloc, state) {
                             if (state is SubscriptionToOpenOrderSuccess) {
                               return updateTable(state.orderUpdate, context);
                             } else if (state is SubscriptionToOpenOrderFailed) {
@@ -84,7 +85,7 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
                             } else {
                               return buildTable(context);
                             }
-                          }),
+                          },
                         );
                       } else if (state is SubscriptonDataFailed) {
                         return Column(children: [
@@ -106,7 +107,12 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
                       } else {
                         return buildTable(context);
                       }
-                    })))));
+                    }
+                    )
+                    )
+                    )
+                    )
+                    );
   }
 
   List<DataRow> updateRows(GetMyOpenOrdersResponse response,
@@ -306,11 +312,19 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
           ])),
         ],
         onLongPress: () {
-          showDialog(
-            context: context,
-            builder: (BuildContext context) =>
-                _buildPopupDialog(context, isClosed, id, isAsk),
-          );
+          // showDialog(
+          //   context: context,
+          //   builder: (BuildContext context) =>
+          //       _buildPopupDialog(context, isClosed, id, isAsk),
+          // );
+           if (!isClosed) {
+                            logger.i(id);
+                            logger.i('Cancel');
+                            context
+                                .read<OpenOrdersCubit>()
+                                .cancelOpenOrders(id, isAsk);
+                            // Navigator.of(context).pop();
+                          }
         });
   }
 
@@ -332,7 +346,7 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
           }
         }
       },
-      builder: (context, state) {
+      builder: (contextbloc, state) {
         if (state is GetOpenordersSuccess) {
           if (updateRows(state.res, myOrderUpdate, context).isNotEmpty) {
             return SingleChildScrollView(
@@ -403,12 +417,12 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
 
   Widget buildTable(BuildContext context) {
     return BlocConsumer<OpenOrdersCubit, OpenOrdersState>(
-      listener: (context, state) {
+      listener: (contextbloc, state) {
         logger.i('listening');
         if (state is CancelorderSuccess) {
           logger.i('Cancel Order Sucess');
           showSnackBar(context, 'Order Cancelled Sucessfully');
-          context.read<OpenOrdersCubit>().getOpenOrders();
+          // context.read<OpenOrdersCubit>().getOpenOrders();
         } else if (state is OrderFailure) {
           if (state.ordertype == OpenOrderType.cancel) {
             showSnackBar(context, 'Failed To Cancel Order Retrying.....');
@@ -421,7 +435,7 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
           }
         }
       },
-      builder: (context, state) {
+      builder: (contextbloc, state) {
         if (state is GetOpenordersSuccess) {
           if (buildRows(state.res, context).isNotEmpty) {
             return SingleChildScrollView(
