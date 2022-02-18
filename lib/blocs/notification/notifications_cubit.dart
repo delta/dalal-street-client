@@ -7,7 +7,6 @@ import 'package:dalal_street_client/proto_build/actions/GetNotifications.pb.dart
 import 'package:dalal_street_client/proto_build/models/Notification.pb.dart';
 import 'package:equatable/equatable.dart';
 
-
 part 'notifications_state.dart';
 
 class NotificationsCubit extends Cubit<NotificationsCubitState> {
@@ -20,7 +19,7 @@ class NotificationsCubit extends Cubit<NotificationsCubitState> {
     try {
       logger.d('requested  $lastNotificationId');
 
-      if(lastNotificationId == 0) {
+      if (lastNotificationId == 0) {
         emit(NotificationsCubitInitial());
       }
 
@@ -31,13 +30,14 @@ class NotificationsCubit extends Cubit<NotificationsCubitState> {
       );
 
       if (response.statusCode == GetNotificationsResponse_StatusCode.OK) {
-        if (!response.moreExists){
-            moreExist = false;
+        if (!response.moreExists) {
+          moreExist = false;
         }
 
-        if(response.notifications.isNotEmpty){
-          lastNotificationId = response.notifications[response.notifications.length - 1].id;
-        } 
+        if (response.notifications.isNotEmpty) {
+          lastNotificationId =
+              response.notifications[response.notifications.length - 1].id;
+        }
 
         emit(GetNotificationSuccess(response.notifications));
       } else {
