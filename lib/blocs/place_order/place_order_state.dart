@@ -24,9 +24,12 @@ class PlaceOrderFailure extends PlaceOrderState {
 
 class PlaceOrderSuccess extends PlaceOrderState {
   final int orderId;
+  final Int64 quantity;
+  final OrderType type;
+  final Stock stock;
 
-  const PlaceOrderSuccess(this.orderId);
+  const PlaceOrderSuccess(this.orderId, this.quantity, this.type, this.stock);
 
   @override
-  List<Object> get props => [orderId];
+  List<Object> get props => [orderId, quantity, type, stock];
 }

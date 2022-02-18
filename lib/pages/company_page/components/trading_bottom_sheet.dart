@@ -2,6 +2,7 @@ import 'package:dalal_street_client/components/loading.dart';
 import 'package:dalal_street_client/config/log.dart';
 import 'package:dalal_street_client/constants/constants.dart';
 import 'package:dalal_street_client/models/snackbar/snackbar_type.dart';
+import 'package:dalal_street_client/pages/company_page/order_placed.dart';
 import 'package:dalal_street_client/proto_build/models/OrderType.pb.dart';
 import 'package:dalal_street_client/utils/calculations.dart';
 import 'package:fixnum/fixnum.dart';
@@ -12,6 +13,7 @@ import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
 import 'package:dalal_street_client/pages/company_page/components/show_price_window.dart';
 import 'package:dalal_street_client/theme/colors.dart';
 import 'package:dalal_street_client/utils/snackbar.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinbox/flutter_spinbox.dart';
@@ -42,9 +44,14 @@ void tradingBottomSheet(
               if (state is PlaceOrderSuccess) {
                 logger.i('order placed');
                 Navigator.pop(context);
-                showSnackBar(context,
-                    'Order successfully placed with Order ID: ${state.orderId}',
-                    type: SnackBarType.success);
+                Navigator.push(
+                    context,
+                    CupertinoPageRoute(
+                        builder: (context) => OrderPlacedPage(
+                            orderId: state.orderId,
+                            quantity: state.quantity,
+                            type: state.type,
+                            stock: state.stock)));
               } else if (state is PlaceOrderFailure) {
                 logger.i('unsuccessful');
                 Navigator.pop(context);
@@ -343,14 +350,14 @@ Widget _tradingBottomSheetBody(
                           child: ElevatedButton(
                             onPressed: () {
                               error == 'true'
-                                  ? null
+                                  ? logger.i('Error while placing Order')
                                   : [
                                       logger.i(cash),
                                       context
                                           .read<PlaceOrderCubit>()
                                           .placeOrder(
                                               isAsk,
-                                              company.id,
+                                              company,
                                               priceType,
                                               Int64(totalPrice),
                                               Int64(quantity)),
