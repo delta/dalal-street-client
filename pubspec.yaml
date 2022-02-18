@@ -16,7 +16,6 @@ dependencies:
 
   google_fonts: ^2.1.1
 
-
   # Logging
   logger: ^1.1.0
 
@@ -58,6 +57,7 @@ dependencies:
   charts_flutter: ^0.12.0
   interactive_chart: ^0.3.4
   lottie: ^1.2.2
+  flutter_svg_provider: ^1.0.3
 
 dev_dependencies:
   flutter_test:

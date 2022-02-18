@@ -9,23 +9,16 @@ abstract class NotificationsCubitState extends Equatable {
 
 class NotificationsCubitInitial extends NotificationsCubitState {}
 
-class GetNotifSuccess extends NotificationsCubitState {
-  final GetNotificationsResponse getNotifResponse;
-  const GetNotifSuccess(this.getNotifResponse);
+class GetNotificationSuccess extends NotificationsCubitState {
+  final List<Notification> notifications;
+  const GetNotificationSuccess(this.notifications);
   @override
-  List<Object> get props => [getNotifResponse];
+  List<Object> get props => [notifications];
 }
 
-class GetNotifFailure extends NotificationsCubitState {
+class GetNotificationFailure extends NotificationsCubitState {
   final String error;
-  const GetNotifFailure(this.error);
+  const GetNotificationFailure(this.error);
   @override
   List<Object> get props => [error];
-}
-
-class GetMoreNotifications extends NotificationsCubitState {
-  final int lastnotificationid;
-  const GetMoreNotifications(this.lastnotificationid);
-  @override
-  List<Object> get props => [lastnotificationid];
 }

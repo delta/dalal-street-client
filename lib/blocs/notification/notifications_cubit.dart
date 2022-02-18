@@ -1,48 +1,50 @@
 import 'package:bloc/bloc.dart';
 import 'package:dalal_street_client/config/get_it.dart';
+import 'package:dalal_street_client/config/log.dart';
 import 'package:dalal_street_client/constants/error_messages.dart';
 import 'package:dalal_street_client/grpc/client.dart';
 import 'package:dalal_street_client/proto_build/actions/GetNotifications.pb.dart';
+import 'package:dalal_street_client/proto_build/models/Notification.pb.dart';
 import 'package:equatable/equatable.dart';
 
-import '../../config/log.dart';
 
 part 'notifications_state.dart';
 
 class NotificationsCubit extends Cubit<NotificationsCubitState> {
   NotificationsCubit() : super(NotificationsCubitInitial());
 
-  Future<void> getNotifications(int lastnotificationId) async {
+  var lastNotificationId = 0;
+  var moreExist = true;
+
+  Future<void> getNotifications() async {
     try {
-      final GetNotificationsResponse notifResponse =
+      logger.d('requested  $lastNotificationId');
+
+      if(lastNotificationId == 0) {
+        emit(NotificationsCubitInitial());
+      }
+
+      final GetNotificationsResponse response =
           await actionClient.getNotifications(
-        GetNotificationsRequest(lastNotificationId: lastnotificationId),
+        GetNotificationsRequest(lastNotificationId: lastNotificationId),
         options: sessionOptions(getIt()),
       );
-      if (notifResponse.statusCode == GetNotificationsResponse_StatusCode.OK) {
-        emit(GetNotifSuccess(notifResponse));
+
+      if (response.statusCode == GetNotificationsResponse_StatusCode.OK) {
+        if (!response.moreExists){
+            moreExist = false;
+        }
+
+        if(response.notifications.isNotEmpty){
+          lastNotificationId = response.notifications[response.notifications.length - 1].id;
+        } 
+
+        emit(GetNotificationSuccess(response.notifications));
       } else {
-        emit(GetNotifFailure(notifResponse.statusMessage));
+        emit(GetNotificationFailure(response.statusMessage));
       }
     } catch (e) {
-      emit(const GetNotifFailure(failedToReachServer));
-      logger.i('unsuccessful');
+      emit(const GetNotificationFailure(failedToReachServer));
     }
   }
-
-  /* Future<void> getMoreNotifications() async {
-    try {
-      final GetNotificationsResponse notifResponse =
-          await actionClient.getNotifications(
-        GetNotificationsRequest(lastNotificationId: state.lastnotificationid),
-        options: sessionOptions(getIt()),
-      );
-
-      emit(GetNotifSuccess(notifResponse));
-    } catch (e) {
-      emit(const GetNotifFailure(failedToReachServer));
-      logger.i('unsuccessful');
-    }
-  }
-  */
 }
