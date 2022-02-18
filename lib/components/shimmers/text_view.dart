@@ -11,169 +11,175 @@ class TextShimmer extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
       child: Shimmer.fromColors(
-          baseColor: background2,
-          highlightColor: baseColor,
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
+        baseColor: background2,
+        highlightColor: baseColor,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      height: 12.0,
+                      decoration: const BoxDecoration(
+                        color: blurredGray,
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(5.0),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 7.0,
+                    ),
+                    FractionallySizedBox(
+                      widthFactor: 0.7,
+                      child: Container(
+                        height: 12.0,
+                        decoration: const BoxDecoration(
+                          color: blurredGray,
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(5.0),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 7.0,
+                    ),
+                    FractionallySizedBox(
+                      widthFactor: 0.85,
+                      child: Container(
+                        height: 12.0,
+                        decoration: const BoxDecoration(
+                          color: blurredGray,
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(5.0),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 7.0,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Expanded(
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      height: 12.0,
+                      decoration: const BoxDecoration(
+                        color: blurredGray,
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(5.0),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 7.0,
+                    ),
+                    FractionallySizedBox(
+                      widthFactor: 0.7,
+                      child: Container(
+                        height: 12.0,
+                        decoration: const BoxDecoration(
+                          color: blurredGray,
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(5.0),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 7.0,
+                    ),
+                    FractionallySizedBox(
+                      widthFactor: 0.85,
+                      child: Container(
+                        height: 12.0,
+                        decoration: const BoxDecoration(
+                          color: blurredGray,
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(5.0),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 7.0,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Expanded(
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      height: 12.0,
+                      decoration: const BoxDecoration(
+                        color: blurredGray,
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(5.0),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 7.0,
+                    ),
+                    FractionallySizedBox(
+                      widthFactor: 0.7,
+                      child: Container(
                         height: 12.0,
                         // width: 30,
                         decoration: const BoxDecoration(
-                            color: blurredGray,
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(5.0),
-                            )),
-                      ),
-                      const SizedBox(
-                        height: 7.0,
-                      ),
-                      FractionallySizedBox(
-                        widthFactor: 0.7,
-                        child: Container(
-                          height: 12.0,
-                          // width: 30,
-                          decoration: const BoxDecoration(
-                              color: blurredGray,
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(5.0),
-                              )),
+                          color: blurredGray,
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(5.0),
+                          ),
                         ),
                       ),
-                      const SizedBox(
-                        height: 7.0,
-                      ),
-                      FractionallySizedBox(
-                        widthFactor: 0.85,
-                        child: Container(
-                          height: 12.0,
-                          // width: 30,
-                          decoration: const BoxDecoration(
-                              color: blurredGray,
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(5.0),
-                              )),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 7.0,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Expanded(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
+                    ),
+                    const SizedBox(
+                      height: 7.0,
+                    ),
+                    FractionallySizedBox(
+                      widthFactor: 0.85,
+                      child: Container(
                         height: 12.0,
                         // width: 30,
                         decoration: const BoxDecoration(
-                            color: blurredGray,
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(5.0),
-                            )),
-                      ),
-                      const SizedBox(
-                        height: 7.0,
-                      ),
-                      FractionallySizedBox(
-                        widthFactor: 0.7,
-                        child: Container(
-                          height: 12.0,
-                          // width: 30,
-                          decoration: const BoxDecoration(
-                              color: blurredGray,
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(5.0),
-                              )),
+                          color: blurredGray,
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(5.0),
+                          ),
                         ),
                       ),
-                      const SizedBox(
-                        height: 7.0,
-                      ),
-                      FractionallySizedBox(
-                        widthFactor: 0.85,
-                        child: Container(
-                          height: 12.0,
-                          // width: 30,
-                          decoration: const BoxDecoration(
-                              color: blurredGray,
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(5.0),
-                              )),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 7.0,
-                      ),
-                    ],
-                  ),
+                    ),
+                    const SizedBox(
+                      height: 7.0,
+                    ),
+                  ],
                 ),
               ),
-              Expanded(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        height: 12.0,
-                        // width: 30,
-                        decoration: const BoxDecoration(
-                            color: blurredGray,
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(5.0),
-                            )),
-                      ),
-                      const SizedBox(
-                        height: 7.0,
-                      ),
-                      FractionallySizedBox(
-                        widthFactor: 0.7,
-                        child: Container(
-                          height: 12.0,
-                          // width: 30,
-                          decoration: const BoxDecoration(
-                              color: blurredGray,
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(5.0),
-                              )),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 7.0,
-                      ),
-                      FractionallySizedBox(
-                        widthFactor: 0.85,
-                        child: Container(
-                          height: 12.0,
-                          // width: 30,
-                          decoration: const BoxDecoration(
-                              color: blurredGray,
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(5.0),
-                              )),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 7.0,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          )),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

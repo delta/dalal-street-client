@@ -47,10 +47,11 @@ class ListImageViewShimmer extends StatelessWidget {
                         width: double.infinity,
                         height: 10.0,
                         decoration: const BoxDecoration(
-                            color: blurredGray,
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(5.0),
-                            )),
+                          color: blurredGray,
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(5.0),
+                          ),
+                        ),
                       ),
                       const Padding(
                         padding: EdgeInsets.symmetric(vertical: 4.0),
@@ -61,10 +62,11 @@ class ListImageViewShimmer extends StatelessWidget {
                           width: double.infinity,
                           height: 10.0,
                           decoration: const BoxDecoration(
-                              color: blurredGray,
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(5.0),
-                              )),
+                            color: blurredGray,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(5.0),
+                            ),
+                          ),
                         ),
                       ),
                       const Padding(
@@ -76,10 +78,11 @@ class ListImageViewShimmer extends StatelessWidget {
                           width: double.infinity,
                           height: 10.0,
                           decoration: const BoxDecoration(
-                              color: blurredGray,
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(5.0),
-                              )),
+                            color: blurredGray,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(5.0),
+                            ),
+                          ),
                         ),
                       ),
                       const Padding(
@@ -91,10 +94,11 @@ class ListImageViewShimmer extends StatelessWidget {
                           width: double.infinity,
                           height: 10.0,
                           decoration: const BoxDecoration(
-                              color: blurredGray,
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(5.0),
-                              )),
+                            color: blurredGray,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(5.0),
+                            ),
+                          ),
                         ),
                       ),
                     ],
