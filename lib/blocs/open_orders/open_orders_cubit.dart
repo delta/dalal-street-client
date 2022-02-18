@@ -32,7 +32,6 @@ class OpenOrdersCubit extends Cubit<OpenOrdersState> {
           options: sessionOptions(getIt()));
       if (resp.statusCode == CancelOrderResponse_StatusCode.OK) {
         emit(const CancelorderSuccess());
-        
       } else {
         emit(OrderFailure(resp.statusMessage, OpenOrderType.cancel));
       }

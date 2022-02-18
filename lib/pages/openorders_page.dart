@@ -60,8 +60,7 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
                             .getOpenOrdersStream(state.subscriptionId);
                         return BlocBuilder<OpenordersSubscriptionCubit,
                             OpenordersSubscriptionState>(
-                          builder: 
-                            (contextbloc, state) {
+                          builder: (contextbloc, state) {
                             if (state is SubscriptionToOpenOrderSuccess) {
                               return updateTable(state.orderUpdate, context);
                             } else if (state is SubscriptionToOpenOrderFailed) {
@@ -107,12 +106,7 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
                       } else {
                         return buildTable(context);
                       }
-                    }
-                    )
-                    )
-                    )
-                    )
-                    );
+                    })))));
   }
 
   List<DataRow> updateRows(GetMyOpenOrdersResponse response,
@@ -317,14 +311,12 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
           //   builder: (BuildContext context) =>
           //       _buildPopupDialog(context, isClosed, id, isAsk),
           // );
-           if (!isClosed) {
-                            logger.i(id);
-                            logger.i('Cancel');
-                            context
-                                .read<OpenOrdersCubit>()
-                                .cancelOpenOrders(id, isAsk);
-                            // Navigator.of(context).pop();
-                          }
+          if (!isClosed) {
+            logger.i(id);
+            logger.i('Cancel');
+            context.read<OpenOrdersCubit>().cancelOpenOrders(id, isAsk);
+            // Navigator.of(context).pop();
+          }
         });
   }
 

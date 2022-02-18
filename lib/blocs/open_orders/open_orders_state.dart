@@ -10,9 +10,9 @@ abstract class OpenOrdersState extends Equatable {
 }
 
 class OpenOrdersInitial extends OpenOrdersState {}
-class CancelOrderInitial extends OpenOrdersState{
 
-}
+class CancelOrderInitial extends OpenOrdersState {}
+
 class GetOpenordersSuccess extends OpenOrdersState {
   final GetMyOpenOrdersResponse res;
   const GetOpenordersSuccess(this.res);
