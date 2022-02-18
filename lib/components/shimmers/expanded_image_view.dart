@@ -10,16 +10,14 @@ class AllTheShimmers extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: SingleChildScrollView(
-        child: SafeArea(
-          child: Column(
-            children: const [
-              ListImageViewShimmer(),
-              ExpandedImageViewShimmer(),
-              TextShimmer()
-            ],
-          ),
+    return SingleChildScrollView(
+      child: SafeArea(
+        child: Column(
+          children: const [
+            ListImageViewShimmer(),
+            ExpandedImageViewShimmer(),
+            TextShimmer()
+          ],
         ),
       ),
     );
