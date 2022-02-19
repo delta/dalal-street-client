@@ -195,8 +195,19 @@ class _LeaderboardTableState extends State<LeaderboardTable> {
                           height: 50,
                           child: OutlinedButton(
                             onPressed: () {
-                              context.read<LeaderboardCubit>().getLeaderboard(
-                                  x + y, 8, widget.leaderboardType);
+                              y == 4
+                                  ? {
+                                      context
+                                          .read<LeaderboardCubit>()
+                                          .getLeaderboard(
+                                              y, 10, widget.leaderboardType)
+                                    }
+                                  : {
+                                      context
+                                          .read<LeaderboardCubit>()
+                                          .getLeaderboard(
+                                              x + y, 10, widget.leaderboardType)
+                                    };
                             },
                             child: const Text('Retry'),
                           ),
