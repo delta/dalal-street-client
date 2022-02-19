@@ -40,6 +40,8 @@ class _ExchangePageState extends State<ExchangePage>
         backgroundColor: backgroundColor,
         body: SingleChildScrollView(
             primary: false,
+            physics: const BouncingScrollPhysics(
+                        parent: AlwaysScrollableScrollPhysics()),
             child: Responsive(
               desktop: _desktopBody(),
               mobile: _mobileBody(),
