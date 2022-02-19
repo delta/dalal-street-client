@@ -111,12 +111,6 @@ class DalalBloc extends HydratedBloc<DalalEvent, DalalState> {
     return super.close();
   }
 
-  @override
-  void onChange(Change<DalalState> change) {
-    super.onChange(change);
-    logger.d('DalalState: $state');
-  }
-
   // Methods required by HydratedBloc to persist state
   @override
   DalalState? fromJson(Map<String, dynamic> json) {
