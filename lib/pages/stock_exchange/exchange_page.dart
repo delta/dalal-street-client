@@ -39,11 +39,12 @@ class _ExchangePageState extends State<ExchangePage>
         resizeToAvoidBottomInset: false,
         backgroundColor: backgroundColor,
         body: SingleChildScrollView(
+            primary: false,
             child: Responsive(
-          desktop: _desktopBody(),
-          mobile: _mobileBody(),
-          tablet: _tabletBody(),
-        )),
+              desktop: _desktopBody(),
+              mobile: _mobileBody(),
+              tablet: _tabletBody(),
+            )),
       ),
     );
   }
