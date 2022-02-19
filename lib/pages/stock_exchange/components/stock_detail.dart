@@ -125,13 +125,13 @@ class _StockDetailState extends State<StockDetail> {
 
   Widget _marketStatus(Stock company) {
     final Stream<Int64> dayHighStream =
-      getIt<GlobalStreams>().stockMapStream.dayHighStream(company.id);
-  final Stream<Int64> dayLowStream =
-      getIt<GlobalStreams>().stockMapStream.dayLowStream(company.id);
-  final Stream<Int64> allTimeHighStream =
-      getIt<GlobalStreams>().stockMapStream.allTimeHighStream(company.id);
-  final Stream<Int64> allTimeLowStream =
-      getIt<GlobalStreams>().stockMapStream.allTimeLowStream(company.id);
+        getIt<GlobalStreams>().stockMapStream.dayHighStream(company.id);
+    final Stream<Int64> dayLowStream =
+        getIt<GlobalStreams>().stockMapStream.dayLowStream(company.id);
+    final Stream<Int64> allTimeHighStream =
+        getIt<GlobalStreams>().stockMapStream.allTimeHighStream(company.id);
+    final Stream<Int64> allTimeLowStream =
+        getIt<GlobalStreams>().stockMapStream.allTimeLowStream(company.id);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
@@ -148,34 +148,34 @@ class _StockDetailState extends State<StockDetail> {
         const SizedBox(
           height: 10,
         ),
-       StreamBuilder<Int64>(
-          stream: dayHighStream,
-          initialData: company.dayHigh,
-          builder: (context, state) {
-            return marketStatusTile(AppIcons.dayHigh, 'Day High',
-                oCcy.format(state.data).toString(), false, true);
-          }),
-      StreamBuilder<Int64>(
-          stream: dayLowStream,
-          initialData: company.dayLow,
-          builder: (context, state) {
-            return marketStatusTile(AppIcons.dayHigh, 'Day Low',
-                oCcy.format(state.data).toString(), true, true);
-          }),
-      StreamBuilder<Int64>(
-          stream: allTimeHighStream,
-          initialData: company.allTimeHigh,
-          builder: (context, state) {
-            return marketStatusTile(AppIcons.alltimeHigh, 'All Time High',
-                oCcy.format(state.data).toString(), false, true);
-          }),
-      StreamBuilder<Int64>(
-          stream: allTimeLowStream,
-          initialData: company.allTimeLow,
-          builder: (context, state) {
-            return marketStatusTile(AppIcons.alltimeHigh, 'All Time Low',
-                oCcy.format(state.data).toString(), true, true);
-          }),
+        StreamBuilder<Int64>(
+            stream: dayHighStream,
+            initialData: company.dayHigh,
+            builder: (context, state) {
+              return marketStatusTile(AppIcons.dayHigh, 'Day High',
+                  oCcy.format(state.data).toString(), false, true);
+            }),
+        StreamBuilder<Int64>(
+            stream: dayLowStream,
+            initialData: company.dayLow,
+            builder: (context, state) {
+              return marketStatusTile(AppIcons.dayHigh, 'Day Low',
+                  oCcy.format(state.data).toString(), true, true);
+            }),
+        StreamBuilder<Int64>(
+            stream: allTimeHighStream,
+            initialData: company.allTimeHigh,
+            builder: (context, state) {
+              return marketStatusTile(AppIcons.alltimeHigh, 'All Time High',
+                  oCcy.format(state.data).toString(), false, true);
+            }),
+        StreamBuilder<Int64>(
+            stream: allTimeLowStream,
+            initialData: company.allTimeLow,
+            builder: (context, state) {
+              return marketStatusTile(AppIcons.alltimeHigh, 'All Time Low',
+                  oCcy.format(state.data).toString(), true, true);
+            }),
       ],
     );
   }
