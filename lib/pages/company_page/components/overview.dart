@@ -85,32 +85,37 @@ Column overView(Stock company, BuildContext context) {
       const SizedBox(
         height: 10,
       ),
-      StreamBuilder<Object>(
+      StreamBuilder<Int64>(
           stream: priceStream,
+          initialData: company.currentPrice,
           builder: (context, state) {
             return marketStatusTile(AppIcons.currentPrice, 'Current Price',
                 oCcy.format(state.data).toString(), false, false);
           }),
-      StreamBuilder<Object>(
+      StreamBuilder<Int64>(
           stream: dayHighStream,
+          initialData: company.dayHigh,
           builder: (context, state) {
             return marketStatusTile(AppIcons.dayHigh, 'Day High',
                 oCcy.format(state.data).toString(), false, false);
           }),
-      StreamBuilder<Object>(
+      StreamBuilder<Int64>(
           stream: dayLowStream,
+          initialData: company.dayLow,
           builder: (context, state) {
             return marketStatusTile(AppIcons.dayHigh, 'Day Low',
                 oCcy.format(state.data).toString(), true, false);
           }),
-      StreamBuilder<Object>(
+      StreamBuilder<Int64>(
           stream: allTimeHighStream,
+          initialData: company.allTimeHigh,
           builder: (context, state) {
             return marketStatusTile(AppIcons.alltimeHigh, 'All Time High',
                 oCcy.format(state.data).toString(), false, false);
           }),
-      StreamBuilder<Object>(
+      StreamBuilder<Int64>(
           stream: allTimeLowStream,
+          initialData: company.allTimeLow,
           builder: (context, state) {
             return marketStatusTile(AppIcons.alltimeHigh, 'All Time Low',
                 oCcy.format(state.data).toString(), true, false);
