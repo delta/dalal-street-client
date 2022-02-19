@@ -37,7 +37,6 @@ class _HomePageState extends State<HomePage>
   bool get wantKeepAlive => true;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     context.read<NewsBloc>().add(const GetNews());
   }

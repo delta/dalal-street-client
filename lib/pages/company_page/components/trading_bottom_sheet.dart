@@ -1,4 +1,5 @@
 import 'package:dalal_street_client/components/loading.dart';
+import 'package:dalal_street_client/components/sheet_pop_over.dart';
 import 'package:dalal_street_client/config/log.dart';
 import 'package:dalal_street_client/constants/constants.dart';
 import 'package:dalal_street_client/models/snackbar/snackbar_type.dart';
@@ -20,6 +21,8 @@ import 'package:intl/intl.dart';
 
 final oCcy = NumberFormat('#,##0.00', 'en_US');
 
+// TODO: stopLoss order ui rebuilding due to sheet keyboard issue
+// TODO: fix placing orders without giving price and handle all the edge cases
 void tradingBottomSheet(
     BuildContext context, Stock company, String orderType, int cash) {
   int priceChange = (company.currentPrice - company.previousDayClose).toInt();
@@ -109,11 +112,7 @@ Widget _tradingBottomSheetBody(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  _bottomSheetTopBar(),
-                  const SizedBox(
-                    height: 3,
-                  ),
-                  _bottomSheetCrossButton(context),
+                  const SheetPopOver(),
                   const SizedBox(
                     height: 15,
                   ),
@@ -310,7 +309,7 @@ Widget _tradingBottomSheetBody(
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
                                     SizedBox(
-                                      width: 200,
+                                      width: 150,
                                       child: TextField(
                                           decoration: const InputDecoration(
                                               border: OutlineInputBorder(),
@@ -469,27 +468,4 @@ Row _stockNameAndPrice(Stock company, int priceChange, String orderType) {
       ),
     ],
   );
-}
-
-Row _bottomSheetCrossButton(BuildContext context) {
-  return Row(
-    mainAxisAlignment: MainAxisAlignment.start,
-    children: [
-      InkWell(
-          onTap: () {
-            Navigator.pop(context);
-          },
-          child: SvgPicture.asset(AppIcons.crossWhite)),
-    ],
-  );
-}
-
-Container _bottomSheetTopBar() {
-  return Container(
-      width: 150,
-      height: 4.5,
-      decoration: const BoxDecoration(
-        color: lightGray,
-        borderRadius: BorderRadius.all(Radius.circular(12)),
-      ));
 }
