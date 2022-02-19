@@ -41,7 +41,7 @@ class _ExchangePageState extends State<ExchangePage>
         body: SingleChildScrollView(
             primary: false,
             physics: const BouncingScrollPhysics(
-                        parent: AlwaysScrollableScrollPhysics()),
+                parent: AlwaysScrollableScrollPhysics()),
             child: Responsive(
               desktop: _desktopBody(),
               mobile: _mobileBody(),
