@@ -77,6 +77,7 @@ Container companyPrices(Stock company) {
                     ),
                     StreamBuilder<Int64>(
                         stream: priceStream,
+                        initialData: company.currentPrice,
                         builder: (context, state) {
                           Int64 stockPrice = state.data!;
                           priceChange = stockPrice - previousDayClose;
