@@ -42,7 +42,6 @@ void main() async {
   );
 }
 
-// TODO: remove router_generator.dart in the end
 // TODO: show something in UI whenever isMarketOpen changes
 // TODO: add proper validationMessages in all ReactiveForms
 // TODO: add metadata in all forms to facilitate Autofill
