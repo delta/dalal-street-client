@@ -21,6 +21,8 @@ import 'package:intl/intl.dart';
 
 final oCcy = NumberFormat('#,##0.00', 'en_US');
 
+// TODO: stopLoss order ui rebuilding due to sheet keyboard issue
+// TODO: fix placing orders without giving price and handle all the edge cases
 void tradingBottomSheet(
     BuildContext context, Stock company, String orderType, int cash) {
   int priceChange = (company.currentPrice - company.previousDayClose).toInt();
