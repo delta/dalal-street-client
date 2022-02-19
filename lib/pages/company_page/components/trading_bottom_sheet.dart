@@ -1,4 +1,5 @@
 import 'package:dalal_street_client/components/loading.dart';
+import 'package:dalal_street_client/components/sheet_pop_over.dart';
 import 'package:dalal_street_client/config/log.dart';
 import 'package:dalal_street_client/constants/constants.dart';
 import 'package:dalal_street_client/models/snackbar/snackbar_type.dart';
@@ -109,11 +110,7 @@ Widget _tradingBottomSheetBody(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  _bottomSheetTopBar(),
-                  const SizedBox(
-                    height: 3,
-                  ),
-                  _bottomSheetCrossButton(context),
+                  const SheetPopOver(),
                   const SizedBox(
                     height: 15,
                   ),
@@ -310,7 +307,7 @@ Widget _tradingBottomSheetBody(
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
                                     SizedBox(
-                                      width: 200,
+                                      width: 150,
                                       child: TextField(
                                           decoration: const InputDecoration(
                                               border: OutlineInputBorder(),
@@ -469,27 +466,4 @@ Row _stockNameAndPrice(Stock company, int priceChange, String orderType) {
       ),
     ],
   );
-}
-
-Row _bottomSheetCrossButton(BuildContext context) {
-  return Row(
-    mainAxisAlignment: MainAxisAlignment.start,
-    children: [
-      InkWell(
-          onTap: () {
-            Navigator.pop(context);
-          },
-          child: SvgPicture.asset(AppIcons.crossWhite)),
-    ],
-  );
-}
-
-Container _bottomSheetTopBar() {
-  return Container(
-      width: 150,
-      height: 4.5,
-      decoration: const BoxDecoration(
-        color: lightGray,
-        borderRadius: BorderRadius.all(Radius.circular(12)),
-      ));
 }

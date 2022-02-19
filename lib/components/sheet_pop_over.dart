@@ -22,7 +22,7 @@ class SheetPopOver extends StatelessWidget {
           height: 3,
         ),
         Padding(
-          padding: const EdgeInsets.all(10),
+          padding: const EdgeInsets.only(top: 10,left: 5),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
