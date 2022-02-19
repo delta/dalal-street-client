@@ -124,13 +124,13 @@ class _StockDetailState extends State<StockDetail> {
   }
 
   Widget _marketStatus(Stock company) {
-    final Stream<Int64> dayHighStream =
+    final dayHighStream =
         getIt<GlobalStreams>().stockMapStream.dayHighStream(company.id);
-    final Stream<Int64> dayLowStream =
+    final dayLowStream =
         getIt<GlobalStreams>().stockMapStream.dayLowStream(company.id);
-    final Stream<Int64> allTimeHighStream =
+    final allTimeHighStream =
         getIt<GlobalStreams>().stockMapStream.allTimeHighStream(company.id);
-    final Stream<Int64> allTimeLowStream =
+    final allTimeLowStream =
         getIt<GlobalStreams>().stockMapStream.allTimeLowStream(company.id);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
