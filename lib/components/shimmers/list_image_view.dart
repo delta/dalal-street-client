@@ -89,7 +89,7 @@ class ListImageViewShimmer extends StatelessWidget {
                         padding: EdgeInsets.symmetric(vertical: 4.0),
                       ),
                       FractionallySizedBox(
-                        widthFactor: 0.4,
+                        widthFactor: 0.5,
                         child: Container(
                           width: double.infinity,
                           height: 10.0,
