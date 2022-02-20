@@ -462,7 +462,21 @@ class MyData extends DataTableSource {
   int get selectedRowCount => 0;
   @override
   DataRow getRow(int index) {
-    if (tableData[index].rank == 1) {
+    if (tableData[index].rank == 1 ||
+        tableData[index].rank == 2 ||
+        tableData[index].rank == 3) {
+      Color textColor = background2;
+      String imagePath = ' ';
+      if (tableData[index].rank == 1) {
+        textColor = gold;
+        imagePath = 'assets/images/Batch1.png';
+      } else if (tableData[index].rank == 2) {
+        textColor = silver;
+        imagePath = 'assets/images/Batch2.png';
+      } else {
+        textColor = bronze;
+        imagePath = 'assets/images/Batch3.png';
+      }
       return DataRow(cells: [
         DataCell(
           Center(
@@ -479,8 +493,7 @@ class MyData extends DataTableSource {
                     minWidth: 120.0,
                     maxWidth: 120.0,
                   ),
-                  child: const Image(
-                      image: AssetImage('assets/images/Batch1.png')),
+                  child: Image(image: AssetImage(imagePath)),
                 ),
               ),
             ),
@@ -501,7 +514,7 @@ class MyData extends DataTableSource {
                 child: Text(
                   (tableData[index].userName).toString(),
                   textAlign: TextAlign.center,
-                  style: const TextStyle(fontSize: 20, color: gold),
+                  style: TextStyle(fontSize: 20, color: textColor),
                 ),
               ),
             ),
@@ -522,7 +535,7 @@ class MyData extends DataTableSource {
                 child: Text(
                   oCcy.format(tableData[index].stockWorth).toString(),
                   textAlign: TextAlign.center,
-                  style: const TextStyle(fontSize: 20, color: gold),
+                  style: TextStyle(fontSize: 20, color: textColor),
                 ),
               ),
             ),
@@ -545,189 +558,7 @@ class MyData extends DataTableSource {
                   child: Text(
                     oCcy.format(tableData[index].totalWorth).toString(),
                     textAlign: TextAlign.center,
-                    style: const TextStyle(fontSize: 20, color: gold),
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ),
-      ]);
-    } else if (tableData[index].rank == 2) {
-      return DataRow(cells: [
-        DataCell(
-          Center(
-            child: Container(
-              height: 45,
-              decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                  color: background3),
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                child: ConstrainedBox(
-                  constraints: const BoxConstraints(
-                    minWidth: 120.0,
-                    maxWidth: 120.0,
-                  ),
-                  child: const Image(
-                      image: AssetImage('assets/images/Batch2.png')),
-                ),
-              ),
-            ),
-          ),
-        ),
-        DataCell(Center(
-          child: Container(
-            decoration: const BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                color: background3),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(
-                  minWidth: 720.0,
-                  maxWidth: 720.0,
-                ),
-                child: Text(
-                  (tableData[index].userName).toString(),
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(fontSize: 20, color: silver),
-                ),
-              ),
-            ),
-          ),
-        )),
-        DataCell(Center(
-          child: Container(
-            decoration: const BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                color: background3),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(
-                  minWidth: 360.0,
-                  maxWidth: 360.0,
-                ),
-                child: Text(
-                  oCcy.format(tableData[index].stockWorth).toString(),
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(fontSize: 20, color: silver),
-                ),
-              ),
-            ),
-          ),
-        )),
-        DataCell(
-          Center(
-            child: Container(
-              decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                  color: background3),
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                child: ConstrainedBox(
-                  constraints: const BoxConstraints(
-                    minWidth: 360.0,
-                    maxWidth: 360.0,
-                  ),
-                  child: Text(
-                    oCcy.format(tableData[index].totalWorth).toString(),
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(fontSize: 20, color: silver),
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ),
-      ]);
-    } else if (tableData[index].rank == 3) {
-      return DataRow(cells: [
-        DataCell(
-          Center(
-            child: Container(
-              height: 45,
-              decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                  color: background2),
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                child: ConstrainedBox(
-                  constraints: const BoxConstraints(
-                    minWidth: 120.0,
-                    maxWidth: 120.0,
-                  ),
-                  child: const Image(
-                      image: AssetImage('assets/images/Batch3.png')),
-                ),
-              ),
-            ),
-          ),
-        ),
-        DataCell(Center(
-          child: Container(
-            decoration: const BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                color: background2),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(
-                  minWidth: 720.0,
-                  maxWidth: 720.0,
-                ),
-                child: Text(
-                  (tableData[index].userName).toString(),
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(fontSize: 20, color: bronze),
-                ),
-              ),
-            ),
-          ),
-        )),
-        DataCell(Center(
-          child: Container(
-            decoration: const BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                color: background2),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(
-                  minWidth: 360.0,
-                  maxWidth: 360.0,
-                ),
-                child: Text(
-                  oCcy.format(tableData[index].stockWorth).toString(),
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(fontSize: 20, color: bronze),
-                ),
-              ),
-            ),
-          ),
-        )),
-        DataCell(
-          Center(
-            child: Container(
-              decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                  color: background2),
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                child: ConstrainedBox(
-                  constraints: const BoxConstraints(
-                    minWidth: 360.0,
-                    maxWidth: 360.0,
-                  ),
-                  child: Text(
-                    oCcy.format(tableData[index].totalWorth).toString(),
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(fontSize: 20, color: bronze),
+                    style: TextStyle(fontSize: 20, color: textColor),
                   ),
                 ),
               ),
