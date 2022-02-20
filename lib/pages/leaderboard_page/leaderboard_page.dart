@@ -173,6 +173,16 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                           width: 350,
                           height: 50,
                           child: TabBar(
+                            labelStyle: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            unselectedLabelStyle: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.normal,
+                            ),
+                            unselectedLabelColor: secondaryColor,
+                            labelColor: Colors.black,
                             tabs: [
                               Tab(
                                 child: Container(
@@ -183,10 +193,6 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                                       border: Border.all(color: primaryColor)),
                                   child: const Text(
                                     'Overall',
-                                    style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w500,
-                                        color: secondaryColor),
                                     textAlign: TextAlign.start,
                                   ),
                                 ),
@@ -200,10 +206,6 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                                       border: Border.all(color: primaryColor)),
                                   child: const Text(
                                     'Daily',
-                                    style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w500,
-                                        color: secondaryColor),
                                     textAlign: TextAlign.start,
                                   ),
                                 ),
