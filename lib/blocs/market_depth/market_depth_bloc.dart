@@ -66,6 +66,8 @@ class MarketDepthBloc extends Bloc<MarketDepthEvent, MarketDepthState> {
           });
 
           emit(MarketDepthUpdateState(askDepth, bidDepth));
+          logger.i(askDepth);
+          logger.i(bidDepth);
         }
       } catch (e) {
         logger.e(e);
