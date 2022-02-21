@@ -54,7 +54,7 @@ class ExpandedImageViewShimmer extends StatelessWidget {
             const SizedBox(
               height: 15.0,
             ),
-            ExpandedText(),
+            const ExpandedText(),
           ],
         ),
       ),
