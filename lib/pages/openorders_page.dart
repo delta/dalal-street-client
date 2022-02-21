@@ -45,7 +45,7 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
                 builder: ((context, state) {
                   if (state is OpenOrdersSuccess) {
                     final openAskList = state.openAskArray;
-                    final openBidList = state.openBidArray;
+                    // final openBidList = state.openBidArray;
 
                     return ListView.builder(
                         itemCount: openAskList.length,
