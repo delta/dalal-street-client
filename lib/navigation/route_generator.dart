@@ -4,6 +4,7 @@ import 'package:dalal_street_client/blocs/admin/tab3/tab3_cubit.dart';
 import 'package:dalal_street_client/blocs/auth/change_password/change_password_cubit.dart';
 import 'package:dalal_street_client/blocs/auth/forgot_password/forgot_password_cubit.dart';
 import 'package:dalal_street_client/blocs/auth/login/login_cubit.dart';
+import 'package:dalal_street_client/blocs/my_orders/my_orders_cubit.dart';
 import 'package:dalal_street_client/blocs/notification/notifications_cubit.dart';
 import 'package:dalal_street_client/pages/admin_page/admin_page.dart';
 import 'package:dalal_street_client/blocs/auth/register/register_cubit.dart';
@@ -28,6 +29,7 @@ import 'package:dalal_street_client/pages/daily_challenges/daily_challenges_page
 import 'package:dalal_street_client/pages/mortgage/mortgage_home.dart';
 import 'package:dalal_street_client/pages/news_page.dart';
 import 'package:dalal_street_client/pages/notifications_page.dart';
+import 'package:dalal_street_client/pages/openorders_page.dart';
 import 'package:dalal_street_client/pages/referral_page.dart';
 import 'package:dalal_street_client/pages/stock_exchange/exchange_page.dart';
 import 'package:dalal_street_client/pages/landing_page.dart';
@@ -104,6 +106,11 @@ class RouteGenerator {
       case '/register':
         return BlocProvider(
             create: (context) => RegisterCubit(), child: RegisterPage());
+            case '/openOrders':
+        return MultiBlocProvider(providers: [
+          BlocProvider(create: (context) => MyOrdersCubit()),
+          BlocProvider(create: (context) => SubscribeCubit())
+        ], child: const OpenOrdersPage());
 
       case '/checkMail':
         if (args is String) {
