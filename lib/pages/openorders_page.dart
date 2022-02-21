@@ -46,7 +46,6 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
                   if (state is OpenOrdersSuccess) {
                     final openAskList = state.openAskArray;
                     final openBidList = state.openBidArray;
-                    
 
                     return ListView.builder(
                         itemCount: openAskList.length,
@@ -154,9 +153,7 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
                                     ])
                               ]);
                         });
-                  }
-                  else
-                  {
+                  } else {
                     return Text(state.toString());
                   }
                 }),

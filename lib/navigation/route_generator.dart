@@ -106,10 +106,9 @@ class RouteGenerator {
       case '/register':
         return BlocProvider(
             create: (context) => RegisterCubit(), child: RegisterPage());
-            case '/openOrders':
+      case '/openOrders':
         return MultiBlocProvider(providers: [
           BlocProvider(create: (context) => MyOrdersCubit()),
-          BlocProvider(create: (context) => SubscribeCubit())
         ], child: const OpenOrdersPage());
 
       case '/checkMail':
