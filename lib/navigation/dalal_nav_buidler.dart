@@ -29,7 +29,7 @@ class _DalalNavBuilderState extends State<DalalNavBuilder> {
   @override
   void initState() {
     super.initState();
-    logger.e('DalalNavBuilder init');
+    logger.i('DalalNavBuilder init');
     context.read<DalalBloc>().add(const CheckUser());
   }
 
@@ -44,7 +44,8 @@ class _DalalNavBuilderState extends State<DalalNavBuilder> {
 
             logger.i('user logged in');
 
-            if (!homeRoutesWeb.contains(widget.routerState.location)) {
+            if (!homeRoutesWeb.contains(widget.routerState.location) &&
+                !otherNonAuthRoutes.contains(widget.routerState.location)) {
               context.webGo('/home');
             } else {
               // Redirect to the same route, without adding to web history
