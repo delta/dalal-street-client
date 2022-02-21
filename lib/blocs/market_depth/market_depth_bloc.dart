@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:dalal_street_client/config/get_it.dart';
 import 'package:dalal_street_client/config/log.dart';
 import 'package:dalal_street_client/grpc/client.dart';
+import 'package:dalal_street_client/models/market_orders.dart';
 import 'package:dalal_street_client/proto_build/datastreams/MarketDepth.pb.dart';
 import 'package:dalal_street_client/proto_build/datastreams/Subscribe.pb.dart';
 import 'package:equatable/equatable.dart';
@@ -31,43 +32,58 @@ class MarketDepthBloc extends Bloc<MarketDepthEvent, MarketDepthState> {
             isFirstUpdate = false;
             askDepth = marketDepthUpdates.askDepth;
             bidDepth = marketDepthUpdates.bidDepth;
-            emit(MarketDepthUpdateState(
-                marketDepthUpdates.askDepth, marketDepthUpdates.bidDepth));
-            continue;
+          } else {
+            final askDiffDepth = marketDepthUpdates.askDepthDiff;
+            final bidDiffDepth = marketDepthUpdates.bidDepthDiff;
+
+            // updating askDepth
+            askDiffDepth.forEach((price, volume) {
+              if (!askDepth.containsKey(price)) {
+                askDepth[price] = 0 as Int64;
+              }
+
+              askDepth[price] = (askDepth[price]! + volume);
+
+              if (askDepth[price]! <= 0) {
+                askDepth.remove(price);
+              }
+            });
+
+            // updating bidDepth
+            bidDiffDepth.forEach((price, volume) {
+              if (!bidDepth.containsKey(price)) {
+                bidDepth[price] = 0 as Int64;
+              }
+
+              bidDepth[price] = (bidDepth[price]! + volume);
+
+              if (bidDepth[price]! <= 0) {
+                bidDepth.remove(price);
+              }
+            });
+          }
+          final List<MarketOrders> askDepthArray = [];
+          final List<MarketOrders> bidDepthArray = [];
+
+          for (var element in askDepth.entries) {
+            askDepthArray.add(MarketOrders(element.key, element.value));
+          }
+          for (var element in bidDepth.entries) {
+            bidDepthArray.add(MarketOrders(element.key, element.value));
           }
 
-          final askDiffDepth = marketDepthUpdates.askDepthDiff;
-          final bidDiffDepth = marketDepthUpdates.bidDepthDiff;
-
-          // updating askDepth
-          askDiffDepth.forEach((price, volume) {
-            if (!askDepth.containsKey(price)) {
-              askDepth[price] = 0 as Int64;
-            }
-
-            askDepth[price] = (askDepth[price]! + volume);
-
-            if (askDepth[price]! <= 0) {
-              askDepth.remove(price);
-            }
+          askDepthArray.sort((a, b) {
+            return (a.price - b.price).toInt();
           });
 
-          // updating bidDepth
-          bidDiffDepth.forEach((price, volume) {
-            if (!bidDepth.containsKey(price)) {
-              bidDepth[price] = 0 as Int64;
-            }
+          bidDepthArray.sort((a, b) {
+            if (a.price == 0) return -1;
+            if (b.price == 0) return 1;
 
-            bidDepth[price] = (bidDepth[price]! + volume);
-
-            if (bidDepth[price]! <= 0) {
-              bidDepth.remove(price);
-            }
+            return (a.price - b.price).toInt();
           });
 
-          emit(MarketDepthUpdateState(askDepth, bidDepth));
-          logger.i(askDepth);
-          logger.i(bidDepth);
+          emit(MarketDepthUpdateState(askDepthArray, bidDepthArray));
         }
       } catch (e) {
         logger.e(e);

@@ -114,7 +114,8 @@ class MyOrdersCubit extends Cubit<MyOrdersState> {
             }
           }
           // emit state on each stream update
-          emit(OpenOrdersSuccess(openAskMap, openBidMap));
+          emit(OpenOrdersSuccess(
+              openAskMap.values.toList(), openBidMap.values.toList()));
         }
       } else {
         emit(OpenOrdersFailure(response.statusMessage));

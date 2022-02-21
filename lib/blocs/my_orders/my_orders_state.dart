@@ -12,13 +12,13 @@ class OpenOrdersInitial extends MyOrdersState {}
 // this state will be emitted on each open orders update as
 // well as the initial fetch
 class OpenOrdersSuccess extends MyOrdersState {
-  final Map<int, Ask> openAskMap;
-  final Map<int, Bid> openBidMap;
+  final List<Ask> openAskArray;
+  final List<Bid> openBidArray;
 
-  const OpenOrdersSuccess(this.openAskMap, this.openBidMap);
+  const OpenOrdersSuccess(this.openAskArray, this.openBidArray);
 
   @override
-  List<Object> get props => [openAskMap, openAskMap];
+  List<Object> get props => [openAskArray, openBidArray];
 }
 
 class OpenOrdersFailure extends MyOrdersState {
