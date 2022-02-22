@@ -43,8 +43,10 @@ class MyOrdersCubit extends Cubit<MyOrdersState> {
         }
 
         logger.d('fetched open orders details');
-        logger.d(openAskMap);
-        logger.d(openBidMap);
+
+        // emit initial fetch data
+        emit(OpenOrdersSuccess(
+            openAskMap.values.toList(), openBidMap.values.toList()));
 
         // listening to open orders stream to update the orders
         SubscribeRequest subscribeRequest =

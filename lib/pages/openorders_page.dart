@@ -1,5 +1,6 @@
 import 'package:dalal_street_client/blocs/my_orders/my_orders_cubit.dart';
 import 'package:dalal_street_client/config/get_it.dart';
+import 'package:dalal_street_client/config/log.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
 import 'package:dalal_street_client/streams/global_streams.dart';
 import 'package:flutter/material.dart';
@@ -44,6 +45,7 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
               child: BlocBuilder<MyOrdersCubit, MyOrdersState>(
                 builder: ((context, state) {
                   if (state is OpenOrdersSuccess) {
+                    logger.d('open order updates');
                     final openAskList = state.openAskArray;
                     // final openBidList = state.openBidArray;
 
