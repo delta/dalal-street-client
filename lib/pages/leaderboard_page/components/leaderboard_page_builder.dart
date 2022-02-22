@@ -18,9 +18,6 @@ class _LeaderboardPageBuilderState extends State<LeaderboardPageBuilder> {
   @override
   initState() {
     super.initState();
-    context
-        .read<LeaderboardCubit>()
-        .getLeaderboard(1, 8, widget.leaderboardType);
   }
 
   @override

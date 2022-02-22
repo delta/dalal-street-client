@@ -9,8 +9,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
 final oCcy = NumberFormat('#,##0.00', 'en_US');
-int totalUsers = 0;
-int myRank = 0;
 
 class LeaderboardPage extends StatefulWidget {
   const LeaderboardPage({Key? key}) : super(key: key);
@@ -102,20 +100,14 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                 ),
                 SizedBox(
                   height: MediaQuery.of(context).size.height,
-                  child: TabBarView(
-                      physics: const BouncingScrollPhysics(
+                  child: const TabBarView(
+                      physics: BouncingScrollPhysics(
                           parent: AlwaysScrollableScrollPhysics()),
                       children: [
-                        BlocProvider(
-                          create: (context) => LeaderboardCubit(),
-                          child: const LeaderboardPageBuilder(
-                              leaderboardType: LeaderboardType.Overall),
-                        ),
-                        BlocProvider(
-                          create: (context) => LeaderboardCubit(),
-                          child: const LeaderboardPageBuilder(
-                              leaderboardType: LeaderboardType.Daily),
-                        ),
+                        LeaderboardPageBuilderWeb(
+                            leaderboardType: LeaderboardType.Overall),
+                        LeaderboardPageBuilderWeb(
+                            leaderboardType: LeaderboardType.Daily)
                       ]),
                 )
               ],
@@ -233,20 +225,14 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                   ),
                   SizedBox(
                     height: MediaQuery.of(context).size.height,
-                    child: TabBarView(
-                        physics: const BouncingScrollPhysics(
+                    child: const TabBarView(
+                        physics: BouncingScrollPhysics(
                             parent: AlwaysScrollableScrollPhysics()),
                         children: [
-                          BlocProvider(
-                            create: (context) => LeaderboardCubit(),
-                            child: const LeaderboardPageBuilderWeb(
-                                leaderboardType: LeaderboardType.Overall),
-                          ),
-                          BlocProvider(
-                            create: (context) => LeaderboardCubit(),
-                            child: const LeaderboardPageBuilderWeb(
-                                leaderboardType: LeaderboardType.Daily),
-                          ),
+                          LeaderboardPageBuilderWeb(
+                              leaderboardType: LeaderboardType.Overall),
+                          LeaderboardPageBuilderWeb(
+                              leaderboardType: LeaderboardType.Daily)
                         ]),
                   )
                 ],

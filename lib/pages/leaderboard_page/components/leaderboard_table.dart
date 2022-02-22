@@ -38,150 +38,13 @@ class _LeaderboardTableState extends State<LeaderboardTable> {
                   if (state is OverallLeaderboardSuccess) {
                     y = state.rankList[0].id;
                     x = 8;
-                    return Theme(
-                      data: Theme.of(context).copyWith(
-                          cardColor: background2,
-                          cardTheme: const CardTheme(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(10))))),
-                      child: PaginatedDataTable2(
-                          handleNext: (i) {
-                            y >= (state.totalUsers - x)
-                                ? {null}
-                                : {
-                                    context
-                                        .read<LeaderboardCubit>()
-                                        .getLeaderboard(
-                                            x + y, 8, widget.leaderboardType)
-                                  };
-                          },
-                          handlePrevious: (i) {
-                            y == 4
-                                ? {null}
-                                : {
-                                    context
-                                        .read<LeaderboardCubit>()
-                                        .getLeaderboard(
-                                            y - x, 8, widget.leaderboardType)
-                                  };
-                          },
-                          source: MyData(tableData: state.rankList),
-                          columnSpacing: 20,
-                          dataRowHeight: 40,
-                          headingRowHeight: 40.0,
-                          rowsPerPage: 8,
-                          columns: <DataColumn>[
-                            const DataColumn(
-                              label: Text('Rank',
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold),
-                                  textAlign: TextAlign.center),
-                            ),
-                            DataColumn(
-                              label: ConstrainedBox(
-                                constraints: const BoxConstraints(
-                                  minWidth: 120.0,
-                                  maxWidth: 120.0,
-                                ),
-                                child: const Text('Name',
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold),
-                                    textAlign: TextAlign.center),
-                              ),
-                            ),
-                            const DataColumn(
-                              label: Text('Stock Worth (₹)',
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold),
-                                  textAlign: TextAlign.center),
-                            ),
-                            const DataColumn(
-                              label: Text('Net Worth (₹)',
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold),
-                                  textAlign: TextAlign.center),
-                            ),
-                          ]),
-                    );
+                    return _leaderboardTable(
+                        state.rankList, state.totalUsers, x, y);
                   } else if (state is DailyLeaderboardSuccess) {
                     y = state.rankList[0].id;
                     x = 8;
-                    return Theme(
-                      data: Theme.of(context).copyWith(
-                          cardColor: background2,
-                          cardTheme: const CardTheme(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(10))))),
-                      child: PaginatedDataTable2(
-                          handleNext: (i) {
-                            y >= (state.totalUsers - x)
-                                ? {null}
-                                : {
-                                    context
-                                        .read<LeaderboardCubit>()
-                                        .getLeaderboard(
-                                            x + y, 8, widget.leaderboardType)
-                                  };
-                          },
-                          handlePrevious: (i) {
-                            y == 4
-                                ? {null}
-                                : {
-                                    x = 8,
-                                    context
-                                        .read<LeaderboardCubit>()
-                                        .getLeaderboard(
-                                            y - x, 8, widget.leaderboardType)
-                                  };
-                          },
-                          source: MyData(tableData: state.rankList),
-                          columnSpacing: 20,
-                          dataRowHeight: 40,
-                          headingRowHeight: 40.0,
-                          rowsPerPage: 8,
-                          columns: <DataColumn>[
-                            const DataColumn(
-                              label: Text('Rank',
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold),
-                                  textAlign: TextAlign.center),
-                            ),
-                            DataColumn(
-                              label: ConstrainedBox(
-                                constraints: const BoxConstraints(
-                                  minWidth: 120.0,
-                                  maxWidth: 120.0,
-                                ),
-                                child: const Text('Name',
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold),
-                                    textAlign: TextAlign.center),
-                              ),
-                            ),
-                            const DataColumn(
-                              label: Text('Stock Worth (₹)',
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold),
-                                  textAlign: TextAlign.center),
-                            ),
-                            const DataColumn(
-                              label: Text('Net Worth (₹)',
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold),
-                                  textAlign: TextAlign.center),
-                            ),
-                          ]),
-                    );
+                    return _leaderboardTable(
+                        state.rankList, state.totalUsers, x, y);
                   } else if (state is LeaderboardFailure) {
                     return Center(
                         child: Column(
@@ -218,6 +81,68 @@ class _LeaderboardTableState extends State<LeaderboardTable> {
                     return const Center(child: CircularProgressIndicator());
                   }
                 })))));
+  }
+
+  Widget _leaderboardTable(dynamic rankList, int totalUsers, int x, int y) {
+    return Theme(
+      data: Theme.of(context).copyWith(
+          cardColor: background2,
+          cardTheme: const CardTheme(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(10))))),
+      child: PaginatedDataTable2(
+          handleNext: (i) {
+            y >= (totalUsers - x)
+                ? {null}
+                : {
+                    context
+                        .read<LeaderboardCubit>()
+                        .getLeaderboard(x + y, 8, widget.leaderboardType)
+                  };
+          },
+          handlePrevious: (i) {
+            y == 4
+                ? {null}
+                : {
+                    context
+                        .read<LeaderboardCubit>()
+                        .getLeaderboard(y - x, 8, widget.leaderboardType)
+                  };
+          },
+          source: MyData(tableData: rankList),
+          columnSpacing: 20,
+          dataRowHeight: 40,
+          headingRowHeight: 40.0,
+          rowsPerPage: 8,
+          columns: <DataColumn>[
+            const DataColumn(
+              label: Text('Rank',
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.center),
+            ),
+            DataColumn(
+              label: ConstrainedBox(
+                constraints: const BoxConstraints(
+                  minWidth: 120.0,
+                  maxWidth: 120.0,
+                ),
+                child: const Text('Name',
+                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.center),
+              ),
+            ),
+            const DataColumn(
+              label: Text('Stock Worth (₹)',
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.center),
+            ),
+            const DataColumn(
+              label: Text('Net Worth (₹)',
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.center),
+            ),
+          ]),
+    );
   }
 }
 
