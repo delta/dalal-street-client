@@ -28,20 +28,21 @@ class _LeaderboardPageBuilderWebState extends State<LeaderboardPageBuilderWeb> {
             child: Container(
                 color: backgroundColor,
                 child: SingleChildScrollView(
-                    child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const SizedBox(height: 10),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height,
-                      child: BlocProvider(
-                        create: (context) => LeaderboardCubit(),
-                        child: LeaderboardTableWeb(
-                            leaderboardType: widget.leaderboardType),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const SizedBox(height: 10),
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height,
+                        child: BlocProvider(
+                          create: (context) => LeaderboardCubit(),
+                          child: LeaderboardTableWeb(
+                              leaderboardType: widget.leaderboardType),
+                        ),
                       ),
-                    ),
-                  ],
-                )))));
+                    ],
+                  ),
+                ))));
   }
 }

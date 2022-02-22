@@ -26,8 +26,8 @@ class _LeaderboardTableWebState extends State<LeaderboardTableWeb> {
 
   @override
   Widget build(BuildContext context) {
-    int x = 10;
-    int y = 1;
+    int noOfEntries = 10;
+    int startingIndex = 1;
     return Scaffold(
         body: SafeArea(
             child: Container(
@@ -36,15 +36,15 @@ class _LeaderboardTableWebState extends State<LeaderboardTableWeb> {
                     BlocBuilder<LeaderboardCubit, LeaderboardState>(
                         builder: (context, state) {
                   if (state is OverallLeaderboardSuccess) {
-                    y = state.rankList[0].id;
-                    x = 10;
-                    return _leaderboardTable(
-                        state.rankList, state.myRank, state.totalUsers, y, x);
+                    startingIndex = state.rankList[0].id;
+                    noOfEntries = 10;
+                    return _leaderboardTable(state.rankList, state.myRank,
+                        state.totalUsers, startingIndex, noOfEntries);
                   } else if (state is DailyLeaderboardSuccess) {
-                    y = state.rankList[0].id;
-                    x = 10;
-                    return _leaderboardTable(
-                        state.rankList, state.myRank, state.totalUsers, y, x);
+                    startingIndex = state.rankList[0].id;
+                    noOfEntries = 10;
+                    return _leaderboardTable(state.rankList, state.myRank,
+                        state.totalUsers, startingIndex, noOfEntries);
                   } else if (state is LeaderboardFailure) {
                     return Center(
                         child: Column(
@@ -58,18 +58,20 @@ class _LeaderboardTableWebState extends State<LeaderboardTableWeb> {
                           height: 50,
                           child: OutlinedButton(
                             onPressed: () {
-                              y == 1
+                              startingIndex == 1
                                   ? {
                                       context
                                           .read<LeaderboardCubit>()
-                                          .getLeaderboard(
-                                              y, 10, widget.leaderboardType)
+                                          .getLeaderboard(startingIndex, 10,
+                                              widget.leaderboardType)
                                     }
                                   : {
                                       context
                                           .read<LeaderboardCubit>()
                                           .getLeaderboard(
-                                              x + y, 10, widget.leaderboardType)
+                                              noOfEntries + startingIndex,
+                                              10,
+                                              widget.leaderboardType)
                                     };
                             },
                             child: const Text('Retry'),
@@ -83,8 +85,8 @@ class _LeaderboardTableWebState extends State<LeaderboardTableWeb> {
                 })))));
   }
 
-  Widget _leaderboardTable(
-      dynamic rankList, int myRank, int totalUsers, int y, int x) {
+  Widget _leaderboardTable(dynamic rankList, int myRank, int totalUsers,
+      int startingIndex, int noOfEntries) {
     return Stack(
       children: [
         Padding(
@@ -102,21 +104,23 @@ class _LeaderboardTableWebState extends State<LeaderboardTableWeb> {
                         borderRadius: BorderRadius.all(Radius.circular(10))))),
             child: PaginatedDataTable2(
                 handleNext: (i) {
-                  y >= (totalUsers - x)
+                  startingIndex >= (totalUsers - noOfEntries)
                       ? {null}
                       : {
-                          context
-                              .read<LeaderboardCubit>()
-                              .getLeaderboard(x + y, 10, widget.leaderboardType)
+                          context.read<LeaderboardCubit>().getLeaderboard(
+                              noOfEntries + startingIndex,
+                              10,
+                              widget.leaderboardType)
                         };
                 },
                 handlePrevious: (i) {
-                  y == 1
+                  startingIndex == 1
                       ? {null}
                       : {
-                          context
-                              .read<LeaderboardCubit>()
-                              .getLeaderboard(y - x, 10, widget.leaderboardType)
+                          context.read<LeaderboardCubit>().getLeaderboard(
+                              startingIndex - noOfEntries,
+                              10,
+                              widget.leaderboardType)
                         };
                 },
                 source: MyData(tableData: rankList),

@@ -100,14 +100,20 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                 ),
                 SizedBox(
                   height: MediaQuery.of(context).size.height,
-                  child: const TabBarView(
-                      physics: BouncingScrollPhysics(
+                  child: TabBarView(
+                      physics: const BouncingScrollPhysics(
                           parent: AlwaysScrollableScrollPhysics()),
                       children: [
-                        LeaderboardPageBuilderWeb(
-                            leaderboardType: LeaderboardType.Overall),
-                        LeaderboardPageBuilderWeb(
-                            leaderboardType: LeaderboardType.Daily)
+                        BlocProvider(
+                          create: (context) => LeaderboardCubit(),
+                          child: const LeaderboardPageBuilder(
+                              leaderboardType: LeaderboardType.Overall),
+                        ),
+                        BlocProvider(
+                          create: (context) => LeaderboardCubit(),
+                          child: const LeaderboardPageBuilder(
+                              leaderboardType: LeaderboardType.Daily),
+                        ),
                       ]),
                 )
               ],
