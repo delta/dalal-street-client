@@ -1,42 +1,39 @@
+import 'package:dalal_street_client/constants/icons.dart';
+import 'package:dalal_street_client/models/menu_item.dart';
 import 'package:dalal_street_client/theme/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class DalalHomeNavBar extends StatefulWidget {
-  final Map<String, String> menu;
+class DalalBottomBar extends StatelessWidget {
+  final List<MenuItem> menu;
+  final int currentIndex;
   final void Function(int index) onItemSelect;
   final void Function(int index) onItemReselect;
   final void Function() onMoreClick;
 
-  const DalalHomeNavBar({
+  DalalBottomBar({
     Key? key,
     required this.menu,
+    required this.currentIndex,
     required this.onItemSelect,
     required this.onItemReselect,
     required this.onMoreClick,
   }) : super(key: key);
 
-  @override
-  _DalalHomeNavBarState createState() => _DalalHomeNavBarState();
-}
+  final _moreItem = MenuItem('More', AppIcons.hamburger);
 
-class _DalalHomeNavBarState extends State<DalalHomeNavBar> {
-  List<BottomNavigationBarItem> get _menuItems => widget.menu
-      .map((label, asset) => MapEntry(
-          label,
-          BottomNavigationBarItem(
-            icon: SvgPicture.asset(
-              asset,
-              color: (label == widget.menu.keys.toList()[currentIndex])
-                  ? primaryColor
-                  : null,
-            ),
-            label: label,
-          )))
-      .values
+  List<BottomNavigationBarItem> get _menuItems => (menu + [_moreItem])
+      .map(
+        (menuItem) => BottomNavigationBarItem(
+          icon: SvgPicture.asset(menuItem.icon),
+          activeIcon: SvgPicture.asset(
+            menuItem.icon,
+            color: primaryColor,
+          ),
+          label: menuItem.name,
+        ),
+      )
       .toList();
-
-  int currentIndex = 0;
 
   @override
   build(context) => BottomNavigationBar(
@@ -48,14 +45,13 @@ class _DalalHomeNavBarState extends State<DalalHomeNavBar> {
         onTap: (value) {
           // Don't select the item when more is clicked
           if (value == _menuItems.length - 1) {
-            widget.onMoreClick();
+            onMoreClick();
             return;
           }
           if (value != currentIndex) {
-            widget.onItemSelect(value);
-            setState(() => currentIndex = value);
+            onItemSelect(value);
           } else {
-            widget.onItemReselect(value);
+            onItemReselect(value);
           }
         },
       );

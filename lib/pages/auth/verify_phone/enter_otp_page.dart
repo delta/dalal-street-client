@@ -1,5 +1,6 @@
 import 'package:dalal_street_client/blocs/auth/verify_phone/enter_otp/enter_otp_cubit.dart';
 import 'package:dalal_street_client/components/fill_max_height_scroll_view.dart';
+import 'package:dalal_street_client/navigation/nav_utils.dart';
 import 'package:dalal_street_client/models/snackbar/snackbar_type.dart';
 import 'package:dalal_street_client/theme/theme.dart';
 import 'package:dalal_street_client/utils/snackbar.dart';
@@ -143,8 +144,7 @@ class _EnterOtpPageState extends State<EnterOtpPage> {
     context.read<EnterOtpCubit>().verifyOTP(int.parse(_otp), phone);
   }
 
-  void _onChangeNumberClick() => Navigator.of(context)
-      .pushNamedAndRemoveUntil('/enterPhone', (route) => false);
+  void _onChangeNumberClick() => context.webGo('/enterPhone');
 
   void _onLogoutClick() => context.read<EnterOtpCubit>().logout();
 }

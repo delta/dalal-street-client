@@ -7,6 +7,7 @@ import 'package:dalal_street_client/utils/snackbar.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 
 import '../../models/snackbar/snackbar_type.dart';
@@ -144,6 +145,5 @@ class LoginPage extends StatelessWidget {
     }
   }
 
-  void _onSignUpClicked(BuildContext context) =>
-      Navigator.of(context).pushNamed('/register');
+  void _onSignUpClicked(BuildContext context) => context.push('/register');
 }
