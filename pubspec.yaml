@@ -40,6 +40,9 @@ dependencies:
   # Needed for better state classes in Bloc
   equatable: ^2.0.3
 
+  # Navigation
+  go_router: ^3.0.1
+
   # Form Validation
   reactive_forms: ^10.6.5
 

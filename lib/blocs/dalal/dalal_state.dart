@@ -9,12 +9,14 @@ abstract class DalalState extends Equatable {
 
 /// User is logged out
 class DalalLoggedOut extends DalalState {
-  final bool fromSplash;
+  /// Wether logged out by user action, or automatically because of some session
+  /// issue
+  final bool manualLogout;
 
-  const DalalLoggedOut({this.fromSplash = false});
+  const DalalLoggedOut({this.manualLogout = true});
 
   @override
-  List<Object> get props => [fromSplash];
+  List<Object> get props => [manualLogout];
 }
 
 /// User is logged in but User data needs to fetched(already authenticated, just opened the app)

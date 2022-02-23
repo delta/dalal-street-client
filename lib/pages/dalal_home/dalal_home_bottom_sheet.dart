@@ -1,10 +1,10 @@
+import 'package:dalal_street_client/models/menu_item.dart';
 import 'package:dalal_street_client/theme/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class DalalHomeBottomSheet extends StatelessWidget {
-  /// A map of labels and asset paths
-  final Map<String, String> items;
+  final List<MenuItem> items;
   final void Function(int index) onItemClick;
 
   const DalalHomeBottomSheet({
@@ -15,22 +15,18 @@ class DalalHomeBottomSheet extends StatelessWidget {
 
   List<Widget> get _sheetItems => items
       .map(
-        (label, asset) => MapEntry(
-          label,
-          Builder(
-            builder: (context) => HomeSheetItem(
-              icon: SvgPicture.asset(asset),
-              label: label,
-              onClick: () {
-                // Close bottom sheet
-                Navigator.pop(context);
-                onItemClick(items.keys.toList().indexOf(label));
-              },
-            ),
+        (menuItem) => Builder(
+          builder: (context) => HomeSheetItem(
+            icon: SvgPicture.asset(menuItem.icon),
+            label: menuItem.name,
+            onClick: () {
+              // Close bottom sheet
+              Navigator.pop(context);
+              onItemClick(items.indexOf(menuItem));
+            },
           ),
         ),
       )
-      .values
       .toList();
 
   @override
