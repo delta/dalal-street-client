@@ -39,7 +39,6 @@ class CancelOrderFailure extends MyOrdersState {
   List<Object> get props => [error];
 }
 
-class CancelOrderSucess extends MyOrdersState
-{
+class CancelOrderSucess extends MyOrdersState {
   const CancelOrderSucess();
 }
