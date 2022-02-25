@@ -6,7 +6,6 @@ import 'package:dalal_street_client/utils/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-
 class MortgageHome extends StatefulWidget {
   const MortgageHome({Key? key}) : super(key: key);
 
@@ -36,27 +35,49 @@ class _MortgageHomeState extends State<MortgageHome> {
 }
 
 Center _tabletBody() {
-    return const Center(
-      child: Text(
-        'Tablet UI will design soon :)',
-        style: TextStyle(
-          fontSize: 14,
-          color: secondaryColor,
-        ),
+  return const Center(
+    child: Text(
+      'Tablet UI will design soon :)',
+      style: TextStyle(
+        fontSize: 14,
+        color: secondaryColor,
       ),
-    );
-  }
+    ),
+  );
+}
 
 Widget _desktopBody() {
+  List<String> mortgageMap = ['Mortgage', 'Retrieve'];
+  var selectedPage = 'Mortgage';
   return Padding(
     padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-    child:  Column(
-      children: const [
-         SizedBox(
+    child: Column(
+      children: [
+        const SizedBox(
           height: 10,
         ),
-        Center(child:  Text('Designing Soon')),
-         SizedBox(
+        Container(
+          padding: const EdgeInsets.all(8.0),
+          width: 300,
+          child: DropdownButtonHideUnderline(
+            child: DropdownButton<String>(
+                isExpanded: true,
+                value: selectedPage,
+                iconSize: 48,
+                icon: const Icon(Icons.arrow_drop_down,color: white),
+                items: mortgageMap.map((type) {
+                  return DropdownMenuItem(
+                    child: Text(
+                      type,
+                      style: const TextStyle(fontSize: 42, color: white),
+                    ),
+                    value: type,
+                  );
+                }).toList(),
+                onChanged: (newValue) {}),
+          ),
+        ),
+        const SizedBox(
           height: 10,
         )
       ],
