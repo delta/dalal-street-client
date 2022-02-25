@@ -16,6 +16,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinbox/flutter_spinbox.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 
 class StockDetail extends StatefulWidget {
   final Stock company;
@@ -459,7 +460,10 @@ class _StockDetailState extends State<StockDetail> {
   void _navigateToCompanyPage(BuildContext context) {
     int cash = getIt<GlobalStreams>().dynamicUserInfoStream.value.cash;
     List<int> data = [widget.company.id, cash];
-    Navigator.pushNamed(context, '/company', arguments: data);
+    context.push(
+      '/company',
+      extra: data,
+    );
   }
 
   void _buyStocksFromExchange(BuildContext context, int stockId, int quantity) {

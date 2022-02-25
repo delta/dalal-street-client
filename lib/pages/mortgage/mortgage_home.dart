@@ -23,7 +23,7 @@ class _MortgageHomeState extends State<MortgageHome> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(
-              height: 10,
+              height: 30,
             ),
             const Padding(
               padding: EdgeInsets.all(8.0),

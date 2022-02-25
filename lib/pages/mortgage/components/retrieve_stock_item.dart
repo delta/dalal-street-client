@@ -9,6 +9,7 @@ import 'package:dalal_street_client/streams/transformations.dart';
 import 'package:dalal_street_client/theme/colors.dart';
 import 'package:fixnum/fixnum.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class RetrieveStockItem extends StatefulWidget {
   final Stock company;
@@ -105,7 +106,10 @@ class _RetrieveStockItemState extends State<RetrieveStockItem> {
   void _navigateToCompanyPage(BuildContext context) {
     int cash = getIt<GlobalStreams>().dynamicUserInfoStream.value.cash;
     List<int> data = [widget.company.id, cash];
-    Navigator.pushNamed(context, '/company', arguments: data);
+    context.push(
+      '/company',
+      extra: data,
+    );
   }
 
   Widget _stockNames(Stock company) {

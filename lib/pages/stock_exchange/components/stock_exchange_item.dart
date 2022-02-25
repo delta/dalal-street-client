@@ -11,6 +11,7 @@ import 'package:fixnum/fixnum.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 
 class StockExchangeItem extends StatefulWidget {
   final Stock company;
@@ -108,7 +109,10 @@ class _StockExchangeItemState extends State<StockExchangeItem> {
   void _navigateToCompanyPage(BuildContext context) {
     int cash = getIt<GlobalStreams>().dynamicUserInfoStream.value.cash;
     List<int> data = [widget.company.id, cash];
-    Navigator.pushNamed(context, '/company', arguments: data);
+    context.push(
+      '/company',
+      extra: data,
+    );
   }
 
   Widget _stockNames(Stock company) {
