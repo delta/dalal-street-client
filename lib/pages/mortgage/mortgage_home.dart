@@ -64,7 +64,7 @@ Widget _desktopBody() {
                 isExpanded: true,
                 value: selectedPage,
                 iconSize: 48,
-                icon: const Icon(Icons.arrow_drop_down,color: white),
+                icon: const Icon(Icons.arrow_drop_down, color: white),
                 items: mortgageMap.map((type) {
                   return DropdownMenuItem(
                     child: Text(
