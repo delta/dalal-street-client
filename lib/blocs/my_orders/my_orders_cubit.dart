@@ -130,10 +130,14 @@ class MyOrdersCubit extends Cubit<MyOrdersState> {
   Future<void> cancelMyOrder(bool isAsk, int orderId) async {
     try {
       final response = await actionClient
-          .cancelOrder(CancelOrderRequest(orderId: orderId, isAsk: isAsk));
+          .cancelOrder(CancelOrderRequest(orderId: orderId, isAsk: isAsk),options: sessionOptions(getIt()));
 
       if (response.statusCode != CancelOrderResponse_StatusCode.OK) {
         emit(CancelOrderFailure(response.statusMessage)); // emit error state
+      }
+      else
+      {
+        emit (const CancelOrderSucess());
       }
 
       // if the cancel order is successful, we'll get a update in my order update stream

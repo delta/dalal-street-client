@@ -38,3 +38,8 @@ class CancelOrderFailure extends MyOrdersState {
   @override
   List<Object> get props => [error];
 }
+
+class CancelOrderSucess extends MyOrdersState
+{
+  const CancelOrderSucess();
+}
