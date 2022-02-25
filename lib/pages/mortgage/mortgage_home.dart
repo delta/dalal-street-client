@@ -2,8 +2,10 @@ import 'package:dalal_street_client/blocs/mortgage/mortgage_details/mortgage_det
 import 'package:dalal_street_client/pages/mortgage/mortgage_page.dart';
 import 'package:dalal_street_client/pages/mortgage/retrieve_page.dart';
 import 'package:dalal_street_client/theme/colors.dart';
+import 'package:dalal_street_client/utils/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 
 class MortgageHome extends StatefulWidget {
   const MortgageHome({Key? key}) : super(key: key);
@@ -15,35 +17,75 @@ class MortgageHome extends StatefulWidget {
 class _MortgageHomeState extends State<MortgageHome> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: backgroundColor,
-      body: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(
-              height: 30,
-            ),
-            const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Text(
-                'Mortgage/Retrieve',
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.w700,
-                  color: white,
-                ),
-                textAlign: TextAlign.end,
-              ),
-            ),
-            _mortgageTabView(context),
-          ],
-        ),
+    return SafeArea(
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        backgroundColor: backgroundColor,
+        body: SingleChildScrollView(
+            primary: false,
+            physics: const BouncingScrollPhysics(
+                parent: AlwaysScrollableScrollPhysics()),
+            child: Responsive(
+              desktop: _desktopBody(),
+              mobile: _mobileBody(context),
+              tablet: _tabletBody(),
+            )),
       ),
     );
   }
 }
+
+Center _tabletBody() {
+    return const Center(
+      child: Text(
+        'Tablet UI will design soon :)',
+        style: TextStyle(
+          fontSize: 14,
+          color: secondaryColor,
+        ),
+      ),
+    );
+  }
+
+Widget _desktopBody() {
+  return Padding(
+    padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+    child:  Column(
+      children: const [
+         SizedBox(
+          height: 10,
+        ),
+        Center(child:  Text('Designing Soon')),
+         SizedBox(
+          height: 10,
+        )
+      ],
+    ),
+  );
+}
+
+Widget _mobileBody(BuildContext context) => Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(
+          height: 30,
+        ),
+        const Padding(
+          padding: EdgeInsets.all(8.0),
+          child: Text(
+            'Mortgage/Retrieve',
+            style: TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.w700,
+              color: white,
+            ),
+            textAlign: TextAlign.end,
+          ),
+        ),
+        _mortgageTabView(context),
+      ],
+    );
 
 Widget _mortgageTabView(BuildContext context) {
   return Container(
@@ -101,4 +143,16 @@ Widget _mortgageTabView(BuildContext context) {
           ],
         ),
       ));
+
+  Center _tabletBody() {
+    return const Center(
+      child: Text(
+        'Tablet UI will design soon :)',
+        style: TextStyle(
+          fontSize: 14,
+          color: secondaryColor,
+        ),
+      ),
+    );
+  }
 }
