@@ -2,7 +2,6 @@ import 'package:dalal_street_client/blocs/mortgage/mortgage_details/mortgage_det
 import 'package:dalal_street_client/blocs/mortgage/retrieve_sheet/retrieve_sheet_cubit.dart';
 import 'package:dalal_street_client/components/loading.dart';
 import 'package:dalal_street_client/config/get_it.dart';
-import 'package:dalal_street_client/config/log.dart';
 import 'package:dalal_street_client/constants/constants.dart';
 import 'package:dalal_street_client/models/snackbar/snackbar_type.dart';
 import 'package:dalal_street_client/proto_build/models/MortgageDetail.pb.dart';
