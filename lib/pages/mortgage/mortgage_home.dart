@@ -1,4 +1,8 @@
 import 'package:dalal_street_client/blocs/mortgage/mortgage_details/mortgage_details_cubit.dart';
+import 'package:dalal_street_client/blocs/mortgage/mortgage_sheet/cubit/mortgage_sheet_cubit.dart';
+import 'package:dalal_street_client/blocs/mortgage/retrieve_sheet/retrieve_sheet_cubit.dart';
+import 'package:dalal_street_client/pages/mortgage/components/mortgage_table.dart';
+import 'package:dalal_street_client/pages/mortgage/components/retrieve_table.dart';
 import 'package:dalal_street_client/pages/mortgage/mortgage_page.dart';
 import 'package:dalal_street_client/pages/mortgage/retrieve_page.dart';
 import 'package:dalal_street_client/theme/colors.dart';
@@ -25,7 +29,7 @@ class _MortgageHomeState extends State<MortgageHome> {
             physics: const BouncingScrollPhysics(
                 parent: AlwaysScrollableScrollPhysics()),
             child: Responsive(
-              desktop: _desktopBody(),
+              desktop: _desktopBody(context),
               mobile: _mobileBody(context),
               tablet: _tabletBody(),
             )),
@@ -46,9 +50,7 @@ Center _tabletBody() {
   );
 }
 
-Widget _desktopBody() {
-  List<String> mortgageMap = ['Mortgage', 'Retrieve'];
-  var selectedPage = 'Mortgage';
+Widget _desktopBody(BuildContext context) {
   return Padding(
     padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
     child: Column(
@@ -56,27 +58,7 @@ Widget _desktopBody() {
         const SizedBox(
           height: 10,
         ),
-        Container(
-          padding: const EdgeInsets.all(8.0),
-          width: 300,
-          child: DropdownButtonHideUnderline(
-            child: DropdownButton<String>(
-                isExpanded: true,
-                value: selectedPage,
-                iconSize: 48,
-                icon: const Icon(Icons.arrow_drop_down, color: white),
-                items: mortgageMap.map((type) {
-                  return DropdownMenuItem(
-                    child: Text(
-                      type,
-                      style: const TextStyle(fontSize: 42, color: white),
-                    ),
-                    value: type,
-                  );
-                }).toList(),
-                onChanged: (newValue) {}),
-          ),
-        ),
+        _mortgageHomeWeb(context),
         const SizedBox(
           height: 10,
         )
@@ -84,6 +66,122 @@ Widget _desktopBody() {
     ),
   );
 }
+
+Widget _mortgageHomeWeb(BuildContext context) {
+  return Container(
+    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+    decoration: BoxDecoration(
+      color: backgroundColor,
+      borderRadius: BorderRadius.circular(10),
+    ),
+    child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Mortgage/Retrieve',
+            style: TextStyle(
+                fontSize: 48, fontWeight: FontWeight.w700, color: white),
+            textAlign: TextAlign.end,
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          const Text(
+            'Carefully invest in the market to make some gains',
+            style: TextStyle(
+                fontSize: 20, fontWeight: FontWeight.w500, color: lightGray),
+            textAlign: TextAlign.end,
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          _mortgageBodyWeb(context)
+        ]),
+  );
+}
+
+Widget _mortgageBodyWeb(BuildContext context) => DefaultTabController(
+      length: 2,
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                child: SizedBox(
+                  width: 350,
+                  height: 50,
+                  child: TabBar(
+                    labelStyle: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    unselectedLabelStyle: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.normal,
+                    ),
+                    unselectedLabelColor: secondaryColor,
+                    labelColor: Colors.black,
+                    tabs: [
+                      Tab(
+                        child: Container(
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(10.0)),
+                              border: Border.all(color: primaryColor)),
+                          child: const Text(
+                            'Mortgage',
+                            textAlign: TextAlign.start,
+                          ),
+                        ),
+                      ),
+                      Tab(
+                        child: Container(
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(10.0)),
+                              border: Border.all(color: primaryColor)),
+                          child: const Text(
+                            'Retrieve',
+                            textAlign: TextAlign.start,
+                          ),
+                        ),
+                      ),
+                    ],
+                    labelPadding: const EdgeInsets.symmetric(horizontal: 10),
+                    indicatorSize: TabBarIndicatorSize.label,
+                    indicator: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: primaryColor),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(
+            height: MediaQuery.of(context).size.height,
+            child:  TabBarView(
+                physics: const BouncingScrollPhysics(
+                    parent: AlwaysScrollableScrollPhysics()),
+                children: [
+                  BlocProvider(
+                    create: (context) => MortgageSheetCubit(),
+                    child: const MortgageTable(),
+                  ),
+                  MultiBlocProvider(providers: [
+                    BlocProvider(create: (context) => MortgageDetailsCubit()),
+                    BlocProvider(create: (context) => RetrieveSheetCubit())
+                  ], child: const RetrieveTable())
+                ]),
+          )
+        ],
+      ),
+    );
 
 Widget _mobileBody(BuildContext context) => Column(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -165,15 +263,4 @@ Widget _mortgageTabView(BuildContext context) {
         ),
       ));
 
-  Center _tabletBody() {
-    return const Center(
-      child: Text(
-        'Tablet UI will design soon :)',
-        style: TextStyle(
-          fontSize: 14,
-          color: secondaryColor,
-        ),
-      ),
-    );
-  }
 }

@@ -26,6 +26,7 @@ class MortgageSheetCubit extends Cubit<MortgageSheetState> {
         logger.e(resp.statusMessage);
         emit(MortgageSheetFailure(resp.statusMessage));
       }
+      emit(MortgageSheetInitial());
     } catch (e) {
       logger.e(e);
       emit(const MortgageSheetFailure(failedToReachServer));

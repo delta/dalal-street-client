@@ -27,6 +27,7 @@ class RetrieveSheetCubit extends Cubit<RetrieveSheetState> {
         logger.e(resp.statusMessage);
         emit(RetrieveSheetFailure(resp.statusMessage));
       }
+      emit(RetrieveSheetInitial());
     } catch (e) {
       logger.e(e);
       emit(const RetrieveSheetFailure(failedToReachServer));
