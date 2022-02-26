@@ -165,7 +165,7 @@ Widget _mortgageBodyWeb(BuildContext context) => DefaultTabController(
           ),
           SizedBox(
             height: MediaQuery.of(context).size.height,
-            child:  TabBarView(
+            child: TabBarView(
                 physics: const BouncingScrollPhysics(
                     parent: AlwaysScrollableScrollPhysics()),
                 children: [
@@ -262,5 +262,4 @@ Widget _mortgageTabView(BuildContext context) {
           ],
         ),
       ));
-
 }
