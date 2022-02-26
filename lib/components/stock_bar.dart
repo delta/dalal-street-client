@@ -42,11 +42,13 @@ class StockBarMarquee extends StatelessWidget {
             previousDayClosePrice: stock.previousDayClose,
             currentPrice: stock.currentPrice,
             stockPriceStream: stockMapStream.priceStream(stockId),
+            isBankrupt: stock.isBankrupt,
           ))
         });
 
     return Marquee(
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           const SizedBox(width: 20.0),
           ...stockBarItemList,
@@ -67,6 +69,7 @@ class StockBarItem extends StatelessWidget {
   final String companyName;
   final Int64 previousDayClosePrice;
   final Int64 currentPrice;
+  final bool isBankrupt;
   final Stream<Int64> stockPriceStream;
 
   const StockBarItem(
@@ -75,7 +78,8 @@ class StockBarItem extends StatelessWidget {
       required this.companyName,
       required this.previousDayClosePrice,
       required this.currentPrice,
-      required this.stockPriceStream})
+      required this.stockPriceStream,
+      required this.isBankrupt})
       : super(key: key);
 
   @override
@@ -98,16 +102,22 @@ class StockBarItem extends StatelessWidget {
           builder: (context, state) {
             Int64 stockPrice = state.data!;
 
-            bool isLowOrHigh = stockPrice > previousDayClosePrice;
+            bool isLowOrHigh = stockPrice >= previousDayClosePrice;
 
             double percentageHighOrLow;
 
-            if (previousDayClosePrice == 0) {
-              percentageHighOrLow = stockPrice.toDouble();
+            if (isBankrupt) {
+              percentageHighOrLow = 0;
             } else {
-              percentageHighOrLow =
-                  ((stockPrice.toDouble() - previousDayClosePrice.toDouble()) /
-                      previousDayClosePrice.toDouble());
+              if (previousDayClosePrice == 0) {
+                percentageHighOrLow = stockPrice.toDouble();
+              } else {
+                percentageHighOrLow = ((stockPrice.toDouble() -
+                        previousDayClosePrice.toDouble()) /
+                    previousDayClosePrice.toDouble());
+
+                percentageHighOrLow *= 100;
+              }
             }
 
             return Row(
