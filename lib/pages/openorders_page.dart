@@ -19,7 +19,6 @@ class OpenOrdersPage extends StatefulWidget {
 }
 
 class _OpenOrdersPageState extends State<OpenOrdersPage> {
-  var noOpenOrders = false;
   List<Widget> openOrdersList = [];
   List<bool> isAskList = [];
   List<int> orderIdList = [];
@@ -94,100 +93,7 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
                               ))
                         ],
                       )),
-                      Expanded(
-                        child: BlocConsumer<MyOrdersCubit, MyOrdersState>(
-                            listener: (context, state) {
-                          if (state is CancelOrderSucess) {
-                            showSnackBar(
-                                context, 'Order Cancelled Sucessfully');
-                            context.read<MyOrdersCubit>().getMyOpenOrders();
-                          } else if (state is CancelOrderFailure) {
-                            showSnackBar(context, state.error);
-                          }
-                        }, builder: (context, state) {
-                          if (state is OpenOrdersSuccess) {
-                            final openAskList = state.openAskArray;
-                            final openBidList = state.openBidArray;
-                            List<Widget> openOrders =
-                                buildList(openAskList, openBidList);
-                            List<bool> isAsk = isAskList;
-                            List<int> orderIds = orderIdList;
-                            isAskList = [];
-                            orderIdList = [];
-                            openOrdersList = [];
-                            if (openOrders.isNotEmpty) {
-                              return Column(children: [
-                                ListView.separated(
-                                    shrinkWrap: true,
-                                    itemCount: openOrders.length,
-                                    itemBuilder: (context, index) {
-                                      return GestureDetector(
-                                          child: openOrders[index],
-                                          onDoubleTap: () {
-                                            context
-                                                .read<MyOrdersCubit>()
-                                                .cancelMyOrder(isAsk[index],
-                                                    orderIds[index]);
-                                          });
-                                    },
-                                    separatorBuilder: (context, index) {
-                                      return const Divider(
-                                        color: lightGray,
-                                      );
-                                    }),
-                                const Divider(
-                                  color: lightGray,
-                                ),
-                                const Padding(
-                                    padding: EdgeInsets.fromLTRB(0, 10, 10, 0),
-                                    child: Align(
-                                        child: Text(
-                                          'Double click a order to close it',
-                                          style: TextStyle(
-                                              fontSize: 11, color: lightGray),
-                                          textAlign: TextAlign.right,
-                                        ),
-                                        alignment: Alignment.bottomCenter))
-                              ]);
-                            } else {
-                              noOpenOrders = true;
-                              return (const Center(
-                                child: Padding(
-                                    padding: EdgeInsets.all(10),
-                                    child: Text('No Open Orders',
-                                        style: TextStyle(
-                                            fontSize: 14,
-                                            color: Colors.white))),
-                              ));
-                            }
-                          } else if (state is OpenOrdersFailure) {
-                            return Center(
-                                child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const Text('Failed to Reach the Server'),
-                                const SizedBox(height: 20),
-                                SizedBox(
-                                  width: 100,
-                                  height: 50,
-                                  child: OutlinedButton(
-                                    onPressed: () {
-                                      context
-                                          .read<MyOrdersCubit>()
-                                          .getMyOpenOrders();
-                                    },
-                                    child: const Text('Retry'),
-                                  ),
-                                ),
-                              ],
-                            ));
-                          } else {
-                            return const Center(
-                              child: DalalLoadingBar(),
-                            );
-                          }
-                        }),
-                      )
+                      buildOpenOrdersList()
                     ])))));
   }
 
@@ -395,5 +301,95 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
                             ))
                       ]))
             ]));
+  }
+
+  Widget buildOpenOrdersList() {
+    return BlocConsumer<MyOrdersCubit, MyOrdersState>(
+        listener: (context, state) {
+      if (state is CancelOrderSucess) {
+        showSnackBar(context, 'Order Cancelled Sucessfully');
+        context.read<MyOrdersCubit>().getMyOpenOrders();
+      } else if (state is CancelOrderFailure) {
+        showSnackBar(context, state.error);
+      }
+    }, builder: (context, state) {
+      if (state is OpenOrdersSuccess) {
+        final openAskList = state.openAskArray;
+        final openBidList = state.openBidArray;
+        List<Widget> openOrders = buildList(openAskList, openBidList);
+        List<bool> isAsk = isAskList;
+        List<int> orderIds = orderIdList;
+        isAskList = [];
+        orderIdList = [];
+        openOrdersList = [];
+        if (openOrders.isNotEmpty) {
+          return  Column(children: [
+            SizedBox(
+              
+              child: 
+            ListView.separated(
+                shrinkWrap: true,
+                scrollDirection: Axis.vertical,
+                itemCount: openOrders.length,
+                itemBuilder: (context, index) {
+                  return GestureDetector(
+                      child: openOrders[index],
+                      onDoubleTap: () {
+                        context
+                            .read<MyOrdersCubit>()
+                            .cancelMyOrder(isAsk[index], orderIds[index]);
+                      });
+                },
+                separatorBuilder: (context, index) {
+                  return const Divider(
+                    color: lightGray,
+                  );
+                }),height: MediaQuery.of(context).size.height*0.75,),
+              const Divider(
+              color: lightGray,
+            ),
+            const Padding(
+                padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                child: Align(
+                    child: Text(
+                      'Double click a order to close it',
+                      style: TextStyle(fontSize: 11, color: lightGray),
+                    ),
+                    alignment: Alignment.bottomCenter))],
+            
+          );
+        } else {
+          return (const Center(
+            child: Padding(
+                padding: EdgeInsets.all(10),
+                child: Text('No Open Orders',
+                    style: TextStyle(fontSize: 14, color: Colors.white))),
+          ));
+        }
+      } else if (state is OpenOrdersFailure) {
+        return Center(
+            child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text('Failed to Reach the Server'),
+            const SizedBox(height: 20),
+            SizedBox(
+              width: 100,
+              height: 50,
+              child: OutlinedButton(
+                onPressed: () {
+                  context.read<MyOrdersCubit>().getMyOpenOrders();
+                },
+                child: const Text('Retry'),
+              ),
+            ),
+          ],
+        ));
+      } else {
+        return const Center(
+          child: DalalLoadingBar(),
+        );
+      }
+    });
   }
 }
