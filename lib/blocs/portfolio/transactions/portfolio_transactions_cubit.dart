@@ -13,10 +13,12 @@ class PortfolioTransactionsCubit extends Cubit<PortfolioTransactionsState> {
 
   Future<void> listenToTransactionStream(var lastId) async {
     try {
-      final res = await actionClient.getTransactions(GetTransactionsRequest(
-        lastTransactionId: lastId,
-        count: 10 //Have to change based on required number of transactions
-      ),
+      final res = await actionClient.getTransactions(
+          GetTransactionsRequest(
+              lastTransactionId: lastId,
+              count:
+                  10 //Have to change based on required number of transactions
+              ),
           options: sessionOptions(getIt()));
 
       if (res.statusCode == GetTransactionsResponse_StatusCode.OK) {

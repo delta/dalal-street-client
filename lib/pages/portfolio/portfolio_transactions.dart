@@ -8,7 +8,6 @@ import 'package:dalal_street_client/blocs/portfolio/transactions/portfolio_trans
 import 'package:dalal_street_client/utils/transaction_to_str.dart';
 import 'package:dalal_street_client/utils/iso_to_datetime.dart';
 
-
 class UserTransactions extends StatefulWidget {
   const UserTransactions({Key? key}) : super(key: key);
 
@@ -35,7 +34,7 @@ class _UserTransactionsState extends State<UserTransactions> {
           transactions.addAll(state.transactions);
           var lastId = state.transactions.last.id;
           bool moreExists = state.moreExists;
-          String loadMore = moreExists? 'Load More ↻':'';
+          String loadMore = moreExists ? 'Load More ↻' : '';
           return Container(
               padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
               margin: const EdgeInsets.only(top: 15),
@@ -65,23 +64,24 @@ class _UserTransactionsState extends State<UserTransactions> {
                     Container(
                       width: double.infinity,
                     ),
-                    _transactionBody(
-                        transactions.length, transactions),
-                        const SizedBox(
+                    _transactionBody(transactions.length, transactions),
+                    const SizedBox(
                       height: 10,
-                      ),
-                        GestureDetector(
-                          onTap: (() => {
-                            context.read<PortfolioTransactionsCubit>().listenToTransactionStream(lastId-1)
+                    ),
+                    GestureDetector(
+                      onTap: (() => {
+                            context
+                                .read<PortfolioTransactionsCubit>()
+                                .listenToTransactionStream(lastId - 1)
                           }),
-                          child: Text(  
-                          loadMore,
+                      child: Text(
+                        loadMore,
                         style: const TextStyle(
-                          fontStyle:FontStyle.italic,
-                          fontSize: 15,
-                          color: blue
-                        ),
-                        ),)
+                            fontStyle: FontStyle.italic,
+                            fontSize: 15,
+                            color: blue),
+                      ),
+                    )
                   ]));
         } else if (state is PortfolioTransactionsError) {
           return Center(
@@ -104,8 +104,8 @@ class _UserTransactionsState extends State<UserTransactions> {
         var reservedCash = transactions[index].reservedCashTotal;
         var reservedStocks = transactions[index].reservedStockQuantity;
         var transactionTime = transactions[index].createdAt;
-        return _singleTransaction(
-            type, qty, price, cash, stockId, reservedCash, reservedStocks,transactionTime);
+        return _singleTransaction(type, qty, price, cash, stockId, reservedCash,
+            reservedStocks, transactionTime);
       });
 
   _singleTransaction(dynamic type, var qty, var price, var cash, int stockId,
@@ -228,20 +228,18 @@ class _UserTransactionsState extends State<UserTransactions> {
           ),
           const SizedBox(height: 15),
           Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const Padding(
-                      padding: EdgeInsets.only(bottom: 10),
-                      child: Text(
-                        'Created At',
-                        style: TextStyle(color: blurredGray),
-                      )),
-                  Text(
-                    ISOtoDateTime(transactionTime)
-                  )
-                ],
-              ),
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const Padding(
+                  padding: EdgeInsets.only(bottom: 10),
+                  child: Text(
+                    'Created At',
+                    style: TextStyle(color: blurredGray),
+                  )),
+              Text(ISOtoDateTime(transactionTime))
+            ],
+          ),
           const SizedBox(height: 15),
         ],
       ),
