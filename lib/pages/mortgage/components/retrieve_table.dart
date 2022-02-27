@@ -1,5 +1,5 @@
 import 'package:dalal_street_client/blocs/mortgage/mortgage_details/mortgage_details_cubit.dart';
-import 'package:dalal_street_client/blocs/mortgage/retrieve_sheet/retrieve_sheet_cubit.dart';
+import 'package:dalal_street_client/blocs/mortgage/mortgage_sheet/cubit/mortgage_sheet_cubit.dart';
 import 'package:dalal_street_client/components/loading.dart';
 import 'package:dalal_street_client/config/get_it.dart';
 import 'package:dalal_street_client/constants/constants.dart';
@@ -58,14 +58,14 @@ class _RetrieveTableState extends State<RetrieveTable> {
     columns.add(_buildDataColumn('Quanitity', false));
     columns.add(_buildDataColumn('Action', false));
     final stockList = getIt<GlobalStreams>().latestStockMap;
-    return BlocListener<RetrieveSheetCubit, RetrieveSheetState>(
+    return BlocListener<MortgageSheetCubit, MortgageSheetState>(
       listener: (context, state) {
-        if (state is RetrieveSheetSuccess) {
+        if (state is MortgageSheetSuccess) {
           showSnackBar(context,
               'Successfully retrieved $selectedQuantity ${selectedCompany.fullName} stocks',
               type: SnackBarType.success);
           context.read<MortgageDetailsCubit>().getMortgageDetails();
-        } else if (state is RetrieveSheetFailure) {
+        } else if (state is MortgageSheetFailure) {
           showSnackBar(context, state.msg, type: SnackBarType.error);
         }
       },
@@ -181,7 +181,7 @@ class _RetrieveTableState extends State<RetrieveTable> {
           if (quantity > 0) {
             selectedQuantity = quantity;
             selectedCompany = company;
-            context.read<RetrieveSheetCubit>().retrieveStocks(
+            context.read<MortgageSheetCubit>().retrieveStocks(
                 company.id, quantity, mortgageDetail.mortgagePrice.toInt());
           }
         },

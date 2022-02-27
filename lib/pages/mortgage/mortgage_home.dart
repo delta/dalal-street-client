@@ -1,6 +1,5 @@
 import 'package:dalal_street_client/blocs/mortgage/mortgage_details/mortgage_details_cubit.dart';
 import 'package:dalal_street_client/blocs/mortgage/mortgage_sheet/cubit/mortgage_sheet_cubit.dart';
-import 'package:dalal_street_client/blocs/mortgage/retrieve_sheet/retrieve_sheet_cubit.dart';
 import 'package:dalal_street_client/pages/mortgage/components/mortgage_table.dart';
 import 'package:dalal_street_client/pages/mortgage/components/retrieve_table.dart';
 import 'package:dalal_street_client/pages/mortgage/mortgage_page.dart';
@@ -175,7 +174,7 @@ Widget _mortgageBodyWeb(BuildContext context) => DefaultTabController(
                   ),
                   MultiBlocProvider(providers: [
                     BlocProvider(create: (context) => MortgageDetailsCubit()),
-                    BlocProvider(create: (context) => RetrieveSheetCubit())
+                    BlocProvider(create: (context) => MortgageSheetCubit())
                   ], child: const RetrieveTable())
                 ]),
           )
