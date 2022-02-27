@@ -68,7 +68,7 @@ class _MortgageTableState extends State<MortgageTable> {
           columns: columns,
           rows: rows,
           columnSpacing: 80,
-          dataRowHeight: 60 ,
+          dataRowHeight: 60,
           headingRowHeight: 60,
         ),
       ),
