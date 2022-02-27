@@ -40,6 +40,9 @@ dependencies:
   # Needed for better state classes in Bloc
   equatable: ^2.0.3
 
+  # Navigation
+  go_router: ^3.0.1
+
   # Form Validation
   reactive_forms: ^10.6.5
 
@@ -56,6 +59,7 @@ dependencies:
   charts_flutter: ^0.12.0
   interactive_chart: ^0.3.4
   lottie: ^1.2.2
+  shimmer: ^2.0.0
 
 dev_dependencies:
   flutter_test:

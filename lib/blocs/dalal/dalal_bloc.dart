@@ -27,11 +27,12 @@ class DalalBloc extends HydratedBloc<DalalEvent, DalalState> {
     on<CheckUser>((event, emit) async {
       if (state is DalalLoggedIn) {
         add(GetUserData((state as DalalLoggedIn).sessionId));
-      } else {
+      } else if (state is! DalalDataLoaded &&
+          state is! DalalVerificationPending) {
         // really quick transition to login page looks wierd
         await Future.delayed(const Duration(milliseconds: 400));
         // go to login page
-        emit(const DalalLoggedOut(fromSplash: true));
+        emit(const DalalLoggedOut(manualLogout: false));
       }
     });
 
@@ -58,12 +59,13 @@ class DalalBloc extends HydratedBloc<DalalEvent, DalalState> {
           globalStreams,
         ));
       } on GrpcError catch (e) {
-        logger.e(e);
         if (e.code == 16) {
+          logger.e(e);
           // Unauthenticated
           logger.i('Logged out becuase of invalid sessionId');
-          emit(const DalalLoggedOut(fromSplash: true));
+          emit(const DalalLoggedOut(manualLogout: false));
         } else {
+          logger.e(e);
           await Future.delayed(const Duration(milliseconds: 200));
           emit(DalalLoginFailed(sessionId));
         }
@@ -90,7 +92,9 @@ class DalalBloc extends HydratedBloc<DalalEvent, DalalState> {
     on<DalalLogOut>((event, emit) {
       try {
         actionClient.logout(LogoutRequest(), options: sessionOptions(getIt()));
-        unsubscribeFromGlobalStreams(getIt(), getIt());
+        if (getIt.isRegistered<GlobalStreams>()) {
+          unsubscribeFromGlobalStreams(getIt(), getIt());
+        }
       } catch (e) {
         // Cant do anything
         logger.e(e);
