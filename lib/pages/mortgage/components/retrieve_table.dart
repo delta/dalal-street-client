@@ -33,19 +33,11 @@ class _RetrieveTableState extends State<RetrieveTable> {
   Widget build(BuildContext context) {
     return Container(
         color: backgroundColor,
-        child: SingleChildScrollView(
-            scrollDirection: Axis.vertical,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const SizedBox(height: 10),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height,
-                  child: _retrieveDataTable(),
-                ),
-              ],
-            )));
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          child: _retrieveDataTable(),
+        ));
   }
 
   Widget _retrieveDataTable() {
@@ -82,10 +74,15 @@ class _RetrieveTableState extends State<RetrieveTable> {
               Stock company = stockList[mortgageDetail.stockId]!;
               rows.add(_retrieveDetailsRow(mortgageDetail, company));
             }
-            return DataTable(
-              columns: columns,
-              rows: rows,
-              columnSpacing: 80,
+            return SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: DataTable(
+                columns: columns,
+                rows: rows,
+                columnSpacing: 70,
+                dataRowHeight: 60,
+                headingRowHeight: 60,
+              ),
             );
           } else if (state is MortgageDetailsLoading) {
             return const Center(
@@ -103,7 +100,8 @@ class _RetrieveTableState extends State<RetrieveTable> {
 
   DataColumn _buildDataColumn(String heading, bool isNumeric) => DataColumn(
         numeric: isNumeric ? true : false,
-        label: Center(
+        label: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
           child: Text(heading,
               style: const TextStyle(
                   fontSize: 20,

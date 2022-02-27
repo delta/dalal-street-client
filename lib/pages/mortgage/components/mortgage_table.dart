@@ -28,19 +28,11 @@ class _MortgageTableState extends State<MortgageTable> {
   Widget build(BuildContext context) {
     return Container(
         color: backgroundColor,
-        child: SingleChildScrollView(
-            scrollDirection: Axis.vertical,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const SizedBox(height: 10),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height,
-                  child: _mortgageDataTable(),
-                ),
-              ],
-            )));
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          child: _mortgageDataTable(),
+        ));
   }
 
   Widget _mortgageDataTable() {
@@ -70,17 +62,23 @@ class _MortgageTableState extends State<MortgageTable> {
           Navigator.maybePop(context);
         }
       },
-      child: DataTable(
-        columns: columns,
-        rows: rows,
-        columnSpacing: 110,
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: DataTable(
+          columns: columns,
+          rows: rows,
+          columnSpacing: 80,
+          dataRowHeight: 60 ,
+          headingRowHeight: 60,
+        ),
       ),
     );
   }
 
   DataColumn _buildDataColumn(String heading, bool isNumeric) => DataColumn(
         numeric: isNumeric ? true : false,
-        label: Center(
+        label: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
           child: Text(heading,
               style: const TextStyle(
                   fontSize: 20,
