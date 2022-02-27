@@ -263,7 +263,7 @@ class _CandleStickLayoutState extends State<CandleStickLayout> {
     return [
       charts.Series<TimeSeriesData, DateTime>(
         id: 'graph',
-        colorFn: (_, __) => charts.ColorUtil.fromDartColor(blue),
+        colorFn: (_, __) => charts.ColorUtil.fromDartColor(secondaryColor),
         data: data,
         domainFn: (TimeSeriesData x, _) => x.time,
         measureFn: (TimeSeriesData y, _) => y.stockPrice,
