@@ -28,7 +28,6 @@ class _ExchangePageState extends State<ExchangePage>
 
   @override
   void initState() {
-    logger.i('Called exchange');
     super.initState();
 
     context.read<ExchangeCubit>().listenToExchangeStream(mapOfStocks);
