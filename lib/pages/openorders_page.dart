@@ -323,40 +323,41 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
         orderIdList = [];
         openOrdersList = [];
         if (openOrders.isNotEmpty) {
-          return  Column(children: [
-            SizedBox(
-              
-              child: 
-            ListView.separated(
-                shrinkWrap: true,
-                scrollDirection: Axis.vertical,
-                itemCount: openOrders.length,
-                itemBuilder: (context, index) {
-                  return GestureDetector(
-                      child: openOrders[index],
-                      onDoubleTap: () {
-                        context
-                            .read<MyOrdersCubit>()
-                            .cancelMyOrder(isAsk[index], orderIds[index]);
-                      });
-                },
-                separatorBuilder: (context, index) {
-                  return const Divider(
-                    color: lightGray,
-                  );
-                }),height: MediaQuery.of(context).size.height*0.75,),
+          return Column(
+            children: [
+              SizedBox(
+                child: ListView.separated(
+                    shrinkWrap: true,
+                    scrollDirection: Axis.vertical,
+                    itemCount: openOrders.length,
+                    itemBuilder: (context, index) {
+                      return GestureDetector(
+                          child: openOrders[index],
+                          onDoubleTap: () {
+                            context
+                                .read<MyOrdersCubit>()
+                                .cancelMyOrder(isAsk[index], orderIds[index]);
+                          });
+                    },
+                    separatorBuilder: (context, index) {
+                      return const Divider(
+                        color: lightGray,
+                      );
+                    }),
+                height: MediaQuery.of(context).size.height * 0.75,
+              ),
               const Divider(
-              color: lightGray,
-            ),
-            const Padding(
-                padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                child: Align(
-                    child: Text(
-                      'Double click a order to close it',
-                      style: TextStyle(fontSize: 11, color: lightGray),
-                    ),
-                    alignment: Alignment.bottomCenter))],
-            
+                color: lightGray,
+              ),
+              const Padding(
+                  padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                  child: Align(
+                      child: Text(
+                        'Double click a order to close it',
+                        style: TextStyle(fontSize: 11, color: lightGray),
+                      ),
+                      alignment: Alignment.bottomCenter))
+            ],
           );
         } else {
           return (const Center(
