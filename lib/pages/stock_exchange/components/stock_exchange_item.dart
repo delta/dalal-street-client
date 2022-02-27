@@ -73,7 +73,8 @@ class _StockExchangeItemState extends State<StockExchangeItem> {
                       overlayColor: MaterialStateProperty.all(secondaryColor),
                       backgroundColor: MaterialStateProperty.all(
                           primaryColor.withOpacity(0.2))),
-                  onPressed: () => widget.onKnowMoreClicked(context,widget.company.id),
+                  onPressed: () =>
+                      widget.onKnowMoreClicked(context, widget.company.id),
                   child: const Text(
                     'View',
                     style: TextStyle(color: primaryColor, fontSize: 14),

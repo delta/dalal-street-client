@@ -24,7 +24,8 @@ class _MortgagePageState extends State<MortgagePage> {
 
   Widget _mortgageBody() {
     List<Widget> stockMortgageItems = mapOfStocks.entries
-        .map((entry) => MortgageStockItem(company: entry.value,onKnowMoreClicked: _navigateToCompanyPage))
+        .map((entry) => MortgageStockItem(
+            company: entry.value, onKnowMoreClicked: _navigateToCompanyPage))
         .toList();
     return ListView.separated(
       physics: const BouncingScrollPhysics(),

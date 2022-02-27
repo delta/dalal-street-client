@@ -226,7 +226,8 @@ class _ExchangePageState extends State<ExchangePage>
 
   Widget _exchangeBodyMobile() {
     List<Widget> stockExchangeItems = mapOfStocks.entries
-        .map((entry) => StockExchangeItem(company: entry.value,onKnowMoreClicked: _navigateToCompanyPage))
+        .map((entry) => StockExchangeItem(
+            company: entry.value, onKnowMoreClicked: _navigateToCompanyPage))
         .toList();
     return ListView.separated(
       physics: const BouncingScrollPhysics(),
@@ -242,7 +243,7 @@ class _ExchangePageState extends State<ExchangePage>
     );
   }
 
-    void _navigateToCompanyPage(BuildContext context,int stockId) {
+  void _navigateToCompanyPage(BuildContext context, int stockId) {
     int cash = getIt<GlobalStreams>().dynamicUserInfoStream.value.cash;
     List<int> data = [stockId, cash];
     context.push(

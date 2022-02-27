@@ -20,7 +20,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 class StockDetail extends StatefulWidget {
   final Stock company;
   final Function onKnowMoreClicked;
-  const StockDetail({Key? key, required this.company, required this.onKnowMoreClicked}) : super(key: key);
+  const StockDetail(
+      {Key? key, required this.company, required this.onKnowMoreClicked})
+      : super(key: key);
 
   @override
   _StockDetailState createState() => _StockDetailState();
@@ -421,7 +423,8 @@ class _StockDetailState extends State<StockDetail> {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             OutlinedButton(
-                onPressed: () => widget.onKnowMoreClicked(context,widget.company.id),
+                onPressed: () =>
+                    widget.onKnowMoreClicked(context, widget.company.id),
                 child: const Text('Know More')),
             const SizedBox(
               width: 40,
