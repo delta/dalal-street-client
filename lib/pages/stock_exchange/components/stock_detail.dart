@@ -16,12 +16,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinbox/flutter_spinbox.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:go_router/go_router.dart';
 
 class StockDetail extends StatefulWidget {
   final Stock company;
-
-  const StockDetail({Key? key, required this.company}) : super(key: key);
+  final Function onKnowMoreClicked;
+  const StockDetail({Key? key, required this.company, required this.onKnowMoreClicked}) : super(key: key);
 
   @override
   _StockDetailState createState() => _StockDetailState();
@@ -422,7 +421,7 @@ class _StockDetailState extends State<StockDetail> {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             OutlinedButton(
-                onPressed: () => _navigateToCompanyPage(context),
+                onPressed: () => widget.onKnowMoreClicked(context,widget.company.id),
                 child: const Text('Know More')),
             const SizedBox(
               width: 40,
@@ -454,15 +453,6 @@ class _StockDetailState extends State<StockDetail> {
           ],
         )
       ],
-    );
-  }
-
-  void _navigateToCompanyPage(BuildContext context) {
-    int cash = getIt<GlobalStreams>().dynamicUserInfoStream.value.cash;
-    List<int> data = [widget.company.id, cash];
-    context.push(
-      '/company',
-      extra: data,
     );
   }
 

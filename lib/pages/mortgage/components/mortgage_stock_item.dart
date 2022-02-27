@@ -8,14 +8,15 @@ import 'package:dalal_street_client/streams/transformations.dart';
 import 'package:dalal_street_client/theme/colors.dart';
 import 'package:fixnum/fixnum.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
 class MortgageStockItem extends StatefulWidget {
   final Stock company;
+  final Function onKnowMoreClicked;
 
   const MortgageStockItem({
     Key? key,
     required this.company,
+    required this.onKnowMoreClicked,
   }) : super(key: key);
 
   @override
@@ -70,7 +71,7 @@ class _MortgageStockItemState extends State<MortgageStockItem> {
                       overlayColor: MaterialStateProperty.all(secondaryColor),
                       backgroundColor: MaterialStateProperty.all(
                           primaryColor.withOpacity(0.2))),
-                  onPressed: () => _navigateToCompanyPage(context),
+                  onPressed: () => widget.onKnowMoreClicked(context,widget.company.id),
                   child: const Text(
                     'View',
                     style: TextStyle(color: primaryColor, fontSize: 14),
@@ -101,15 +102,6 @@ class _MortgageStockItemState extends State<MortgageStockItem> {
           )
         ],
       ),
-    );
-  }
-
-  void _navigateToCompanyPage(BuildContext context) {
-    int cash = getIt<GlobalStreams>().dynamicUserInfoStream.value.cash;
-    List<int> data = [widget.company.id, cash];
-    context.push(
-      '/company',
-      extra: data,
     );
   }
 

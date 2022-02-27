@@ -11,14 +11,15 @@ import 'package:fixnum/fixnum.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:go_router/go_router.dart';
 
 class StockExchangeItem extends StatefulWidget {
   final Stock company;
+  final Function onKnowMoreClicked;
 
   const StockExchangeItem({
     Key? key,
     required this.company,
+    required this.onKnowMoreClicked,
   }) : super(key: key);
 
   @override
@@ -72,7 +73,7 @@ class _StockExchangeItemState extends State<StockExchangeItem> {
                       overlayColor: MaterialStateProperty.all(secondaryColor),
                       backgroundColor: MaterialStateProperty.all(
                           primaryColor.withOpacity(0.2))),
-                  onPressed: () => _navigateToCompanyPage(context),
+                  onPressed: () => widget.onKnowMoreClicked(context,widget.company.id),
                   child: const Text(
                     'View',
                     style: TextStyle(color: primaryColor, fontSize: 14),
@@ -103,15 +104,6 @@ class _StockExchangeItemState extends State<StockExchangeItem> {
           )
         ],
       ),
-    );
-  }
-
-  void _navigateToCompanyPage(BuildContext context) {
-    int cash = getIt<GlobalStreams>().dynamicUserInfoStream.value.cash;
-    List<int> data = [widget.company.id, cash];
-    context.push(
-      '/company',
-      extra: data,
     );
   }
 

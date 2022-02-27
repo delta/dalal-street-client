@@ -3,6 +3,7 @@ import 'package:dalal_street_client/pages/mortgage/components/mortgage_stock_ite
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
 import 'package:dalal_street_client/streams/global_streams.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class MortgagePage extends StatefulWidget {
   const MortgagePage({Key? key}) : super(key: key);
@@ -23,7 +24,7 @@ class _MortgagePageState extends State<MortgagePage> {
 
   Widget _mortgageBody() {
     List<Widget> stockMortgageItems = mapOfStocks.entries
-        .map((entry) => MortgageStockItem(company: entry.value))
+        .map((entry) => MortgageStockItem(company: entry.value,onKnowMoreClicked: _navigateToCompanyPage))
         .toList();
     return ListView.separated(
       physics: const BouncingScrollPhysics(),
@@ -36,6 +37,15 @@ class _MortgagePageState extends State<MortgagePage> {
           height: 10,
         );
       },
+    );
+  }
+
+  void _navigateToCompanyPage(BuildContext context, int stockId) {
+    int cash = getIt<GlobalStreams>().dynamicUserInfoStream.value.cash;
+    List<int> data = [stockId, cash];
+    context.push(
+      '/company',
+      extra: data,
     );
   }
 }

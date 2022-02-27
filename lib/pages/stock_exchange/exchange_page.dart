@@ -10,6 +10,7 @@ import 'package:dalal_street_client/theme/colors.dart';
 import 'package:dalal_street_client/utils/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class ExchangePage extends StatefulWidget {
   const ExchangePage({Key? key}) : super(key: key);
@@ -120,6 +121,7 @@ class _ExchangePageState extends State<ExchangePage>
               child: BlocBuilder<ListSelectionCubit, ListSelectionState>(
                 builder: (_, state) => StockDetail(
                   company: mapOfStocks.values.elementAt(state.selectedIndex),
+                  onKnowMoreClicked: _navigateToCompanyPage,
                 ),
               ),
             )
@@ -224,7 +226,7 @@ class _ExchangePageState extends State<ExchangePage>
 
   Widget _exchangeBodyMobile() {
     List<Widget> stockExchangeItems = mapOfStocks.entries
-        .map((entry) => StockExchangeItem(company: entry.value))
+        .map((entry) => StockExchangeItem(company: entry.value,onKnowMoreClicked: _navigateToCompanyPage))
         .toList();
     return ListView.separated(
       physics: const BouncingScrollPhysics(),
@@ -237,6 +239,15 @@ class _ExchangePageState extends State<ExchangePage>
           height: 10,
         );
       },
+    );
+  }
+
+    void _navigateToCompanyPage(BuildContext context,int stockId) {
+    int cash = getIt<GlobalStreams>().dynamicUserInfoStream.value.cash;
+    List<int> data = [stockId, cash];
+    context.push(
+      '/company',
+      extra: data,
     );
   }
 }
