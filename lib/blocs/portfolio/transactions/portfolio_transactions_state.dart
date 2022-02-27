@@ -10,8 +10,9 @@ abstract class PortfolioTransactionsState extends Equatable {
 
 class PortfolioTransactionsLoaded extends PortfolioTransactionsState {
   final List transactions;
+  final bool moreExists;
 
-  const PortfolioTransactionsLoaded(this.transactions);
+  const PortfolioTransactionsLoaded(this.moreExists, this.transactions);
 
   @override
   List<Object> get props => [transactions];

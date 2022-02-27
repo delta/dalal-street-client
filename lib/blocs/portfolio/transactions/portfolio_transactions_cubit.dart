@@ -11,13 +11,18 @@ part 'portfolio_transactions_state.dart';
 class PortfolioTransactionsCubit extends Cubit<PortfolioTransactionsState> {
   PortfolioTransactionsCubit() : super(const PortfolioTransactionsLoading());
 
-  Future<void> listenToTransactionStream() async {
+  Future<void> listenToTransactionStream(var lastId) async {
     try {
-      final res = await actionClient.getTransactions(GetTransactionsRequest(),
+      final res = await actionClient.getTransactions(
+          GetTransactionsRequest(
+              lastTransactionId: lastId,
+              count:
+                  10 //Have to change based on required number of transactions
+              ),
           options: sessionOptions(getIt()));
 
       if (res.statusCode == GetTransactionsResponse_StatusCode.OK) {
-        emit(PortfolioTransactionsLoaded(res.transactions));
+        emit(PortfolioTransactionsLoaded(res.moreExists, res.transactions));
       } else {
         emit(PortfolioTransactionsError(res.statusMessage));
       }

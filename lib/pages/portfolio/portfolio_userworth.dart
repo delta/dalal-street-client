@@ -1,4 +1,5 @@
 import 'package:dalal_street_client/components/loading.dart';
+import 'package:dalal_street_client/models/dynamic_user_info.dart';
 import 'package:fixnum/fixnum.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,6 +18,7 @@ class PortfolioUserWorth extends StatefulWidget {
 
 class _PortfolioUserWorthState extends State<PortfolioUserWorth> {
   Map<int, Stock> mapOfStocks = getIt<GlobalStreams>().latestStockMap;
+  final userInfoStream = getIt<GlobalStreams>().dynamicUserInfoStream;
 
   @override
   void initState() {
@@ -33,15 +35,6 @@ class _PortfolioUserWorthState extends State<PortfolioUserWorth> {
             child: DalalLoadingBar(),
           );
         } else if (state is UserWorthLoaded) {
-          int stockWorth = calculateUserStockWorth(state.stocks);
-          int reserveStockWorth =
-              calculateUserReservedStocksWorth(state.reservedStocks);
-          Int64 cash = state.user.cash;
-          Int64 reservedCash = state.user.reservedCash;
-          int total = stockWorth +
-              reserveStockWorth +
-              cash.toInt() +
-              reservedCash.toInt();
           return Wrap(children: [
             Container(
                 padding:
@@ -50,63 +43,7 @@ class _PortfolioUserWorthState extends State<PortfolioUserWorth> {
                   color: background2,
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Padding(
-                        padding: EdgeInsets.only(top: 15),
-                      ),
-                      const Text(
-                        'Portfolio',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w500,
-                          color: white,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      Column(
-                        children: [
-                          const SizedBox(height: 10),
-                          _eachField('Cash in Hand', cash.toString()),
-                          const SizedBox(height: 15),
-                          _eachField('Stock Worth', stockWorth.toString()),
-                          const SizedBox(height: 15),
-                          _eachField('Reserved Cash', reservedCash.toString()),
-                          const SizedBox(height: 15),
-                          _eachField('Reserved Stock Worth',
-                              reserveStockWorth.toString()),
-                          const SizedBox(height: 15),
-                          Row(children: [
-                            const Padding(padding: EdgeInsets.only(left: 20)),
-                            const Text(
-                              'Total Worth',
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w800,
-                              ),
-                            ),
-                            const Spacer(),
-                            Container(
-                              padding: const EdgeInsets.only(right: 25, top: 5),
-                              child: Text(
-                                total.toString(),
-                                style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w800,
-                                    color: total.toInt() >= 0
-                                        ? secondaryColor
-                                        : heartRed),
-                              ),
-                            )
-                          ])
-                        ],
-                      ),
-                    ])),
+                child: _userWorthDetails()),
             Container(
                 padding:
                     const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
@@ -148,6 +85,80 @@ class _PortfolioUserWorthState extends State<PortfolioUserWorth> {
         return const Text('');
       });
 
+  Widget _userWorthDetails() {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+      decoration: BoxDecoration(
+        color: background2,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: StreamBuilder<DynamicUserInfo>(
+        stream: userInfoStream,
+        initialData: userInfoStream.value,
+        builder: (context, snapshot) {
+          dynamic data = snapshot.data!;
+          return Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Padding(
+                  padding: EdgeInsets.only(top: 15),
+                ),
+                const Text(
+                  'Portfolio',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w500,
+                    color: white,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Column(
+                  children: [
+                    const SizedBox(height: 10),
+                    _eachField('Cash in Hand', data.cash.toString()),
+                    const SizedBox(height: 15),
+                    _eachField('Stock Worth', data.stockWorth.toString()),
+                    const SizedBox(height: 15),
+                    _eachField('Reserved Cash', data.reservedCash.toString()),
+                    const SizedBox(height: 15),
+                    _eachField('Reserved Stock Worth',
+                        data.reservedStocksWorth.toString()),
+                    const SizedBox(height: 15),
+                    Row(children: [
+                      const Padding(padding: EdgeInsets.only(left: 20)),
+                      const Text(
+                        'Total Worth',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+                      const Spacer(),
+                      Container(
+                        padding: const EdgeInsets.only(right: 25, top: 5),
+                        child: Text(
+                          data.totalWorth.toString(),
+                          style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w800,
+                              color: data.totalWorth.toInt() >= 0
+                                  ? secondaryColor
+                                  : heartRed),
+                        ),
+                      )
+                    ])
+                  ],
+                ),
+              ]);
+        },
+      ),
+    );
+  }
+
   Widget _holdings(UserWorthLoaded state) {
     var stockHeld = <dynamic, dynamic>{};
 
@@ -156,8 +167,10 @@ class _PortfolioUserWorthState extends State<PortfolioUserWorth> {
     Map<int, Int64> cashSpentMap = state.cashSpent;
 
     mapOfStocks.forEach((stockId, value) {
-      if ((!stocksReservedMap.containsKey(stockId)) &
-          (!stocksOwnedMap.containsKey(stockId))) {
+      if (((!stocksReservedMap.containsKey(stockId)) &
+              (!stocksOwnedMap.containsKey(stockId))) ||
+          ((stocksReservedMap[stockId] == 0) &
+              (stocksOwnedMap[stockId] == 0))) {
       } else {
         stockHeld[stockId] = true;
       }
@@ -303,23 +316,5 @@ class _PortfolioUserWorthState extends State<PortfolioUserWorth> {
         ),
       )
     ]);
-  }
-
-  int calculateUserReservedStocksWorth(Map<int, Int64> stocksReservedMap) {
-    int worth = 0;
-    stocksReservedMap.forEach((stockId, value) {
-      worth +=
-          value.toInt() * (mapOfStocks[stockId]?.currentPrice.toInt() ?? 0);
-    });
-    return worth;
-  }
-
-  int calculateUserStockWorth(Map<int, Int64> stocksOwnedMap) {
-    int worth = 0;
-    stocksOwnedMap.forEach((stockId, value) {
-      worth +=
-          value.toInt() * (mapOfStocks[stockId]?.currentPrice.toInt() ?? 0);
-    });
-    return worth;
   }
 }
