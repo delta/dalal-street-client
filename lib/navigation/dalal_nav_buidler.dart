@@ -62,7 +62,7 @@ class _DalalNavBuilderState extends State<DalalNavBuilder> {
             }
 
             // snackbar util
-            streamToast(context);
+            streamSnackBarUpdates(context);
           } else if (state is DalalVerificationPending) {
             // Register sessionId
             getIt.registerSingleton(state.sessionId);
