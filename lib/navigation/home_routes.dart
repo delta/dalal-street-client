@@ -74,13 +74,12 @@ Map<String, Widget> mobileHomePagesMore(User extra) => {
         create: (context) => DailyChallengesPageCubit()..getChallengesConfig(),
         child: const DailyChallengesPage(),
       ),
-      '/openOrders': BlocProvider(create: (context) => MyOrdersCubit(),
-         child: const OpenOrdersPage()),
+      '/openOrders': BlocProvider(
+          create: (context) => MyOrdersCubit(), child: const OpenOrdersPage()),
       '/referAndEarn': BlocProvider(
         create: (context) => ReferralCubit(),
         child: ReferralPage(user: extra),
       ),
       '/mediaPartners': const Text('Media partners tbd'),
       '/notifications': const Text('Notifications tbd'),
-     
     };
