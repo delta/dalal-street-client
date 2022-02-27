@@ -116,39 +116,44 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
                             orderIdList = [];
                             openOrdersList = [];
                             if (openOrders.isNotEmpty) {
-                              return Column(children: [
-                                ListView.separated(
-                                    shrinkWrap: true,
-                                    itemCount: openOrders.length,
-                                    itemBuilder: (context, index) {
-                                      return GestureDetector(
-                                          child: openOrders[index],
-                                          onDoubleTap: () {
-                                            context
-                                                .read<MyOrdersCubit>()
-                                                .cancelMyOrder(isAsk[index],
-                                                    orderIds[index]);
-                                          });
-                                    },
-                                    separatorBuilder: (context, index) {
-                                      return const Divider(
-                                        color: lightGray,
-                                      );
-                                    }),
-                                const Divider(
-                                  color: lightGray,
-                                ),
-                                const Padding(
-                                    padding: EdgeInsets.fromLTRB(0, 10, 10, 0),
-                                    child: Align(
-                                        child: Text(
-                                          'Double click a order to close it',
-                                          style: TextStyle(
-                                              fontSize: 11, color: lightGray),
-                                          textAlign: TextAlign.right,
-                                        ),
-                                        alignment: Alignment.bottomCenter))
-                              ]);
+                              return SingleChildScrollView(
+                                child: Column(children: [
+                                  ListView.separated(
+                                      shrinkWrap: true,
+                                      physics:
+                                          const NeverScrollableScrollPhysics(),
+                                      itemCount: openOrders.length,
+                                      itemBuilder: (context, index) {
+                                        return GestureDetector(
+                                            child: openOrders[index],
+                                            onDoubleTap: () {
+                                              context
+                                                  .read<MyOrdersCubit>()
+                                                  .cancelMyOrder(isAsk[index],
+                                                      orderIds[index]);
+                                            });
+                                      },
+                                      separatorBuilder: (context, index) {
+                                        return const Divider(
+                                          color: lightGray,
+                                        );
+                                      }),
+                                  const Divider(
+                                    color: lightGray,
+                                  ),
+                                  const Padding(
+                                      padding:
+                                          EdgeInsets.fromLTRB(0, 10, 10, 0),
+                                      child: Align(
+                                          child: Text(
+                                            'Double click an order to close it',
+                                            style: TextStyle(
+                                                fontSize: 11, color: lightGray),
+                                            textAlign: TextAlign.right,
+                                          ),
+                                          alignment: Alignment.bottomCenter))
+                                ]),
+                              );
                             } else {
                               noOpenOrders = true;
                               return (const Center(
