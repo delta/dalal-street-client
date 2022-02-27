@@ -167,8 +167,8 @@ class _PortfolioUserWorthState extends State<PortfolioUserWorth> {
     Map<int, Int64> cashSpentMap = state.cashSpent;
 
     mapOfStocks.forEach((stockId, value) {
-      if ((!stocksReservedMap.containsKey(stockId)) &
-          (!stocksOwnedMap.containsKey(stockId))) {
+      if (((!stocksReservedMap.containsKey(stockId)) &
+          (!stocksOwnedMap.containsKey(stockId)))||((stocksReservedMap[stockId]==0)&(stocksOwnedMap[stockId]==0))) {
       } else {
         stockHeld[stockId] = true;
       }
