@@ -1,6 +1,7 @@
 import 'package:dalal_street_client/blocs/my_orders/my_orders_cubit.dart';
 import 'package:dalal_street_client/components/loading.dart';
 import 'package:dalal_street_client/config/get_it.dart';
+import 'package:dalal_street_client/models/snackbar/snackbar_type.dart';
 import 'package:dalal_street_client/proto_build/models/Ask.pb.dart';
 import 'package:dalal_street_client/proto_build/models/Bid.pb.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
@@ -55,10 +56,19 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                     color: background2),
-                child: Center(
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const Padding(
+                          padding: EdgeInsets.fromLTRB(5, 10, 10, 5),
+                          child: Align(
+                            child: Text(
+                              'Double click an order to close it',
+                              style: TextStyle(fontSize: 11, color: lightGray),
+                              textAlign: TextAlign.right,
+                            ),
+                            alignment: Alignment.bottomRight,
+                          )),
                       Center(
                           child: Row(
                         children: const [
@@ -97,12 +107,14 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
                       Expanded(
                         child: BlocConsumer<MyOrdersCubit, MyOrdersState>(
                             listener: (context, state) {
-                          if (state is CancelOrderSucess) {
+                          if (state is CancelOrderSuccess) {
                             showSnackBar(
-                                context, 'Order Cancelled Sucessfully');
+                                context, 'Order Cancelled Successfully',
+                                type: SnackBarType.success);
                             context.read<MyOrdersCubit>().getMyOpenOrders();
                           } else if (state is CancelOrderFailure) {
-                            showSnackBar(context, state.error);
+                            showSnackBar(context, state.error,
+                                type: SnackBarType.error);
                           }
                         }, builder: (context, state) {
                           if (state is OpenOrdersSuccess) {
@@ -141,17 +153,6 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
                                   const Divider(
                                     color: lightGray,
                                   ),
-                                  const Padding(
-                                      padding:
-                                          EdgeInsets.fromLTRB(0, 10, 10, 0),
-                                      child: Align(
-                                          child: Text(
-                                            'Double click an order to close it',
-                                            style: TextStyle(
-                                                fontSize: 11, color: lightGray),
-                                            textAlign: TextAlign.right,
-                                          ),
-                                          alignment: Alignment.bottomCenter))
                                 ]),
                               );
                             } else {
@@ -193,7 +194,7 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
                           }
                         }),
                       )
-                    ])))));
+                    ]))));
   }
 
   List<Widget> buildList(List<Ask> openAskList, List<Bid> openBidList) {
@@ -267,7 +268,7 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
                         const Text('PRICE',
                             style: TextStyle(fontSize: 9, color: lightGray)),
                         Text(
-                          '\$' + openAsk.price.toString() + ' per stock',
+                          '₹' + openAsk.price.toString() + ' per stock',
                           style: const TextStyle(
                             fontSize: 12,
                             color: Colors.white,
@@ -363,7 +364,7 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
                         const Text('PRICE',
                             style: TextStyle(fontSize: 9, color: lightGray)),
                         Text(
-                          '\$' + openBid.price.toString() + ' per stock',
+                          '₹' + openBid.price.toString() + ' per stock',
                           style: const TextStyle(
                             fontSize: 12,
                             color: Colors.white,

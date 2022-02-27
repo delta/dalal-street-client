@@ -136,7 +136,7 @@ class MyOrdersCubit extends Cubit<MyOrdersState> {
       if (response.statusCode != CancelOrderResponse_StatusCode.OK) {
         emit(CancelOrderFailure(response.statusMessage)); // emit error state
       } else {
-        emit(const CancelOrderSucess());
+        emit(const CancelOrderSuccess());
       }
 
       // if the cancel order is successful, we'll get a update in my order update stream
