@@ -50,7 +50,7 @@ class _RetrievePageState extends State<RetrievePage> {
               return RetrieveStockItem(
                   company: mapOfStocks[stockId]!,
                   mortgageDetail: state.mortgageDetails[index],
-                  onKnowMoreClicked: _navigateToCompanyPage);
+                  onViewClicked: _navigateToCompanyPage);
             },
             separatorBuilder: (BuildContext context, int index) {
               return const SizedBox(

@@ -19,7 +19,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 class StockDetail extends StatefulWidget {
   final Stock company;
-  final Function onKnowMoreClicked;
+  final void Function(BuildContext context, int stockId) onKnowMoreClicked;
   const StockDetail(
       {Key? key, required this.company, required this.onKnowMoreClicked})
       : super(key: key);

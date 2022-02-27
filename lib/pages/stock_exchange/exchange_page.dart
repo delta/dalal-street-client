@@ -227,7 +227,7 @@ class _ExchangePageState extends State<ExchangePage>
   Widget _exchangeBodyMobile() {
     List<Widget> stockExchangeItems = mapOfStocks.entries
         .map((entry) => StockExchangeItem(
-            company: entry.value, onKnowMoreClicked: _navigateToCompanyPage))
+            company: entry.value, onViewClicked: _navigateToCompanyPage))
         .toList();
     return ListView.separated(
       physics: const BouncingScrollPhysics(),

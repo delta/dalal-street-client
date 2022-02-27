@@ -14,12 +14,12 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 class StockExchangeItem extends StatefulWidget {
   final Stock company;
-  final Function onKnowMoreClicked;
+  final void Function(BuildContext context, int stockId) onViewClicked;
 
   const StockExchangeItem({
     Key? key,
     required this.company,
-    required this.onKnowMoreClicked,
+    required this.onViewClicked,
   }) : super(key: key);
 
   @override
@@ -74,7 +74,7 @@ class _StockExchangeItemState extends State<StockExchangeItem> {
                       backgroundColor: MaterialStateProperty.all(
                           primaryColor.withOpacity(0.2))),
                   onPressed: () =>
-                      widget.onKnowMoreClicked(context, widget.company.id),
+                      widget.onViewClicked(context, widget.company.id),
                   child: const Text(
                     'View',
                     style: TextStyle(color: primaryColor, fontSize: 14),
