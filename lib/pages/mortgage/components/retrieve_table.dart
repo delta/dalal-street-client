@@ -77,10 +77,11 @@ class _RetrieveTableState extends State<RetrieveTable> {
                   ));
             }
             List<DataRow> rows = [];
-            int index=1;
+            int index = 1;
             for (var mortgageDetail in state.mortgageDetails) {
               Stock company = stockList[mortgageDetail.stockId]!;
-              rows.add(_retrieveDetailsRow(mortgageDetail, company, index%2==0 ? background3 : background2));
+              rows.add(_retrieveDetailsRow(mortgageDetail, company,
+                  index % 2 == 0 ? background3 : background2));
               index++;
             }
             return SingleChildScrollView(

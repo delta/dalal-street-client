@@ -48,7 +48,8 @@ class _MortgageTableState extends State<MortgageTable> {
     final stockList = getIt<GlobalStreams>().latestStockMap;
     int index = 1;
     for (var company in stockList.values) {
-      rows.add(_mortgageDetailsRow(company, index%2==0 ? background3 : background2));
+      rows.add(_mortgageDetailsRow(
+          company, index % 2 == 0 ? background3 : background2));
       index++;
     }
     return BlocListener<MortgageSheetCubit, MortgageSheetState>(
@@ -97,9 +98,8 @@ class _MortgageTableState extends State<MortgageTable> {
 
   DataRow _mortgageDetailsRow(Stock company, Color bgColorRow) {
     int quantity = 1;
-    return DataRow(
-      color: MaterialStateProperty.all(bgColorRow),
-      cells: <DataCell>[
+    return DataRow(color: MaterialStateProperty.all(bgColorRow), cells: <
+        DataCell>[
       DataCell(Center(
           child: Text(
         (company.shortName).toString(),
