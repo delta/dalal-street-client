@@ -1,4 +1,4 @@
-import 'package:dalal_street_client/blocs/mortgage/retrieve_sheet/retrieve_sheet_cubit.dart';
+import 'package:dalal_street_client/blocs/mortgage/mortgage_sheet/cubit/mortgage_sheet_cubit.dart';
 import 'package:dalal_street_client/components/sheet_pop_over.dart';
 import 'package:dalal_street_client/constants/constants.dart';
 import 'package:dalal_street_client/constants/format.dart';
@@ -34,21 +34,21 @@ class _RetrieveBottomSheetState extends State<RetrieveBottomSheet> {
     double mortgagePrice = widget.mortgageDetail.mortgagePrice.toDouble();
     totalPrice = mortgagePrice * RETRIEVE_DEPOSIT_RATE * quantity;
     return BlocProvider(
-      create: (context) => RetrieveSheetCubit(),
-      child: BlocConsumer<RetrieveSheetCubit, RetrieveSheetState>(
+      create: (context) => MortgageSheetCubit(),
+      child: BlocConsumer<MortgageSheetCubit, MortgageSheetState>(
         listener: (context, state) {
-          if (state is RetrieveSheetSuccess) {
+          if (state is MortgageSheetSuccess) {
             showSnackBar(context,
                 'Successfully retrieved $quantity ${widget.company.fullName} stocks',
                 type: SnackBarType.success);
             Navigator.maybePop(context);
-          } else if (state is RetrieveSheetFailure) {
+          } else if (state is MortgageSheetFailure) {
             showSnackBar(context, state.msg, type: SnackBarType.error);
             Navigator.maybePop(context);
           }
         },
         builder: (context, state) {
-          if (state is RetrieveSheetLoading) {
+          if (state is MortgageSheetLoading) {
             return const Center(
               child: CircularProgressIndicator(
                 color: Colors.green,
@@ -98,7 +98,7 @@ class _RetrieveBottomSheetState extends State<RetrieveBottomSheet> {
 
   void _retrieveStocks(BuildContext context, int quantity) {
     if (quantity > 0) {
-      context.read<RetrieveSheetCubit>().retrieveStocks(widget.company.id,
+      context.read<MortgageSheetCubit>().retrieveStocks(widget.company.id,
           quantity, widget.mortgageDetail.mortgagePrice.toInt());
     }
   }

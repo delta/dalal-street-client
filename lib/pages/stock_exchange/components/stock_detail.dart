@@ -19,8 +19,10 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 class StockDetail extends StatefulWidget {
   final Stock company;
-
-  const StockDetail({Key? key, required this.company}) : super(key: key);
+  final void Function(int stockId) onKnowMoreClicked;
+  const StockDetail(
+      {Key? key, required this.company, required this.onKnowMoreClicked})
+      : super(key: key);
 
   @override
   _StockDetailState createState() => _StockDetailState();
@@ -421,7 +423,7 @@ class _StockDetailState extends State<StockDetail> {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             OutlinedButton(
-                onPressed: () => _navigateToCompanyPage(context),
+                onPressed: () => widget.onKnowMoreClicked(widget.company.id),
                 child: const Text('Know More')),
             const SizedBox(
               width: 40,
@@ -454,12 +456,6 @@ class _StockDetailState extends State<StockDetail> {
         )
       ],
     );
-  }
-
-  void _navigateToCompanyPage(BuildContext context) {
-    int cash = getIt<GlobalStreams>().dynamicUserInfoStream.value.cash;
-    List<int> data = [widget.company.id, cash];
-    Navigator.pushNamed(context, '/company', arguments: data);
   }
 
   void _buyStocksFromExchange(BuildContext context, int stockId, int quantity) {

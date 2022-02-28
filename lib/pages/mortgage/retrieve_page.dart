@@ -6,6 +6,7 @@ import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
 import 'package:dalal_street_client/streams/global_streams.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class RetrievePage extends StatefulWidget {
   const RetrievePage({Key? key}) : super(key: key);
@@ -48,7 +49,8 @@ class _RetrievePageState extends State<RetrievePage> {
               int stockId = state.mortgageDetails[index].stockId;
               return RetrieveStockItem(
                   company: mapOfStocks[stockId]!,
-                  mortgageDetail: state.mortgageDetails[index]);
+                  mortgageDetail: state.mortgageDetails[index],
+                  onViewClicked: _navigateToCompanyPage);
             },
             separatorBuilder: (BuildContext context, int index) {
               return const SizedBox(
@@ -66,6 +68,15 @@ class _RetrievePageState extends State<RetrievePage> {
           );
         }
       },
+    );
+  }
+
+  void _navigateToCompanyPage(int stockId) {
+    int cash = getIt<GlobalStreams>().dynamicUserInfoStream.value.cash;
+    List<int> data = [stockId, cash];
+    context.push(
+      '/company',
+      extra: data,
     );
   }
 }

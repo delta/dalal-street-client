@@ -13,8 +13,13 @@ import 'package:flutter/material.dart';
 class RetrieveStockItem extends StatefulWidget {
   final Stock company;
   final MortgageDetail mortgageDetail;
+  final void Function(int stockId) onViewClicked;
+
   const RetrieveStockItem(
-      {Key? key, required this.company, required this.mortgageDetail})
+      {Key? key,
+      required this.company,
+      required this.mortgageDetail,
+      required this.onViewClicked})
       : super(key: key);
 
   @override
@@ -67,7 +72,7 @@ class _RetrieveStockItemState extends State<RetrieveStockItem> {
                       overlayColor: MaterialStateProperty.all(secondaryColor),
                       backgroundColor: MaterialStateProperty.all(
                           primaryColor.withOpacity(0.2))),
-                  onPressed: () => _navigateToCompanyPage(context),
+                  onPressed: () => widget.onViewClicked(widget.company.id),
                   child: const Text(
                     'View',
                     style: TextStyle(color: primaryColor, fontSize: 14),
@@ -100,12 +105,6 @@ class _RetrieveStockItemState extends State<RetrieveStockItem> {
         ],
       ),
     );
-  }
-
-  void _navigateToCompanyPage(BuildContext context) {
-    int cash = getIt<GlobalStreams>().dynamicUserInfoStream.value.cash;
-    List<int> data = [widget.company.id, cash];
-    Navigator.pushNamed(context, '/company', arguments: data);
   }
 
   Widget _stockNames(Stock company) {
