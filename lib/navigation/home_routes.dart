@@ -1,6 +1,8 @@
 import 'package:dalal_street_client/blocs/daily_challenges/daily_challenges_page_cubit.dart';
+import 'package:dalal_street_client/blocs/my_orders/my_orders_cubit.dart';
 import 'package:dalal_street_client/blocs/news/news_bloc.dart';
 import 'package:dalal_street_client/blocs/news_subscription/news_subscription_cubit.dart';
+import 'package:dalal_street_client/blocs/notification/notifications_cubit.dart';
 import 'package:dalal_street_client/blocs/referral/referral_cubit.dart';
 import 'package:dalal_street_client/blocs/subscribe/subscribe_cubit.dart';
 import 'package:dalal_street_client/constants/icons.dart';
@@ -8,6 +10,8 @@ import 'package:dalal_street_client/models/menu_item.dart';
 import 'package:dalal_street_client/pages/daily_challenges/daily_challenges_page.dart';
 import 'package:dalal_street_client/pages/mortgage/mortgage_home.dart';
 import 'package:dalal_street_client/pages/news_page.dart';
+import 'package:dalal_street_client/pages/notifications_page.dart';
+import 'package:dalal_street_client/pages/openorders_page.dart';
 import 'package:dalal_street_client/pages/referral_page.dart';
 import 'package:dalal_street_client/proto_build/models/User.pb.dart';
 import 'package:flutter/widgets.dart';
@@ -72,11 +76,17 @@ Map<String, Widget> mobileHomePagesMore(User extra) => {
         create: (context) => DailyChallengesPageCubit()..getChallengesConfig(),
         child: const DailyChallengesPage(),
       ),
-      '/openOrders': const Text('OpenOrders tbd'),
+      '/openOrders': BlocProvider(
+        create: (context) => MyOrdersCubit(),
+        child: const OpenOrdersPage(),
+      ),
       '/referAndEarn': BlocProvider(
         create: (context) => ReferralCubit(),
         child: ReferralPage(user: extra),
       ),
+      '/notifications': BlocProvider(
+        create: ((context) => NotificationsCubit()),
+        child: const NotificationsPage(),
+      ),
       '/mediaPartners': const Text('Media partners tbd'),
-      '/notifications': const Text('Notifications tbd'),
     };

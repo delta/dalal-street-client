@@ -145,9 +145,9 @@ class MyOrdersCubit extends Cubit<MyOrdersState> {
     }
   }
 
-  // unsubscribe to the stream, must be called at disposing
-  // error handling is not needed though
-  void unsubscribe() {
+  @override
+  Future<void> close() {
     unSubscribe(subscribtionId, getIt<String>());
+    return super.close();
   }
 }

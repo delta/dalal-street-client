@@ -141,7 +141,7 @@ Future<void> _listenTransactionStream(BuildContext context) async {
 
       case TransactionType.CANCEL_ORDER_TRANSACTION:
         showSnackBar(context,
-            'A total of ${stockQty < 0 ? stockQty.abs().toString() + "stocks" : '₹' + total.abs().toString() + 'has been returned for cancelling the order '}',
+            'A total of ${stockQty < 0 ? stockQty.abs().toString() + "stocks" : '₹' + total.abs().toString() + ' has been returned for cancelling the order'}',
             type: SnackBarType.success);
         break;
 

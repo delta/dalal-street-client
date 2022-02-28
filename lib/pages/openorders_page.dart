@@ -31,12 +31,6 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
   }
 
   @override
-  void dispose() {
-    context.read<MyOrdersCubit>().unsubscribe();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
