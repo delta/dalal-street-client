@@ -41,7 +41,7 @@ class _MortgagePageState extends State<MortgagePage> {
     );
   }
 
-  void _navigateToCompanyPage(BuildContext context, int stockId) {
+  void _navigateToCompanyPage(int stockId) {
     int cash = getIt<GlobalStreams>().dynamicUserInfoStream.value.cash;
     List<int> data = [stockId, cash];
     context.push(

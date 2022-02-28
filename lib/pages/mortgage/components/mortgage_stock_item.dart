@@ -11,7 +11,7 @@ import 'package:flutter/material.dart';
 
 class MortgageStockItem extends StatefulWidget {
   final Stock company;
-  final void Function(BuildContext context, int stockId) onViewClicked;
+  final void Function(int stockId) onViewClicked;
 
   const MortgageStockItem({
     Key? key,
@@ -72,7 +72,7 @@ class _MortgageStockItemState extends State<MortgageStockItem> {
                       backgroundColor: MaterialStateProperty.all(
                           primaryColor.withOpacity(0.2))),
                   onPressed: () =>
-                      widget.onViewClicked(context, widget.company.id),
+                      widget.onViewClicked(widget.company.id),
                   child: const Text(
                     'View',
                     style: TextStyle(color: primaryColor, fontSize: 14),

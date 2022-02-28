@@ -19,7 +19,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 class StockDetail extends StatefulWidget {
   final Stock company;
-  final void Function(BuildContext context, int stockId) onKnowMoreClicked;
+  final void Function(int stockId) onKnowMoreClicked;
   const StockDetail(
       {Key? key, required this.company, required this.onKnowMoreClicked})
       : super(key: key);
@@ -424,7 +424,7 @@ class _StockDetailState extends State<StockDetail> {
           children: [
             OutlinedButton(
                 onPressed: () =>
-                    widget.onKnowMoreClicked(context, widget.company.id),
+                    widget.onKnowMoreClicked(widget.company.id),
                 child: const Text('Know More')),
             const SizedBox(
               width: 40,

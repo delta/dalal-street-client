@@ -13,7 +13,7 @@ import 'package:flutter/material.dart';
 class RetrieveStockItem extends StatefulWidget {
   final Stock company;
   final MortgageDetail mortgageDetail;
-  final void Function(BuildContext context, int stockId) onViewClicked;
+  final void Function(int stockId) onViewClicked;
 
   const RetrieveStockItem(
       {Key? key,
@@ -73,7 +73,7 @@ class _RetrieveStockItemState extends State<RetrieveStockItem> {
                       backgroundColor: MaterialStateProperty.all(
                           primaryColor.withOpacity(0.2))),
                   onPressed: () =>
-                      widget.onViewClicked(context, widget.company.id),
+                      widget.onViewClicked(widget.company.id),
                   child: const Text(
                     'View',
                     style: TextStyle(color: primaryColor, fontSize: 14),
