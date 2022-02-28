@@ -218,29 +218,26 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                           ),
                         ),
                       ),
-                      const Spacer(),
-                      const Padding(
-                        padding: EdgeInsets.only(top: 30.0, right: 40.0),
-                        child: Text(
-                          'The leaderboard is updated every 30 seconds.',
-                          style: TextStyle(color: blurredGray, fontSize: 16.0),
-                          textAlign: TextAlign.end,
-                        ),
-                      )
                     ],
                   ),
                   SizedBox(
                     height: MediaQuery.of(context).size.height,
-                    child: const TabBarView(
-                        physics: BouncingScrollPhysics(
+                    child: TabBarView(
+                        physics: const BouncingScrollPhysics(
                             parent: AlwaysScrollableScrollPhysics()),
                         children: [
-                          LeaderboardPageBuilderWeb(
-                              leaderboardType: LeaderboardType.Overall),
-                          LeaderboardPageBuilderWeb(
-                              leaderboardType: LeaderboardType.Daily)
+                          BlocProvider(
+                            create: (context) => LeaderboardCubit(),
+                            child: const LeaderboardPageBuilderWeb(
+                                leaderboardType: LeaderboardType.Overall),
+                          ),
+                          BlocProvider(
+                            create: (context) => LeaderboardCubit(),
+                            child: const LeaderboardPageBuilderWeb(
+                                leaderboardType: LeaderboardType.Daily),
+                          )
                         ]),
-                  )
+                  ),
                 ],
               ),
             ),

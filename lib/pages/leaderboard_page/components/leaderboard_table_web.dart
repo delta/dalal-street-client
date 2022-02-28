@@ -87,188 +87,138 @@ class _LeaderboardTableWebState extends State<LeaderboardTableWeb> {
 
   Widget _leaderboardTable(dynamic rankList, int myRank, int totalUsers,
       int startingIndex, int noOfEntries) {
-    return Stack(
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(bottom: 100),
-          child: Theme(
-            data: Theme.of(context).copyWith(
-                cardColor: backgroundColor,
-                dividerColor: backgroundColor,
-                iconTheme: const IconThemeData(
-                  size: 35,
-                  color: white,
-                ),
-                cardTheme: const CardTheme(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10))))),
-            child: PaginatedDataTable2(
-                handleNext: (i) {
-                  startingIndex >= (totalUsers - noOfEntries)
-                      ? {null}
-                      : {
-                          context.read<LeaderboardCubit>().getLeaderboard(
-                              noOfEntries + startingIndex,
-                              10,
-                              widget.leaderboardType)
-                        };
-                },
-                handlePrevious: (i) {
-                  startingIndex == 1
-                      ? {null}
-                      : {
-                          context.read<LeaderboardCubit>().getLeaderboard(
-                              startingIndex - noOfEntries,
-                              10,
-                              widget.leaderboardType)
-                        };
-                },
-                source: MyData(tableData: rankList),
-                columnSpacing: 5,
-                dataRowHeight: 50,
-                headingRowHeight: 50.0,
-                rowsPerPage: 10,
-                columns: <DataColumn>[
-                  DataColumn(
-                    label: Container(
-                      decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          color: primaryColor),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 10, horizontal: 20),
-                        child: ConstrainedBox(
-                          constraints: const BoxConstraints(
-                            minWidth: 120.0,
-                            maxWidth: 120.0,
-                          ),
-                          child: const Text('Rank',
-                              style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black),
-                              textAlign: TextAlign.center),
-                        ),
-                      ),
-                    ),
-                  ),
-                  DataColumn(
-                    label: Container(
-                      decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          color: primaryColor),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 10, horizontal: 20),
-                        child: ConstrainedBox(
-                          constraints: const BoxConstraints(
-                              minWidth: 720.0, maxWidth: 720.0),
-                          child: const Text('Name',
-                              style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black),
-                              textAlign: TextAlign.center),
-                        ),
-                      ),
-                    ),
-                  ),
-                  DataColumn(
-                    label: Container(
-                      decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          color: primaryColor),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 10, horizontal: 20),
-                        child: ConstrainedBox(
-                          constraints: const BoxConstraints(
-                            minWidth: 360.0,
-                            maxWidth: 360.0,
-                          ),
-                          child: const Text('Stock Worth (₹)',
-                              style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black),
-                              textAlign: TextAlign.center),
-                        ),
-                      ),
-                    ),
-                  ),
-                  DataColumn(
-                    label: Container(
-                      decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          color: primaryColor),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 10, horizontal: 20),
-                        child: ConstrainedBox(
-                          constraints: const BoxConstraints(
-                            minWidth: 360.0,
-                            maxWidth: 360.0,
-                          ),
-                          child: const Text('Net Worth (₹)',
-                              style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black),
-                              textAlign: TextAlign.center),
-                        ),
-                      ),
-                    ),
-                  ),
-                ]),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(left: 30, top: 570),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 100),
+      child: Theme(
+        data: Theme.of(context).copyWith(
+            cardColor: backgroundColor,
+            dividerColor: backgroundColor,
+            iconTheme: const IconThemeData(
+              size: 35,
+              color: white,
+            ),
+            cardTheme: const CardTheme(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(10))))),
+        child: PaginatedDataTable2(
+            handleNext: (i) {
+              startingIndex >= (totalUsers - noOfEntries)
+                  ? {null}
+                  : {
+                      context.read<LeaderboardCubit>().getLeaderboard(
+                          noOfEntries + startingIndex,
+                          10,
+                          widget.leaderboardType)
+                    };
+            },
+            handlePrevious: (i) {
+              startingIndex == 1
+                  ? {null}
+                  : {
+                      context.read<LeaderboardCubit>().getLeaderboard(
+                          startingIndex - noOfEntries,
+                          10,
+                          widget.leaderboardType)
+                    };
+            },
+            source: MyData(tableData: rankList),
+            columnSpacing: 5,
+            dataRowHeight: 50,
+            headingRowHeight: 50.0,
+            rowsPerPage: 10,
+            columns: <DataColumn>[
+              DataColumn(
+                label: Container(
                   decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                      color: baseColor),
+                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                      color: primaryColor),
                   child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 10, horizontal: 20),
-                      child: Row(
-                        children: [
-                          const Text(
-                            'Your rank is ',
-                            style: TextStyle(fontSize: 18),
-                          ),
-                          Text(
-                            myRank.toString(),
-                            style: const TextStyle(
-                                color: secondaryColor,
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          const Text(
-                            ' out of ',
-                            style: TextStyle(fontSize: 18),
-                          ),
-                          Text(
-                            totalUsers.toString(),
-                            style: const TextStyle(
-                                color: Colors.yellow,
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          const Text(
-                            ' participants. ',
-                            style: TextStyle(fontSize: 18),
-                          ),
-                        ],
-                      )))
-            ],
-          ),
-        ),
-      ],
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10, horizontal: 20),
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(
+                        minWidth: 120.0,
+                        maxWidth: 120.0,
+                      ),
+                      child: const Text('Rank',
+                          style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black),
+                          textAlign: TextAlign.center),
+                    ),
+                  ),
+                ),
+              ),
+              DataColumn(
+                label: Container(
+                  decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                      color: primaryColor),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10, horizontal: 20),
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(
+                          minWidth: 720.0, maxWidth: 720.0),
+                      child: const Text('Name',
+                          style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black),
+                          textAlign: TextAlign.center),
+                    ),
+                  ),
+                ),
+              ),
+              DataColumn(
+                label: Container(
+                  decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                      color: primaryColor),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10, horizontal: 20),
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(
+                        minWidth: 360.0,
+                        maxWidth: 360.0,
+                      ),
+                      child: const Text('Stock Worth (₹)',
+                          style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black),
+                          textAlign: TextAlign.center),
+                    ),
+                  ),
+                ),
+              ),
+              DataColumn(
+                label: Container(
+                  decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                      color: primaryColor),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10, horizontal: 20),
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(
+                        minWidth: 360.0,
+                        maxWidth: 360.0,
+                      ),
+                      child: const Text('Net Worth (₹)',
+                          style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black),
+                          textAlign: TextAlign.center),
+                    ),
+                  ),
+                ),
+              ),
+            ]),
+      ),
     );
   }
 }

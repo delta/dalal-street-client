@@ -16,11 +16,6 @@ class LeaderboardPageBuilder extends StatefulWidget {
 
 class _LeaderboardPageBuilderState extends State<LeaderboardPageBuilder> {
   @override
-  initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: SafeArea(
