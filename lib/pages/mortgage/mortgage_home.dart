@@ -162,7 +162,9 @@ Widget _mortgageBodyWeb(BuildContext context) => DefaultTabController(
               ),
             ],
           ),
-          const SizedBox(height: 20,),
+          const SizedBox(
+            height: 20,
+          ),
           SizedBox(
             height: MediaQuery.of(context).size.height,
             child: TabBarView(
