@@ -20,7 +20,6 @@ class OpenOrdersPage extends StatefulWidget {
 }
 
 class _OpenOrdersPageState extends State<OpenOrdersPage> {
-  var noOpenOrders = false;
   List<Widget> openOrdersList = [];
   List<bool> isAskList = [];
   List<int> orderIdList = [];
@@ -112,8 +111,8 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
                           }
                         }, builder: (context, state) {
                           if (state is OpenOrdersSuccess) {
-                            final openAskList = state.openAskArray;
-                            final openBidList = state.openBidArray;
+                            final openAskList = state.openAskOrders;
+                            final openBidList = state.openBidOrders;
                             List<Widget> openOrders =
                                 buildList(openAskList, openBidList);
                             List<bool> isAsk = isAskList;
@@ -121,45 +120,42 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
                             isAskList = [];
                             orderIdList = [];
                             openOrdersList = [];
-                            if (openOrders.isNotEmpty) {
-                              return SingleChildScrollView(
-                                child: Column(children: [
-                                  ListView.separated(
-                                      shrinkWrap: true,
-                                      physics:
-                                          const NeverScrollableScrollPhysics(),
-                                      itemCount: openOrders.length,
-                                      itemBuilder: (context, index) {
-                                        return GestureDetector(
-                                            child: openOrders[index],
-                                            onDoubleTap: () {
-                                              context
-                                                  .read<MyOrdersCubit>()
-                                                  .cancelMyOrder(isAsk[index],
-                                                      orderIds[index]);
-                                            });
-                                      },
-                                      separatorBuilder: (context, index) {
-                                        return const Divider(
-                                          color: lightGray,
-                                        );
-                                      }),
-                                  const Divider(
-                                    color: lightGray,
-                                  ),
-                                ]),
-                              );
-                            } else {
-                              noOpenOrders = true;
-                              return (const Center(
-                                child: Padding(
-                                    padding: EdgeInsets.all(10),
-                                    child: Text('No Open Orders',
-                                        style: TextStyle(
-                                            fontSize: 14,
-                                            color: Colors.white))),
-                              ));
-                            }
+
+                            return SingleChildScrollView(
+                              child: Column(children: [
+                                ListView.separated(
+                                    shrinkWrap: true,
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
+                                    itemCount: openOrders.length,
+                                    itemBuilder: (context, index) {
+                                      return GestureDetector(
+                                          child: openOrders[index],
+                                          onDoubleTap: () {
+                                            context
+                                                .read<MyOrdersCubit>()
+                                                .cancelMyOrder(isAsk[index],
+                                                    orderIds[index]);
+                                          });
+                                    },
+                                    separatorBuilder: (context, index) {
+                                      return const Divider(
+                                        color: lightGray,
+                                      );
+                                    }),
+                                const Divider(
+                                  color: lightGray,
+                                ),
+                              ]),
+                            );
+                          } else if (state is NoOpenOrders) {
+                            return (const Center(
+                              child: Padding(
+                                  padding: EdgeInsets.all(10),
+                                  child: Text('No Open Orders',
+                                      style: TextStyle(
+                                          fontSize: 14, color: Colors.white))),
+                            ));
                           } else if (state is OpenOrdersFailure) {
                             return Center(
                                 child: Column(
@@ -193,21 +189,22 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
 
   List<Widget> buildList(List<Ask> openAskList, List<Bid> openBidList) {
     for (var openAsk in openAskList) {
-      openOrdersList.add(buildItemAsk(openAsk));
+      openOrdersList.add(buildItem(openAsk, 'ASK'));
       isAskList.add(true);
       orderIdList.add(openAsk.id);
     }
     for (var openBid in openBidList) {
-      openOrdersList.add(buildItemBid(openBid));
+      openOrdersList.add(buildItem(openBid, 'BID'));
       isAskList.add(false);
       orderIdList.add(openBid.id);
     }
     return openOrdersList;
   }
 
-  Widget buildItemAsk(Ask openAsk) {
+  Widget buildItem(openorder, ordertype) {
     final stockList = getIt<GlobalStreams>().latestStockMap;
-    Stock? company = stockList[openAsk.stockId];
+    Stock? company = stockList[openorder.stockId];
+
     return Card(
         color: background2,
         child: Row(
@@ -255,14 +252,17 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
                           'TYPE',
                           style: TextStyle(fontSize: 9, color: lightGray),
                         ),
-                        Text('ASK / ' + openAsk.orderType.name + ' ORDER',
+                        Text(
+                            '$ordertype / ' +
+                                openorder.orderType.name +
+                                ' ORDER',
                             style: const TextStyle(
                                 fontSize: 12, color: Colors.white)),
                         const SizedBox.square(dimension: 10),
                         const Text('PRICE',
                             style: TextStyle(fontSize: 9, color: lightGray)),
                         Text(
-                          '₹' + openAsk.price.toString() + ' per stock',
+                          '₹' + openorder.price.toString() + ' per stock',
                           style: const TextStyle(
                             fontSize: 12,
                             color: Colors.white,
@@ -281,7 +281,7 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
                           style: TextStyle(fontSize: 9, color: lightGray),
                         ),
                         Text(
-                            '${openAsk.stockQuantityFulfilled}/${openAsk.stockQuantity}',
+                            '${openorder.stockQuantityFulfilled}/${openorder.stockQuantity}',
                             style: const TextStyle(
                                 fontSize: 12, color: secondaryColor)),
                         const SizedBox.square(dimension: 10),
@@ -292,103 +292,7 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
                         SizedBox(
                             width: 60,
                             child: Text(
-                              ISOtoDateTime(openAsk.createdAt),
-                              style: const TextStyle(
-                                  fontSize: 12, color: Colors.white),
-                              textAlign: TextAlign.right,
-                            ))
-                      ]))
-            ]));
-  }
-
-  Widget buildItemBid(Bid openBid) {
-    final stockList = getIt<GlobalStreams>().latestStockMap;
-    Stock? company = stockList[openBid.stockId];
-
-    return Card(
-        color: background2,
-        child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              ClipRRect(
-                  child: Padding(
-                      padding: const EdgeInsets.all(5),
-                      child: Image.network(
-                        'https://assets.airtel.in/static-assets/new-home/img/favicon-32x32.png',
-                        height: 20,
-                        width: 20,
-                      )),
-                  borderRadius: BorderRadius.circular(10)),
-              Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: SizedBox(
-                      width: 85,
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const SizedBox.square(dimension: 20),
-                            Text(
-                              (company?.fullName.toUpperCase())!,
-                              style: const TextStyle(
-                                  fontSize: 12, color: lightGray),
-                              textAlign: TextAlign.left,
-                            ),
-                            const SizedBox.square(dimension: 10),
-                            Text(
-                              (company?.shortName.toUpperCase())!,
-                              style: const TextStyle(fontSize: 12),
-                              textAlign: TextAlign.left,
-                            ),
-                          ]))),
-              Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const SizedBox.square(dimension: 20),
-                        const Text(
-                          'TYPE',
-                          style: TextStyle(fontSize: 9, color: lightGray),
-                        ),
-                        Text('BID / ' + openBid.orderType.name + ' ORDER',
-                            style: const TextStyle(
-                                fontSize: 12, color: Colors.white)),
-                        const SizedBox.square(dimension: 10),
-                        const Text('PRICE',
-                            style: TextStyle(fontSize: 9, color: lightGray)),
-                        Text(
-                          '₹' + openBid.price.toString() + ' per stock',
-                          style: const TextStyle(
-                            fontSize: 12,
-                            color: Colors.white,
-                          ),
-                          maxLines: 1,
-                        ),
-                      ])),
-              Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        const SizedBox.square(dimension: 20),
-                        const Text(
-                          'COMPLETED',
-                          style: TextStyle(fontSize: 9, color: lightGray),
-                        ),
-                        Text(
-                            '${openBid.stockQuantityFulfilled}/${openBid.stockQuantity}',
-                            style: const TextStyle(
-                                fontSize: 12, color: secondaryColor)),
-                        const SizedBox.square(dimension: 10),
-                        const Text(
-                          'ORDERED',
-                          style: TextStyle(fontSize: 9, color: lightGray),
-                        ),
-                        SizedBox(
-                            width: 60,
-                            child: Text(
-                              ISOtoDateTime(openBid.createdAt),
+                              ISOtoDateTime(openorder.createdAt),
                               style: const TextStyle(
                                   fontSize: 12, color: Colors.white),
                               textAlign: TextAlign.right,
