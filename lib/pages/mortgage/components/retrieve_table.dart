@@ -21,7 +21,6 @@ class RetrieveTable extends StatefulWidget {
 }
 
 class _RetrieveTableState extends State<RetrieveTable> {
-
   @override
   void initState() {
     super.initState();
@@ -54,8 +53,8 @@ class _RetrieveTableState extends State<RetrieveTable> {
         if (state is MortgageSheetSuccess) {
           String companyName = stockList[state.stockId]!.fullName;
           int quantity = state.stockQuantity;
-          showSnackBar(context,
-              'Successfully retrieved $quantity $companyName stocks',
+          showSnackBar(
+              context, 'Successfully retrieved $quantity $companyName stocks',
               type: SnackBarType.success);
           context.read<MortgageDetailsCubit>().getMortgageDetails();
         } else if (state is MortgageSheetFailure) {

@@ -22,7 +22,7 @@ class MortgageSheetCubit extends Cubit<MortgageSheetState> {
           ),
           options: sessionOptions(getIt<String>()));
       if (resp.statusCode == MortgageStocksResponse_StatusCode.OK) {
-        emit(MortgageSheetSuccess(stockId,stockQuantity));
+        emit(MortgageSheetSuccess(stockId, stockQuantity));
       } else {
         logger.e(resp.statusMessage);
         emit(MortgageSheetFailure(resp.statusMessage));
@@ -44,7 +44,7 @@ class MortgageSheetCubit extends Cubit<MortgageSheetState> {
               retrievePrice: Int64(mortgagePrice)),
           options: sessionOptions(getIt<String>()));
       if (resp.statusCode == RetrieveMortgageStocksResponse_StatusCode.OK) {
-        emit(MortgageSheetSuccess(stockId,stockQuantity));
+        emit(MortgageSheetSuccess(stockId, stockQuantity));
       } else {
         logger.e(resp.statusMessage);
         emit(MortgageSheetFailure(resp.statusMessage));

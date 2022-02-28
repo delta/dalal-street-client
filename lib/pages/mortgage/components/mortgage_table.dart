@@ -20,7 +20,6 @@ class MortgageTable extends StatefulWidget {
 }
 
 class _MortgageTableState extends State<MortgageTable> {
- 
   final stockMapStream = getIt<GlobalStreams>().stockMapStream;
   final userInfoStream = getIt<GlobalStreams>().dynamicUserInfoStream;
   @override
@@ -56,8 +55,8 @@ class _MortgageTableState extends State<MortgageTable> {
         if (state is MortgageSheetSuccess) {
           String companyName = stockList[state.stockId]!.fullName;
           int quantity = state.stockQuantity;
-          showSnackBar(context,
-              'Successfully mortgaged $quantity $companyName stocks',
+          showSnackBar(
+              context, 'Successfully mortgaged $quantity $companyName stocks',
               type: SnackBarType.success);
           Navigator.maybePop(context);
         } else if (state is MortgageSheetFailure) {
