@@ -24,7 +24,7 @@ class _LeaderboardPageBuilderWebState extends State<LeaderboardPageBuilderWeb> {
             child: Container(
                 color: backgroundColor,
                 child: SizedBox(
-                  height: 800,
+                  height: 700,
                   child: Stack(
                     children: [
                       Row(
