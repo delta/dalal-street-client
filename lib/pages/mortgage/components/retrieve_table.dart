@@ -47,7 +47,7 @@ class _RetrieveTableState extends State<RetrieveTable> {
     columns.add(_buildDataColumn('Mortgaged Price(₹)', true));
     columns.add(_buildDataColumn('Retrieval Rate(%)', true));
     columns.add(_buildDataColumn('Amount Per Stock(₹)', true));
-    columns.add(_buildDataColumn('Quanitity', false));
+    columns.add(_buildDataColumn('Quantity', false));
     columns.add(_buildDataColumn('Action', false));
     final stockList = getIt<GlobalStreams>().latestStockMap;
     return BlocListener<MortgageSheetCubit, MortgageSheetState>(
@@ -65,14 +65,23 @@ class _RetrieveTableState extends State<RetrieveTable> {
         builder: (context, state) {
           if (state is MortgageDetailsLoaded) {
             if (state.mortgageDetails.isEmpty) {
-              return const Center(
-                child: Text('No mortgaged Stocks'),
-              );
+              return const Align(
+                  alignment: Alignment.center,
+                  child: Text(
+                    'You don\'t have any stocks mortgaged.',
+                    style: TextStyle(
+                        fontSize: 36,
+                        color: white,
+                        fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.center,
+                  ));
             }
             List<DataRow> rows = [];
+            int index=1;
             for (var mortgageDetail in state.mortgageDetails) {
               Stock company = stockList[mortgageDetail.stockId]!;
-              rows.add(_retrieveDetailsRow(mortgageDetail, company));
+              rows.add(_retrieveDetailsRow(mortgageDetail, company, index%2==0 ? background3 : background2));
+              index++;
             }
             return SingleChildScrollView(
               scrollDirection: Axis.horizontal,
@@ -82,6 +91,12 @@ class _RetrieveTableState extends State<RetrieveTable> {
                 columnSpacing: 70,
                 dataRowHeight: 60,
                 headingRowHeight: 60,
+                headingRowColor: MaterialStateProperty.all(background3),
+                border: TableBorder.all(
+                    color: blurredGray,
+                    width: 1,
+                    borderRadius: const BorderRadius.all(Radius.circular(10)),
+                    style: BorderStyle.solid),
               ),
             );
           } else if (state is MortgageDetailsLoading) {
@@ -106,84 +121,87 @@ class _RetrieveTableState extends State<RetrieveTable> {
               style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
-                  color: Colors.white),
+                  color: primaryColor),
               textAlign: TextAlign.center),
         ),
       );
 
-  DataRow _retrieveDetailsRow(MortgageDetail mortgageDetail, Stock company) {
+  DataRow _retrieveDetailsRow(
+      MortgageDetail mortgageDetail, Stock company, Color bgColorRow) {
     int quantity = 1;
-    return DataRow(cells: <DataCell>[
-      DataCell(Center(
-          child: Text(
-        (company.shortName).toString(),
-        textAlign: TextAlign.center,
-        style: const TextStyle(fontSize: 20, color: white),
-      ))),
-      DataCell(Center(
-          child: Text(
-        (mortgageDetail.stocksInBank).toString(),
-        textAlign: TextAlign.center,
-        style: const TextStyle(fontSize: 20, color: white),
-      ))),
-      DataCell(Center(
-          child: Text(
-        (mortgageDetail.mortgagePrice).toString(),
-        textAlign: TextAlign.center,
-        style: const TextStyle(fontSize: 20, color: white),
-      ))),
-      DataCell(Center(
-          child: Text(
-        ((RETRIEVE_DEPOSIT_RATE * 100).toInt()).toString(),
-        textAlign: TextAlign.center,
-        style: const TextStyle(fontSize: 20, color: white),
-      ))),
-      DataCell(Center(
-          child: Text(
-        (mortgageDetail.mortgagePrice.toInt() * RETRIEVE_DEPOSIT_RATE)
-            .toDouble()
-            .toStringAsFixed(2),
-        textAlign: TextAlign.center,
-        style: const TextStyle(fontSize: 20, color: white),
-      ))),
-      DataCell(Center(
-          child: Container(
-        height: 40,
-        width: 150,
-        padding: EdgeInsets.zero,
-        decoration: BoxDecoration(
-          borderRadius: const BorderRadius.all(Radius.circular(5)),
-          color: primaryColor.withOpacity(0.2),
-        ),
-        child: SpinBox(
-          min: 1,
-          max: 20,
-          value: 01,
-          onChanged: (value) {
-            quantity = value as int;
-          },
-          decoration: const InputDecoration(border: InputBorder.none),
-          iconColor: MaterialStateProperty.all(primaryColor),
-          spacing: 15,
-          cursorColor: primaryColor,
-          textStyle: const TextStyle(
-            color: primaryColor,
-            fontSize: 18,
-          ),
-        ),
-      ))),
-      DataCell(Center(
-          child: OutlinedButton(
-        child: const Text('Retrieve'),
-        onPressed: () {
-          if (quantity > 0) {
-            selectedQuantity = quantity;
-            selectedCompany = company;
-            context.read<MortgageSheetCubit>().retrieveStocks(
-                company.id, quantity, mortgageDetail.mortgagePrice.toInt());
-          }
-        },
-      ))),
-    ]);
+    return DataRow(
+        color: MaterialStateProperty.all(bgColorRow),
+        cells: <DataCell>[
+          DataCell(Center(
+              child: Text(
+            (company.shortName).toString(),
+            textAlign: TextAlign.center,
+            style: const TextStyle(fontSize: 20, color: white),
+          ))),
+          DataCell(Center(
+              child: Text(
+            (mortgageDetail.stocksInBank).toString(),
+            textAlign: TextAlign.center,
+            style: const TextStyle(fontSize: 20, color: white),
+          ))),
+          DataCell(Center(
+              child: Text(
+            (mortgageDetail.mortgagePrice).toString(),
+            textAlign: TextAlign.center,
+            style: const TextStyle(fontSize: 20, color: white),
+          ))),
+          DataCell(Center(
+              child: Text(
+            ((RETRIEVE_DEPOSIT_RATE * 100).toInt()).toString(),
+            textAlign: TextAlign.center,
+            style: const TextStyle(fontSize: 20, color: white),
+          ))),
+          DataCell(Center(
+              child: Text(
+            (mortgageDetail.mortgagePrice.toInt() * RETRIEVE_DEPOSIT_RATE)
+                .toDouble()
+                .toStringAsFixed(2),
+            textAlign: TextAlign.center,
+            style: const TextStyle(fontSize: 20, color: white),
+          ))),
+          DataCell(Center(
+              child: Container(
+            height: 40,
+            width: 150,
+            padding: EdgeInsets.zero,
+            decoration: BoxDecoration(
+              borderRadius: const BorderRadius.all(Radius.circular(5)),
+              color: primaryColor.withOpacity(0.2),
+            ),
+            child: SpinBox(
+              min: 1,
+              max: 20,
+              value: 01,
+              onChanged: (value) {
+                quantity = value as int;
+              },
+              decoration: const InputDecoration(border: InputBorder.none),
+              iconColor: MaterialStateProperty.all(primaryColor),
+              spacing: 15,
+              cursorColor: primaryColor,
+              textStyle: const TextStyle(
+                color: primaryColor,
+                fontSize: 18,
+              ),
+            ),
+          ))),
+          DataCell(Center(
+              child: OutlinedButton(
+            child: const Text('Retrieve'),
+            onPressed: () {
+              if (quantity > 0) {
+                selectedQuantity = quantity;
+                selectedCompany = company;
+                context.read<MortgageSheetCubit>().retrieveStocks(
+                    company.id, quantity, mortgageDetail.mortgagePrice.toInt());
+              }
+            },
+          ))),
+        ]);
   }
 }

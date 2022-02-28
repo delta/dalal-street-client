@@ -43,12 +43,13 @@ class _MortgageTableState extends State<MortgageTable> {
     columns.add(_buildDataColumn('Current Price(₹)', true));
     columns.add(_buildDataColumn('Deposit Rate(%)', true));
     columns.add(_buildDataColumn('Amount Per Stock(₹)', true));
-    columns.add(_buildDataColumn('Quanitity', false));
+    columns.add(_buildDataColumn('Quantity', false));
     columns.add(_buildDataColumn('Action', false));
     final stockList = getIt<GlobalStreams>().latestStockMap;
-
+    int index = 1;
     for (var company in stockList.values) {
-      rows.add(_mortgageDetailsRow(company));
+      rows.add(_mortgageDetailsRow(company, index%2==0 ? background3 : background2));
+      index++;
     }
     return BlocListener<MortgageSheetCubit, MortgageSheetState>(
       listener: (context, state) {
@@ -70,6 +71,12 @@ class _MortgageTableState extends State<MortgageTable> {
           columnSpacing: 80,
           dataRowHeight: 60,
           headingRowHeight: 60,
+          headingRowColor: MaterialStateProperty.all(background3),
+          border: TableBorder.all(
+              color: blurredGray,
+              width: 1,
+              borderRadius: const BorderRadius.all(Radius.circular(10)),
+              style: BorderStyle.solid),
         ),
       ),
     );
@@ -83,14 +90,16 @@ class _MortgageTableState extends State<MortgageTable> {
               style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
-                  color: Colors.white),
+                  color: primaryColor),
               textAlign: TextAlign.center),
         ),
       );
 
-  DataRow _mortgageDetailsRow(Stock company) {
+  DataRow _mortgageDetailsRow(Stock company, Color bgColorRow) {
     int quantity = 1;
-    return DataRow(cells: <DataCell>[
+    return DataRow(
+      color: MaterialStateProperty.all(bgColorRow),
+      cells: <DataCell>[
       DataCell(Center(
           child: Text(
         (company.shortName).toString(),
