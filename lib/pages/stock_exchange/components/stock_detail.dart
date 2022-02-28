@@ -423,8 +423,7 @@ class _StockDetailState extends State<StockDetail> {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             OutlinedButton(
-                onPressed: () =>
-                    widget.onKnowMoreClicked(widget.company.id),
+                onPressed: () => widget.onKnowMoreClicked(widget.company.id),
                 child: const Text('Know More')),
             const SizedBox(
               width: 40,
