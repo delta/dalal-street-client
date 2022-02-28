@@ -16,14 +16,6 @@ class LeaderboardPageBuilder extends StatefulWidget {
 
 class _LeaderboardPageBuilderState extends State<LeaderboardPageBuilder> {
   @override
-  initState() {
-    super.initState();
-    context
-        .read<LeaderboardCubit>()
-        .getLeaderboard(1, 8, widget.leaderboardType);
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: SafeArea(
@@ -38,7 +30,7 @@ class _LeaderboardPageBuilderState extends State<LeaderboardPageBuilder> {
                     topContainer(widget.leaderboardType, context),
                     const SizedBox(height: 10),
                     SizedBox(
-                      height: MediaQuery.of(context).size.height,
+                      height: 650,
                       child: BlocProvider(
                         create: (context) => LeaderboardCubit(),
                         child: LeaderboardTable(
