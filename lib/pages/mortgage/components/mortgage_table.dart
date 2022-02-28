@@ -20,8 +20,7 @@ class MortgageTable extends StatefulWidget {
 }
 
 class _MortgageTableState extends State<MortgageTable> {
-  Stock selectedCompany = Stock();
-  int selectedQuantity = 1;
+ 
   final stockMapStream = getIt<GlobalStreams>().stockMapStream;
   final userInfoStream = getIt<GlobalStreams>().dynamicUserInfoStream;
   @override
@@ -55,8 +54,10 @@ class _MortgageTableState extends State<MortgageTable> {
     return BlocListener<MortgageSheetCubit, MortgageSheetState>(
       listener: (context, state) {
         if (state is MortgageSheetSuccess) {
+          String companyName = stockList[state.stockId]!.fullName;
+          int quantity = state.stockQuantity;
           showSnackBar(context,
-              'Successfully mortgaged $selectedQuantity ${selectedCompany.fullName} stocks',
+              'Successfully mortgaged $quantity $companyName stocks',
               type: SnackBarType.success);
           Navigator.maybePop(context);
         } else if (state is MortgageSheetFailure) {
@@ -175,8 +176,6 @@ class _MortgageTableState extends State<MortgageTable> {
         child: const Text('Mortgage'),
         onPressed: () {
           if (quantity > 0) {
-            selectedQuantity = quantity;
-            selectedCompany = company;
             context
                 .read<MortgageSheetCubit>()
                 .mortgageStocks(company.id, quantity);

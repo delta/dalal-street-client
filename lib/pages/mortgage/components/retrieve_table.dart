@@ -21,8 +21,7 @@ class RetrieveTable extends StatefulWidget {
 }
 
 class _RetrieveTableState extends State<RetrieveTable> {
-  Stock selectedCompany = Stock();
-  int selectedQuantity = 1;
+
   @override
   void initState() {
     super.initState();
@@ -53,8 +52,10 @@ class _RetrieveTableState extends State<RetrieveTable> {
     return BlocListener<MortgageSheetCubit, MortgageSheetState>(
       listener: (context, state) {
         if (state is MortgageSheetSuccess) {
+          String companyName = stockList[state.stockId]!.fullName;
+          int quantity = state.stockQuantity;
           showSnackBar(context,
-              'Successfully retrieved $selectedQuantity ${selectedCompany.fullName} stocks',
+              'Successfully retrieved $quantity $companyName stocks',
               type: SnackBarType.success);
           context.read<MortgageDetailsCubit>().getMortgageDetails();
         } else if (state is MortgageSheetFailure) {
@@ -196,8 +197,6 @@ class _RetrieveTableState extends State<RetrieveTable> {
             child: const Text('Retrieve'),
             onPressed: () {
               if (quantity > 0) {
-                selectedQuantity = quantity;
-                selectedCompany = company;
                 context.read<MortgageSheetCubit>().retrieveStocks(
                     company.id, quantity, mortgageDetail.mortgagePrice.toInt());
               }

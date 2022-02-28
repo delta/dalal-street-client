@@ -14,7 +14,13 @@ class MortgageSheetLoading extends MortgageSheetState {
 }
 
 class MortgageSheetSuccess extends MortgageSheetState {
-  const MortgageSheetSuccess();
+  final int stockId;
+  final int stockQuantity;
+
+  const MortgageSheetSuccess(this.stockId,this.stockQuantity);
+
+  @override
+  List<Object> get props => [stockId,stockQuantity];
 }
 
 class MortgageSheetFailure extends MortgageSheetState {
