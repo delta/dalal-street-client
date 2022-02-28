@@ -20,10 +20,10 @@ class OpenOrdersSuccess extends MyOrdersState {
   @override
   List<Object> get props => [openAskOrders, openBidOrders];
 }
-class NoOpenOrders extends MyOrdersState
-{
+
+class NoOpenOrders extends MyOrdersState {
   const NoOpenOrders();
-   @override
+  @override
   List<Object> get props => [];
 }
 

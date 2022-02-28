@@ -45,14 +45,12 @@ class MyOrdersCubit extends Cubit<MyOrdersState> {
         logger.d('fetched open orders details');
 
         // emit initial fetch data
-     if(openAskMap.isEmpty && openBidMap.isEmpty)
-          {
-             emit(const NoOpenOrders());
-          }
-          else{
+        if (openAskMap.isEmpty && openBidMap.isEmpty) {
+          emit(const NoOpenOrders());
+        } else {
           emit(OpenOrdersSuccess(
               openAskMap.values.toList(), openBidMap.values.toList()));
-          }
+        }
 
         // listening to open orders stream to update the orders
         SubscribeRequest subscribeRequest =
@@ -122,13 +120,11 @@ class MyOrdersCubit extends Cubit<MyOrdersState> {
             }
           }
           // emit state on each stream update
-          if(openAskMap.isEmpty && openBidMap.isEmpty)
-          {
-             emit(const NoOpenOrders());
-          }
-          else{
-          emit(OpenOrdersSuccess(
-              openAskMap.values.toList(), openBidMap.values.toList()));
+          if (openAskMap.isEmpty && openBidMap.isEmpty) {
+            emit(const NoOpenOrders());
+          } else {
+            emit(OpenOrdersSuccess(
+                openAskMap.values.toList(), openBidMap.values.toList()));
           }
         }
       } else {
