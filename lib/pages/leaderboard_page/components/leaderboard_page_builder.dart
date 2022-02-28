@@ -30,7 +30,7 @@ class _LeaderboardPageBuilderState extends State<LeaderboardPageBuilder> {
                     topContainer(widget.leaderboardType, context),
                     const SizedBox(height: 10),
                     SizedBox(
-                      height: MediaQuery.of(context).size.height,
+                      height: 650,
                       child: BlocProvider(
                         create: (context) => LeaderboardCubit(),
                         child: LeaderboardTable(

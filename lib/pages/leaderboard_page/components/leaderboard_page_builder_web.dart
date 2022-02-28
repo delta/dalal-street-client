@@ -23,13 +23,19 @@ class _LeaderboardPageBuilderWebState extends State<LeaderboardPageBuilderWeb> {
         body: SafeArea(
             child: Container(
                 color: backgroundColor,
-                child: SingleChildScrollView(
+                child: SizedBox(
+                  height: 800,
                   child: Stack(
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 1360),
-                        child:
-                            rankContainerWeb(widget.leaderboardType, context),
+                      Row(
+                        children: [
+                          const Spacer(),
+                          Padding(
+                            padding: const EdgeInsets.only(right: 40),
+                            child: rankContainerWeb(
+                                widget.leaderboardType, context),
+                          ),
+                        ],
                       ),
                       const SizedBox(height: 10),
                       Padding(

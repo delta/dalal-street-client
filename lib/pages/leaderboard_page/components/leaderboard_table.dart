@@ -1,4 +1,5 @@
 import 'package:dalal_street_client/blocs/leaderboard/leaderboard_cubit.dart';
+import 'package:dalal_street_client/components/loading.dart';
 import 'package:dalal_street_client/constants/leaderboard_type.dart';
 import 'package:dalal_street_client/theme/colors.dart';
 import 'package:flutter/material.dart';
@@ -80,7 +81,7 @@ class _LeaderboardTableState extends State<LeaderboardTable> {
                       ],
                     ));
                   } else {
-                    return const Center(child: CircularProgressIndicator());
+                    return const Center(child: DalalLoadingBar());
                   }
                 })))));
   }
