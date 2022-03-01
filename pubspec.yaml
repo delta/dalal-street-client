@@ -42,6 +42,8 @@ dependencies:
 
   # Navigation
   go_router: ^3.0.1
+  # Helper for matching path regex
+  path_to_regexp: ^0.4.0
 
   # Form Validation
   reactive_forms: ^10.6.5
