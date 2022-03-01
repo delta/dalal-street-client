@@ -2,6 +2,7 @@ import 'package:dalal_street_client/blocs/news/news_bloc.dart';
 import 'package:dalal_street_client/blocs/news_subscription/news_subscription_cubit.dart';
 import 'package:dalal_street_client/blocs/subscribe/subscribe_cubit.dart';
 import 'package:dalal_street_client/components/loading.dart';
+import 'package:dalal_street_client/config/log.dart';
 import 'package:dalal_street_client/pages/newsdetail_page.dart';
 import 'package:dalal_street_client/proto_build/datastreams/Subscribe.pb.dart';
 import 'package:dalal_street_client/proto_build/models/MarketEvent.pb.dart';
@@ -83,6 +84,22 @@ class _NewsPageState extends State<NewsPage> {
               mapMarketEvents.remove(mapMarketEvents[0]);
               i++;
             }
+          }
+          if(mapMarketEvents.isEmpty){
+            return  Column(
+              children: const [
+                SizedBox(height: 20,),
+                Text(
+                  'No More News',
+                  style: TextStyle(
+                      fontSize: 20,
+                      color: white,
+                      fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 20,)
+              ],
+            );
           }
           return ListView.separated(
             shrinkWrap: true,
@@ -185,8 +202,8 @@ class _NewsPageState extends State<NewsPage> {
           return BlocBuilder<NewsSubscriptionCubit, NewsSubscriptionState>(
               builder: (context, state) {
             if (state is SubscriptionToNewsSuccess) {
-              MarketEvent marketEvent = state.news.marketEvent;
 
+              MarketEvent marketEvent = state.news.marketEvent;
               String headline = marketEvent.headline;
               String imagePath = marketEvent.imagePath;
               String createdAt = marketEvent.createdAt;
@@ -225,6 +242,18 @@ class _NewsPageState extends State<NewsPage> {
               return BlocBuilder<NewsBloc, NewsState>(
                   builder: (context, state) {
                 if (state is GetNewsSucess) {
+                  if(state.marketEventsList.marketEvents.isEmpty){
+                    return const Align(
+                  alignment: Alignment.center,
+                  child: Text(
+                    'No latest News',
+                    style: TextStyle(
+                        fontSize: 20,
+                        color: white,
+                        fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.center,
+                  ));
+                  }
                   mapmarketEventsCopy
                       .addAll(state.marketEventsList.marketEvents);
                   MarketEvent marketEvent = mapmarketEventsCopy[0];
