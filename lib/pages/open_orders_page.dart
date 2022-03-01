@@ -1,7 +1,7 @@
 import 'package:dalal_street_client/blocs/my_orders/my_orders_cubit.dart';
 import 'package:dalal_street_client/components/loading.dart';
 import 'package:dalal_street_client/config/get_it.dart';
-import 'package:dalal_street_client/config/log.dart';
+import 'package:dalal_street_client/models/open_order_type.dart';
 import 'package:dalal_street_client/models/snackbar/snackbar_type.dart';
 import 'package:dalal_street_client/proto_build/models/Ask.pb.dart';
 import 'package:dalal_street_client/proto_build/models/Bid.pb.dart';
@@ -183,11 +183,10 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
   }
 
   List<Widget> buildList(List<Ask> askOrders, List<Bid> bidOrders) =>
-      askOrders.map((e) => buildItem(e, 'ASK')).toList() +
-      bidOrders.map((e) => buildItem(e, 'BID')).toList();
+      askOrders.map((e) => buildItem(e, OpenOrderType.ASK)).toList() +
+      bidOrders.map((e) => buildItem(e, OpenOrderType.BID)).toList();
 
-  // TODO: create an enum for ordertype
-  Widget buildItem(openorder, ordertype) {
+  Widget buildItem(openorder, OpenOrderType ordertype) {
     final stockList = getIt<GlobalStreams>().latestStockMap;
     Stock? company = stockList[openorder.stockId];
 
@@ -239,7 +238,7 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
                           style: TextStyle(fontSize: 9, color: lightGray),
                         ),
                         Text(
-                            '$ordertype / ' +
+                            '${ordertype.asString()} / ' +
                                 openorder.orderType.name +
                                 ' ORDER',
                             style: const TextStyle(
