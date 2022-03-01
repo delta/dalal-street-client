@@ -65,19 +65,21 @@ GoRouter generateRouter(BuildContext context) => GoRouter(
             return mobileExtras[location]!;
           },
         ),
-        // TODO: can do params
-        // Example: /company/1
-        // Link: https://gorouter.dev/parameters
         GoRoute(
-          path: '/company',
-          builder: (_, state) => MultiBlocProvider(
-            providers: [
-              BlocProvider(create: (_) => MarketDepthBloc()),
-              BlocProvider(create: (_) => SubscribeCubit()),
-              BlocProvider(create: (_) => NewsBloc()),
-            ],
-            child: CompanyPage(data: state.extra! as List<int>),
-          ),
+          path: '/company/:id',
+          name: 'company',
+          builder: (_, state) {
+            // TODO: handle for invalid stockId and no stockId
+            final stockId = int.parse(state.params['id']!);
+            return MultiBlocProvider(
+              providers: [
+                BlocProvider(create: (_) => MarketDepthBloc()),
+                BlocProvider(create: (_) => SubscribeCubit()),
+                BlocProvider(create: (_) => NewsBloc()),
+              ],
+              child: CompanyPage(stockId: stockId),
+            );
+          },
         )
       ],
       // Show snackbar and navigate to Home or Login page whenever UserState changes
