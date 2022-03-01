@@ -85,19 +85,21 @@ class _NewsPageState extends State<NewsPage> {
               i++;
             }
           }
-          if(mapMarketEvents.isEmpty){
-            return  Column(
+          if (mapMarketEvents.isEmpty) {
+            return Column(
               children: const [
-                SizedBox(height: 20,),
+                SizedBox(
+                  height: 20,
+                ),
                 Text(
                   'No More News',
                   style: TextStyle(
-                      fontSize: 20,
-                      color: white,
-                      fontWeight: FontWeight.bold),
+                      fontSize: 20, color: white, fontWeight: FontWeight.bold),
                   textAlign: TextAlign.center,
                 ),
-                SizedBox(height: 20,)
+                SizedBox(
+                  height: 20,
+                )
               ],
             );
           }
@@ -202,7 +204,6 @@ class _NewsPageState extends State<NewsPage> {
           return BlocBuilder<NewsSubscriptionCubit, NewsSubscriptionState>(
               builder: (context, state) {
             if (state is SubscriptionToNewsSuccess) {
-
               MarketEvent marketEvent = state.news.marketEvent;
               String headline = marketEvent.headline;
               String imagePath = marketEvent.imagePath;
@@ -242,17 +243,17 @@ class _NewsPageState extends State<NewsPage> {
               return BlocBuilder<NewsBloc, NewsState>(
                   builder: (context, state) {
                 if (state is GetNewsSucess) {
-                  if(state.marketEventsList.marketEvents.isEmpty){
+                  if (state.marketEventsList.marketEvents.isEmpty) {
                     return const Align(
-                  alignment: Alignment.center,
-                  child: Text(
-                    'No latest News',
-                    style: TextStyle(
-                        fontSize: 20,
-                        color: white,
-                        fontWeight: FontWeight.bold),
-                    textAlign: TextAlign.center,
-                  ));
+                        alignment: Alignment.center,
+                        child: Text(
+                          'No latest News',
+                          style: TextStyle(
+                              fontSize: 20,
+                              color: white,
+                              fontWeight: FontWeight.bold),
+                          textAlign: TextAlign.center,
+                        ));
                   }
                   mapmarketEventsCopy
                       .addAll(state.marketEventsList.marketEvents);
