@@ -1,6 +1,7 @@
 import 'package:dalal_street_client/blocs/my_orders/my_orders_cubit.dart';
 import 'package:dalal_street_client/components/loading.dart';
 import 'package:dalal_street_client/config/get_it.dart';
+import 'package:dalal_street_client/config/log.dart';
 import 'package:dalal_street_client/models/snackbar/snackbar_type.dart';
 import 'package:dalal_street_client/proto_build/models/Ask.pb.dart';
 import 'package:dalal_street_client/proto_build/models/Bid.pb.dart';
@@ -20,13 +21,10 @@ class OpenOrdersPage extends StatefulWidget {
 }
 
 class _OpenOrdersPageState extends State<OpenOrdersPage> {
-  List<Widget> openOrdersList = [];
-  List<bool> isAskList = [];
-  List<int> orderIdList = [];
   @override
   void initState() {
-    context.read<MyOrdersCubit>().getMyOpenOrders();
     super.initState();
+    context.read<MyOrdersCubit>().getMyOpenOrders();
   }
 
   @override
@@ -111,38 +109,35 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
                           }
                         }, builder: (context, state) {
                           if (state is OpenOrdersSuccess) {
-                            final openAskList = state.openAskOrders;
-                            final openBidList = state.openBidOrders;
+                            final askOrders = state.openAskOrders;
+                            final bidOrders = state.openBidOrders;
                             List<Widget> openOrders =
-                                buildList(openAskList, openBidList);
-                            List<bool> isAsk = isAskList;
-                            List<int> orderIds = orderIdList;
-                            isAskList = [];
-                            orderIdList = [];
-                            openOrdersList = [];
+                                buildList(askOrders, bidOrders);
 
                             return SingleChildScrollView(
                               child: Column(children: [
                                 ListView.separated(
-                                    shrinkWrap: true,
-                                    physics:
-                                        const NeverScrollableScrollPhysics(),
-                                    itemCount: openOrders.length,
-                                    itemBuilder: (context, index) {
-                                      return GestureDetector(
-                                          child: openOrders[index],
-                                          onDoubleTap: () {
-                                            context
-                                                .read<MyOrdersCubit>()
-                                                .cancelMyOrder(isAsk[index],
-                                                    orderIds[index]);
-                                          });
-                                    },
-                                    separatorBuilder: (context, index) {
-                                      return const Divider(
-                                        color: lightGray,
-                                      );
-                                    }),
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  itemCount: openOrders.length,
+                                  itemBuilder: (context, index) {
+                                    bool isAsk = index < askOrders.length;
+                                    int orderId = isAsk
+                                        ? askOrders[index].id
+                                        : bidOrders[index - askOrders.length]
+                                            .id;
+                                    return GestureDetector(
+                                      child: openOrders[index],
+                                      onDoubleTap: () {
+                                        context
+                                            .read<MyOrdersCubit>()
+                                            .cancelMyOrder(isAsk, orderId);
+                                      },
+                                    );
+                                  },
+                                  separatorBuilder: (context, index) =>
+                                      const Divider(color: lightGray),
+                                ),
                                 const Divider(
                                   color: lightGray,
                                 ),
@@ -187,20 +182,11 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
                     ]))));
   }
 
-  List<Widget> buildList(List<Ask> openAskList, List<Bid> openBidList) {
-    for (var openAsk in openAskList) {
-      openOrdersList.add(buildItem(openAsk, 'ASK'));
-      isAskList.add(true);
-      orderIdList.add(openAsk.id);
-    }
-    for (var openBid in openBidList) {
-      openOrdersList.add(buildItem(openBid, 'BID'));
-      isAskList.add(false);
-      orderIdList.add(openBid.id);
-    }
-    return openOrdersList;
-  }
+  List<Widget> buildList(List<Ask> askOrders, List<Bid> bidOrders) =>
+      askOrders.map((e) => buildItem(e, 'ASK')).toList() +
+      bidOrders.map((e) => buildItem(e, 'BID')).toList();
 
+  // TODO: create an enum for ordertype
   Widget buildItem(openorder, ordertype) {
     final stockList = getIt<GlobalStreams>().latestStockMap;
     Stock? company = stockList[openorder.stockId];

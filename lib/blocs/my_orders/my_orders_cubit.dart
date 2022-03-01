@@ -42,8 +42,6 @@ class MyOrdersCubit extends Cubit<MyOrdersState> {
           openBidMap[bid.id] = bid;
         }
 
-        logger.d('fetched open orders details');
-
         // emit initial fetch data
         if (openAskMap.isEmpty && openBidMap.isEmpty) {
           emit(const NoOpenOrders());
