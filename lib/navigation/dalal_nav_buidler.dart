@@ -5,6 +5,7 @@ import 'package:dalal_street_client/config/log.dart';
 import 'package:dalal_street_client/models/snackbar/snackbar_type.dart';
 import 'package:dalal_street_client/navigation/home_routes.dart';
 import 'package:dalal_street_client/navigation/nav_utils.dart';
+import 'package:dalal_street_client/utils/regex_util.dart';
 import 'package:dalal_street_client/utils/snackbar.dart';
 import 'package:dalal_street_client/utils/stream_snackbar.dart';
 import 'package:flutter/material.dart';
@@ -45,11 +46,10 @@ class _DalalNavBuilderState extends State<DalalNavBuilder> {
 
             logger.i('user logged in');
 
-            // TODO: handle redirect for /company/:id
             if (!homeRoutesWeb.contains(widget.routerState.location) &&
-                !otherNonAuthRoutes.contains(widget.routerState.name)) {
+                !otherNonAuthRoutes.hasMatch(widget.routerState.location)) {
               context.webGo('/home');
-              logger.d('Redirect to home from ${widget.routerState.name}');
+              logger.i('Redirecting to /home from ${widget.routerState.location}');
             } else {
               // Redirect to the same route, without adding to web history
               // Originally state will not be DalalDataLoaded, so exception will happen
@@ -57,7 +57,6 @@ class _DalalNavBuilderState extends State<DalalNavBuilder> {
               // Now the state has required data, so router can again direct to the required page
               //
               // Hacky fix, but no other way possible unless the routing lib gives a dedicated api for async loading of data
-              logger.d('Redirect to same location');
               context.webGo(
                 widget.routerState.location,
                 extra: widget.routerState.extra,
