@@ -593,7 +593,7 @@ class _HomePageState extends State<HomePage>
         maxLines: 2,
         overflow: TextOverflow.ellipsis,
       ),
-      padding: EdgeInsets.all(10),
+      padding: const EdgeInsets.all(10),
     );
   }
 }
