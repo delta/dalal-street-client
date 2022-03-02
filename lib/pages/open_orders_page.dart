@@ -62,37 +62,40 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
                           )),
                       Center(
                           child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.max,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: const [
-                          Padding(
-                              padding: EdgeInsets.fromLTRB(40, 10, 60, 0),
-                              child: Text(
-                                'ACTION',
-                                style: TextStyle(
-                                  color: blurredGray,
-                                  fontSize: 11,
-                                ),
-                                textAlign: TextAlign.left,
-                              )),
-                          Padding(
-                              padding: EdgeInsets.fromLTRB(0, 10, 40, 0),
-                              child: Text(
-                                'DETAIL',
-                                style: TextStyle(
-                                  color: blurredGray,
-                                  fontSize: 11,
-                                ),
-                                textAlign: TextAlign.left,
-                              )),
-                          Padding(
-                              padding: EdgeInsets.fromLTRB(80, 10, 0, 0),
-                              child: Text(
-                                'STATUS',
-                                style: TextStyle(
-                                  color: blurredGray,
-                                  fontSize: 11,
-                                ),
-                                textAlign: TextAlign.right,
-                              ))
+                          Expanded(
+                            child: Text(
+                              'ACTION',
+                              style: TextStyle(
+                                color: blurredGray,
+                                fontSize: 11,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                          Expanded(
+                            child: Text(
+                              'DETAIL',
+                              style: TextStyle(
+                                color: blurredGray,
+                                fontSize: 11,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                          Expanded(
+                            child: Text(
+                              'STATUS',
+                              style: TextStyle(
+                                color: blurredGray,
+                                fontSize: 11,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          )
                         ],
                       )),
                       Expanded(
@@ -195,94 +198,99 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
         child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.max,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               ClipRRect(
                   child: Padding(
-                      padding: const EdgeInsets.all(5),
+                      padding: const EdgeInsets.all(10),
                       child: Image.network(
                         'https://assets.airtel.in/static-assets/new-home/img/favicon-32x32.png',
-                        height: 20,
-                        width: 20,
+                        height: 25,
+                        width: 25,
                       )),
                   borderRadius: BorderRadius.circular(10)),
-              Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: SizedBox(
-                      width: 85,
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const SizedBox.square(dimension: 20),
-                            Text(
-                              (company?.fullName.toUpperCase())!,
-                              style: const TextStyle(
-                                  fontSize: 12, color: lightGray),
-                              textAlign: TextAlign.left,
-                              maxLines: 2,
-                            ),
-                            const SizedBox.square(dimension: 10),
-                            Text(
-                              (company?.shortName.toUpperCase())!,
-                              style: const TextStyle(fontSize: 12),
-                              textAlign: TextAlign.left,
-                            ),
-                          ]))),
-              Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const SizedBox.square(dimension: 20),
-                        const Text(
-                          'TYPE',
-                          style: TextStyle(fontSize: 9, color: lightGray),
-                        ),
-                        Text(
+              Expanded(
+                flex: 1,
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox.square(dimension: 20),
+                      Text(
+                        (company?.fullName.toUpperCase())!,
+                        style: const TextStyle(
+                            fontSize: 12, color: lightGray),
+                        textAlign: TextAlign.left,
+                        maxLines: 2,
+                      ),
+                      const SizedBox.square(dimension: 10),
+                      Text(
+                        (company?.shortName.toUpperCase())!,
+                        style: const TextStyle(fontSize: 12),
+                        textAlign: TextAlign.left,
+                      ),
+                    ]),
+              ),
+              Expanded(
+                flex: 1,
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox.square(dimension: 20),
+                      const Text(
+                        'TYPE',
+                        style: TextStyle(fontSize: 9, color: lightGray),
+                      ),
+                      SizedBox(
+                        width: 80,
+                        child: Text(
                             '${ordertype.asString()} / ' +
                                 openorder.orderType.name +
                                 ' ORDER',
                             style: const TextStyle(
                                 fontSize: 12, color: Colors.white)),
-                        const SizedBox.square(dimension: 10),
-                        const Text('PRICE',
-                            style: TextStyle(fontSize: 9, color: lightGray)),
-                        Text(
-                          '₹' + openorder.price.toString() + ' per stock',
+                      ),
+                      const SizedBox.square(dimension: 10),
+                      const Text('PRICE',
+                          style: TextStyle(fontSize: 9, color: lightGray)),
+                      Text(
+                        '₹' + openorder.price.toString() + ' per stock',
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: Colors.white,
+                        ),
+                        maxLines: 1,
+                      ),
+                    ]),
+              ),
+              Expanded(
+                flex: 1,
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      const SizedBox.square(dimension: 20),
+                      const Text(
+                        'COMPLETED',
+                        style: TextStyle(fontSize: 9, color: lightGray),
+                      ),
+                      Text(
+                          '${openorder.stockQuantityFulfilled}/${openorder.stockQuantity}',
                           style: const TextStyle(
-                            fontSize: 12,
-                            color: Colors.white,
-                          ),
-                          maxLines: 1,
-                        ),
-                      ])),
-              Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        const SizedBox.square(dimension: 20),
-                        const Text(
-                          'COMPLETED',
-                          style: TextStyle(fontSize: 9, color: lightGray),
-                        ),
-                        Text(
-                            '${openorder.stockQuantityFulfilled}/${openorder.stockQuantity}',
+                              fontSize: 12, color: secondaryColor)),
+                      const SizedBox.square(dimension: 10),
+                      const Text(
+                        'ORDERED',
+                        style: TextStyle(fontSize: 9, color: lightGray),
+                      ),
+                      SizedBox(
+                          width: 80,
+                          child: Text(
+                            ISOtoDateTime(openorder.createdAt),
                             style: const TextStyle(
-                                fontSize: 12, color: secondaryColor)),
-                        const SizedBox.square(dimension: 10),
-                        const Text(
-                          'ORDERED',
-                          style: TextStyle(fontSize: 9, color: lightGray),
-                        ),
-                        SizedBox(
-                            width: 60,
-                            child: Text(
-                              ISOtoDateTime(openorder.createdAt),
-                              style: const TextStyle(
-                                  fontSize: 12, color: Colors.white),
-                              textAlign: TextAlign.right,
-                            ))
-                      ]))
+                                fontSize: 12, color: Colors.white),
+                            textAlign: TextAlign.right,
+                          ))
+                    ]),
+              )
             ]));
   }
 }
