@@ -69,43 +69,39 @@ class _HomePageState extends State<HomePage>
   }
 
   Center _desktopBody() {
-    return 
-    Center( 
-    
-      child: SingleChildScrollView(
-        child:
-        Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-         const  SizedBox.square(dimension: 30,),
-      Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-      SizedBox(child: 
-      SingleChildScrollView(
-        child:  _companiesDesktop()),
-      height: 500,
-      width: 697,
-      ),
-      const SizedBox.square(dimension: 45,),
-      Column(children: [
-       
-        _notifications(),
-        const SizedBox.square(dimension: 15,),
-    
-        _userworth(),
-        
-       
-      ],)
-      ]),
-       const SizedBox.square(dimension: 35,),
-      SizedBox( 
-          height: 770,
-          width: 1230,
-        child: _recentNewsDesktop()
+    return Center(
+        child: SingleChildScrollView(
+            child: Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        const SizedBox.square(
+          dimension: 30,
         ),
-    ],)));
-  
+        Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+          SizedBox(
+            child: SingleChildScrollView(child: _companiesDesktop()),
+            height: 500,
+            width: 697,
+          ),
+          const SizedBox.square(
+            dimension: 45,
+          ),
+          Column(
+            children: [
+              _notifications(),
+              const SizedBox.square(
+                dimension: 15,
+              ),
+              _userworth(),
+            ],
+          )
+        ]),
+        const SizedBox.square(
+          dimension: 35,
+        ),
+        SizedBox(height: 770, width: 1230, child: _recentNewsDesktop()),
+      ],
+    )));
   }
 
   Center _tabletBody() {
@@ -137,13 +133,11 @@ class _HomePageState extends State<HomePage>
           const SizedBox(
             height: 10,
           ),
-         
           _recentNews(),
         ],
       ),
     );
   }
-    
 
   Container _recentNews() {
     return Container(
@@ -183,7 +177,8 @@ class _HomePageState extends State<HomePage>
               feedlist()
             ]));
   }
-Container _recentNewsDesktop() {
+
+  Container _recentNewsDesktop() {
     return Container(
         width: double.infinity,
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
@@ -198,15 +193,16 @@ Container _recentNewsDesktop() {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Padding(padding: EdgeInsets.all(10),
-                  child: Text(
-                    'Recent News',
-                    style: TextStyle(
-                      fontSize: 24,                     
-                      color: whiteWithOpacity75,
-                    ),
-                    textAlign: TextAlign.start,
-                  )),
+                  const Padding(
+                      padding: EdgeInsets.all(10),
+                      child: Text(
+                        'Recent News',
+                        style: TextStyle(
+                          fontSize: 24,
+                          color: whiteWithOpacity75,
+                        ),
+                        textAlign: TextAlign.start,
+                      )),
                   TertiaryButton(
                     width: 80,
                     height: 25,
@@ -221,6 +217,7 @@ Container _recentNewsDesktop() {
               feedlist()
             ]));
   }
+
   Widget feedlist() =>
       BlocBuilder<NewsBloc, NewsState>(builder: (context, state) {
         if (state is GetNewsSucess) {
@@ -290,7 +287,7 @@ Container _recentNewsDesktop() {
         }
       });
 
-Container _companiesDesktop() {
+  Container _companiesDesktop() {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
       decoration: BoxDecoration(
@@ -301,14 +298,12 @@ Container _companiesDesktop() {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Padding(padding: EdgeInsets.all(10)
-          ,child: Text(
-            'Top Companies',
-            style: TextStyle(
-                fontSize: 24,
-                color: whiteWithOpacity75),
-          )
-          ),
+          const Padding(
+              padding: EdgeInsets.all(10),
+              child: Text(
+                'Top Companies',
+                style: TextStyle(fontSize: 24, color: whiteWithOpacity75),
+              )),
           const SizedBox(
             height: 40,
           ),
@@ -317,6 +312,7 @@ Container _companiesDesktop() {
       ),
     );
   }
+
   Container _companies() {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
@@ -402,8 +398,7 @@ Container _companiesDesktop() {
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
                     child: Text(text,
-                        style:
-                            const TextStyle(color: white, fontSize: 15)),
+                        style: const TextStyle(color: white, fontSize: 15)),
                   ),
                 ),
                 const SizedBox.square(
@@ -437,11 +432,10 @@ Container _companiesDesktop() {
     }
   }
 
-
-Widget _userworth() {
-  return Container(
-    width: 489,
-        height:239 ,
+  Widget _userworth() {
+    return Container(
+      width: 489,
+      height: 239,
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
       decoration: BoxDecoration(
         color: background2,
@@ -489,7 +483,7 @@ Widget _userworth() {
                       Container(
                         padding: const EdgeInsets.only(right: 25, top: 5),
                         child: Text(
-                         '₹'+ data.totalWorth.toString(),
+                          '₹' + data.totalWorth.toString(),
                           style: TextStyle(
                               fontSize: 30,
                               color: data.totalWorth.toInt() >= 0
@@ -504,101 +498,105 @@ Widget _userworth() {
         },
       ),
     );
-}
- Widget _eachField(String field, String value) {
+  }
+
+  Widget _eachField(String field, String value) {
     return Row(children: [
       const Padding(padding: EdgeInsets.all(10)),
       Text(
         field,
-        style: const TextStyle(
-          fontSize: 30,
-          color: whiteWithOpacity75
-        ),
+        style: const TextStyle(fontSize: 30, color: whiteWithOpacity75),
       ),
       const Spacer(),
       Container(
         padding: const EdgeInsets.only(right: 25),
-        child: Text('₹'+
-          value,
-          style: const TextStyle(fontSize: 30,color: lightGray),
-          
+        child: Text(
+          '₹' + value,
+          style: const TextStyle(fontSize: 30, color: lightGray),
         ),
       )
     ]);
   }
-Widget _notifications() {
-   List<notification.Notification> notifications = [];
-  return Container(
-    width: 489,
-    height:245,
-    
-      padding: const EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        color: background2,
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child:Column (
-      crossAxisAlignment: CrossAxisAlignment.start,
 
-      children: [
-       const  Padding(padding: EdgeInsets.all(10),
-        child: Text('Notifications',style: TextStyle(color: whiteWithOpacity75,fontSize: 24),),),
-
-      Center(child:  BlocBuilder<NotificationsCubit, NotificationsCubitState>(
-        builder: (context, state) {
-      if (state is GetNotificationSuccess) {
-        notifications.addAll(state.notifications);
-
-        return 
-        SizedBox(
+  Widget _notifications() {
+    List<notification.Notification> notifications = [];
+    return Container(
         width: 489,
-        height: 176,
-        
-          child: ListView.separated(
-          shrinkWrap: true,
-          physics: const ScrollPhysics(),
-          itemCount: notifications.length,
-          itemBuilder: (context, index) {
-            var notification = notifications[index];
-
-            return notificationItem(
-                notification.text);
-          },
-          separatorBuilder: (context, index) {
-            return const Divider(color: lightGray,);
-          },
-        ));
-      } else if (state is GetNotificationFailure) {
-        return Column(
-          children: [
-            const Text('Failed to reach server'),
-            const SizedBox(height: 20),
-            SizedBox(
-              width: 100,
-              height: 50,
-              child: OutlinedButton(
-                onPressed: () =>
-                    context.read<NotificationsCubit>().getNotifications(),
-                child: const Text('Retry'),
-              ),
+        height: 245,
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: background2,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          const Padding(
+            padding: EdgeInsets.all(10),
+            child: Text(
+              'Notifications',
+              style: TextStyle(color: whiteWithOpacity75, fontSize: 24),
             ),
-          ],
-        );
-      } else {
-        return const Center(
-          child: DalalLoadingBar(),
-        );
-      }
-    }))]));
+          ),
+          Center(child:
+              BlocBuilder<NotificationsCubit, NotificationsCubitState>(
+                  builder: (context, state) {
+            if (state is GetNotificationSuccess) {
+              notifications.addAll(state.notifications);
 
+              return SizedBox(
+                  width: 489,
+                  height: 176,
+                  child: ListView.separated(
+                    shrinkWrap: true,
+                    physics: const ScrollPhysics(),
+                    itemCount: notifications.length,
+                    itemBuilder: (context, index) {
+                      var notification = notifications[index];
+
+                      return notificationItem(notification.text);
+                    },
+                    separatorBuilder: (context, index) {
+                      return const Divider(
+                        color: lightGray,
+                      );
+                    },
+                  ));
+            } else if (state is GetNotificationFailure) {
+              return Column(
+                children: [
+                  const Text('Failed to reach server'),
+                  const SizedBox(height: 20),
+                  SizedBox(
+                    width: 100,
+                    height: 50,
+                    child: OutlinedButton(
+                      onPressed: () =>
+                          context.read<NotificationsCubit>().getNotifications(),
+                      child: const Text('Retry'),
+                    ),
+                  ),
+                ],
+              );
+            } else {
+              return const Center(
+                child: DalalLoadingBar(),
+              );
+            }
+          }))
+        ]));
+  }
+
+  Widget notificationItem(String text) {
+    return Padding(
+      child: Text(
+        text,
+        style: const TextStyle(color: white, fontSize: 16),
+        maxLines: 2,
+        overflow: TextOverflow.ellipsis,
+      ),
+      padding: EdgeInsets.all(10),
+    );
+  }
 }
-
-Widget notificationItem(String text) {
-  return 
-  Padding(child: Text(text,style:const TextStyle(color:white,fontSize: 16),maxLines: 2,overflow: TextOverflow.ellipsis,),padding: EdgeInsets.all(10),);
-
-}
-    }
 
 class StockItem extends StatelessWidget {
   final Stock stock;

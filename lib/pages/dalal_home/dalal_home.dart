@@ -91,10 +91,10 @@ class _DalalHomeState extends State<DalalHome> {
 
   List<Widget> get _pageViewChildren => [
         MultiBlocProvider(
-         providers: [ 
-         BlocProvider( create: (context) => NewsBloc()),
-         BlocProvider(create: (context) => NotificationsCubit()),
-        ],
+          providers: [
+            BlocProvider(create: (context) => NewsBloc()),
+            BlocProvider(create: (context) => NotificationsCubit()),
+          ],
           child: HomePage(user: widget.user),
         ),
         BlocProvider(
