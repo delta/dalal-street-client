@@ -66,37 +66,38 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
   }
 
   Widget _openOrdersWeb() => Container(
-    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-    decoration: BoxDecoration(
-      color: backgroundColor,
-      borderRadius: BorderRadius.circular(10),
-    ),
-    child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: const [
-          Text(
-            'Open Orders',
-            style: TextStyle(
-                fontSize: 48, fontWeight: FontWeight.w700, color: white),
-            textAlign: TextAlign.end,
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          Text(
-            'Carefully manage the open orders to make some gains and stay in the game.',
-            style: TextStyle(
-                fontSize: 20, fontWeight: FontWeight.w500, color: lightGray),
-            textAlign: TextAlign.end,
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          OpenOrderTable()
-        ]),
-  );
-
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+        decoration: BoxDecoration(
+          color: backgroundColor,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: const [
+              Text(
+                'Open Orders',
+                style: TextStyle(
+                    fontSize: 48, fontWeight: FontWeight.w700, color: white),
+                textAlign: TextAlign.end,
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Text(
+                'Carefully manage the open orders to make some gains and stay in the game.',
+                style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w500,
+                    color: lightGray),
+                textAlign: TextAlign.end,
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              OpenOrderTable()
+            ]),
+      );
 
   Widget _mobileBody() {
     return Padding(

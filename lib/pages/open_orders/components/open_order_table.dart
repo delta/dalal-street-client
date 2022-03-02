@@ -122,9 +122,7 @@ class _OpenOrderTableState extends State<OpenOrderTable> {
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
           child: Text(heading,
               style: const TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: white),
+                  fontSize: 20, fontWeight: FontWeight.bold, color: white),
               textAlign: TextAlign.center),
         ),
       );
@@ -136,37 +134,55 @@ class _OpenOrderTableState extends State<OpenOrderTable> {
             child: Text(
           (company.shortName).toString(),
           textAlign: TextAlign.center,
-          style:  TextStyle(fontSize: 20, color: (ordertype == OpenOrderType.ASK) ? heartRed : primaryColor),
+          style: TextStyle(
+              fontSize: 20,
+              color:
+                  (ordertype == OpenOrderType.ASK) ? heartRed : primaryColor),
         ))),
         DataCell(Center(
             child: Text(
           '${ordertype.asString()} / ' + openOrder.orderType.name,
           textAlign: TextAlign.center,
-          style:  TextStyle(fontSize: 20, color: (ordertype == OpenOrderType.ASK) ? heartRed : primaryColor),
+          style: TextStyle(
+              fontSize: 20,
+              color:
+                  (ordertype == OpenOrderType.ASK) ? heartRed : primaryColor),
         ))),
         DataCell(Center(
             child: Text(
           '${openOrder.stockQuantity}',
           textAlign: TextAlign.center,
-          style:  TextStyle(fontSize: 20, color: (ordertype == OpenOrderType.ASK) ? heartRed : primaryColor),
+          style: TextStyle(
+              fontSize: 20,
+              color:
+                  (ordertype == OpenOrderType.ASK) ? heartRed : primaryColor),
         ))),
         DataCell(Center(
             child: Text(
           '${openOrder.stockQuantityFulfilled}',
           textAlign: TextAlign.center,
-          style:  TextStyle(fontSize: 20, color: (ordertype == OpenOrderType.ASK) ? heartRed : primaryColor),
+          style: TextStyle(
+              fontSize: 20,
+              color:
+                  (ordertype == OpenOrderType.ASK) ? heartRed : primaryColor),
         ))),
         DataCell(Center(
             child: Text(
           '₹' + openOrder.price.toString(),
           textAlign: TextAlign.center,
-          style:  TextStyle(fontSize: 20, color: (ordertype == OpenOrderType.ASK) ? heartRed : primaryColor),
+          style: TextStyle(
+              fontSize: 20,
+              color:
+                  (ordertype == OpenOrderType.ASK) ? heartRed : primaryColor),
         ))),
         DataCell(Center(
             child: OutlinedButton(
-          style: OutlinedButton.styleFrom(
-              side: const BorderSide(color: heartRed)),
-          child: const Text('Cancel',style: TextStyle(color: heartRed),),
+          style:
+              OutlinedButton.styleFrom(side: const BorderSide(color: heartRed)),
+          child: const Text(
+            'Cancel',
+            style: TextStyle(color: heartRed),
+          ),
           onPressed: () {
             bool isAsk = ordertype == OpenOrderType.ASK ? true : false;
             int orderId = openOrder.id;
