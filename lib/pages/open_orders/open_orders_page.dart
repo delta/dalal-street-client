@@ -3,6 +3,7 @@ import 'package:dalal_street_client/components/loading.dart';
 import 'package:dalal_street_client/config/get_it.dart';
 import 'package:dalal_street_client/models/open_order_type.dart';
 import 'package:dalal_street_client/models/snackbar/snackbar_type.dart';
+import 'package:dalal_street_client/pages/open_orders/components/open_order_table.dart';
 import 'package:dalal_street_client/proto_build/models/Ask.pb.dart';
 import 'package:dalal_street_client/proto_build/models/Bid.pb.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
@@ -12,7 +13,7 @@ import 'package:dalal_street_client/utils/responsive.dart';
 import 'package:dalal_street_client/utils/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../theme/colors.dart';
+import '../../theme/colors.dart';
 
 class OpenOrdersPage extends StatefulWidget {
   const OpenOrdersPage({Key? key}) : super(key: key);
@@ -64,7 +65,38 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
     );
   }
 
-  Widget _openOrdersWeb() => const Text('hello');
+  Widget _openOrdersWeb() => Container(
+    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+    decoration: BoxDecoration(
+      color: backgroundColor,
+      borderRadius: BorderRadius.circular(10),
+    ),
+    child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: const [
+          Text(
+            'Open Orders',
+            style: TextStyle(
+                fontSize: 48, fontWeight: FontWeight.w700, color: white),
+            textAlign: TextAlign.end,
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Text(
+            'Carefully manage the open orders to make some gains and stay in the game.',
+            style: TextStyle(
+                fontSize: 20, fontWeight: FontWeight.w500, color: lightGray),
+            textAlign: TextAlign.end,
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          OpenOrderTable()
+        ]),
+  );
+
 
   Widget _mobileBody() {
     return Padding(
