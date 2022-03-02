@@ -217,8 +217,7 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
                       const SizedBox.square(dimension: 20),
                       Text(
                         (company?.fullName.toUpperCase())!,
-                        style: const TextStyle(
-                            fontSize: 12, color: lightGray),
+                        style: const TextStyle(fontSize: 12, color: lightGray),
                         textAlign: TextAlign.left,
                         maxLines: 2,
                       ),
