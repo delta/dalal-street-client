@@ -202,8 +202,7 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
                   child: Padding(
                       padding: EdgeInsets.all(10),
                       child: Text('No Open Orders',
-                          style:
-                              TextStyle(fontSize: 14, color: Colors.white))),
+                          style: TextStyle(fontSize: 14, color: Colors.white))),
                 ));
               } else if (state is OpenOrdersFailure) {
                 return Center(
@@ -249,7 +248,7 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
             children: [
               ClipRRect(
                   child: Padding(
-                      padding: const EdgeInsets.fromLTRB(0,10,10,10),
+                      padding: const EdgeInsets.fromLTRB(0, 10, 10, 10),
                       child: Image.network(
                         'https://assets.airtel.in/static-assets/new-home/img/favicon-32x32.png',
                         height: 25,
@@ -280,7 +279,6 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
                       ),
                       const SizedBox.square(dimension: 10),
                     ]),
-                    
               ),
               Expanded(
                 flex: 1,
@@ -342,7 +340,7 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
                                 fontSize: 12, color: Colors.white),
                             textAlign: TextAlign.right,
                           )),
-                      const SizedBox.square(dimension: 10),    
+                      const SizedBox.square(dimension: 10),
                     ]),
               )
             ]));
