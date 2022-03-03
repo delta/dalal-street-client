@@ -49,7 +49,8 @@ class _DalalNavBuilderState extends State<DalalNavBuilder> {
             if (!homeRoutesWeb.contains(widget.routerState.location) &&
                 !otherNonAuthRoutes.hasMatch(widget.routerState.location)) {
               context.webGo('/home');
-              logger.i('Redirecting to /home from ${widget.routerState.location}');
+              logger.i(
+                  'Redirecting to /home from ${widget.routerState.location}');
             } else {
               // Redirect to the same route, without adding to web history
               // Originally state will not be DalalDataLoaded, so exception will happen
