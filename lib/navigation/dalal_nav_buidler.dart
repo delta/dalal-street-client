@@ -46,7 +46,14 @@ class _DalalNavBuilderState extends State<DalalNavBuilder> {
 
             logger.i('user logged in');
 
-            if (!homeRoutesWeb.contains(widget.routerState.location) &&
+            if (widget.routerState.location == '/admin') {
+              if (state.user.isAdmin) {
+                // only admin user can access /admin route
+                context.webGo('/admin');
+              } else {
+                context.webGo('/home');
+              }
+            } else if (!homeRoutesWeb.contains(widget.routerState.location) &&
                 !otherNonAuthRoutes.hasMatch(widget.routerState.location)) {
               context.webGo('/home');
               logger.i(

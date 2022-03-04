@@ -47,15 +47,15 @@ class StockBarMarquee extends StatelessWidget {
         });
 
     return Marquee(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          const SizedBox(width: 20.0),
-          ...stockBarItemList,
-          const SizedBox(
-            width: 2.0,
-          )
-        ],
+      child: Container(
+        constraints:
+            BoxConstraints(minWidth: MediaQuery.of(context).size.width),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            ...stockBarItemList,
+          ],
+        ),
       ),
       pauseDuration: const Duration(milliseconds: 0),
       backDuration: const Duration(milliseconds: 30000),
