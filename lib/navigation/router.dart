@@ -8,6 +8,7 @@ import 'package:dalal_street_client/blocs/dalal/dalal_bloc.dart';
 import 'package:dalal_street_client/blocs/market_depth/market_depth_bloc.dart';
 import 'package:dalal_street_client/blocs/news/news_bloc.dart';
 import 'package:dalal_street_client/blocs/subscribe/subscribe_cubit.dart';
+import 'package:dalal_street_client/config/get_it.dart';
 import 'package:dalal_street_client/navigation/dalal_nav_buidler.dart';
 import 'package:dalal_street_client/navigation/home_routes.dart';
 import 'package:dalal_street_client/pages/admin_page/admin_page.dart';
@@ -24,6 +25,7 @@ import 'package:dalal_street_client/pages/auth/register_page.dart';
 import 'package:dalal_street_client/pages/auth/verify_phone/enter_otp_page.dart';
 import 'package:dalal_street_client/pages/auth/verify_phone/enter_phone_page.dart';
 import 'package:dalal_street_client/pages/landing_page.dart';
+import 'package:dalal_street_client/streams/global_streams.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -65,19 +67,30 @@ GoRouter generateRouter(BuildContext context) => GoRouter(
             return mobileExtras[location]!;
           },
         ),
-        // TODO: can do params
-        // Example: /company/1
-        // Link: https://gorouter.dev/parameters
         GoRoute(
-          path: '/company',
-          builder: (_, state) => MultiBlocProvider(
-            providers: [
-              BlocProvider(create: (_) => MarketDepthBloc()),
-              BlocProvider(create: (_) => SubscribeCubit()),
-              BlocProvider(create: (_) => NewsBloc()),
-            ],
-            child: CompanyPage(data: state.extra! as List<int>),
-          ),
+          path: '/company/:id',
+          name: 'company',
+          builder: (_, state) {
+            final stockId = int.tryParse(state.params['id']!);
+            if (stockId == null) {
+              throw Exception('Invalid company id');
+            }
+
+            final stockIds =
+                getIt<GlobalStreams>().latestStockMap.keys.toList();
+            if (!stockIds.contains(stockId)) {
+              throw Exception('Company with id $stockId doesn\'t exist');
+            }
+
+            return MultiBlocProvider(
+              providers: [
+                BlocProvider(create: (_) => MarketDepthBloc()),
+                BlocProvider(create: (_) => SubscribeCubit()),
+                BlocProvider(create: (_) => NewsBloc()),
+              ],
+              child: CompanyPage(stockId: stockId),
+            );
+          },
         )
       ],
       // Show snackbar and navigate to Home or Login page whenever UserState changes

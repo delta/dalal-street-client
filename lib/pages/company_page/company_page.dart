@@ -17,8 +17,9 @@ import 'package:intl/intl.dart';
 final oCcy = NumberFormat('#,##0.00', 'en_US');
 
 class CompanyPage extends StatefulWidget {
-  final List<int> data;
-  const CompanyPage({Key? key, required this.data}) : super(key: key);
+  final int stockId;
+
+  const CompanyPage({Key? key, required this.stockId}) : super(key: key);
 
   @override
   State<CompanyPage> createState() => _CompanyPageState();
@@ -33,15 +34,16 @@ class _CompanyPageState extends State<CompanyPage>
     super.initState();
     // Subscribe to the stream of Market Depth Updates
     context.read<SubscribeCubit>().subscribe(DataStreamType.MARKET_DEPTH,
-        dataStreamId: widget.data[0].toString());
+        dataStreamId: widget.stockId.toString());
   }
 
   @override
   // ignore: must_call_super
   Widget build(BuildContext context) {
-    final stockList = getIt<GlobalStreams>().latestStockMap;
-    final int stockId = widget.data.first;
-    final int cash = widget.data.last;
+    final globalStreams = getIt<GlobalStreams>();
+    final stockList = globalStreams.latestStockMap;
+    final int stockId = widget.stockId;
+    final int cash = globalStreams.latestUserInfo.cash;
     Stock company = stockList[stockId]!;
     return SafeArea(
       child: Responsive(
@@ -67,7 +69,7 @@ class _CompanyPageState extends State<CompanyPage>
                       const SizedBox(
                         height: 10,
                       ),
-                      CompanyNewsPage(stockId: widget.data.first)
+                      CompanyNewsPage(stockId: stockId)
                     ])),
                 // Hide Place Order Button if company went Bankrupt
                 company.isBankrupt

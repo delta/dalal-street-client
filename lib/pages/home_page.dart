@@ -354,15 +354,8 @@ class StockItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    int cash = getIt<GlobalStreams>().dynamicUserInfoStream.value.cash;
-    List<int> data = [stock.id, cash];
     return GestureDetector(
-      onTap: () {
-        context.push(
-          '/company',
-          extra: data,
-        );
-      },
+      onTap: () => context.push('/company/${stock.id}'),
       child: Container(
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
           child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [

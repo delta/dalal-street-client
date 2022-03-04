@@ -71,12 +71,5 @@ class _RetrievePageState extends State<RetrievePage> {
     );
   }
 
-  void _navigateToCompanyPage(int stockId) {
-    int cash = getIt<GlobalStreams>().dynamicUserInfoStream.value.cash;
-    List<int> data = [stockId, cash];
-    context.push(
-      '/company',
-      extra: data,
-    );
-  }
+  void _navigateToCompanyPage(int stockId) => context.push('/company/$stockId');
 }
