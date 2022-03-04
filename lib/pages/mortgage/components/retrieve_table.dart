@@ -67,15 +67,17 @@ class _RetrieveTableState extends State<RetrieveTable> {
             if (state.mortgageDetails.isEmpty) {
               return Column(
                 children: const [
-                    SizedBox(height: 100,),
-                    Text(
-                      'You don\'t have any stocks mortgaged.',
-                      style: TextStyle(
-                          fontSize: 36,
-                          color: white,
-                          fontWeight: FontWeight.bold),
-                      textAlign: TextAlign.center,
-                    )
+                  SizedBox(
+                    height: 100,
+                  ),
+                  Text(
+                    'You don\'t have any stocks mortgaged.',
+                    style: TextStyle(
+                        fontSize: 36,
+                        color: white,
+                        fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.center,
+                  )
                 ],
               );
             }

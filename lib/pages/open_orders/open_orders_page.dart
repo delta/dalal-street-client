@@ -237,7 +237,8 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
                     child: Padding(
                         padding: EdgeInsets.all(10),
                         child: Text('No Open Orders',
-                            style: TextStyle(fontSize: 14, color: Colors.white))),
+                            style:
+                                TextStyle(fontSize: 14, color: Colors.white))),
                   )),
                 );
               } else if (state is OpenOrdersFailure) {
