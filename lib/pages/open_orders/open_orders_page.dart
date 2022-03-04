@@ -93,7 +93,7 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
                 textAlign: TextAlign.end,
               ),
               SizedBox(
-                height: 20,
+                height: 50,
               ),
               OpenOrderTable()
             ]),
@@ -231,12 +231,15 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
                   ),
                 ]);
               } else if (state is NoOpenOrders) {
-                return (const Center(
-                  child: Padding(
-                      padding: EdgeInsets.all(10),
-                      child: Text('No Open Orders',
-                          style: TextStyle(fontSize: 14, color: Colors.white))),
-                ));
+                return SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.75,
+                  child: (const Center(
+                    child: Padding(
+                        padding: EdgeInsets.all(10),
+                        child: Text('No Open Orders',
+                            style: TextStyle(fontSize: 14, color: Colors.white))),
+                  )),
+                );
               } else if (state is OpenOrdersFailure) {
                 return Center(
                     child: Column(

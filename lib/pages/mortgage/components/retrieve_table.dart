@@ -65,16 +65,19 @@ class _RetrieveTableState extends State<RetrieveTable> {
         builder: (context, state) {
           if (state is MortgageDetailsLoaded) {
             if (state.mortgageDetails.isEmpty) {
-              return const Align(
-                  alignment: Alignment.center,
-                  child: Text(
-                    'You don\'t have any stocks mortgaged.',
-                    style: TextStyle(
-                        fontSize: 36,
-                        color: white,
-                        fontWeight: FontWeight.bold),
-                    textAlign: TextAlign.center,
-                  ));
+              return Column(
+                children: const [
+                    SizedBox(height: 100,),
+                    Text(
+                      'You don\'t have any stocks mortgaged.',
+                      style: TextStyle(
+                          fontSize: 36,
+                          color: white,
+                          fontWeight: FontWeight.bold),
+                      textAlign: TextAlign.center,
+                    )
+                ],
+              );
             }
             List<DataRow> rows = [];
             int index = 1;
