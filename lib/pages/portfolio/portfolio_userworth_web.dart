@@ -35,63 +35,55 @@ class _PortfolioUserWorthWebState extends State<PortfolioUserWorthWeb> {
             child: DalalLoadingBar(),
           );
         } else if (state is UserWorthLoaded) {
-          return 
-          Padding(padding: EdgeInsets.only(top: 25),
-          child:  SizedBox(
-            height: 350,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-                
-                Container(
-                   margin: EdgeInsets.only(left: 100),
-                  height: double.infinity,
-                  width: MediaQuery.of(context).size.width  * 0.3,
-                padding:
-                    const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                decoration: BoxDecoration(
-                  color: background2,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: _userWorthDetails()),
-            
-            Container(
-                margin: EdgeInsets.only(right: 100),
-                width: MediaQuery.of(context).size.width  * 0.40,
-                padding:
-                    const EdgeInsets.symmetric(vertical: 25, horizontal: 15),
-                decoration: BoxDecoration(
-                  color: background2,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        'Your Holdings',
-                        style: TextStyle(
-                          fontSize: 21,
-                          fontWeight: FontWeight.w500,
-                          color: white,
-                        ),
-                        textAlign: TextAlign.center,
+          return Padding(
+            padding: EdgeInsets.only(top: 25),
+            child: SizedBox(
+              height: 350,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Container(
+                      margin: EdgeInsets.only(left: 100),
+                      height: double.infinity,
+                      width: MediaQuery.of(context).size.width * 0.3,
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 10, horizontal: 10),
+                      decoration: BoxDecoration(
+                        color: background2,
+                        borderRadius: BorderRadius.circular(10),
                       ),
-                      const SizedBox(
-                        height: 20,
+                      child: _userWorthDetails()),
+                  Container(
+                      margin: EdgeInsets.only(right: 100),
+                      width: MediaQuery.of(context).size.width * 0.40,
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 25, horizontal: 15),
+                      decoration: BoxDecoration(
+                        color: background2,
+                        borderRadius: BorderRadius.circular(10),
                       ),
-                      _holdings(state),
-                     
-                    ])),
-              ],
-            
-          ) ,
-          ),)
-         
-           
-          
-          
-          ;
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'Your Holdings',
+                              style: TextStyle(
+                                fontSize: 21,
+                                fontWeight: FontWeight.w500,
+                                color: white,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            _holdings(state),
+                          ])),
+                ],
+              ),
+            ),
+          );
         } else if (state is UserWorthFailure) {
           return Center(
             child: Text(state.message),
@@ -201,20 +193,19 @@ class _PortfolioUserWorthWebState extends State<PortfolioUserWorthWeb> {
           Map<int, Int64> stocksReservedMap,
           Map<int, Int64> stocksOwnedMap,
           Map<int, Int64> cashSpentMap) =>
-         Expanded(child: 
-           ListView.builder(
-           physics: const AlwaysScrollableScrollPhysics(),
-          shrinkWrap: true,
-          itemCount: stocksHeld.length,
-          itemBuilder: (context, index) {
-            return _eachStock(
-                stocksOwnedMap[keyList[index]],
-                stocksReservedMap[keyList[index]],
-                cashSpentMap[keyList[index]],
-                mapOfStocks[keyList[index]]?.fullName ?? '',
-                mapOfStocks[keyList[index]]?.currentPrice);
-          }) );
-        
+      Expanded(
+          child: ListView.builder(
+              physics: const AlwaysScrollableScrollPhysics(),
+              shrinkWrap: true,
+              itemCount: stocksHeld.length,
+              itemBuilder: (context, index) {
+                return _eachStock(
+                    stocksOwnedMap[keyList[index]],
+                    stocksReservedMap[keyList[index]],
+                    cashSpentMap[keyList[index]],
+                    mapOfStocks[keyList[index]]?.fullName ?? '',
+                    mapOfStocks[keyList[index]]?.currentPrice);
+              }));
 
   Widget _eachStock(Int64? owned, Int64? reserved, Int64? cashSpent,
       String name, Int64? price) {
@@ -253,15 +244,13 @@ class _PortfolioUserWorthWebState extends State<PortfolioUserWorthWeb> {
                     padding: EdgeInsets.only(bottom: 10),
                     child: Text(
                       'Owned',
-                      style: TextStyle(color: blurredGray,
-                      fontSize: 18),
+                      style: TextStyle(color: blurredGray, fontSize: 18),
                     )),
                 Text(
                   owned.toString(),
                   style: TextStyle(
                       color: (owned.toInt()) >= 0 ? secondaryColor : heartRed,
                       fontSize: 18),
-                      
                 )
               ],
             ),
@@ -273,15 +262,14 @@ class _PortfolioUserWorthWebState extends State<PortfolioUserWorthWeb> {
                     padding: EdgeInsets.only(bottom: 10),
                     child: Text(
                       'Reserved',
-                      style: TextStyle(color: blurredGray,
-                      fontSize: 18),
+                      style: TextStyle(color: blurredGray, fontSize: 18),
                     )),
                 Text(
                   reserved.toString(),
                   style: TextStyle(
                       color:
                           (reserved.toInt()) >= 0 ? secondaryColor : heartRed,
-                          fontSize: 18),
+                      fontSize: 18),
                 )
               ],
             ),
@@ -293,13 +281,12 @@ class _PortfolioUserWorthWebState extends State<PortfolioUserWorthWeb> {
                     padding: EdgeInsets.only(bottom: 10),
                     child: Text(
                       'Current Price',
-                      style: TextStyle(color: blurredGray,
-                      fontSize: 18),
+                      style: TextStyle(color: blurredGray, fontSize: 18),
                     )),
-                Text(price.toString(),
-                style: TextStyle(
-                  fontSize: 18
-                ),)
+                Text(
+                  price.toString(),
+                  style: TextStyle(fontSize: 18),
+                )
               ],
             ),
             Column(
@@ -310,17 +297,14 @@ class _PortfolioUserWorthWebState extends State<PortfolioUserWorthWeb> {
                     padding: EdgeInsets.only(bottom: 10),
                     child: Text(
                       'Avg Buy Price',
-                      style: TextStyle(color: blurredGray,
-                      fontSize: 18),
+                      style: TextStyle(color: blurredGray, fontSize: 18),
                     )),
                 Text(
                   avgbuyprice.toStringAsFixed(2),
-                  style: const TextStyle(color: secondaryColor,
-                  fontSize: 18),
+                  style: const TextStyle(color: secondaryColor, fontSize: 18),
                 )
               ],
             ),
-            
           ],
         ),
       ]),

@@ -8,6 +8,7 @@ import 'package:dalal_street_client/pages/portfolio/portfolio_transactions.dart'
 import 'package:dalal_street_client/blocs/portfolio/transactions/portfolio_transactions_cubit.dart';
 import 'package:dalal_street_client/pages/portfolio/portfolio_userworth_web.dart';
 import 'package:dalal_street_client/pages/portfolio/portfolio_transactions_web.dart';
+
 class PortfolioPage extends StatefulWidget {
   const PortfolioPage({Key? key}) : super(key: key);
 
@@ -41,28 +42,26 @@ class _PortfolioPageState extends State<PortfolioPage>
 
   SingleChildScrollView _desktopPortfolio() {
     return SingleChildScrollView(
-        child: 
-        SizedBox(
+      child: SizedBox(
           child: Stack(
-      children: [
-       
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-          child: Column(
-            children: [
-              const PortfolioUserWorthWeb(),
-              SizedBox(
-                height: 25,
-              ),
-              BlocProvider(
-                  create: (context) => PortfolioTransactionsCubit(),
-                  child: const UserTransactionsWeb())
-            ],
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+            child: Column(
+              children: [
+                const PortfolioUserWorthWeb(),
+                SizedBox(
+                  height: 25,
+                ),
+                BlocProvider(
+                    create: (context) => PortfolioTransactionsCubit(),
+                    child: const UserTransactionsWeb())
+              ],
+            ),
           ),
-        ),
-      ],
-    )) ,)
-        ;
+        ],
+      )),
+    );
   }
 
   SingleChildScrollView _tabletPortfolio() {
@@ -82,7 +81,6 @@ class _PortfolioPageState extends State<PortfolioPage>
         ),
       ],
     ));
-  
   }
 
   SingleChildScrollView _mobilePortfolio() {

@@ -36,7 +36,7 @@ class _UserTransactionsWebState extends State<UserTransactionsWeb> {
           bool moreExists = state.moreExists;
           String loadMore = moreExists ? 'Load More ↻' : '';
           return Container(
-              width: MediaQuery.of(context).size.width  * 0.76,
+              width: MediaQuery.of(context).size.width * 0.76,
               padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
               margin: const EdgeInsets.only(top: 15),
               decoration: BoxDecoration(
@@ -48,16 +48,16 @@ class _UserTransactionsWebState extends State<UserTransactionsWeb> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Padding(
-                      padding: EdgeInsets.only(top: 10,left: 10),
+                      padding: EdgeInsets.only(top: 10, left: 10),
                       child: Text(
-                      'Transactions',
-                      style: TextStyle(
-                        fontSize: 21,
-                        fontWeight: FontWeight.w500,
-                        color: white,
+                        'Transactions',
+                        style: TextStyle(
+                          fontSize: 21,
+                          fontWeight: FontWeight.w500,
+                          color: white,
+                        ),
+                        textAlign: TextAlign.center,
                       ),
-                      textAlign: TextAlign.center,
-                    ),
                     ),
                     const SizedBox(
                       height: 10,
@@ -139,14 +139,11 @@ class _UserTransactionsWebState extends State<UserTransactionsWeb> {
                       padding: EdgeInsets.only(bottom: 10),
                       child: Text(
                         'Type',
-                        style: TextStyle(color: blurredGray,
-                        fontSize: 18),
+                        style: TextStyle(color: blurredGray, fontSize: 18),
                       )),
                   Text(
                     transactionTypeToStr(type),
-                    style: TextStyle(
-                      fontSize: 18
-                    ),
+                    style: TextStyle(fontSize: 18),
                   )
                 ],
               ),
@@ -158,13 +155,12 @@ class _UserTransactionsWebState extends State<UserTransactionsWeb> {
                       padding: EdgeInsets.only(bottom: 10),
                       child: Text(
                         'Qty',
-                        style: TextStyle(color: blurredGray,
-                        fontSize: 18),
+                        style: TextStyle(color: blurredGray, fontSize: 18),
                       )),
                   Text(
                     qty.toString(),
-                    style:
-                        TextStyle(color: qty > 0 ? secondaryColor : heartRed,
+                    style: TextStyle(
+                        color: qty > 0 ? secondaryColor : heartRed,
                         fontSize: 18),
                   )
                 ],
@@ -177,13 +173,12 @@ class _UserTransactionsWebState extends State<UserTransactionsWeb> {
                       padding: EdgeInsets.only(bottom: 10),
                       child: Text(
                         'Trade Price',
-                        style: TextStyle(color: blurredGray,
-                        fontSize: 18),
+                        style: TextStyle(color: blurredGray, fontSize: 18),
                       )),
-                  Text(price == 0 ? '-' : price.toString(),
-                  style: TextStyle(
-                    fontSize: 18
-                  ),)
+                  Text(
+                    price == 0 ? '-' : price.toString(),
+                    style: TextStyle(fontSize: 18),
+                  )
                 ],
               ),
               Column(
@@ -194,13 +189,12 @@ class _UserTransactionsWebState extends State<UserTransactionsWeb> {
                       padding: EdgeInsets.only(bottom: 10),
                       child: Text(
                         'Cash',
-                        style: TextStyle(color: blurredGray,
-                        fontSize: 18),
+                        style: TextStyle(color: blurredGray, fontSize: 18),
                       )),
                   Text(
                     cash.toString(),
-                    style:
-                        TextStyle(color: cash > 0 ? secondaryColor : heartRed,
+                    style: TextStyle(
+                        color: cash > 0 ? secondaryColor : heartRed,
                         fontSize: 18),
                   )
                 ],
@@ -213,13 +207,12 @@ class _UserTransactionsWebState extends State<UserTransactionsWeb> {
                       padding: EdgeInsets.only(bottom: 10),
                       child: Text(
                         'Reserved Cash',
-                        style: TextStyle(color: blurredGray,
-                        fontSize: 18),
+                        style: TextStyle(color: blurredGray, fontSize: 18),
                       )),
-                  Text(reservedCash.toString(),
-                  style: TextStyle(
-                    fontSize: 18
-                  ),)
+                  Text(
+                    reservedCash.toString(),
+                    style: TextStyle(fontSize: 18),
+                  )
                 ],
               ),
               Column(
@@ -230,40 +223,35 @@ class _UserTransactionsWebState extends State<UserTransactionsWeb> {
                       padding: EdgeInsets.only(bottom: 10),
                       child: Text(
                         'Reserved Stocks',
-                        style: TextStyle(color: blurredGray,
-                        fontSize: 18),
+                        style: TextStyle(color: blurredGray, fontSize: 18),
                       )),
-                  Text(reservedStocks.toString(),
-                  style: TextStyle(
-                    fontSize: 18
-                  ),)
+                  Text(
+                    reservedStocks.toString(),
+                    style: TextStyle(fontSize: 18),
+                  )
                 ],
               ),
               Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const Padding(
-                  padding: EdgeInsets.only(bottom: 10),
-                  child: Text(
-                    'Created At',
-                    style: TextStyle(color: blurredGray,
-                    fontSize: 18),
-                  )),
-              Text(ISOtoDateTime(transactionTime),
-              style: TextStyle(
-                fontSize: 18
-              ),)
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const Padding(
+                      padding: EdgeInsets.only(bottom: 10),
+                      child: Text(
+                        'Created At',
+                        style: TextStyle(color: blurredGray, fontSize: 18),
+                      )),
+                  Text(
+                    ISOtoDateTime(transactionTime),
+                    style: TextStyle(fontSize: 18),
+                  )
+                ],
+              ),
             ],
           ),
+          const SizedBox(height: 30)
         ],
       ),
-      const SizedBox(height: 30)
-            ],
-          ),
-    
-          
-          
     );
   }
 }
