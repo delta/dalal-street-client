@@ -6,7 +6,8 @@ import 'package:dalal_street_client/pages/portfolio/portfolio_userworth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dalal_street_client/pages/portfolio/portfolio_transactions.dart';
 import 'package:dalal_street_client/blocs/portfolio/transactions/portfolio_transactions_cubit.dart';
-
+import 'package:dalal_street_client/pages/portfolio/portfolio_userworth_web.dart';
+import 'package:dalal_street_client/pages/portfolio/portfolio_transactions_web.dart';
 class PortfolioPage extends StatefulWidget {
   const PortfolioPage({Key? key}) : super(key: key);
 
@@ -38,28 +39,50 @@ class _PortfolioPageState extends State<PortfolioPage>
     );
   }
 
-  Center _desktopPortfolio() {
-    return const Center(
-      child: Text(
-        'Soon',
-        style: TextStyle(
-          fontSize: 14,
-          color: secondaryColor,
+  SingleChildScrollView _desktopPortfolio() {
+    return SingleChildScrollView(
+        child: 
+        SizedBox(
+          child: Stack(
+      children: [
+       
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+          child: Column(
+            children: [
+              const PortfolioUserWorthWeb(),
+              SizedBox(
+                height: 25,
+              ),
+              BlocProvider(
+                  create: (context) => PortfolioTransactionsCubit(),
+                  child: const UserTransactionsWeb())
+            ],
+          ),
         ),
-      ),
-    );
+      ],
+    )) ,)
+        ;
   }
 
-  Center _tabletPortfolio() {
-    return const Center(
-      child: Text(
-        'Soon',
-        style: TextStyle(
-          fontSize: 14,
-          color: secondaryColor,
+  SingleChildScrollView _tabletPortfolio() {
+    return SingleChildScrollView(
+        child: Stack(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+          child: Column(
+            children: [
+              const PortfolioUserWorth(),
+              BlocProvider(
+                  create: (context) => PortfolioTransactionsCubit(),
+                  child: const UserTransactions())
+            ],
+          ),
         ),
-      ),
-    );
+      ],
+    ));
+  
   }
 
   SingleChildScrollView _mobilePortfolio() {
