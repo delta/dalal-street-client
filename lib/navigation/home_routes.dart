@@ -11,7 +11,7 @@ import 'package:dalal_street_client/pages/daily_challenges/daily_challenges_page
 import 'package:dalal_street_client/pages/mortgage/mortgage_home.dart';
 import 'package:dalal_street_client/pages/news_page.dart';
 import 'package:dalal_street_client/pages/notifications_page.dart';
-import 'package:dalal_street_client/pages/open_orders_page.dart';
+import 'package:dalal_street_client/pages/open_orders/open_orders_page.dart';
 import 'package:dalal_street_client/pages/referral_page.dart';
 import 'package:dalal_street_client/proto_build/models/User.pb.dart';
 import 'package:flutter/widgets.dart';
