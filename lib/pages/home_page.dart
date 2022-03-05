@@ -324,7 +324,7 @@ class _HomePageState extends State<HomePage>
             height: 20,
           ),
           SizedBox(
-              height: MediaQuery.of(context).size.height * 0.35,
+              height: MediaQuery.of(context).size.height * 0.4,
               child: SingleChildScrollView(child: _stockList(true))),
         ],
       ),
@@ -489,7 +489,7 @@ class _HomePageState extends State<HomePage>
                       const Text(
                         'Total Worth',
                         style: TextStyle(
-                          fontSize: 30,
+                          fontSize: 26,
                         ),
                       ),
                       const Spacer(),
@@ -498,7 +498,7 @@ class _HomePageState extends State<HomePage>
                         child: Text(
                           '₹' + data.totalWorth.toString(),
                           style: TextStyle(
-                              fontSize: 30,
+                              fontSize: 26,
                               color: data.totalWorth.toInt() >= 0
                                   ? secondaryColor
                                   : heartRed),
@@ -518,14 +518,14 @@ class _HomePageState extends State<HomePage>
       const Padding(padding: EdgeInsets.all(10)),
       Text(
         field,
-        style: const TextStyle(fontSize: 30, color: whiteWithOpacity75),
+        style: const TextStyle(fontSize: 26, color: whiteWithOpacity75),
       ),
       const Spacer(),
       Container(
         padding: const EdgeInsets.only(right: 25),
         child: Text(
           '₹' + value,
-          style: const TextStyle(fontSize: 30, color: lightGray),
+          style: const TextStyle(fontSize: 26, color: lightGray),
         ),
       )
     ]);
@@ -549,7 +549,7 @@ class _HomePageState extends State<HomePage>
             ),
           ),
           SizedBox(
-            height: MediaQuery.of(context).size.height * 0.20,
+            height: MediaQuery.of(context).size.height * 0.25,
             child: SingleChildScrollView(
               child: Center(child:
                   BlocBuilder<NotificationsCubit, NotificationsCubitState>(
