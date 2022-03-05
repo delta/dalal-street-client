@@ -60,7 +60,7 @@ final homeRoutesWeb = homeRoutesMobile + moreRoutesMobile;
 final userRoutes = [
   ...homeRoutesWeb,
   '/company/:id',
-  '/admin'
+  '/admin',
 ];
 
 /// Widgets for routes in more section in mobile
