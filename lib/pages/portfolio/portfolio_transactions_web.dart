@@ -130,24 +130,24 @@ class _UserTransactionsWebState extends State<UserTransactionsWeb> {
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            
             children: [
               Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Padding(
-                      padding: EdgeInsets.only(bottom: 10, left:20),
+                      padding: EdgeInsets.only(bottom: 10, left: 20),
                       child: Text(
                         'Type',
                         style: TextStyle(color: blurredGray, fontSize: 18),
                       )),
-                  Padding(padding: EdgeInsets.only(left: 20.0),
-                  child: Text(
-                    transactionTypeToStr(type),
-                    style: TextStyle(fontSize: 18),
-                  ),)
-                 
+                  Padding(
+                    padding: EdgeInsets.only(left: 20.0),
+                    child: Text(
+                      transactionTypeToStr(type),
+                      style: TextStyle(fontSize: 18),
+                    ),
+                  )
                 ],
               ),
               Column(

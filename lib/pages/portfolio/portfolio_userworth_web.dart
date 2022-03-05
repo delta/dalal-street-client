@@ -194,13 +194,12 @@ class _PortfolioUserWorthWebState extends State<PortfolioUserWorthWeb> {
           Map<int, Int64> stocksOwnedMap,
           Map<int, Int64> cashSpentMap) =>
       Expanded(
-          child: 
-           RawScrollbar(
-            isAlwaysShown: true,
-            thumbColor: Color(0xFF388E3C),
-            radius: Radius.circular(5.0),
-            thickness: 10.0,
-            child: ListView.builder(
+        child: RawScrollbar(
+          isAlwaysShown: true,
+          thumbColor: Color(0xFF388E3C),
+          radius: Radius.circular(5.0),
+          thickness: 10.0,
+          child: ListView.builder(
               primary: false,
               shrinkWrap: true,
               itemCount: stocksHeld.length,
@@ -211,9 +210,9 @@ class _PortfolioUserWorthWebState extends State<PortfolioUserWorthWeb> {
                     cashSpentMap[keyList[index]],
                     mapOfStocks[keyList[index]]?.fullName ?? '',
                     mapOfStocks[keyList[index]]?.currentPrice);
-              }),),
-          
-          );
+              }),
+        ),
+      );
 
   Widget _eachStock(Int64? owned, Int64? reserved, Int64? cashSpent,
       String name, Int64? price) {
