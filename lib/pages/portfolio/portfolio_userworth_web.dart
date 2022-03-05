@@ -70,7 +70,7 @@ class _PortfolioUserWorthWebState extends State<PortfolioUserWorthWeb> {
                               'Your Holdings',
                               style: TextStyle(
                                 fontSize: 21,
-                                fontWeight: FontWeight.w500,
+                                fontWeight: FontWeight.w900,
                                 color: white,
                               ),
                               textAlign: TextAlign.center,
@@ -115,7 +115,7 @@ class _PortfolioUserWorthWebState extends State<PortfolioUserWorthWeb> {
                   'Portfolio',
                   style: TextStyle(
                     fontSize: 21,
-                    fontWeight: FontWeight.w500,
+                    fontWeight: FontWeight.w900,
                     color: white,
                   ),
                   textAlign: TextAlign.center,
@@ -194,8 +194,14 @@ class _PortfolioUserWorthWebState extends State<PortfolioUserWorthWeb> {
           Map<int, Int64> stocksOwnedMap,
           Map<int, Int64> cashSpentMap) =>
       Expanded(
-          child: ListView.builder(
-              physics: const AlwaysScrollableScrollPhysics(),
+          child: 
+           RawScrollbar(
+            isAlwaysShown: true,
+            thumbColor: Color(0xFF388E3C),
+            radius: Radius.circular(5.0),
+            thickness: 10.0,
+            child: ListView.builder(
+              primary: false,
               shrinkWrap: true,
               itemCount: stocksHeld.length,
               itemBuilder: (context, index) {
@@ -205,7 +211,9 @@ class _PortfolioUserWorthWebState extends State<PortfolioUserWorthWeb> {
                     cashSpentMap[keyList[index]],
                     mapOfStocks[keyList[index]]?.fullName ?? '',
                     mapOfStocks[keyList[index]]?.currentPrice);
-              }));
+              }),),
+          
+          );
 
   Widget _eachStock(Int64? owned, Int64? reserved, Int64? cashSpent,
       String name, Int64? price) {

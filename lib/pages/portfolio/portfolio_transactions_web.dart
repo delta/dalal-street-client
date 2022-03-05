@@ -53,7 +53,7 @@ class _UserTransactionsWebState extends State<UserTransactionsWeb> {
                         'Transactions',
                         style: TextStyle(
                           fontSize: 21,
-                          fontWeight: FontWeight.w500,
+                          fontWeight: FontWeight.w900,
                           color: white,
                         ),
                         textAlign: TextAlign.center,
@@ -120,7 +120,7 @@ class _UserTransactionsWebState extends State<UserTransactionsWeb> {
           Row(
             children: [
               Padding(
-                padding: const EdgeInsets.only(bottom: 15, left: 30, top: 30),
+                padding: const EdgeInsets.only(bottom: 15, left: 20, top: 30),
                 child: Text(
                   mapOfStocks[stockId]?.fullName.toUpperCase() ?? '',
                   style: const TextStyle(fontSize: 21),
@@ -129,22 +129,25 @@ class _UserTransactionsWebState extends State<UserTransactionsWeb> {
             ],
           ),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            
             children: [
               Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Padding(
-                      padding: EdgeInsets.only(bottom: 10),
+                      padding: EdgeInsets.only(bottom: 10, left:20),
                       child: Text(
                         'Type',
                         style: TextStyle(color: blurredGray, fontSize: 18),
                       )),
-                  Text(
+                  Padding(padding: EdgeInsets.only(left: 20.0),
+                  child: Text(
                     transactionTypeToStr(type),
                     style: TextStyle(fontSize: 18),
-                  )
+                  ),)
+                 
                 ],
               ),
               Column(
@@ -233,7 +236,7 @@ class _UserTransactionsWebState extends State<UserTransactionsWeb> {
               ),
               Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                crossAxisAlignment: CrossAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Padding(
                       padding: EdgeInsets.only(bottom: 10),
@@ -247,6 +250,7 @@ class _UserTransactionsWebState extends State<UserTransactionsWeb> {
                   )
                 ],
               ),
+              SizedBox(width: 2)
             ],
           ),
           const SizedBox(height: 30)
