@@ -1,5 +1,6 @@
 import 'package:dalal_street_client/blocs/dalal/dalal_bloc.dart';
 import 'package:dalal_street_client/config/config.dart';
+import 'package:dalal_street_client/config/log.dart';
 import 'package:dalal_street_client/grpc/client.dart';
 import 'package:dalal_street_client/navigation/router.dart';
 import 'package:dalal_street_client/theme/theme.dart';
@@ -40,6 +41,14 @@ void main() async {
     ),
     storage: storage,
   );
+
+  // Test logs
+  logger.v('Verbose log');
+  logger.d('Debug log');
+  logger.i('Info log');
+  logger.w('Warning log');
+  logger.e('Error log');
+  logger.wtf('What a terrible failure log');
 }
 
 // TODO: add proper validationMessages in all ReactiveForms
