@@ -110,8 +110,7 @@ GoRouter generateRouter(BuildContext context) => GoRouter(
 
 /// Returns if the route is for an authenticated user
 bool isUserRoute(GoRouterState routerState) =>
-    homeRoutesWeb.contains(routerState.location) ||
-    otherNonAuthRoutes.hasMatch(routerState.location);
+    userRoutes.hasMatch(routerState.location);
 
 final _initialRoutes = [
   GoRoute(
