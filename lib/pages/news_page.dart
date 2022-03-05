@@ -84,6 +84,24 @@ class _NewsPageState extends State<NewsPage> {
               i++;
             }
           }
+          if (mapMarketEvents.isEmpty) {
+            return Column(
+              children: const [
+                SizedBox(
+                  height: 20,
+                ),
+                Text(
+                  'No More News',
+                  style: TextStyle(
+                      fontSize: 20, color: white, fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(
+                  height: 20,
+                )
+              ],
+            );
+          }
           return ListView.separated(
             shrinkWrap: true,
             physics: const ScrollPhysics(),
@@ -186,7 +204,6 @@ class _NewsPageState extends State<NewsPage> {
               builder: (context, state) {
             if (state is SubscriptionToNewsSuccess) {
               MarketEvent marketEvent = state.news.marketEvent;
-
               String headline = marketEvent.headline;
               String imagePath = marketEvent.imagePath;
               String createdAt = marketEvent.createdAt;
@@ -225,6 +242,18 @@ class _NewsPageState extends State<NewsPage> {
               return BlocBuilder<NewsBloc, NewsState>(
                   builder: (context, state) {
                 if (state is GetNewsSucess) {
+                  if (state.marketEventsList.marketEvents.isEmpty) {
+                    return const Align(
+                        alignment: Alignment.center,
+                        child: Text(
+                          'No latest News',
+                          style: TextStyle(
+                              fontSize: 20,
+                              color: white,
+                              fontWeight: FontWeight.bold),
+                          textAlign: TextAlign.center,
+                        ));
+                  }
                   mapmarketEventsCopy
                       .addAll(state.marketEventsList.marketEvents);
                   MarketEvent marketEvent = mapmarketEventsCopy[0];

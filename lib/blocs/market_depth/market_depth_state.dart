@@ -18,14 +18,19 @@ class SubscriptionToMarketDepthFailed extends MarketDepthState {
 }
 
 class MarketDepthUpdateState extends MarketDepthState {
-  final Map<Int64, Int64> askDepth;
-  final Map<Int64, Int64> bidDepth;
+  final List<MarketOrders> askDepth;
+  final List<MarketOrders> bidDepth;
 
   const MarketDepthUpdateState(this.askDepth, this.bidDepth);
+
+  @override
+  List<Object> get props => [askDepth, bidDepth];
 }
 
 class TradeUpdateState extends MarketDepthState {
   final List<Trade> trades;
 
   const TradeUpdateState(this.trades);
+  @override
+  List<Object> get props => [trades];
 }

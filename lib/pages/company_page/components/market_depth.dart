@@ -1,11 +1,11 @@
 import 'package:dalal_street_client/blocs/market_depth/market_depth_bloc.dart';
 import 'package:dalal_street_client/blocs/subscribe/subscribe_cubit.dart';
 import 'package:dalal_street_client/components/loading.dart';
+import 'package:dalal_street_client/config/log.dart';
 import 'package:dalal_street_client/constants/constants.dart';
 import 'package:dalal_street_client/models/market_orders.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
 import 'package:dalal_street_client/theme/colors.dart';
-import 'package:fixnum/fixnum.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -43,6 +43,7 @@ Widget marketDepth(Stock company) {
             return BlocBuilder<MarketDepthBloc, MarketDepthState>(
               builder: (context, state) {
                 if (state is MarketDepthUpdateState) {
+                  logger.d('market depth update');
                   return SingleChildScrollView(
                     scrollDirection: Axis.vertical,
                     child: SingleChildScrollView(
@@ -107,29 +108,8 @@ Widget marketDepth(Stock company) {
 }
 
 List<DataRow> buildRowsOfMarketDepth(
-    Map<Int64, Int64> askDepth, Map<Int64, Int64> bidDepth) {
+    List<MarketOrders> askDepthArray, List<MarketOrders> bidDepthArray) {
   List<DataRow> rows = [];
-
-  final List<MarketOrders> askDepthArray = [];
-  final List<MarketOrders> bidDepthArray = [];
-
-  for (var element in askDepth.entries) {
-    askDepthArray.add(MarketOrders(element.key, element.value));
-  }
-  for (var element in bidDepth.entries) {
-    bidDepthArray.add(MarketOrders(element.key, element.value));
-  }
-
-  askDepthArray.sort((a, b) {
-    return (a.price - b.price).toInt();
-  });
-
-  bidDepthArray.sort((a, b) {
-    if (a.price == 0) return -1;
-    if (b.price == 0) return 1;
-
-    return (a.price - b.price).toInt();
-  });
 
   for (int i = 0; i < marketDepthRows; i++) {
     String askPrice =
