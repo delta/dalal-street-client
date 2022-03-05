@@ -82,7 +82,7 @@ class _DalalNavBuilderState extends State<DalalNavBuilder> {
             } else {
               logger.i('user logged out because of issue with session id');
             }
-            if (widget.routerState.location != '/') context.webGo('/');
+            if (isUserRoute(widget.routerState)) context.webGo('/');
           } else if (state is DalalLoginFailed) {
             // Nothing to do. Just show button to retry
           }
