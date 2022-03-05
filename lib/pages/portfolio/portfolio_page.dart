@@ -1,7 +1,6 @@
 import 'package:dalal_street_client/blocs/portfolio/userWorth/portfolio_cubit.dart';
 import 'package:dalal_street_client/utils/responsive.dart';
 import 'package:flutter/material.dart';
-import 'package:dalal_street_client/theme/colors.dart';
 import 'package:dalal_street_client/pages/portfolio/portfolio_userworth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dalal_street_client/pages/portfolio/portfolio_transactions.dart';
@@ -50,7 +49,7 @@ class _PortfolioPageState extends State<PortfolioPage>
             child: Column(
               children: [
                 const PortfolioUserWorthWeb(),
-                SizedBox(
+                const SizedBox(
                   height: 25,
                 ),
                 BlocProvider(

@@ -142,10 +142,10 @@ class _UserTransactionsWebState extends State<UserTransactionsWeb> {
                         style: TextStyle(color: blurredGray, fontSize: 18),
                       )),
                   Padding(
-                    padding: EdgeInsets.only(left: 20.0),
+                    padding: const EdgeInsets.only(left: 20.0),
                     child: Text(
                       transactionTypeToStr(type),
-                      style: TextStyle(fontSize: 18),
+                      style: const TextStyle(fontSize: 18),
                     ),
                   )
                 ],
@@ -180,7 +180,7 @@ class _UserTransactionsWebState extends State<UserTransactionsWeb> {
                       )),
                   Text(
                     price == 0 ? '-' : price.toString(),
-                    style: TextStyle(fontSize: 18),
+                    style: const TextStyle(fontSize: 18),
                   )
                 ],
               ),
@@ -214,7 +214,7 @@ class _UserTransactionsWebState extends State<UserTransactionsWeb> {
                       )),
                   Text(
                     reservedCash.toString(),
-                    style: TextStyle(fontSize: 18),
+                    style: const TextStyle(fontSize: 18),
                   )
                 ],
               ),
@@ -230,7 +230,7 @@ class _UserTransactionsWebState extends State<UserTransactionsWeb> {
                       )),
                   Text(
                     reservedStocks.toString(),
-                    style: TextStyle(fontSize: 18),
+                    style: const TextStyle(fontSize: 18),
                   )
                 ],
               ),
@@ -246,11 +246,11 @@ class _UserTransactionsWebState extends State<UserTransactionsWeb> {
                       )),
                   Text(
                     ISOtoDateTime(transactionTime),
-                    style: TextStyle(fontSize: 18),
+                    style: const TextStyle(fontSize: 18),
                   )
                 ],
               ),
-              SizedBox(width: 2)
+              const SizedBox(width: 2)
             ],
           ),
           const SizedBox(height: 30)

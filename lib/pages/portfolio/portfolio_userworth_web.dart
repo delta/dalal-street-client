@@ -36,14 +36,14 @@ class _PortfolioUserWorthWebState extends State<PortfolioUserWorthWeb> {
           );
         } else if (state is UserWorthLoaded) {
           return Padding(
-            padding: EdgeInsets.only(top: 25),
+            padding: const EdgeInsets.only(top: 25),
             child: SizedBox(
               height: 350,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Container(
-                      margin: EdgeInsets.only(left: 100),
+                      margin: const EdgeInsets.only(left: 100),
                       height: double.infinity,
                       width: MediaQuery.of(context).size.width * 0.3,
                       padding: const EdgeInsets.symmetric(
@@ -54,7 +54,7 @@ class _PortfolioUserWorthWebState extends State<PortfolioUserWorthWeb> {
                       ),
                       child: _userWorthDetails()),
                   Container(
-                      margin: EdgeInsets.only(right: 100),
+                      margin: const EdgeInsets.only(right: 100),
                       width: MediaQuery.of(context).size.width * 0.40,
                       padding: const EdgeInsets.symmetric(
                           vertical: 25, horizontal: 15),
@@ -196,8 +196,8 @@ class _PortfolioUserWorthWebState extends State<PortfolioUserWorthWeb> {
       Expanded(
         child: RawScrollbar(
           isAlwaysShown: true,
-          thumbColor: Color(0xFF388E3C),
-          radius: Radius.circular(5.0),
+          thumbColor: const Color(0xFF388E3C),
+          radius: const Radius.circular(5.0),
           thickness: 10.0,
           child: ListView.builder(
               primary: false,
@@ -292,7 +292,7 @@ class _PortfolioUserWorthWebState extends State<PortfolioUserWorthWeb> {
                     )),
                 Text(
                   price.toString(),
-                  style: TextStyle(fontSize: 18),
+                  style: const TextStyle(fontSize: 18),
                 )
               ],
             ),
