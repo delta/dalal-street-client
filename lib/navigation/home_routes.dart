@@ -56,8 +56,12 @@ final moreRoutesMobile = moreMenuMobile.keys.toList();
 /// Home routes for web
 final homeRoutesWeb = homeRoutesMobile + moreRoutesMobile;
 
-/// Routes not directly in home page, but accesed by only authenticated users
-final otherNonAuthRoutes = ['/company/:id'];
+/// Routes that can be accessed by only authenticated users
+final userRoutes = [
+  ...homeRoutesWeb,
+  '/company/:id',
+  '/admin',
+];
 
 /// Widgets for routes in more section in mobile
 Map<String, Widget> mobileHomePagesMore(User extra) => {
