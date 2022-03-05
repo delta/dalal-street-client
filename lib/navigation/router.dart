@@ -41,7 +41,6 @@ GoRouter generateRouter(BuildContext context) => GoRouter(
     routes: [
       ..._initialRoutes,
       ..._authRoutes,
-      _adminRoute,
       GoRoute(
         /// A regular expression to match all home routes
         /// Note: Sorry for hardcoding everything, i am noob in regex
@@ -69,7 +68,6 @@ GoRouter generateRouter(BuildContext context) => GoRouter(
       ),
       GoRoute(
         path: '/company/:id',
-        name: 'company',
         builder: (_, state) {
           final stockId = int.tryParse(state.params['id']!);
           if (stockId == null) {
@@ -90,7 +88,24 @@ GoRouter generateRouter(BuildContext context) => GoRouter(
             child: CompanyPage(stockId: stockId),
           );
         },
-      )
+      ),
+      GoRoute(
+        path: '/admin',
+        builder: (_, __) => MultiBlocProvider(
+          providers: [
+            BlocProvider(create: (_) => Tab1Cubit()),
+            BlocProvider(create: (_) => Tab2Cubit()),
+            BlocProvider(create: (_) => Tab3Cubit()),
+          ],
+          child: const AdminPage(),
+        ),
+        redirect: (_) {
+          final dalalData = context.read<DalalBloc>().state as DalalDataLoaded;
+          final user = dalalData.user;
+          if (!user.isAdmin) return '/home';
+          return null;
+        },
+      ),
     ],
     // Show snackbar and navigate to Home or Login page whenever UserState changes
     navigatorBuilder: (context, state, child) => DalalNavBuilder(
@@ -172,15 +187,3 @@ final _verifyRoutes = [
     ),
   ),
 ];
-
-final _adminRoute = GoRoute(
-  path: '/admin',
-  builder: (_, __) => MultiBlocProvider(
-    providers: [
-      BlocProvider(create: (context) => Tab1Cubit()),
-      BlocProvider(create: (context) => Tab2Cubit()),
-      BlocProvider(create: (context) => Tab3Cubit()),
-    ],
-    child: const AdminPage(),
-  ),
-);
