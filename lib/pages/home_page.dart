@@ -68,40 +68,48 @@ class _HomePageState extends State<HomePage>
     );
   }
 
-  Center _desktopBody() {
-    return Center(
-        child: SingleChildScrollView(
-            child: Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        const SizedBox.square(
-          dimension: 30,
-        ),
-        Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-          SizedBox(
-            child: SingleChildScrollView(child: _companiesDesktop()),
-            height: 500,
-            width: 697,
+  Widget _desktopBody() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const SizedBox.square(
+            dimension: 20,
+          ),
+          IntrinsicHeight(
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  SizedBox(
+                    child: _companiesDesktop(),
+                    width: MediaQuery.of(context).size.width * 0.55,
+                  ),
+                  const SizedBox.square(
+                    dimension: 25,
+                  ),
+                  Column(
+                    children: [
+                      _notifications(),
+                      const SizedBox.square(
+                        dimension: 10,
+                      ),
+                      _userworth(),
+                    ],
+                  )
+                ]),
           ),
           const SizedBox.square(
-            dimension: 45,
+            dimension: 35,
           ),
-          Column(
-            children: [
-              _notifications(),
-              const SizedBox.square(
-                dimension: 15,
-              ),
-              _userworth(),
-            ],
-          )
-        ]),
-        const SizedBox.square(
-          dimension: 35,
-        ),
-        SizedBox(height: 770, width: 1230, child: _recentNewsDesktop()),
-      ],
-    )));
+          SizedBox(
+              width: MediaQuery.of(context).size.width * 0.90,
+              child: _recentNewsDesktop()),
+        ],
+      ),
+    );
   }
 
   Center _tabletBody() {
@@ -207,14 +215,19 @@ class _HomePageState extends State<HomePage>
                     width: 80,
                     height: 25,
                     fontSize: 12,
-                    title: 'See All',
+                    title: 'See More',
                     onPressed: () {
                       context.go('/news');
                     },
                   ),
                 ],
               ),
-              feedlist()
+              const SizedBox(
+                height: 20,
+              ),
+              SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.4,
+                  child: SingleChildScrollView(child: feedlist()))
             ]));
   }
 
@@ -287,8 +300,10 @@ class _HomePageState extends State<HomePage>
         }
       });
 
-  Container _companiesDesktop() {
+  Widget _companiesDesktop() {
     return Container(
+      constraints:
+          BoxConstraints(minHeight: MediaQuery.of(context).size.height / 2),
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
       decoration: BoxDecoration(
         color: background2,
@@ -296,7 +311,8 @@ class _HomePageState extends State<HomePage>
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisSize: MainAxisSize.min,
         children: [
           const Padding(
               padding: EdgeInsets.all(10),
@@ -305,9 +321,11 @@ class _HomePageState extends State<HomePage>
                 style: TextStyle(fontSize: 24, color: whiteWithOpacity75),
               )),
           const SizedBox(
-            height: 40,
+            height: 20,
           ),
-          _stockList(),
+          SizedBox(
+              height: MediaQuery.of(context).size.height * 0.35,
+              child: SingleChildScrollView(child: _stockList(true))),
         ],
       ),
     );
@@ -347,19 +365,20 @@ class _HomePageState extends State<HomePage>
           const SizedBox(
             height: 20,
           ),
-          _stockList(),
+          _stockList(false),
         ],
       ),
     );
   }
 
-  Widget _stockList() {
+  Widget _stockList(bool isWeb) {
     List<Widget> stockItems = stocks.entries
         .map((entry) => StockItem(
             stock: entry.value,
             isBankruptStream: stockMapStream.isBankruptStream(entry.value.id),
             givesDividendStream: stockMapStream.givesDividents(entry.value.id),
-            stockPriceStream: stockMapStream.priceStream(entry.key)))
+            stockPriceStream: stockMapStream.priceStream(entry.key),
+            isWeb: isWeb))
         .toList();
     return ListView(
       physics: const NeverScrollableScrollPhysics(),
@@ -383,7 +402,7 @@ class _HomePageState extends State<HomePage>
           ClipRRect(
             borderRadius: BorderRadius.circular(20),
             child: Image(
-              width: 100,
+              width: 200,
               height: 100,
               fit: BoxFit.contain,
               image: NetworkImage(imagePath),
@@ -393,13 +412,10 @@ class _HomePageState extends State<HomePage>
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
-                SizedBox(
-                  width: (MediaQuery.of(context).size.width - 100) * 0.8,
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-                    child: Text(text,
-                        style: const TextStyle(color: white, fontSize: 15)),
-                  ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                  child: Text(text,
+                      style: const TextStyle(color: white, fontSize: 24)),
                 ),
                 const SizedBox.square(
                   dimension: 5,
@@ -410,7 +426,7 @@ class _HomePageState extends State<HomePage>
                         style: const TextStyle(
                             fontStyle: FontStyle.italic,
                             color: lightGray,
-                            fontSize: 12)))
+                            fontSize: 18)))
               ]),
         ],
       ),
@@ -434,8 +450,8 @@ class _HomePageState extends State<HomePage>
 
   Widget _userworth() {
     return Container(
-      width: 489,
-      height: 239,
+      width: MediaQuery.of(context).size.width * 0.35,
+      //  height: MediaQuery.of(context).size.height * 0.25,
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
       decoration: BoxDecoration(
         color: background2,
@@ -450,9 +466,6 @@ class _HomePageState extends State<HomePage>
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Padding(
-                  padding: EdgeInsets.only(top: 15),
-                ),
                 const Text(
                   'Your Holdings',
                   style: TextStyle(
@@ -462,7 +475,7 @@ class _HomePageState extends State<HomePage>
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(
-                  height: 20,
+                  height: 10,
                 ),
                 Column(
                   children: [
@@ -521,8 +534,7 @@ class _HomePageState extends State<HomePage>
   Widget _notifications() {
     List<notification.Notification> notifications = [];
     return Container(
-        width: 489,
-        height: 245,
+        width: MediaQuery.of(context).size.width * 0.35,
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
           color: background2,
@@ -536,16 +548,15 @@ class _HomePageState extends State<HomePage>
               style: TextStyle(color: whiteWithOpacity75, fontSize: 24),
             ),
           ),
-          Center(child:
-              BlocBuilder<NotificationsCubit, NotificationsCubitState>(
-                  builder: (context, state) {
-            if (state is GetNotificationSuccess) {
-              notifications.addAll(state.notifications);
-
-              return SizedBox(
-                  width: 489,
-                  height: 176,
-                  child: ListView.separated(
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.20,
+            child: SingleChildScrollView(
+              child: Center(child:
+                  BlocBuilder<NotificationsCubit, NotificationsCubitState>(
+                      builder: (context, state) {
+                if (state is GetNotificationSuccess) {
+                  notifications.addAll(state.notifications);
+                  return ListView.separated(
                     shrinkWrap: true,
                     physics: const ScrollPhysics(),
                     itemCount: notifications.length,
@@ -559,29 +570,32 @@ class _HomePageState extends State<HomePage>
                         color: lightGray,
                       );
                     },
-                  ));
-            } else if (state is GetNotificationFailure) {
-              return Column(
-                children: [
-                  const Text('Failed to reach server'),
-                  const SizedBox(height: 20),
-                  SizedBox(
-                    width: 100,
-                    height: 50,
-                    child: OutlinedButton(
-                      onPressed: () =>
-                          context.read<NotificationsCubit>().getNotifications(),
-                      child: const Text('Retry'),
-                    ),
-                  ),
-                ],
-              );
-            } else {
-              return const Center(
-                child: DalalLoadingBar(),
-              );
-            }
-          }))
+                  );
+                } else if (state is GetNotificationFailure) {
+                  return Column(
+                    children: [
+                      const Text('Failed to reach server'),
+                      const SizedBox(height: 20),
+                      SizedBox(
+                        width: 100,
+                        height: 50,
+                        child: OutlinedButton(
+                          onPressed: () => context
+                              .read<NotificationsCubit>()
+                              .getNotifications(),
+                          child: const Text('Retry'),
+                        ),
+                      ),
+                    ],
+                  );
+                } else {
+                  return const Center(
+                    child: DalalLoadingBar(),
+                  );
+                }
+              })),
+            ),
+          )
         ]));
   }
 
@@ -590,8 +604,7 @@ class _HomePageState extends State<HomePage>
       child: Text(
         text,
         style: const TextStyle(color: white, fontSize: 16),
-        maxLines: 2,
-        overflow: TextOverflow.ellipsis,
+        //overflow: TextOverflow.ellipsis,
       ),
       padding: const EdgeInsets.all(10),
     );
@@ -603,13 +616,15 @@ class StockItem extends StatelessWidget {
   final Stream<Int64> stockPriceStream;
   final Stream<bool> isBankruptStream;
   final Stream<bool> givesDividendStream;
+  final bool isWeb;
 
   const StockItem(
       {Key? key,
       required this.stock,
       required this.isBankruptStream,
       required this.givesDividendStream,
-      required this.stockPriceStream})
+      required this.stockPriceStream,
+      required this.isWeb})
       : super(key: key);
 
   @override
@@ -626,14 +641,14 @@ class StockItem extends StatelessWidget {
       child: Container(
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
           child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-            _stockNames(stock),
+            _stockNames(stock, isWeb),
             _stockGraph(stock.id),
-            _stockPrices(),
+            _stockPrices(isWeb),
           ])),
     );
   }
 
-  Expanded _stockNames(Stock company) {
+  Expanded _stockNames(Stock company, bool isWeb) {
     return Expanded(
       child: StreamBuilder<bool>(
         stream: isBankruptStream,
@@ -651,34 +666,34 @@ class StockItem extends StatelessWidget {
                       if (isBankrupt)
                         Text(
                           company.shortName,
-                          style: const TextStyle(
+                          style: TextStyle(
                               color: Colors.red,
-                              fontSize: 18,
+                              fontSize: isWeb ? 22 : 18,
                               fontWeight: FontWeight.w600,
                               decoration: TextDecoration.lineThrough),
                         )
                       else if (givesDividends)
                         Text(
                           company.shortName,
-                          style: const TextStyle(
+                          style: TextStyle(
                             color: Colors.green,
                             fontWeight: FontWeight.w600,
-                            fontSize: 18,
+                            fontSize: isWeb ? 22 : 18,
                           ),
                         )
                       else
                         Text(
                           company.shortName,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontWeight: FontWeight.w600,
-                            fontSize: 18,
+                            fontSize: isWeb ? 22 : 18,
                           ),
                         ),
                       Text(
                         company.fullName,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontWeight: FontWeight.w600,
-                          fontSize: 14,
+                          fontSize: isWeb ? 18 : 14,
                           color: whiteWithOpacity50,
                         ),
                       ),
@@ -699,7 +714,7 @@ class StockItem extends StatelessWidget {
     );
   }
 
-  Widget _stockPrices() {
+  Widget _stockPrices(bool isWeb) {
     return Expanded(
       child: StreamBuilder<Int64>(
         stream: stockPriceStream,
@@ -723,8 +738,8 @@ class StockItem extends StatelessWidget {
             children: [
               Text(
                 '₹' + oCcy.format(stockPrice).toString(),
-                style: const TextStyle(
-                  fontSize: 18,
+                style: TextStyle(
+                  fontSize: isWeb ? 22 : 18,
                 ),
               ),
               Text(
@@ -732,7 +747,7 @@ class StockItem extends StatelessWidget {
                     ? '+' + oCcy.format(percentageHighOrLow).toString() + '%'
                     : oCcy.format(percentageHighOrLow).toString() + '%',
                 style: TextStyle(
-                  fontSize: 14,
+                  fontSize: isWeb ? 18 : 14,
                   color: isLowOrHigh ? secondaryColor : heartRed,
                 ),
               ),
