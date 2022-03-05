@@ -66,12 +66,12 @@ class DalalBloc extends HydratedBloc<DalalEvent, DalalState> {
           emit(const DalalLoggedOut(manualLogout: false));
         } else {
           logger.e(e);
-          // await Future.delayed(const Duration(milliseconds: 200));
+          await Future.delayed(const Duration(milliseconds: 200));
           emit(DalalLoginFailed(sessionId));
         }
       } catch (e) {
         logger.e(e);
-        // await Future.delayed(const Duration(milliseconds: 200));
+        await Future.delayed(const Duration(milliseconds: 200));
         emit(DalalLoginFailed(sessionId));
       }
     });
