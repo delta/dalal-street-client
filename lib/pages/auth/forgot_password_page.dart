@@ -3,6 +3,7 @@ import 'package:dalal_street_client/components/dalal_back_button.dart';
 import 'package:dalal_street_client/components/fill_max_height_scroll_view.dart';
 import 'package:dalal_street_client/components/loading.dart';
 import 'package:dalal_street_client/models/snackbar/snackbar_type.dart';
+import 'package:dalal_street_client/theme/colors.dart';
 import 'package:dalal_street_client/utils/form_validation.dart';
 import 'package:dalal_street_client/utils/snackbar.dart';
 import 'package:flutter/material.dart';
@@ -35,24 +36,46 @@ class ForgotPasswordPage extends StatelessWidget {
               if (state is ForgotPasswordLoading) {
                 return const Center(child: DalalLoadingBar());
               }
-              return body();
+
+              var screenwidth = MediaQuery.of(context).size.width;
+
+              return screenwidth > 1000
+                  ? (Center(
+                      child: Container(
+                      decoration: BoxDecoration(
+                          // color: baseColor,
+                          border: Border.all(color: secondaryColor, width: 2),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(10))),
+                      // decoration: BoxDecoration(),
+                      child: body(context),
+                      margin: EdgeInsets.fromLTRB(
+                          screenwidth * 0.35,
+                          screenwidth * 0.1,
+                          screenwidth * 0.35,
+                          screenwidth * 0.1),
+                    )))
+                  : body(context);
             },
           ),
         ),
       );
 
-  Widget body() => FillMaxHeightScrollView(
-        builder: (context) => Padding(
-          padding: const EdgeInsets.all(30),
-          child: Column(
-            children: [
-              header(context),
-              const SizedBox(height: 150),
-              form(context),
-            ],
-          ),
+  Widget body(BuildContext context) {
+    var screenwidth = MediaQuery.of(context).size.width;
+    return FillMaxHeightScrollView(
+      builder: (context) => Padding(
+        padding: const EdgeInsets.all(30),
+        child: Column(
+          children: [
+            header(context),
+            SizedBox(height: screenwidth > 1000 ? 100 : 150),
+            form(context),
+          ],
         ),
-      );
+      ),
+    );
+  }
 
   Widget header(BuildContext context) => Column(
         crossAxisAlignment: CrossAxisAlignment.start,

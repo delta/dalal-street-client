@@ -3,6 +3,7 @@ import 'package:dalal_street_client/components/dalal_back_button.dart';
 import 'package:dalal_street_client/components/fill_max_height_scroll_view.dart';
 import 'package:dalal_street_client/components/loading.dart';
 import 'package:dalal_street_client/components/reactive_password_field.dart';
+import 'package:dalal_street_client/theme/colors.dart';
 import 'package:dalal_street_client/utils/snackbar.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -37,7 +38,25 @@ class LoginPage extends StatelessWidget {
               if (state is LoginLoading) {
                 return const Center(child: DalalLoadingBar());
               }
-              return buildBody();
+              var screenwidth = MediaQuery.of(context).size.width;
+
+              return screenwidth > 1000
+                  ? (Center(
+                      child: Container(
+                      decoration: BoxDecoration(
+                          // color: baseColor,
+                          border: Border.all(color: secondaryColor, width: 2),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(10))),
+                      // decoration: BoxDecoration(),
+                      child: buildBody(),
+                      margin: EdgeInsets.fromLTRB(
+                          screenwidth * 0.35,
+                          screenwidth * 0.03,
+                          screenwidth * 0.35,
+                          screenwidth * 0.1),
+                    )))
+                  : buildBody();
             })(),
           ),
         ),
@@ -74,8 +93,15 @@ class LoginPage extends StatelessWidget {
         ],
       );
 
-  Widget buildForm(BuildContext context) => ReactiveForm(
-        formGroup: form,
+  Widget buildForm(BuildContext context) {
+    var screenwidth = MediaQuery.of(context).size.width;
+    bool isWeb = screenwidth > 1000;
+    return ReactiveForm(
+      formGroup: form,
+      child: Padding(
+        padding: !isWeb
+            ? const EdgeInsets.all(0.0)
+            : const EdgeInsets.fromLTRB(0, 0, 25, 0),
         child: Column(
           children: [
             ReactiveTextField(
@@ -105,7 +131,7 @@ class LoginPage extends StatelessWidget {
             ),
             const SizedBox(height: 50),
             SizedBox(
-              width: 300,
+              width: isWeb ? double.infinity : 300,
               child: ElevatedButton(
                 onPressed: () => _onLoginClicked(context),
                 child: const Text('Log In'),
@@ -114,7 +140,9 @@ class LoginPage extends StatelessWidget {
             const SizedBox(height: 20),
           ],
         ),
-      );
+      ),
+    );
+  }
 
   Widget buildFooter(BuildContext context) => Padding(
         padding: const EdgeInsets.all(24),
