@@ -62,14 +62,25 @@ class _HomePageState extends State<HomePage>
     );
   }
 
-  Center _desktopBody() {
-    return const Center(
-      child: Text(
-        'Web UI will design soon :)',
-        style: TextStyle(
-          fontSize: 14,
-          color: secondaryColor,
-        ),
+  Padding _desktopBody() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+      child: Column(
+        children: [
+          ElevatedButton(
+              onPressed: () {
+                context.read<DalalBloc>().add(const DalalLogOut());
+              },
+              child: const Text('Logout')),
+          const SizedBox(
+            height: 5,
+          ),
+          _companies(),
+          const SizedBox(
+            height: 10,
+          ),
+          _recentNews(),
+        ],
       ),
     );
   }

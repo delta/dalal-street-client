@@ -1,6 +1,8 @@
 import 'package:dalal_street_client/blocs/subscribe/subscribe_cubit.dart';
 import 'package:dalal_street_client/components/stock_bar.dart';
 import 'package:dalal_street_client/config/get_it.dart';
+import 'package:dalal_street_client/pages/company_page/components/company_prices_web.dart';
+import 'package:dalal_street_client/pages/company_page/components/company_tab_view_web.dart';
 import 'package:dalal_street_client/pages/company_page/components/news.dart';
 import 'package:dalal_street_client/proto_build/datastreams/Subscribe.pb.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
@@ -102,7 +104,20 @@ class _CompanyPageState extends State<CompanyPage>
               ],
             )),
         tablet: Container(),
-        desktop: Container(),
+        desktop: Scaffold(
+            backgroundColor: Colors.black,
+            body: Column(children: [
+              const StockBar(),
+              const SizedBox(
+                height: 0,
+              ),
+              companyPricesForWeb(company, context, cash),
+              CompanyTabViewWeb(company: company),
+              const SizedBox(
+                height: 10,
+              ),
+              CompanyNewsPage(stockId: stockId)
+            ])),
       ),
     );
   }
