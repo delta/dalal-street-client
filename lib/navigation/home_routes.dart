@@ -88,9 +88,9 @@ Map<String, Widget> mobileHomePagesMore(User extra) => {
         create: (context) => ReferralCubit(),
         child: ReferralPage(user: extra),
       ),
+      '/mediaPartners': const Text('Media partners tbd'),
       '/notifications': BlocProvider(
         create: ((context) => NotificationsCubit()),
         child: const NotificationsPage(),
       ),
-      '/mediaPartners': const Text('Media partners tbd'),
     };
