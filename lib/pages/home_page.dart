@@ -227,7 +227,8 @@ class _HomePageState extends State<HomePage>
               ),
               SizedBox(
                   height: MediaQuery.of(context).size.height * 0.4,
-                  child: SingleChildScrollView(child: feedlist()))
+                  child:
+                      SingleChildScrollView(primary: false, child: feedlist()))
             ]));
   }
 
@@ -323,9 +324,12 @@ class _HomePageState extends State<HomePage>
           const SizedBox(
             height: 20,
           ),
-          SizedBox(
-              height: MediaQuery.of(context).size.height * 0.4,
-              child: SingleChildScrollView(child: _stockList(true))),
+          Expanded(
+            child: SizedBox(
+                height: MediaQuery.of(context).size.height * 0.4,
+                child: SingleChildScrollView(
+                    primary: false, child: _stockList(true))),
+          ),
         ],
       ),
     );
@@ -551,6 +555,7 @@ class _HomePageState extends State<HomePage>
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.25,
             child: SingleChildScrollView(
+              primary: false,
               child: Center(child:
                   BlocBuilder<NotificationsCubit, NotificationsCubitState>(
                       builder: (context, state) {
