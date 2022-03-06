@@ -103,6 +103,8 @@ class DalalBloc extends HydratedBloc<DalalEvent, DalalState> {
     });
   }
 
+  bool get loggedIn => state is! DalalLoggedOut;
+
   @override
   Future<void> close() {
     if (state is! DalalLoggedOut) {
