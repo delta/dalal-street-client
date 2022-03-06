@@ -239,6 +239,7 @@ class _HomePageState extends State<HomePage>
           mapMarketEvents.addAll(state.marketEventsList.marketEvents);
           // Sort MarketEvents according to there created time
           mapMarketEvents.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+          mapMarketEvents.take(10).toList();
           if (mapMarketEvents.isNotEmpty) {
             return ListView.separated(
               shrinkWrap: true,
