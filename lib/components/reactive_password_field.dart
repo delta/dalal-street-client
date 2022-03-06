@@ -4,11 +4,13 @@ import 'package:reactive_forms/reactive_forms.dart';
 class ReactivePasswordField extends StatefulWidget {
   final String formControlName;
   final String? label;
+  Map<String, String> validation = {};
 
-  const ReactivePasswordField({
+  ReactivePasswordField({
     Key? key,
     required this.formControlName,
     this.label,
+    this.validation = const {},
   }) : super(key: key);
 
   @override

@@ -11,6 +11,7 @@ import 'package:go_router/go_router.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 
 import '../../models/snackbar/snackbar_type.dart';
+import '../../utils/form_validation.dart';
 
 class LoginPage extends StatelessWidget {
   LoginPage({Key? key}) : super(key: key);
@@ -78,15 +79,18 @@ class LoginPage extends StatelessWidget {
         child: Column(
           children: [
             ReactiveTextField(
-              formControlName: 'email',
-              decoration: const InputDecoration(
-                labelText: 'Email',
-                prefixIcon: Icon(Icons.email),
-              ),
-              keyboardType: TextInputType.emailAddress,
-            ),
+                formControlName: 'email',
+                decoration: const InputDecoration(
+                  labelText: 'Email',
+                  prefixIcon: Icon(Icons.email),
+                ),
+                keyboardType: TextInputType.emailAddress,
+                validationMessages: (control) => emailValidation()),
             const SizedBox(height: 20),
-            const ReactivePasswordField(formControlName: 'password'),
+            ReactivePasswordField(
+              formControlName: 'password',
+              validation: requiredValidation('password'),
+            ),
             const SizedBox(height: 20),
             Align(
               alignment: Alignment.centerRight,
@@ -135,7 +139,7 @@ class LoginPage extends StatelessWidget {
       );
 
   void _onForgotPasswordClick(BuildContext context) =>
-      Navigator.of(context).pushNamed('/forgotPassword');
+      context.push('/forgotPassword');
 
   void _onLoginClicked(BuildContext context) {
     if (form.valid) {

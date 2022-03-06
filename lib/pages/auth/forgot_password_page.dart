@@ -1,7 +1,9 @@
 import 'package:dalal_street_client/blocs/auth/forgot_password/forgot_password_cubit.dart';
 import 'package:dalal_street_client/components/dalal_back_button.dart';
 import 'package:dalal_street_client/components/fill_max_height_scroll_view.dart';
+import 'package:dalal_street_client/components/loading.dart';
 import 'package:dalal_street_client/models/snackbar/snackbar_type.dart';
+import 'package:dalal_street_client/utils/form_validation.dart';
 import 'package:dalal_street_client/utils/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -31,7 +33,7 @@ class ForgotPasswordPage extends StatelessWidget {
             },
             builder: (context, state) {
               if (state is ForgotPasswordLoading) {
-                return const Center(child: CircularProgressIndicator());
+                return const Center(child: DalalLoadingBar());
               }
               return body();
             },
@@ -76,13 +78,13 @@ class ForgotPasswordPage extends StatelessWidget {
           child: Column(
             children: [
               ReactiveTextField(
-                formControlName: 'email',
-                decoration: const InputDecoration(
-                  labelText: 'Email',
-                  prefixIcon: Icon(Icons.email),
-                ),
-                keyboardType: TextInputType.emailAddress,
-              ),
+                  formControlName: 'email',
+                  decoration: const InputDecoration(
+                    labelText: 'Email',
+                    prefixIcon: Icon(Icons.email),
+                  ),
+                  keyboardType: TextInputType.emailAddress,
+                  validationMessages: (control) => emailValidation()),
               const SizedBox(height: 40),
               SizedBox(
                 width: double.infinity,

@@ -4,6 +4,7 @@ import 'package:dalal_street_client/components/fill_max_height_scroll_view.dart'
 import 'package:dalal_street_client/components/loading.dart';
 import 'package:dalal_street_client/components/reactive_password_field.dart';
 import 'package:dalal_street_client/navigation/nav_utils.dart';
+import 'package:dalal_street_client/utils/form_validation.dart';
 import 'package:dalal_street_client/utils/snackbar.dart';
 import 'package:dalal_street_client/utils/tooltip.dart';
 import 'package:flutter/gestures.dart';
@@ -92,6 +93,7 @@ class RegisterPage extends StatelessWidget {
                 labelText: 'Name',
                 prefixIcon: Icon(Icons.person_outlined),
               ),
+              validationMessages: (control) => requiredValidation('name'),
             ),
             const SizedBox(height: 20),
             ReactiveTextField(
@@ -101,13 +103,18 @@ class RegisterPage extends StatelessWidget {
                 prefixIcon: Icon(Icons.mail_outline),
               ),
               keyboardType: TextInputType.emailAddress,
+              validationMessages: (control) => emailValidation(),
             ),
             const SizedBox(height: 20),
-            const ReactivePasswordField(formControlName: 'password'),
+            ReactivePasswordField(
+              formControlName: 'password',
+              validation: passwordValidation('password'),
+            ),
             const SizedBox(height: 20),
-            const ReactivePasswordField(
+            ReactivePasswordField(
               formControlName: 'confirmPassword',
               label: 'Confirm Password',
+              validation: passwordValidation('confirm password'),
             ),
             const SizedBox(height: 20),
             ReactiveTextField(
@@ -117,7 +124,6 @@ class RegisterPage extends StatelessWidget {
                 labelText: 'Referral Code',
                 suffixIcon: Builder(
                   builder: (context) => IconButton(
-                    // TODO: When we show tooltip and click back button, current page is popped but tooltip is not disappearing
                     onPressed: () => showTooltip(
                         context, 'Enter referral code to get cash reward'),
                     icon: const Icon(Icons.info_outline),

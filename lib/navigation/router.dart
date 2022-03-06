@@ -7,6 +7,7 @@ import 'package:dalal_street_client/blocs/auth/login/login_cubit.dart';
 import 'package:dalal_street_client/blocs/dalal/dalal_bloc.dart';
 import 'package:dalal_street_client/blocs/market_depth/market_depth_bloc.dart';
 import 'package:dalal_street_client/blocs/news/news_bloc.dart';
+import 'package:dalal_street_client/blocs/resend_mail/resend_mail_cubit.dart';
 import 'package:dalal_street_client/blocs/subscribe/subscribe_cubit.dart';
 import 'package:dalal_street_client/config/get_it.dart';
 import 'package:dalal_street_client/navigation/dalal_nav_buidler.dart';
@@ -165,7 +166,14 @@ final _authRoutes = [
   ),
   GoRoute(
     path: '/checkMail',
-    builder: (_, state) => CheckMailPage(mail: state.extra! as String),
+    builder: (_, state) {
+      var email = state.extra! as String;
+      return BlocBuilder<ResendMailCubit, ResendMailState>(
+        builder: (context, state) {
+          return CheckMailPage(mail: email);
+        },
+      );
+    },
   ),
   ..._verifyRoutes,
 ];
