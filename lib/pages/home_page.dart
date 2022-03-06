@@ -420,8 +420,12 @@ class _HomePageState extends State<HomePage>
                 children: <Widget>[
                   Padding(
                     padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-                    child: Text(text,
-                        style: const TextStyle(color: white, fontSize: 24),overflow: TextOverflow.ellipsis,maxLines: 2,),
+                    child: Text(
+                      text,
+                      style: const TextStyle(color: white, fontSize: 24),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 2,
+                    ),
                   ),
                   const SizedBox.square(
                     dimension: 5,
