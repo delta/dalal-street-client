@@ -1,7 +1,4 @@
-import 'dart:js';
-
 import 'package:dalal_street_client/blocs/resend_mail/resend_mail_cubit.dart';
-import 'package:dalal_street_client/components/fill_max_height_scroll_view.dart';
 import 'package:dalal_street_client/models/snackbar/snackbar_type.dart';
 import 'package:dalal_street_client/theme/buttons.dart';
 import 'package:dalal_street_client/theme/colors.dart';

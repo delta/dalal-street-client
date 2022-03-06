@@ -1,7 +1,4 @@
-import 'dart:html';
-
 import 'package:bloc/bloc.dart';
-import 'package:dalal_street_client/config/get_it.dart';
 import 'package:dalal_street_client/config/log.dart';
 import 'package:dalal_street_client/constants/error_messages.dart';
 import 'package:dalal_street_client/grpc/client.dart';

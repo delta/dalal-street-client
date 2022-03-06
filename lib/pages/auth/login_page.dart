@@ -44,11 +44,9 @@ class LoginPage extends StatelessWidget {
                   ? (Center(
                       child: Container(
                       decoration: BoxDecoration(
-                          // color: baseColor,
                           border: Border.all(color: secondaryColor, width: 2),
                           borderRadius:
                               const BorderRadius.all(Radius.circular(10))),
-                      // decoration: BoxDecoration(),
                       child: buildBody(),
                       margin: EdgeInsets.fromLTRB(
                           screenwidth * 0.35,
