@@ -4,6 +4,7 @@ import 'package:dalal_street_client/blocs/resend_mail/resend_mail_cubit.dart';
 import 'package:dalal_street_client/components/fill_max_height_scroll_view.dart';
 import 'package:dalal_street_client/models/snackbar/snackbar_type.dart';
 import 'package:dalal_street_client/theme/buttons.dart';
+import 'package:dalal_street_client/theme/colors.dart';
 import 'package:dalal_street_client/utils/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -25,32 +26,53 @@ class CheckMailPage extends StatelessWidget {
         },
         child: Scaffold(
           body: SafeArea(
-            child: FillMaxHeightScrollView(
-              builder: (context) => Padding(
-                padding: const EdgeInsets.all(30),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    buildHeader(context),
-                    SizedBox(
-                      width: double.infinity,
-                      child: Image.asset('assets/images/Mail.png'),
-                    ),
-                    buildFooter(context),
-                  ],
-                ),
-              ),
-            ),
+            child: (() {
+              var screenwidth = MediaQuery.of(context).size.width;
+
+              if (screenwidth > 1000) {
+                return Container(
+                  decoration: BoxDecoration(
+                      // color: baseColor,
+                      border: Border.all(color: secondaryColor, width: 2),
+                      borderRadius:
+                          const BorderRadius.all(Radius.circular(10))),
+                  // decoration: BoxDecoration(),
+                  child: body(context),
+                  margin: EdgeInsets.fromLTRB(
+                      screenwidth * 0.35,
+                      screenwidth * 0.03,
+                      screenwidth * 0.35,
+                      screenwidth * 0.1),
+                );
+              }
+              return body(context);
+            }()),
           ),
         ),
       );
+
+  Padding body(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(30),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          buildHeader(context),
+          SizedBox(
+            child: Image.asset('assets/images/Mail.png'),
+          ),
+          buildFooter(context),
+        ],
+      ),
+    );
+  }
 
   Widget buildHeader(BuildContext context) => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const SizedBox(height: 30),
           Text(
-            'Check Your\nEmail',
+            'Check Your Email',
             style: Theme.of(context).textTheme.headline1,
           ),
           const SizedBox(height: 24),
@@ -58,7 +80,7 @@ class CheckMailPage extends StatelessWidget {
             text: TextSpan(
               style: Theme.of(context).textTheme.headline6,
               children: [
-                const TextSpan(text: 'We have sent a verification email to \n'),
+                const TextSpan(text: 'We have sent a verification email to '),
                 TextSpan(
                   text: mail,
                   style: Theme.of(context)
