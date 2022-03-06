@@ -20,3 +20,11 @@ Map<String, String> passwordValidation(String field) {
     ValidationMessage.minLength: 'The $field must have at least 6 characters'
   };
 }
+
+Map<String, String> phoneNumberValidation() {
+  return {
+    ValidationMessage.required: 'This field is required',
+    ValidationMessage.minLength: 'Invalid phone number',
+    ValidationMessage.maxLength: 'Invalid phone number'
+  };
+}

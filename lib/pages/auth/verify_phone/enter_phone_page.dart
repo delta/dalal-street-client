@@ -1,7 +1,9 @@
 import 'package:dalal_street_client/blocs/auth/verify_phone/enter_phone/enter_phone_cubit.dart';
+import 'package:dalal_street_client/components/loading.dart';
 import 'package:dalal_street_client/constants/app_info.dart';
 import 'package:dalal_street_client/navigation/nav_utils.dart';
 import 'package:dalal_street_client/models/snackbar/snackbar_type.dart';
+import 'package:dalal_street_client/utils/form_validation.dart';
 import 'package:dalal_street_client/utils/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -47,7 +49,7 @@ class EnterPhonePage extends StatelessWidget {
                 if (state is EnterPhoneInitial) {
                   return buildContent(context);
                 } else {
-                  return const CircularProgressIndicator();
+                  return const DalalLoadingBar();
                 }
               },
             ),
@@ -72,7 +74,6 @@ class EnterPhonePage extends StatelessWidget {
             width: double.infinity,
             child: Image.asset(
               'assets/images/OTP.png',
-              fit: BoxFit.fill,
             ),
           ),
           const SizedBox(height: 40),
@@ -103,6 +104,8 @@ class EnterPhonePage extends StatelessWidget {
                       formControlName: 'code',
                       keyboardType: TextInputType.number,
                       textAlign: TextAlign.center,
+                      validationMessages: (control) =>
+                          {ValidationMessage.required: 'Invalid code'},
                     ),
                   ),
                   const SizedBox(width: 20),
@@ -113,6 +116,7 @@ class EnterPhonePage extends StatelessWidget {
                       decoration:
                           const InputDecoration(labelText: 'Phone Number'),
                       keyboardType: TextInputType.phone,
+                      validationMessages: (control) => phoneNumberValidation(),
                     ),
                   ),
                 ],

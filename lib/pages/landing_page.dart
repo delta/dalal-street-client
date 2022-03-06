@@ -1,3 +1,4 @@
+import 'package:dalal_street_client/components/fill_max_height_scroll_view.dart';
 import 'package:dalal_street_client/constants/app_info.dart';
 import 'package:dalal_street_client/constants/urls.dart';
 import 'package:dalal_street_client/theme/buttons.dart';
@@ -13,54 +14,56 @@ class LandingPage extends StatelessWidget {
   @override
   Widget build(context) => Scaffold(
         bottomNavigationBar: buildFooter(context),
-        body: SafeArea(
-          child: SizedBox(
-            width: double.infinity,
-            child: Padding(
-              padding: const EdgeInsets.all(30),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Image.asset(
-                    'assets/images/army_bull.png',
-                    height: 300,
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        appTitle,
-                        style: Theme.of(context).textTheme.headline4,
-                      ),
-                      const SizedBox(height: 10),
-                      Text(
-                        appDesc,
-                        style: Theme.of(context).textTheme.subtitle1,
-                      ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Expanded(
-                        flex: 1,
-                        child: ElevatedButton(
-                          onPressed: () => onRegisterClick(context),
-                          child: const Text('Register'),
+        body: FillMaxHeightScrollView(
+          builder: (context) => SafeArea(
+            child: SizedBox(
+              width: double.infinity,
+              child: Padding(
+                padding: const EdgeInsets.all(30),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Image.asset(
+                      'assets/images/army_bull.png',
+                      height: 300,
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          appTitle,
+                          style: Theme.of(context).textTheme.headline4,
                         ),
-                      ),
-                      const SizedBox(width: 20),
-                      Expanded(
-                        flex: 1,
-                        child: ElevatedButton(
-                          style: secondaryButtonStyle,
-                          onPressed: () => onLoginClick(context),
-                          child: const Text('Log In'),
+                        const SizedBox(height: 10),
+                        Text(
+                          appDesc,
+                          style: Theme.of(context).textTheme.subtitle1,
                         ),
-                      ),
-                    ],
-                  )
-                ],
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Expanded(
+                          flex: 1,
+                          child: ElevatedButton(
+                            onPressed: () => onRegisterClick(context),
+                            child: const Text('Register'),
+                          ),
+                        ),
+                        const SizedBox(width: 20),
+                        Expanded(
+                          flex: 1,
+                          child: ElevatedButton(
+                            style: secondaryButtonStyle,
+                            onPressed: () => onLoginClick(context),
+                            child: const Text('Log In'),
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
               ),
             ),
           ),

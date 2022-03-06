@@ -140,7 +140,11 @@ class _EnterOtpPageState extends State<EnterOtpPage> {
   }
 
   void _onVerifyOTPClick(String phone) {
-    // TODO: form validation
+    // TODO: improve validation later
+    if (_otp.length < 4) {
+      showSnackBar(context, 'Invalid Otp', type: SnackBarType.error);
+      return;
+    }
     context.read<EnterOtpCubit>().verifyOTP(int.parse(_otp), phone);
   }
 
