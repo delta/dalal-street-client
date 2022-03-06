@@ -32,7 +32,6 @@ class CheckMailPage extends StatelessWidget {
               if (screenwidth > 1000) {
                 return Container(
                   decoration: BoxDecoration(
-                      // color: baseColor,
                       border: Border.all(color: secondaryColor, width: 2),
                       borderRadius:
                           const BorderRadius.all(Radius.circular(10))),
