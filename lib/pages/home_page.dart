@@ -243,7 +243,7 @@ class _HomePageState extends State<HomePage>
           if (mapMarketEvents.isNotEmpty) {
             return ListView.separated(
               shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
+              physics: const ScrollPhysics(),
               itemCount: mapMarketEvents.length,
               itemBuilder: (context, index) {
                 MarketEvent marketEvent = mapMarketEvents[index];
@@ -413,26 +413,28 @@ class _HomePageState extends State<HomePage>
               image: NetworkImage(imagePath),
             ),
           ),
-          Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-                  child: Text(text,
-                      style: const TextStyle(color: white, fontSize: 24)),
-                ),
-                const SizedBox.square(
-                  dimension: 5,
-                ),
-                Padding(
+          Expanded(
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Padding(
                     padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-                    child: Text('Published on ' + dur,
-                        style: const TextStyle(
-                            fontStyle: FontStyle.italic,
-                            color: lightGray,
-                            fontSize: 18)))
-              ]),
+                    child: Text(text,
+                        style: const TextStyle(color: white, fontSize: 24),overflow: TextOverflow.ellipsis,maxLines: 2,),
+                  ),
+                  const SizedBox.square(
+                    dimension: 5,
+                  ),
+                  Padding(
+                      padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                      child: Text('Published on ' + dur,
+                          style: const TextStyle(
+                              fontStyle: FontStyle.italic,
+                              color: lightGray,
+                              fontSize: 18)))
+                ]),
+          ),
         ],
       ),
     ));
@@ -610,7 +612,6 @@ class _HomePageState extends State<HomePage>
       child: Text(
         text,
         style: const TextStyle(color: white, fontSize: 16),
-        //overflow: TextOverflow.ellipsis,
       ),
       padding: const EdgeInsets.all(10),
     );
