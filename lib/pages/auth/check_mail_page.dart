@@ -18,9 +18,9 @@ class CheckMailPage extends StatelessWidget {
   Widget build(context) => BlocListener<ResendMailCubit, ResendMailState>(
         listener: (context, state) {
           if (state is ResendMailSuccess) {
-            showSnackBar(context, state.msg, type: SnackBarType.error);
+            showSnackBar(context, state.msg, type: SnackBarType.success);
           } else if (state is ResendMailFailure) {
-            showSnackBar(context, state.msg);
+            showSnackBar(context, state.msg, type: SnackBarType.error);
           }
         },
         child: Scaffold(
@@ -80,8 +80,8 @@ class CheckMailPage extends StatelessWidget {
               Expanded(
                 flex: 1,
                 child: ElevatedButton(
-                  onPressed: () => resendMail(context),
-                  child: const Text('Resend mail'),
+                  onPressed: () => onLoginClick(context),
+                  child: const Text('Log In'),
                 ),
               ),
               const SizedBox(width: 20),
@@ -91,10 +91,10 @@ class CheckMailPage extends StatelessWidget {
                     flex: 1,
                     child: ElevatedButton(
                       style: secondaryButtonStyle,
-                      onPressed: state is ResendMailLoading
-                          ? () => onLoginClick(context)
+                      onPressed: state is! ResendMailLoading
+                          ? () => resendMail(context)
                           : null,
-                      child: const Text('Log In'),
+                      child: const Text('Resend mail'),
                     ),
                   );
                 },

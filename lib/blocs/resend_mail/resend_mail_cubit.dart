@@ -18,8 +18,7 @@ class ResendMailCubit extends Cubit<ResendMailState> {
 
     try {
       var response = await actionClient.resendVerificationEmail(
-          ResendVerificationEmailRequest(email: email),
-          options: sessionOptions(getIt()));
+          ResendVerificationEmailRequest(email: email));
 
       if (response.statusCode ==
           ResendVerificationEmailResponse_StatusCode.OK) {
