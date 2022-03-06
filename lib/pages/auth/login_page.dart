@@ -24,6 +24,9 @@ class LoginPage extends StatelessWidget {
   Widget build(context) => BlocConsumer<LoginCubit, LoginState>(
         listener: (context, state) {
           if (state is LoginFailure) {
+            if (!state.isMailVerified) {
+              context.push('/checkMail');
+            }
             showSnackBar(context, state.msg, type: SnackBarType.error);
           }
         },

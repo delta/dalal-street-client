@@ -1,3 +1,4 @@
+import 'package:dalal_street_client/components/fill_max_height_scroll_view.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -9,18 +10,20 @@ class CheckMailPage extends StatelessWidget {
   @override
   Widget build(context) => Scaffold(
         body: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(30),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                buildHeader(context),
-                SizedBox(
-                  width: double.infinity,
-                  child: Image.asset('assets/images/Mail.png'),
-                ),
-                buildFooter(context),
-              ],
+          child: FillMaxHeightScrollView(
+            builder: (context) => Padding(
+              padding: const EdgeInsets.all(30),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  buildHeader(context),
+                  SizedBox(
+                    width: double.infinity,
+                    child: Image.asset('assets/images/Mail.png'),
+                  ),
+                  buildFooter(context),
+                ],
+              ),
             ),
           ),
         ),
