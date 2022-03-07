@@ -103,17 +103,20 @@ class LoginPage extends StatelessWidget {
         child: Column(
           children: [
             ReactiveTextField(
-                formControlName: 'email',
-                decoration: const InputDecoration(
-                  labelText: 'Email',
-                  prefixIcon: Icon(Icons.email),
-                ),
-                keyboardType: TextInputType.emailAddress,
-                validationMessages: (control) => emailValidation()),
+              formControlName: 'email',
+              decoration: const InputDecoration(
+                labelText: 'Email',
+                prefixIcon: Icon(Icons.email),
+              ),
+              keyboardType: TextInputType.emailAddress,
+              validationMessages: (control) => emailValidation(),
+              autofillHints: const [AutofillHints.email],
+            ),
             const SizedBox(height: 20),
             ReactivePasswordField(
               formControlName: 'password',
               validation: requiredValidation('password'),
+              autofillHints: const [AutofillHints.password],
             ),
             const SizedBox(height: 20),
             Align(

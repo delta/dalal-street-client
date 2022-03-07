@@ -5,12 +5,14 @@ class ReactivePasswordField extends StatefulWidget {
   final String formControlName;
   final String? label;
   final Map<String, String> validation;
+  final Iterable<String>? autofillHints;
 
   const ReactivePasswordField({
     Key? key,
     required this.formControlName,
     this.label,
     required this.validation,
+    this.autofillHints,
   }) : super(key: key);
 
   @override
@@ -35,6 +37,7 @@ class _ReactivePasswordFieldState extends State<ReactivePasswordField> {
         ),
         keyboardType: TextInputType.visiblePassword,
         validationMessages: (control) => widget.validation,
+        autofillHints: widget.autofillHints,
       );
 
   void _toggleVisibility() =>
