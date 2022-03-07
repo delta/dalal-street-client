@@ -182,7 +182,10 @@ class _HomePageState extends State<HomePage>
                   ),
                 ],
               ),
-              feedlist()
+               const SizedBox(
+                height: 10,
+              ),
+              feedlist(false)
             ]));
   }
 
@@ -228,11 +231,11 @@ class _HomePageState extends State<HomePage>
               SizedBox(
                   height: MediaQuery.of(context).size.height * 0.4,
                   child:
-                      SingleChildScrollView(primary: false, child: feedlist()))
+                      SingleChildScrollView(primary: false, child: feedlist(true)))
             ]));
   }
 
-  Widget feedlist() =>
+  Widget feedlist(bool isWeb) =>
       BlocBuilder<NewsBloc, NewsState>(builder: (context, state) {
         if (state is GetNewsSucess) {
           mapMarketEvents.clear();
@@ -253,7 +256,7 @@ class _HomePageState extends State<HomePage>
                 String text = marketEvent.text;
                 String dur = getdur(createdAt);
                 return GestureDetector(
-                    child: newsItem(headline, imagePath, createdAt),
+                    child: newsItem(headline, imagePath, createdAt,isWeb),
                     onTap: () => Navigator.push(
                         context,
                         CupertinoPageRoute(
@@ -396,6 +399,7 @@ class _HomePageState extends State<HomePage>
     String text,
     String imagePath,
     String createdAt,
+    bool isWeb
   ) {
     String dur = getdur(createdAt);
     return (Container(
@@ -407,7 +411,7 @@ class _HomePageState extends State<HomePage>
           ClipRRect(
             borderRadius: BorderRadius.circular(20),
             child: Image(
-              width: 200,
+              width: isWeb ? 200 : 125,
               height: 100,
               fit: BoxFit.contain,
               image: NetworkImage(imagePath),
@@ -422,7 +426,7 @@ class _HomePageState extends State<HomePage>
                     padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
                     child: Text(
                       text,
-                      style: const TextStyle(color: white, fontSize: 24),
+                      style: TextStyle(color: white, fontSize: isWeb ? 24 : 18),
                       overflow: TextOverflow.ellipsis,
                       maxLines: 2,
                     ),
@@ -433,10 +437,10 @@ class _HomePageState extends State<HomePage>
                   Padding(
                       padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
                       child: Text('Published on ' + dur,
-                          style: const TextStyle(
+                          style: TextStyle(
                               fontStyle: FontStyle.italic,
                               color: lightGray,
-                              fontSize: 18)))
+                              fontSize: isWeb ? 18 : 14)))
                 ]),
           ),
         ],
