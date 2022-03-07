@@ -22,7 +22,6 @@ class DailyChallengesPageCubit extends Cubit<DailyChallengesPageState> {
       if (resp.statusCode == GetDailyChallengeConfigResponse_StatusCode.OK) {
         emit(DailyChallengesPageSuccess(
           resp.marketDay,
-          resp.isDailyChallengOpen,
           resp.totalMarketDays,
         ));
         listenToGameStateStream();
@@ -35,7 +34,6 @@ class DailyChallengesPageCubit extends Cubit<DailyChallengesPageState> {
     }
   }
 
-  /// Updates `isDailyChallengeOpen` in [DailyChallengesPageSuccess]
   /// Only call this after [getChallengesConfig] is succesful
   Future<void> listenToGameStateStream() async {
     final gameStateStream = getIt<GlobalStreams>().gameStateStream;
@@ -43,12 +41,8 @@ class DailyChallengesPageCubit extends Cubit<DailyChallengesPageState> {
       final gameState = update.gameState;
       if (gameState.type == GameStateUpdateType.DailyChallengeStatusUpdate) {
         try {
-          final success = state as DailyChallengesPageSuccess;
-          emit(DailyChallengesPageSuccess(
-            success.marketDay,
-            gameState.dailyChallengeState.isDailyChallengeOpen,
-            success.totalMarketDays,
-          ));
+          // TODO: handle separately from DailyChallengesPageSuccess state
+          // final success = state as DailyChallengesPageSuccess;
         } catch (e) {
           logger.e(e);
         }

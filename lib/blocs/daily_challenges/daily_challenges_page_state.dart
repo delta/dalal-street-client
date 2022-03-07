@@ -11,17 +11,15 @@ class DailyChallengesPageLoading extends DailyChallengesPageState {}
 
 class DailyChallengesPageSuccess extends DailyChallengesPageState {
   final int marketDay;
-  final bool isDailyChallengesOpen;
   final int totalMarketDays;
 
   const DailyChallengesPageSuccess(
     this.marketDay,
-    this.isDailyChallengesOpen,
     this.totalMarketDays,
   );
 
   @override
-  List<Object> get props => [marketDay, isDailyChallengesOpen, totalMarketDays];
+  List<Object> get props => [marketDay, totalMarketDays];
 }
 
 class DailyChallengesPageFailure extends DailyChallengesPageState {
