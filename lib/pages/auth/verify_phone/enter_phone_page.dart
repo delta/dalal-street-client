@@ -124,6 +124,7 @@ class EnterPhonePage extends StatelessWidget {
                       textAlign: TextAlign.center,
                       validationMessages: (control) =>
                           {ValidationMessage.required: 'Invalid code'},
+                      autofillHints: const [AutofillHints.countryCode],
                     ),
                   ),
                   const SizedBox(width: 20),
@@ -135,6 +136,7 @@ class EnterPhonePage extends StatelessWidget {
                           const InputDecoration(labelText: 'Phone Number'),
                       keyboardType: TextInputType.phone,
                       validationMessages: (control) => phoneNumberValidation(),
+                      autofillHints: const [AutofillHints.telephoneNumber],
                     ),
                   ),
                 ],
