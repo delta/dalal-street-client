@@ -3,16 +3,18 @@ import 'package:reactive_forms/reactive_forms.dart';
 
 class ReactivePasswordField extends StatefulWidget {
   final String formControlName;
-  final String? label;
   final Map<String, String> validation;
+  final String? label;
   final Iterable<String>? autofillHints;
+  final TextInputAction? textInputAction;
 
   const ReactivePasswordField({
     Key? key,
     required this.formControlName,
-    this.label,
     required this.validation,
+    this.label,
     this.autofillHints,
+    this.textInputAction,
   }) : super(key: key);
 
   @override
@@ -38,6 +40,7 @@ class _ReactivePasswordFieldState extends State<ReactivePasswordField> {
         keyboardType: TextInputType.visiblePassword,
         validationMessages: (control) => widget.validation,
         autofillHints: widget.autofillHints,
+        textInputAction: widget.textInputAction,
       );
 
   void _toggleVisibility() =>

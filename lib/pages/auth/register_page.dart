@@ -119,6 +119,7 @@ class RegisterPage extends StatelessWidget {
               ),
               validationMessages: (control) => requiredValidation('name'),
               autofillHints: const [AutofillHints.name],
+              textInputAction: TextInputAction.next,
             ),
             const SizedBox(height: 20),
             ReactiveTextField(
@@ -130,18 +131,21 @@ class RegisterPage extends StatelessWidget {
               keyboardType: TextInputType.emailAddress,
               validationMessages: (control) => emailValidation(),
               autofillHints: const [AutofillHints.email],
+              textInputAction: TextInputAction.next,
             ),
             const SizedBox(height: 20),
             ReactivePasswordField(
               formControlName: 'password',
               validation: passwordValidation('password'),
               autofillHints: const [AutofillHints.newPassword],
+              textInputAction: TextInputAction.next,
             ),
             const SizedBox(height: 20),
             ReactivePasswordField(
               formControlName: 'confirmPassword',
               label: 'Confirm Password',
               validation: passwordValidation('confirm password'),
+              textInputAction: TextInputAction.next,
             ),
             const SizedBox(height: 20),
             ReactiveTextField(
@@ -157,6 +161,7 @@ class RegisterPage extends StatelessWidget {
                   ),
                 ),
               ),
+              textInputAction: TextInputAction.done,
             ),
             const SizedBox(height: 50),
             SizedBox(
