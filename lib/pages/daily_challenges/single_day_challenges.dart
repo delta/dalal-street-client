@@ -13,13 +13,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SingleDayChallenges extends StatefulWidget {
   final bool isChallengesOpen;
-  final int marketDay;
+  final bool isCurrentDay;
   final int day;
 
   const SingleDayChallenges(
       {Key? key,
       required this.isChallengesOpen,
-      required this.marketDay,
+      required this.isCurrentDay,
       required this.day})
       : super(key: key);
 
@@ -53,7 +53,7 @@ class _SingleDayChallengesState extends State<SingleDayChallenges>
       },
       builder: (context, state) {
         if (state is SingleDayChallengesLoaded) {
-          if (widget.marketDay != widget.day) {
+          if (!widget.isCurrentDay) {
             return content(state);
           }
           // Update isOpen state only for current day challenges
@@ -114,7 +114,7 @@ class _SingleDayChallengesState extends State<SingleDayChallenges>
                 child: ListView.separated(
                   itemCount: challengeInfos.length,
                   itemBuilder: (_, i) => DailyChallengeItem(
-                    marketDay: widget.marketDay,
+                    isCurrentDay: widget.isCurrentDay,
                     challenge: challengeInfos[i].challenge,
                     userState: challengeInfos[i].userState,
                     stock: challengeInfos[i].challenge.hasStockId()

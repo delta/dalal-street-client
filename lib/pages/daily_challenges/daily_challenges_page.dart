@@ -110,7 +110,7 @@ class _DailyChallengesPageBodyState extends State<_DailyChallengesPageBody>
                     create: (_) => SingleDayChallengesCubit(),
                     child: SingleDayChallenges(
                       isChallengesOpen: isChallengesOpen,
-                      marketDay: marketDay,
+                      isCurrentDay: marketDay == day,
                       day: day,
                     ),
                   )
