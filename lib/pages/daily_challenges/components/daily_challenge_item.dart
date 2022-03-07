@@ -12,7 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DailyChallengeItem extends StatelessWidget {
-  final int marketDay;
+  final bool isCurrentDay;
 
   final DailyChallenge challenge;
   final UserState userState;
@@ -20,7 +20,7 @@ class DailyChallengeItem extends StatelessWidget {
 
   DailyChallengeItem({
     Key? key,
-    required this.marketDay,
+    required this.isCurrentDay,
     required this.challenge,
     required this.userState,
     required this.stock,
@@ -83,10 +83,9 @@ class DailyChallengeItem extends StatelessWidget {
         ),
       );
 
-  // TODO: add progress bar
   // TODO: animate between changes in userInfoStream
   Widget _challengeProgress() {
-    if (challenge.marketDay != marketDay) {
+    if (!isCurrentDay) {
       return ChallengeProgress(
         progress: (userState.finalValue - userState.initialValue).toInt(),
         targetValue: challenge.value.toInt(),
