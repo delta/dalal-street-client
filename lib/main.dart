@@ -41,14 +41,6 @@ void main() async {
     ),
     storage: storage,
   );
-
-  // Test logs
-  logger.v('Verbose log');
-  logger.d('Debug log');
-  logger.i('Info log');
-  logger.w('Warning log');
-  logger.e('Error log');
-  logger.wtf('What a terrible failure log');
 }
 
 // TODO: add proper validationMessages in all ReactiveForms
