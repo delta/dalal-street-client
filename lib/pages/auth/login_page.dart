@@ -119,6 +119,7 @@ class LoginPage extends StatelessWidget {
               validation: requiredValidation('password'),
               autofillHints: const [AutofillHints.password],
               textInputAction: TextInputAction.done,
+              onSubmitted: () => _onLoginClicked(context),
             ),
             const SizedBox(height: 20),
             Align(

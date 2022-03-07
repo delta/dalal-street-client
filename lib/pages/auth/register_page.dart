@@ -145,7 +145,8 @@ class RegisterPage extends StatelessWidget {
               formControlName: 'confirmPassword',
               label: 'Confirm Password',
               validation: passwordValidation('confirm password'),
-              textInputAction: TextInputAction.next,
+              textInputAction: TextInputAction.done,
+              onSubmitted: () => _onRegisterClick(context),
             ),
             const SizedBox(height: 20),
             ReactiveTextField(
@@ -162,6 +163,7 @@ class RegisterPage extends StatelessWidget {
                 ),
               ),
               textInputAction: TextInputAction.done,
+              onSubmitted: () => _onRegisterClick(context),
             ),
             const SizedBox(height: 50),
             SizedBox(

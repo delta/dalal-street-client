@@ -7,6 +7,7 @@ class ReactivePasswordField extends StatefulWidget {
   final String? label;
   final Iterable<String>? autofillHints;
   final TextInputAction? textInputAction;
+  final void Function()? onSubmitted;
 
   const ReactivePasswordField({
     Key? key,
@@ -15,6 +16,7 @@ class ReactivePasswordField extends StatefulWidget {
     this.label,
     this.autofillHints,
     this.textInputAction,
+    this.onSubmitted,
   }) : super(key: key);
 
   @override
@@ -41,6 +43,7 @@ class _ReactivePasswordFieldState extends State<ReactivePasswordField> {
         validationMessages: (control) => widget.validation,
         autofillHints: widget.autofillHints,
         textInputAction: widget.textInputAction,
+        onSubmitted: widget.onSubmitted,
       );
 
   void _toggleVisibility() =>
