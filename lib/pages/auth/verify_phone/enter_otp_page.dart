@@ -1,7 +1,9 @@
 import 'package:dalal_street_client/blocs/auth/verify_phone/enter_otp/enter_otp_cubit.dart';
 import 'package:dalal_street_client/components/fill_max_height_scroll_view.dart';
+import 'package:dalal_street_client/components/loading.dart';
 import 'package:dalal_street_client/navigation/nav_utils.dart';
 import 'package:dalal_street_client/models/snackbar/snackbar_type.dart';
+import 'package:dalal_street_client/theme/colors.dart';
 import 'package:dalal_street_client/theme/theme.dart';
 import 'package:dalal_street_client/utils/snackbar.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +28,7 @@ class _EnterOtpPageState extends State<EnterOtpPage> {
               if (state is OtpFailure) {
                 showSnackBar(context, state.msg, type: SnackBarType.error);
               } else if (state is OtpResent) {
-                showSnackBar(context, 'Otp resent succesfully',
+                showSnackBar(context, 'Otp resent successfully',
                     type: SnackBarType.info);
               } else if (state is OtpSuccess) {
                 showSnackBar(context, 'Phone Verified',
@@ -35,9 +37,25 @@ class _EnterOtpPageState extends State<EnterOtpPage> {
             },
             builder: (context, state) {
               if (state is OtpInitial) {
-                return buildContent(state.phone);
+                var screenwidth = MediaQuery.of(context).size.width;
+
+                return screenwidth > 1000
+                    ? (Center(
+                        child: Container(
+                        decoration: BoxDecoration(
+                            border: Border.all(color: secondaryColor, width: 2),
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(10))),
+                        child: buildContent(state.phone),
+                        margin: EdgeInsets.fromLTRB(
+                            screenwidth * 0.35,
+                            screenwidth * 0.03,
+                            screenwidth * 0.35,
+                            screenwidth * 0.1),
+                      )))
+                    : buildContent(state.phone);
               } else {
-                return const Center(child: CircularProgressIndicator());
+                return const Center(child: DalalLoadingBar());
               }
             },
           ),
@@ -140,7 +158,11 @@ class _EnterOtpPageState extends State<EnterOtpPage> {
   }
 
   void _onVerifyOTPClick(String phone) {
-    // TODO: form validation
+    // TODO: improve validation later
+    if (_otp.length < 4) {
+      showSnackBar(context, 'Invalid Otp', type: SnackBarType.error);
+      return;
+    }
     context.read<EnterOtpCubit>().verifyOTP(int.parse(_otp), phone);
   }
 

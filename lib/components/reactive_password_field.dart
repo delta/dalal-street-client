@@ -4,11 +4,13 @@ import 'package:reactive_forms/reactive_forms.dart';
 class ReactivePasswordField extends StatefulWidget {
   final String formControlName;
   final String? label;
+  final Map<String, String> validation;
 
   const ReactivePasswordField({
     Key? key,
     required this.formControlName,
     this.label,
+    required this.validation,
   }) : super(key: key);
 
   @override
@@ -32,6 +34,7 @@ class _ReactivePasswordFieldState extends State<ReactivePasswordField> {
           ),
         ),
         keyboardType: TextInputType.visiblePassword,
+        validationMessages: (control) => widget.validation,
       );
 
   void _toggleVisibility() =>

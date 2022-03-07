@@ -20,8 +20,15 @@ class LoginCubit extends Cubit<LoginState> {
     try {
       final loginResp = await actionClient
           .login(LoginRequest(email: email, password: password));
+
+      if (loginResp.statusCode ==
+          LoginResponse_StatusCode.EmailNotVerifiedError) {
+        emit(LoginFailure(loginResp.statusMessage, false));
+        return;
+      }
+
       if (loginResp.statusCode != LoginResponse_StatusCode.OK) {
-        emit(LoginFailure(loginResp.statusMessage));
+        emit(LoginFailure(loginResp.statusMessage, true));
         return;
       }
       emit(LoginSuccess(loginResp));
@@ -31,7 +38,7 @@ class LoginCubit extends Cubit<LoginState> {
       // Inavlid session id error not possible because this is first time login
       // No need to check for grpc error code 16
       logger.e(e);
-      emit(const LoginFailure(failedToReachServer));
+      emit(const LoginFailure(failedToReachServer, true));
     }
   }
 }
