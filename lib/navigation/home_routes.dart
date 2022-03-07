@@ -7,6 +7,7 @@ import 'package:dalal_street_client/blocs/referral/referral_cubit.dart';
 import 'package:dalal_street_client/blocs/subscribe/subscribe_cubit.dart';
 import 'package:dalal_street_client/constants/icons.dart';
 import 'package:dalal_street_client/models/menu_item.dart';
+import 'package:dalal_street_client/navigation/router.dart';
 import 'package:dalal_street_client/pages/daily_challenges/daily_challenges_page.dart';
 import 'package:dalal_street_client/pages/mortgage/mortgage_home.dart';
 import 'package:dalal_street_client/pages/news_page.dart';
@@ -59,6 +60,7 @@ final homeRoutesWeb = homeRoutesMobile + moreRoutesMobile;
 /// Routes that can be accessed by only authenticated users
 final userRoutes = [
   ...homeRoutesWeb,
+  ...verifyRoutes.map((e) => e.path),
   '/company/:id',
   '/admin',
 ];

@@ -42,6 +42,7 @@ GoRouter generateRouter(BuildContext context) => GoRouter(
     routes: [
       ..._initialRoutes,
       ..._authRoutes,
+      ...verifyRoutes,
       GoRoute(
         /// A regular expression to match all home routes
         /// Note: Sorry for hardcoding everything, i am noob in regex
@@ -166,19 +167,14 @@ final _authRoutes = [
   ),
   GoRoute(
     path: '/checkMail',
-    builder: (_, state) {
-      var email = state.extra! as String;
-      return BlocBuilder<ResendMailCubit, ResendMailState>(
-        builder: (context, state) {
-          return CheckMailPage(mail: email);
-        },
-      );
-    },
+    builder: (_, state) => BlocProvider(
+      create: (_) => ResendMailCubit(),
+      child: CheckMailPage(mail: state.extra! as String),
+    ),
   ),
-  ..._verifyRoutes,
 ];
 
-final _verifyRoutes = [
+final verifyRoutes = [
   GoRoute(
     path: '/enterPhone',
     builder: (_, __) => BlocProvider(
