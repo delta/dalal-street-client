@@ -10,16 +10,18 @@ abstract class DailyChallengesPageState extends Equatable {
 class DailyChallengesPageLoading extends DailyChallengesPageState {}
 
 class DailyChallengesPageSuccess extends DailyChallengesPageState {
+  final bool isChallengesOpen;
   final int marketDay;
   final int totalMarketDays;
 
   const DailyChallengesPageSuccess(
+    this.isChallengesOpen,
     this.marketDay,
     this.totalMarketDays,
   );
 
   @override
-  List<Object> get props => [marketDay, totalMarketDays];
+  List<Object> get props => [isChallengesOpen, marketDay, totalMarketDays];
 }
 
 class DailyChallengesPageFailure extends DailyChallengesPageState {

@@ -5,17 +5,22 @@ import 'package:dalal_street_client/models/snackbar/snackbar_type.dart';
 import 'package:dalal_street_client/pages/daily_challenges/components/single_day_progress.dart';
 import 'package:dalal_street_client/pages/daily_challenges/components/daily_challenge_item.dart';
 import 'package:dalal_street_client/streams/global_streams.dart';
+import 'package:dalal_street_client/streams/transformations.dart';
 import 'package:dalal_street_client/theme/colors.dart';
 import 'package:dalal_street_client/utils/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SingleDayChallenges extends StatefulWidget {
+  final bool isChallengesOpen;
   final int marketDay;
   final int day;
 
   const SingleDayChallenges(
-      {Key? key, required this.marketDay, required this.day})
+      {Key? key,
+      required this.isChallengesOpen,
+      required this.marketDay,
+      required this.day})
       : super(key: key);
 
   @override
@@ -25,6 +30,11 @@ class SingleDayChallenges extends StatefulWidget {
 class _SingleDayChallengesState extends State<SingleDayChallenges>
     with AutomaticKeepAliveClientMixin {
   final stocks = getIt<GlobalStreams>().latestStockMap;
+
+  Stream<bool> get isOpenStream => getIt<GlobalStreams>()
+      .gameStateStream
+      .isDailyChallengesOpenStream()
+      .distinct();
 
   @override
   void initState() {
@@ -43,26 +53,43 @@ class _SingleDayChallengesState extends State<SingleDayChallenges>
       },
       builder: (context, state) {
         if (state is SingleDayChallengesLoaded) {
-          return Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12),
-                child: SingleDayProgress(challengeInfos: state.challengeInfos),
-              ),
-              const SizedBox(height: 12),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
-                  child: challengesList(state.challengeInfos),
-                ),
-              ),
-            ],
+          if (widget.marketDay != widget.day) {
+            return content(state);
+          }
+          // Update isOpen state only for current day challenges
+          return StreamBuilder<bool>(
+            stream: isOpenStream,
+            initialData: widget.isChallengesOpen,
+            builder: (context, snapshot) {
+              final isOpen = snapshot.data!;
+              if (isOpen) {
+                return content(state);
+              }
+              return const Center(
+                  child: Text('Daily Challenges is closed for now'));
+            },
           );
         }
         return const Center(child: CircularProgressIndicator());
       },
     );
   }
+
+  Widget content(SingleDayChallengesLoaded state) => Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: SingleDayProgress(challengeInfos: state.challengeInfos),
+          ),
+          const SizedBox(height: 12),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: challengesList(state.challengeInfos),
+            ),
+          ),
+        ],
+      );
 
   Widget challengesList(List<DailyChallengeInfo> challengeInfos) => Card(
         color: background2,

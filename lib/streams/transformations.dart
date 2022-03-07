@@ -1,4 +1,6 @@
 import 'package:dalal_street_client/models/dynamic_user_info.dart';
+import 'package:dalal_street_client/proto_build/datastreams/GameState.pb.dart';
+import 'package:dalal_street_client/proto_build/models/GameState.pb.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
 import 'package:fixnum/fixnum.dart';
 
@@ -30,4 +32,17 @@ extension StockMapStreamTransformations on Stream<Map<int, Stock>> {
 
   Stream<bool> givesDividents(int stockId) =>
       map((stocks) => stocks[stockId]!.givesDividends).distinct();
+}
+
+/// Useful extensions on gamestate stream
+extension GameStateStreamTransformations on Stream<GameStateUpdate> {
+  /// A bool stream of isDailyChallengeOpen updates
+  Stream<bool> isDailyChallengesOpenStream() async* {
+    await for (var update in this) {
+      final gameState = update.gameState;
+      if (gameState.type == GameStateUpdateType.DailyChallengeStatusUpdate) {
+        yield gameState.dailyChallengeState.isDailyChallengeOpen;
+      }
+    }
+  }
 }
