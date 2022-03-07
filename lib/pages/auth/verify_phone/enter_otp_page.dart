@@ -46,7 +46,6 @@ class _EnterOtpPageState extends State<EnterOtpPage> {
                             border: Border.all(color: secondaryColor, width: 2),
                             borderRadius:
                                 const BorderRadius.all(Radius.circular(10))),
-                        // decoration: BoxDecoration(),
                         child: buildContent(state.phone),
                         margin: EdgeInsets.fromLTRB(
                             screenwidth * 0.35,

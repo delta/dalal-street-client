@@ -12,7 +12,7 @@ import 'package:go_router/go_router.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 
 import '../../models/snackbar/snackbar_type.dart';
-import '../../utils/form_validation.dart';
+import '../../utils/form_validation_messages.dart';
 
 class LoginPage extends StatelessWidget {
   LoginPage({Key? key}) : super(key: key);

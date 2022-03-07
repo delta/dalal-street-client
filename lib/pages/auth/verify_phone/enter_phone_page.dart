@@ -4,7 +4,7 @@ import 'package:dalal_street_client/constants/app_info.dart';
 import 'package:dalal_street_client/navigation/nav_utils.dart';
 import 'package:dalal_street_client/models/snackbar/snackbar_type.dart';
 import 'package:dalal_street_client/theme/colors.dart';
-import 'package:dalal_street_client/utils/form_validation.dart';
+import 'package:dalal_street_client/utils/form_validation_messages.dart';
 import 'package:dalal_street_client/utils/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

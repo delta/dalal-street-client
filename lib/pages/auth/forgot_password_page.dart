@@ -4,7 +4,7 @@ import 'package:dalal_street_client/components/fill_max_height_scroll_view.dart'
 import 'package:dalal_street_client/components/loading.dart';
 import 'package:dalal_street_client/models/snackbar/snackbar_type.dart';
 import 'package:dalal_street_client/theme/colors.dart';
-import 'package:dalal_street_client/utils/form_validation.dart';
+import 'package:dalal_street_client/utils/form_validation_messages.dart';
 import 'package:dalal_street_client/utils/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -46,7 +46,6 @@ class ForgotPasswordPage extends StatelessWidget {
                           border: Border.all(color: secondaryColor, width: 2),
                           borderRadius:
                               const BorderRadius.all(Radius.circular(10))),
-                      // decoration: BoxDecoration(),
                       child: body(context),
                       margin: EdgeInsets.fromLTRB(
                           screenwidth * 0.35,
