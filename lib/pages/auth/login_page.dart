@@ -3,6 +3,7 @@ import 'package:dalal_street_client/components/dalal_back_button.dart';
 import 'package:dalal_street_client/components/fill_max_height_scroll_view.dart';
 import 'package:dalal_street_client/components/loading.dart';
 import 'package:dalal_street_client/components/reactive_password_field.dart';
+import 'package:dalal_street_client/theme/colors.dart';
 import 'package:dalal_street_client/utils/snackbar.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +12,7 @@ import 'package:go_router/go_router.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 
 import '../../models/snackbar/snackbar_type.dart';
+import '../../utils/form_validation_messages.dart';
 
 class LoginPage extends StatelessWidget {
   LoginPage({Key? key}) : super(key: key);
@@ -24,6 +26,9 @@ class LoginPage extends StatelessWidget {
   Widget build(context) => BlocConsumer<LoginCubit, LoginState>(
         listener: (context, state) {
           if (state is LoginFailure) {
+            if (!state.isMailVerified) {
+              context.push('/checkMail');
+            }
             showSnackBar(context, state.msg, type: SnackBarType.error);
           }
         },
@@ -33,7 +38,23 @@ class LoginPage extends StatelessWidget {
               if (state is LoginLoading) {
                 return const Center(child: DalalLoadingBar());
               }
-              return buildBody();
+              var screenwidth = MediaQuery.of(context).size.width;
+
+              return screenwidth > 1000
+                  ? (Center(
+                      child: Container(
+                      decoration: BoxDecoration(
+                          border: Border.all(color: secondaryColor, width: 2),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(10))),
+                      child: buildBody(),
+                      margin: EdgeInsets.fromLTRB(
+                          screenwidth * 0.35,
+                          screenwidth * 0.03,
+                          screenwidth * 0.35,
+                          screenwidth * 0.1),
+                    )))
+                  : buildBody();
             })(),
           ),
         ),
@@ -70,20 +91,30 @@ class LoginPage extends StatelessWidget {
         ],
       );
 
-  Widget buildForm(BuildContext context) => ReactiveForm(
-        formGroup: form,
+  Widget buildForm(BuildContext context) {
+    var screenwidth = MediaQuery.of(context).size.width;
+    bool isWeb = screenwidth > 1000;
+    return ReactiveForm(
+      formGroup: form,
+      child: Padding(
+        padding: !isWeb
+            ? const EdgeInsets.all(0.0)
+            : const EdgeInsets.fromLTRB(0, 0, 25, 0),
         child: Column(
           children: [
             ReactiveTextField(
-              formControlName: 'email',
-              decoration: const InputDecoration(
-                labelText: 'Email',
-                prefixIcon: Icon(Icons.email),
-              ),
-              keyboardType: TextInputType.emailAddress,
-            ),
+                formControlName: 'email',
+                decoration: const InputDecoration(
+                  labelText: 'Email',
+                  prefixIcon: Icon(Icons.email),
+                ),
+                keyboardType: TextInputType.emailAddress,
+                validationMessages: (control) => emailValidation()),
             const SizedBox(height: 20),
-            const ReactivePasswordField(formControlName: 'password'),
+            ReactivePasswordField(
+              formControlName: 'password',
+              validation: requiredValidation('password'),
+            ),
             const SizedBox(height: 20),
             Align(
               alignment: Alignment.centerRight,
@@ -98,7 +129,7 @@ class LoginPage extends StatelessWidget {
             ),
             const SizedBox(height: 50),
             SizedBox(
-              width: 300,
+              width: isWeb ? double.infinity : 300,
               child: ElevatedButton(
                 onPressed: () => _onLoginClicked(context),
                 child: const Text('Log In'),
@@ -107,7 +138,9 @@ class LoginPage extends StatelessWidget {
             const SizedBox(height: 20),
           ],
         ),
-      );
+      ),
+    );
+  }
 
   Widget buildFooter(BuildContext context) => Padding(
         padding: const EdgeInsets.all(24),
@@ -132,7 +165,7 @@ class LoginPage extends StatelessWidget {
       );
 
   void _onForgotPasswordClick(BuildContext context) =>
-      Navigator.of(context).pushNamed('/forgotPassword');
+      context.push('/forgotPassword');
 
   void _onLoginClicked(BuildContext context) {
     if (form.valid) {
