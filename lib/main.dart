@@ -1,6 +1,5 @@
 import 'package:dalal_street_client/blocs/dalal/dalal_bloc.dart';
 import 'package:dalal_street_client/config/config.dart';
-import 'package:dalal_street_client/config/log.dart';
 import 'package:dalal_street_client/grpc/client.dart';
 import 'package:dalal_street_client/navigation/router.dart';
 import 'package:dalal_street_client/theme/theme.dart';
