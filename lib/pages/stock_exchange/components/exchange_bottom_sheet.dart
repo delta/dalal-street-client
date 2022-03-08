@@ -164,7 +164,7 @@ class _ExchangeBottomSheetState extends State<ExchangeBottomSheet> {
               ),
               child: SpinBox(
                 min: 1,
-                max: 20,
+                max: 30,
                 value: 01,
                 onChanged: (value) {
                   setBottomSheetState(() {

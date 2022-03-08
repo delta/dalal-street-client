@@ -1,8 +1,6 @@
 import 'package:dalal_street_client/components/loading.dart';
 import 'package:dalal_street_client/components/sheet_pop_over.dart';
 import 'package:dalal_street_client/config/get_it.dart';
-import 'package:dalal_street_client/config/log.dart';
-import 'package:dalal_street_client/constants/constants.dart';
 import 'package:dalal_street_client/models/snackbar/snackbar_type.dart';
 import 'package:dalal_street_client/proto_build/models/OrderType.pb.dart';
 import 'package:dalal_street_client/streams/global_streams.dart';
@@ -22,11 +20,8 @@ import 'package:intl/intl.dart';
 
 final oCcy = NumberFormat('#,##0.00', 'en_US');
 
-// TODO: stopLoss order ui rebuilding due to sheet keyboard issue
-// TODO: fix placing orders without giving price and handle all the edge cases
+// TODO: text field validation message
 void tradingBottomSheet(BuildContext context, int stockId, bool isAsk) {
-  logger.d('trading bottom sheet called');
-
   // getting user cash and company data from global streams
   var cash = getIt<GlobalStreams>().dynamicUserInfoStream.value.cash;
   var company = getIt<GlobalStreams>().stockMapStream.value[stockId]!;
@@ -34,19 +29,14 @@ void tradingBottomSheet(BuildContext context, int stockId, bool isAsk) {
   // data variables related to buy/sell logics
   int quantity = 1;
   var price = 0;
-  int totalPrice = 0;
   int orderFee = 0;
   var orderType = OrderType.LIMIT;
   var selectedOrderType = 'Limit';
 
-  bool error = false;
-
   Widget _tradingBottomSheetBody() {
-    logger.d('_tradingBottomSheetBody');
-
     return StatefulBuilder(
       builder: (context, setBottomSheetState) {
-        List<String> priceTypeMap = [
+        List<String> orderTypes = [
           'Limit',
           'Market',
           'Stop Loss',
@@ -103,15 +93,14 @@ void tradingBottomSheet(BuildContext context, int stockId, bool isAsk) {
                                   padding: EdgeInsets.zero,
                                   child: SpinBox(
                                     min: 1,
-                                    max: 20,
+                                    max: 50,
                                     value: 01,
                                     onChanged: (value) {
                                       setBottomSheetState(() {
                                         quantity = value.toInt();
 
-                                        totalPrice = price * quantity;
                                         orderFee =
-                                            calculateOrderFee(totalPrice);
+                                            calculateOrderFee(price * quantity);
                                       });
                                     },
                                     readOnly: true,
@@ -171,12 +160,11 @@ void tradingBottomSheet(BuildContext context, int stockId, bool isAsk) {
                                                 price = 0;
                                               }
 
-                                              totalPrice = price * quantity;
-                                              orderFee =
-                                                  calculateOrderFee(totalPrice);
+                                              orderFee = calculateOrderFee(
+                                                  price * quantity);
                                             });
                                           },
-                                          items: priceTypeMap.map((type) {
+                                          items: orderTypes.map((type) {
                                             return DropdownMenuItem(
                                               child: Text(
                                                 type,
@@ -214,7 +202,7 @@ void tradingBottomSheet(BuildContext context, int stockId, bool isAsk) {
                                     children: [
                                       SizedBox(
                                           width: 150,
-                                          child: TextFormField(
+                                          child: TextField(
                                             keyboardType: TextInputType.number,
                                             decoration: const InputDecoration(
                                                 border: OutlineInputBorder(),
@@ -234,22 +222,9 @@ void tradingBottomSheet(BuildContext context, int stockId, bool isAsk) {
                                                 price = 0;
                                               }
                                               setBottomSheetState(() {
-                                                totalPrice = price * quantity;
                                                 orderFee = calculateOrderFee(
-                                                    totalPrice);
+                                                    price * quantity);
                                               });
-                                            },
-                                            autovalidateMode: AutovalidateMode
-                                                .onUserInteraction,
-                                            validator: (text) {
-                                              if (text == null ||
-                                                  text.isEmpty) {
-                                                setBottomSheetState(() {
-                                                  error = true;
-                                                });
-
-                                                return 'Enter a positive value';
-                                              }
                                             },
                                           )),
                                     ],
@@ -272,14 +247,12 @@ void tradingBottomSheet(BuildContext context, int stockId, bool isAsk) {
                                             onChanged: (String? value) {
                                               if (value != null) {
                                                 price = int.parse(value);
-                                                logger.d(price);
                                               } else {
                                                 price = 0;
                                               }
                                               setBottomSheetState(() {
-                                                totalPrice = price * quantity;
                                                 orderFee = calculateOrderFee(
-                                                    totalPrice);
+                                                    price * quantity);
                                               });
                                             }),
                                       ),
@@ -299,16 +272,12 @@ void tradingBottomSheet(BuildContext context, int stockId, bool isAsk) {
                             width: double.infinity,
                             child: ElevatedButton(
                               onPressed: () {
-                                error == true
-                                    ? null
-                                    : context
-                                        .read<PlaceOrderCubit>()
-                                        .placeOrder(
-                                            isAsk,
-                                            company.id,
-                                            orderType,
-                                            Int64(price),
-                                            Int64(quantity));
+                                context.read<PlaceOrderCubit>().placeOrder(
+                                    isAsk,
+                                    company.id,
+                                    orderType,
+                                    Int64(price),
+                                    Int64(quantity));
                               },
                               child: const Text('Place Order'),
                             ),
@@ -381,7 +350,6 @@ Row _userBalance(int cash) {
 }
 
 Row _orderFee(int orderFee) {
-  logger.d(orderFee);
   return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
     const Text(
       'Order Fee',

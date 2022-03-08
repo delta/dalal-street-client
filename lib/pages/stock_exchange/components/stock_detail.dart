@@ -399,7 +399,7 @@ class _StockDetailState extends State<StockDetail> {
               ),
               child: SpinBox(
                 min: 1,
-                max: 20,
+                max: 30,
                 value: 01,
                 onChanged: (value) {
                   quantity = value as int;
