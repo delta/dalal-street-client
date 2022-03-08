@@ -2,6 +2,7 @@ import 'package:dalal_street_client/blocs/exchange/exchange_cubit.dart';
 import 'package:dalal_street_client/blocs/exchange/sheet/exchange_sheet_cubit.dart';
 import 'package:dalal_street_client/components/loading.dart';
 import 'package:dalal_street_client/config/get_it.dart';
+import 'package:dalal_street_client/constants/constants.dart';
 import 'package:dalal_street_client/constants/format.dart';
 import 'package:dalal_street_client/constants/icons.dart';
 import 'package:dalal_street_client/models/snackbar/snackbar_type.dart';
@@ -399,7 +400,7 @@ class _StockDetailState extends State<StockDetail> {
               ),
               child: SpinBox(
                 min: 1,
-                max: 30,
+                max: BUY_SIZE.toDouble(),
                 value: 01,
                 onChanged: (value) {
                   quantity = value as int;

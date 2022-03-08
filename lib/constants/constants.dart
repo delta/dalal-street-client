@@ -6,3 +6,5 @@ const int ORDER_PRICE_WINDOW = 20;
 const double MORTGAGE_DEPOSIT_RATE = 0.8;
 const double RETRIEVE_DEPOSIT_RATE = 0.9;
 const int marketDepthRows = 13;
+const int BUY_SIZE = 30;
+const int ORDER_LIMIT = 50;

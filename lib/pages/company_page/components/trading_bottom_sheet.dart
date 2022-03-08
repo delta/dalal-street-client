@@ -1,6 +1,7 @@
 import 'package:dalal_street_client/components/loading.dart';
 import 'package:dalal_street_client/components/sheet_pop_over.dart';
 import 'package:dalal_street_client/config/get_it.dart';
+import 'package:dalal_street_client/constants/constants.dart';
 import 'package:dalal_street_client/models/snackbar/snackbar_type.dart';
 import 'package:dalal_street_client/proto_build/models/OrderType.pb.dart';
 import 'package:dalal_street_client/streams/global_streams.dart';
@@ -93,7 +94,7 @@ void tradingBottomSheet(BuildContext context, int stockId, bool isAsk) {
                                   padding: EdgeInsets.zero,
                                   child: SpinBox(
                                     min: 1,
-                                    max: 50,
+                                    max: ORDER_LIMIT.toDouble(),
                                     value: 01,
                                     onChanged: (value) {
                                       setBottomSheetState(() {
@@ -202,7 +203,7 @@ void tradingBottomSheet(BuildContext context, int stockId, bool isAsk) {
                                     children: [
                                       SizedBox(
                                           width: 150,
-                                          child: TextField(
+                                          child: TextFormField(
                                             keyboardType: TextInputType.number,
                                             decoration: const InputDecoration(
                                                 border: OutlineInputBorder(),
@@ -226,6 +227,16 @@ void tradingBottomSheet(BuildContext context, int stockId, bool isAsk) {
                                                     price * quantity);
                                               });
                                             },
+                                            validator: (value) {
+                                              if (value == null ||
+                                                  value == '0') {
+                                                return 'Enter a positive value';
+                                              }
+
+                                              return null;
+                                            },
+                                            autovalidateMode: AutovalidateMode
+                                                .onUserInteraction,
                                           )),
                                     ],
                                   )
@@ -235,26 +246,35 @@ void tradingBottomSheet(BuildContext context, int stockId, bool isAsk) {
                                     children: [
                                       SizedBox(
                                         width: 150,
-                                        child: TextField(
-                                            keyboardType: TextInputType.number,
-                                            decoration: const InputDecoration(
-                                                border: OutlineInputBorder(),
-                                                labelText: 'Price per stock',
-                                                contentPadding:
-                                                    EdgeInsets.all(8),
-                                                labelStyle:
-                                                    TextStyle(fontSize: 11.0)),
-                                            onChanged: (String? value) {
-                                              if (value != null) {
-                                                price = int.parse(value);
-                                              } else {
-                                                price = 0;
-                                              }
-                                              setBottomSheetState(() {
-                                                orderFee = calculateOrderFee(
-                                                    price * quantity);
-                                              });
-                                            }),
+                                        child: TextFormField(
+                                          keyboardType: TextInputType.number,
+                                          decoration: const InputDecoration(
+                                              border: OutlineInputBorder(),
+                                              labelText: 'Price per stock',
+                                              contentPadding: EdgeInsets.all(8),
+                                              labelStyle:
+                                                  TextStyle(fontSize: 11.0)),
+                                          onChanged: (String? value) {
+                                            if (value != null) {
+                                              price = int.parse(value);
+                                            } else {
+                                              price = 0;
+                                            }
+                                            setBottomSheetState(() {
+                                              orderFee = calculateOrderFee(
+                                                  price * quantity);
+                                            });
+                                          },
+                                          validator: (value) {
+                                            if (value == null || value == '0') {
+                                              return 'Enter a positive value';
+                                            }
+
+                                            return null;
+                                          },
+                                          autovalidateMode: AutovalidateMode
+                                              .onUserInteraction,
+                                        ),
                                       ),
                                     ],
                                   )

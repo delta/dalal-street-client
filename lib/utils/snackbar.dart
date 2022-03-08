@@ -13,7 +13,7 @@ void showSnackBar(BuildContext context, String msg,
       behavior: SnackBarBehavior.floating,
       margin: const EdgeInsets.all(10),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      duration: const Duration(milliseconds: 1500),
+      duration: const Duration(milliseconds: 3000),
       content: Wrap(
         children: [
           Row(
