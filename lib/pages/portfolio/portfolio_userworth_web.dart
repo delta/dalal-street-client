@@ -216,17 +216,7 @@ class _PortfolioUserWorthWebState extends State<PortfolioUserWorthWeb> {
 
   Widget _eachStock(Int64? owned, Int64? reserved, Int64? cashSpent,
       String name, Int64? price) {
-    double avgbuyprice = 0.toDouble();
-    Int64 totalStocks = owned! + reserved!;
-    cashSpent == null
-        ? {null}
-        : {
-            totalStocks == 0
-                ? {null}
-                : {
-                    avgbuyprice = cashSpent.toDouble() / totalStocks.toDouble(),
-                  }
-          };
+    
     return Wrap(children: [
       Column(mainAxisAlignment: MainAxisAlignment.start, children: [
         Row(
@@ -256,7 +246,7 @@ class _PortfolioUserWorthWebState extends State<PortfolioUserWorthWeb> {
                 Text(
                   owned.toString(),
                   style: TextStyle(
-                      color: (owned.toInt()) >= 0 ? secondaryColor : heartRed,
+                      color: (owned!.toInt()) >= 0 ? secondaryColor : heartRed,
                       fontSize: 18),
                 )
               ],
@@ -275,7 +265,7 @@ class _PortfolioUserWorthWebState extends State<PortfolioUserWorthWeb> {
                   reserved.toString(),
                   style: TextStyle(
                       color:
-                          (reserved.toInt()) >= 0 ? secondaryColor : heartRed,
+                          (reserved!.toInt()) >= 0 ? secondaryColor : heartRed,
                       fontSize: 18),
                 )
               ],
@@ -303,12 +293,13 @@ class _PortfolioUserWorthWebState extends State<PortfolioUserWorthWeb> {
                 const Padding(
                     padding: EdgeInsets.only(bottom: 10),
                     child: Text(
-                      'Avg Buy Price',
+                      'Cash Spent',
                       style: TextStyle(color: blurredGray, fontSize: 18),
                     )),
                 Text(
-                  avgbuyprice.toStringAsFixed(2),
-                  style: const TextStyle(color: secondaryColor, fontSize: 18),
+                  cashSpent.toString(),
+                  style: TextStyle(
+                    color: (cashSpent!.toInt() >= 0 ? secondaryColor : heartRed)),
                 )
               ],
             ),

@@ -9,6 +9,7 @@ String transactionTypeToStr(TransactionType trType) {
   const TAX_TRANSACTION = TransactionType.TAX_TRANSACTION;
   const PLACE_ORDER_TRANSACTION = TransactionType.PLACE_ORDER_TRANSACTION;
   const CANCEL_ORDER_TRANSACTION = TransactionType.CANCEL_ORDER_TRANSACTION;
+  const SHORT_SELL_TRANSACTION = TransactionType.SHORT_SELL_TRANSACTION;
   switch (trType) {
     case FROM_EXCHANGE_TRANSACTION:
       return 'Exchange';
@@ -26,6 +27,8 @@ String transactionTypeToStr(TransactionType trType) {
       return 'Reserve';
     case CANCEL_ORDER_TRANSACTION:
       return 'Cancel Order';
+    case SHORT_SELL_TRANSACTION:
+      return 'Short Sell';
     default:
       return '';
   }
