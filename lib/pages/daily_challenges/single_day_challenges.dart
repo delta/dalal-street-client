@@ -75,20 +75,20 @@ class _SingleDayChallengesState extends State<SingleDayChallenges>
     );
   }
 
-  Widget content(SingleDayChallengesLoaded state) => Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            child: SingleDayProgress(challengeInfos: state.challengeInfos),
-          ),
-          const SizedBox(height: 12),
-          Expanded(
-            child: Padding(
+  Widget content(SingleDayChallengesLoaded state) => SingleChildScrollView(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: SingleDayProgress(challengeInfos: state.challengeInfos),
+            ),
+            const SizedBox(height: 12),
+            Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12),
               child: challengesList(state.challengeInfos),
             ),
-          ),
-        ],
+          ],
+        ),
       );
 
   Widget challengesList(List<DailyChallengeInfo> challengeInfos) => Card(
@@ -110,19 +110,19 @@ class _SingleDayChallengesState extends State<SingleDayChallenges>
                 ),
               ),
               const SizedBox(height: 10),
-              Expanded(
-                child: ListView.separated(
-                  itemCount: challengeInfos.length,
-                  itemBuilder: (_, i) => DailyChallengeItem(
-                    isCurrentDay: widget.isCurrentDay,
-                    challenge: challengeInfos[i].challenge,
-                    userState: challengeInfos[i].userState,
-                    stock: challengeInfos[i].challenge.hasStockId()
-                        ? stocks[challengeInfos[i].challenge.stockId]
-                        : null,
-                  ),
-                  separatorBuilder: (_, __) => const SizedBox(height: 10),
+              ListView.separated(
+                itemCount: challengeInfos.length,
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemBuilder: (_, i) => DailyChallengeItem(
+                  isCurrentDay: widget.isCurrentDay,
+                  challenge: challengeInfos[i].challenge,
+                  userState: challengeInfos[i].userState,
+                  stock: challengeInfos[i].challenge.hasStockId()
+                      ? stocks[challengeInfos[i].challenge.stockId]
+                      : null,
                 ),
+                separatorBuilder: (_, __) => const SizedBox(height: 10),
               ),
             ],
           ),
