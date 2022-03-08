@@ -182,7 +182,7 @@ class _HomePageState extends State<HomePage>
                   ),
                 ],
               ),
-               const SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               feedlist(false)
@@ -230,8 +230,8 @@ class _HomePageState extends State<HomePage>
               ),
               SizedBox(
                   height: MediaQuery.of(context).size.height * 0.4,
-                  child:
-                      SingleChildScrollView(primary: false, child: feedlist(true)))
+                  child: SingleChildScrollView(
+                      primary: false, child: feedlist(true)))
             ]));
   }
 
@@ -256,7 +256,7 @@ class _HomePageState extends State<HomePage>
                 String text = marketEvent.text;
                 String dur = getdur(createdAt);
                 return GestureDetector(
-                    child: newsItem(headline, imagePath, createdAt,isWeb),
+                    child: newsItem(headline, imagePath, createdAt, isWeb),
                     onTap: () => Navigator.push(
                         context,
                         CupertinoPageRoute(
@@ -395,12 +395,7 @@ class _HomePageState extends State<HomePage>
     );
   }
 
-  Widget newsItem(
-    String text,
-    String imagePath,
-    String createdAt,
-    bool isWeb
-  ) {
+  Widget newsItem(String text, String imagePath, String createdAt, bool isWeb) {
     String dur = getdur(createdAt);
     return (Container(
       padding: const EdgeInsets.symmetric(vertical: 2),

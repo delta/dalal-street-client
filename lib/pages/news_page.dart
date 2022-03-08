@@ -22,18 +22,19 @@ class _NewsPageState extends State<NewsPage> {
   List<MarketEvent> mapMarketEvents = [];
   List<MarketEvent> mapmarketEventsCopy = [];
   int i = 1;
+  bool moreExists = false;
   @override
   void initState() {
     super.initState();
     context.read<NewsBloc>().add(const GetNews());
     context.read<SubscribeCubit>().subscribe(DataStreamType.MARKET_EVENTS);
+
     _scrollController.addListener(() {
-      if (_scrollController.position.atEdge) {
-        if (_scrollController.position.pixels != 0) {
-          if (mapMarketEvents[mapMarketEvents.length - 1].id > 0) {
-            context.read<NewsBloc>().add(GetMoreNews(
-                mapMarketEvents[mapMarketEvents.length - 1].id - 1));
-          }
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+        if (mapMarketEvents[mapMarketEvents.length - 1].id > 0 && moreExists) {
+          context.read<NewsBloc>().add(
+              GetMoreNews(mapMarketEvents[mapMarketEvents.length - 1].id - 1));
         }
       }
     });
@@ -77,12 +78,11 @@ class _NewsPageState extends State<NewsPage> {
   Widget feedlist() =>
       BlocBuilder<NewsBloc, NewsState>(builder: (context, state) {
         if (state is GetNewsSucess) {
-          if (state.marketEventsList.moreExists) {
-            mapMarketEvents.addAll(state.marketEventsList.marketEvents);
-            if (i == 1) {
-              mapMarketEvents.remove(mapMarketEvents[0]);
-              i++;
-            }
+          moreExists = state.marketEventsList.moreExists;
+          mapMarketEvents.addAll(state.marketEventsList.marketEvents);
+          if (i == 1) {
+            mapMarketEvents.remove(mapMarketEvents[0]);
+            i++;
           }
           if (mapMarketEvents.isEmpty) {
             return Column(
@@ -191,7 +191,7 @@ class _NewsPageState extends State<NewsPage> {
           ),
           SizedBox(
               child: latestnews(),
-              height: MediaQuery.of(context).size.height * 0.4),
+              height: MediaQuery.of(context).size.height * 0.40),
         ]),
       );
   Widget latestnews() =>
@@ -408,8 +408,8 @@ class _NewsPageState extends State<NewsPage> {
                   borderRadius: BorderRadius.circular(20),
                   child: Image(
                     image: NetworkImage(imagePath),
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height * 0.25,
+                    width: MediaQuery.of(context).size.width * 0.8,
+                    height: MediaQuery.of(context).size.height * 0.20,
                     fit: BoxFit.contain,
                   ),
                 )
