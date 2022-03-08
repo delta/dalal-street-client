@@ -33,6 +33,7 @@ class _EnterOtpPageState extends State<EnterOtpPage> {
               } else if (state is OtpSuccess) {
                 showSnackBar(context, 'Phone Verified',
                     type: SnackBarType.success);
+                context.webGo('/home');
               }
             },
             builder: (context, state) {

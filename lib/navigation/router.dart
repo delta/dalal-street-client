@@ -42,7 +42,7 @@ GoRouter generateRouter(BuildContext context) => GoRouter(
     routes: [
       ..._initialRoutes,
       ..._authRoutes,
-      ...verifyRoutes,
+      ...verifyGoRoutes,
       GoRoute(
         /// A regular expression to match all home routes
         /// Note: Sorry for hardcoding everything, i am noob in regex
@@ -129,6 +129,41 @@ GoRouter generateRouter(BuildContext context) => GoRouter(
 bool isUserRoute(GoRouterState routerState) =>
     userRoutes.hasMatch(routerState.location);
 
+/// Routes that can be accessed by only authenticated users
+final userRoutes = [
+  ...homeRoutesWeb,
+  ...verifyRoutes,
+  '/company/:id',
+  '/admin',
+];
+
+bool isVerifyRoute(GoRouterState routerState) =>
+    verifyRoutes.hasMatch(routerState.location);
+
+final verifyRoutes = [
+  '/enterPhone',
+  '/enterOtp',
+];
+
+// TODO: Add redirects
+final verifyGoRoutes = [
+  GoRoute(
+    path: '/enterPhone',
+    builder: (_, __) => BlocProvider(
+      create: (context) => EnterPhoneCubit(context.read()),
+      child: EnterPhonePage(),
+    ),
+  ),
+  GoRoute(
+    path: '/enterOtp',
+    builder: (_, state) => BlocProvider(
+      create: (context) =>
+          EnterOtpCubit(context.read(), state.extra! as String),
+      child: const EnterOtpPage(),
+    ),
+  ),
+];
+
 final _initialRoutes = [
   GoRoute(
     path: '/',
@@ -170,24 +205,6 @@ final _authRoutes = [
     builder: (_, state) => BlocProvider(
       create: (_) => ResendMailCubit(),
       child: CheckMailPage(mail: state.extra! as String),
-    ),
-  ),
-];
-
-final verifyRoutes = [
-  GoRoute(
-    path: '/enterPhone',
-    builder: (_, __) => BlocProvider(
-      create: (context) => EnterPhoneCubit(context.read()),
-      child: EnterPhonePage(),
-    ),
-  ),
-  GoRoute(
-    path: '/enterOtp',
-    builder: (_, state) => BlocProvider(
-      create: (context) =>
-          EnterOtpCubit(context.read(), state.extra! as String),
-      child: const EnterOtpPage(),
     ),
   ),
 ];
