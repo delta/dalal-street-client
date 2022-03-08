@@ -88,7 +88,7 @@ class _CandleStickLayoutState extends State<CandleStickLayout> {
         builder: (context, state) {
           if (state is StockHistoryInitial) {
             return SizedBox(
-                height: height, child: Center(child: DalalLoadingBar()));
+                height: height, child: const Center(child: DalalLoadingBar()));
           } else if (state is StockHistorySuccess) {
             var stockHistoryMap = state.stockHistoryMap;
 
@@ -96,7 +96,7 @@ class _CandleStickLayoutState extends State<CandleStickLayout> {
             if (stockHistoryMap.length <= 3) {
               return SizedBox(
                 height: height,
-                child: Center(
+                child: const Center(
                   child: Text('chart data is insufficient, try again later'),
                 ),
               );

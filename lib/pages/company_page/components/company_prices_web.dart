@@ -127,30 +127,21 @@ Container companyPricesForWeb(Stock company, BuildContext context, int cash) {
                         }),
                   ],
                 ),
-                // Container(
-                //   height: 70,
-                //   decoration: const BoxDecoration(
-                //       color: baseColor,
-                //       borderRadius: BorderRadius.only(
-                //         topRight: Radius.circular(15),
-                //         topLeft: Radius.circular(15),
-                //       )),
-                //   alignment: Alignment.bottomCenter,
-                //   padding:
-                //       const EdgeInsets.symmetric(vertical: 10, horizontal: 30),
-                //   child: Align(
-                //     alignment: Alignment.bottomCenter,
-                //     child: SizedBox(
-                //       width: double.infinity,
-                //       child: ElevatedButton(
-                //         onPressed: () {
-                //           chooseBuyOrSellBottomSheet(context, company, cash);
-                //         },
-                //         child: const Text('Place Your Order'),
-                //       ),
-                //     ),
-                //   ),
-                // ),
+                Container(
+                  height: 70,
+                  alignment: Alignment.centerRight,
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 30),
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        chooseBuyOrSellBottomSheet(context, company, cash);
+                      },
+                      child: const Text('Place Your Order'),
+                    ),
+                  ),
+                ),
               ],
             ),
           ]));
