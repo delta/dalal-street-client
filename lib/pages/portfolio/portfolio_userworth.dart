@@ -275,12 +275,11 @@ class _PortfolioUserWorthState extends State<PortfolioUserWorth> {
                       'Cash spent',
                       style: TextStyle(color: blurredGray),
                     )),
-                Text(
-                  cashSpent.toString(),
-                  style: TextStyle(
-                    color: (cashSpent!.toInt() >= 0 ? secondaryColor : heartRed),
-                )
-                )
+                Text(cashSpent.toString(),
+                    style: TextStyle(
+                      color:
+                          (cashSpent!.toInt() >= 0 ? secondaryColor : heartRed),
+                    ))
               ],
             ),
           ],
