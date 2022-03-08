@@ -39,20 +39,23 @@ class ForgotPasswordPage extends StatelessWidget {
               var screenwidth = MediaQuery.of(context).size.width;
 
               return screenwidth > 1000
-                  ? (Center(
+                  ? Center(
                       child: Container(
-                      decoration: BoxDecoration(
+                        decoration: BoxDecoration(
                           // color: baseColor,
                           border: Border.all(color: secondaryColor, width: 2),
                           borderRadius:
-                              const BorderRadius.all(Radius.circular(10))),
-                      child: body(context),
-                      margin: EdgeInsets.fromLTRB(
+                              const BorderRadius.all(Radius.circular(10)),
+                        ),
+                        child: body(context),
+                        margin: EdgeInsets.fromLTRB(
                           screenwidth * 0.35,
                           screenwidth * 0.1,
                           screenwidth * 0.35,
-                          screenwidth * 0.1),
-                    )))
+                          screenwidth * 0.1,
+                        ),
+                      ),
+                    )
                   : body(context);
             },
           ),
@@ -99,13 +102,16 @@ class ForgotPasswordPage extends StatelessWidget {
           child: Column(
             children: [
               ReactiveTextField(
-                  formControlName: 'email',
-                  decoration: const InputDecoration(
-                    labelText: 'Email',
-                    prefixIcon: Icon(Icons.email),
-                  ),
-                  keyboardType: TextInputType.emailAddress,
-                  validationMessages: (control) => emailValidation()),
+                formControlName: 'email',
+                decoration: const InputDecoration(
+                  labelText: 'Email',
+                  prefixIcon: Icon(Icons.email),
+                ),
+                keyboardType: TextInputType.emailAddress,
+                validationMessages: (control) => emailValidation(),
+                autofillHints: const [AutofillHints.email],
+                onSubmitted: () => onResetClick(context),
+              ),
               const SizedBox(height: 40),
               SizedBox(
                 width: double.infinity,
