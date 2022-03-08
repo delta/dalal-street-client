@@ -56,13 +56,6 @@ final moreRoutesMobile = moreMenuMobile.keys.toList();
 /// Home routes for web
 final homeRoutesWeb = homeRoutesMobile + moreRoutesMobile;
 
-/// Routes that can be accessed by only authenticated users
-final userRoutes = [
-  ...homeRoutesWeb,
-  '/company/:id',
-  '/admin',
-];
-
 /// Widgets for routes in more section in mobile
 Map<String, Widget> mobileHomePagesMore(User extra) => {
       '/news': MultiBlocProvider(

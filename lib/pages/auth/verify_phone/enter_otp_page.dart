@@ -33,6 +33,7 @@ class _EnterOtpPageState extends State<EnterOtpPage> {
               } else if (state is OtpSuccess) {
                 showSnackBar(context, 'Phone Verified',
                     type: SnackBarType.success);
+                context.webGo('/home');
               }
             },
             builder: (context, state) {
@@ -114,6 +115,8 @@ class _EnterOtpPageState extends State<EnterOtpPage> {
                 fontWeight: FontWeight.bold,
               ),
               pinTheme: pinTextFieldTheme,
+              onSubmitted: (_) => _onVerifyOTPClick(phone),
+              textInputAction: TextInputAction.done,
             ),
           ),
           GestureDetector(
