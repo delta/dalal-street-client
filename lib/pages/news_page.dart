@@ -195,7 +195,9 @@ class _NewsPageState extends State<NewsPage> {
               alignment: Alignment.topLeft,
               margin: const EdgeInsets.all(10),
             ),
-            const SizedBox(height: 10,),
+            const SizedBox(
+              height: 10,
+            ),
             feedlist(isWeb)
           ],
         ));
@@ -218,7 +220,9 @@ class _NewsPageState extends State<NewsPage> {
             alignment: Alignment.topLeft,
             margin: const EdgeInsets.all(10),
           ),
-          const SizedBox(height: 10,),
+          const SizedBox(
+            height: 10,
+          ),
           SizedBox(
               child: latestnews(isWeb),
               height: MediaQuery.of(context).size.height * 0.40),
@@ -371,12 +375,14 @@ class _NewsPageState extends State<NewsPage> {
               borderRadius: BorderRadius.circular(20),
               child: Image(
                 width: isWeb ? 200 : 150,
-                height: isWeb? 100 : 75,
+                height: isWeb ? 100 : 75,
                 fit: BoxFit.contain,
                 image: NetworkImage(imagePath),
               ),
             ),
-            const SizedBox(width: 10,),
+            const SizedBox(
+              width: 10,
+            ),
             Expanded(
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
