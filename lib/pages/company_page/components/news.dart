@@ -17,7 +17,8 @@ class CompanyNewsPage extends StatefulWidget {
   final stockId;
   final bool isWeb;
 
-  const CompanyNewsPage({Key? key, required this.stockId, required this.isWeb}) : super(key: key);
+  const CompanyNewsPage({Key? key, required this.stockId, required this.isWeb})
+      : super(key: key);
 
   @override
   State<CompanyNewsPage> createState() => _CompanyNewsPageState();
@@ -115,7 +116,8 @@ class _CompanyNewsPageState extends State<CompanyNewsPage> {
                 String text = marketEvent.text;
                 String dur = getdur(createdAt);
                 return GestureDetector(
-                    child: newsItem(headline, imagePath, createdAt,widget.isWeb),
+                    child:
+                        newsItem(headline, imagePath, createdAt, widget.isWeb),
                     onTap: () => Navigator.push(
                         context,
                         CupertinoPageRoute(
@@ -199,7 +201,9 @@ class _CompanyNewsPageState extends State<CompanyNewsPage> {
                   ),
                 ],
               ),
-              const SizedBox(height: 20,),
+              const SizedBox(
+                height: 20,
+              ),
               feedlist()
             ]));
   }

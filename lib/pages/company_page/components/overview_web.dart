@@ -51,7 +51,7 @@ Widget overViewWeb(Stock company, BuildContext context) {
   var screenWidth = MediaQuery.of(context).size.width;
   var screenHeight = MediaQuery.of(context).size.height;
   return Padding(
-    padding: const EdgeInsets.fromLTRB(50,20,30,10),
+    padding: const EdgeInsets.fromLTRB(50, 20, 30, 10),
     child: Container(
       color: Colors.black,
       child: Row(
@@ -64,8 +64,7 @@ Widget overViewWeb(Stock company, BuildContext context) {
                   color: background2, borderRadius: BorderRadius.circular(20)),
               height: screenHeight * 0.3,
               width: screenWidth * 0.6,
-              child: _companyGraph(
-                  company, screenHeight * 0.3)),
+              child: _companyGraph(company, screenHeight * 0.3)),
           const SizedBox(width: 50),
           Container(
             padding: const EdgeInsets.all(20),
