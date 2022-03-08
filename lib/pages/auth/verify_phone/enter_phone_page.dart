@@ -137,6 +137,7 @@ class EnterPhonePage extends StatelessWidget {
                       keyboardType: TextInputType.phone,
                       validationMessages: (control) => phoneNumberValidation(),
                       autofillHints: const [AutofillHints.telephoneNumber],
+                      onSubmitted: () => _onSendOTPClick(context),
                     ),
                   ),
                 ],

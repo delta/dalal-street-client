@@ -114,6 +114,8 @@ class _EnterOtpPageState extends State<EnterOtpPage> {
                 fontWeight: FontWeight.bold,
               ),
               pinTheme: pinTextFieldTheme,
+              onSubmitted: (_) => _onVerifyOTPClick(phone),
+              textInputAction: TextInputAction.done,
             ),
           ),
           GestureDetector(
