@@ -176,7 +176,7 @@ class _HomePageState extends State<HomePage>
                     fontSize: 12,
                     title: 'See All',
                     onPressed: () {
-                      context.go('/news');
+                      context.push('/news');
                     },
                   ),
                 ],
@@ -184,7 +184,7 @@ class _HomePageState extends State<HomePage>
               const SizedBox(
                 height: 10,
               ),
-              feedlist(false)
+              newsFeed(false)
             ]));
   }
 
@@ -230,11 +230,11 @@ class _HomePageState extends State<HomePage>
               SizedBox(
                   height: MediaQuery.of(context).size.height * 0.4,
                   child: SingleChildScrollView(
-                      primary: false, child: feedlist(true)))
+                      primary: false, child: newsFeed(true)))
             ]));
   }
 
-  Widget feedlist(bool isWeb) =>
+  Widget newsFeed(bool isWeb) =>
       BlocBuilder<MarketEventCubit, MarketEventState>(
           builder: (context, state) {
         if (state is MarketEventSuccess) {
@@ -267,12 +267,15 @@ class _HomePageState extends State<HomePage>
               },
             );
           } else {
-            return const Center(
-              child: Text(
-                'No News',
-                style: TextStyle(
-                  fontSize: 14,
-                  color: secondaryColor,
+            return const SizedBox(
+              height: 150,
+              child: Center(
+                child: Text(
+                  'No recent news',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: secondaryColor,
+                  ),
                 ),
               ),
             );

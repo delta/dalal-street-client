@@ -114,17 +114,21 @@ class _NewsPageState extends State<NewsPage> {
 
               if (marketEvents.isEmpty) {
                 return Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.end,
                   children: const [
                     SizedBox(
                       height: 20,
                     ),
-                    Text(
-                      'No news',
-                      style: TextStyle(
-                          fontSize: 20,
-                          color: white,
-                          fontWeight: FontWeight.bold),
-                      textAlign: TextAlign.center,
+                    Center(
+                      child: Text(
+                        'No recent news',
+                        style: TextStyle(
+                            fontSize: 20,
+                            color: white,
+                            fontWeight: FontWeight.bold),
+                        textAlign: TextAlign.center,
+                      ),
                     ),
                     SizedBox(
                       height: 20,
