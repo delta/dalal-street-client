@@ -71,7 +71,7 @@ class _CompanyPageState extends State<CompanyPage>
                       const SizedBox(
                         height: 10,
                       ),
-                      CompanyNewsPage(stockId: stockId)
+                      CompanyNewsPage(stockId: stockId,isWeb: false)
                     ])),
                 // Hide Place Order Button if company went Bankrupt
                 company.isBankrupt
@@ -117,7 +117,10 @@ class _CompanyPageState extends State<CompanyPage>
                 const SizedBox(
                   height: 10,
                 ),
-                CompanyNewsPage(stockId: stockId)
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 50,vertical: 10),
+                  child: CompanyNewsPage(stockId: stockId,isWeb: true,),
+                )
               ]),
             )),
       ),

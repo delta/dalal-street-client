@@ -1,4 +1,3 @@
-import 'package:dalal_street_client/pages/company_page/components/overview.dart';
 import 'package:dalal_street_client/pages/company_page/components/market_depth.dart';
 import 'package:dalal_street_client/pages/company_page/components/overview_web.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';

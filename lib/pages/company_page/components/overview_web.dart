@@ -48,24 +48,29 @@ Widget overViewWeb(Stock company, BuildContext context) {
       getIt<GlobalStreams>().stockMapStream.allTimeHighStream(company.id);
   final Stream<Int64> allTimeLowStream =
       getIt<GlobalStreams>().stockMapStream.allTimeLowStream(company.id);
+  var screenWidth = MediaQuery.of(context).size.width;
+  var screenHeight = MediaQuery.of(context).size.height;
   return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 100.0, vertical: 20),
+    padding: const EdgeInsets.fromLTRB(50,20,30,10),
     child: Container(
       color: Colors.black,
-      child: Wrap(
-        spacing: 20,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
                   color: background2, borderRadius: BorderRadius.circular(20)),
-              height: 550,
-              width: 800,
-              child: _companyGraph(company, 550)),
+              height: screenHeight * 0.3,
+              width: screenWidth * 0.6,
+              child: _companyGraph(
+                  company, screenHeight * 0.3)),
+          const SizedBox(width: 50),
           Container(
             padding: const EdgeInsets.all(20),
-            width: 450,
-            height: 550,
+            width: screenWidth * 0.30,
+            height: screenHeight * 0.3,
             decoration: BoxDecoration(
                 color: background2, borderRadius: BorderRadius.circular(20)),
             child: Column(
@@ -141,21 +146,21 @@ Widget overViewWeb(Stock company, BuildContext context) {
                           'Current Price',
                           oCcy.format(state.data).toString(),
                           false,
-                          false);
+                          true);
                     }),
                 StreamBuilder<Int64>(
                     stream: dayHighStream,
                     initialData: company.dayHigh,
                     builder: (context, state) {
                       return marketStatusTile(AppIcons.dayHigh, 'Day High',
-                          oCcy.format(state.data).toString(), false, false);
+                          oCcy.format(state.data).toString(), false, true);
                     }),
                 StreamBuilder<Int64>(
                     stream: dayLowStream,
                     initialData: company.dayLow,
                     builder: (context, state) {
                       return marketStatusTile(AppIcons.dayHigh, 'Day Low',
-                          oCcy.format(state.data).toString(), true, false);
+                          oCcy.format(state.data).toString(), true, true);
                     }),
                 StreamBuilder<Int64>(
                     stream: allTimeHighStream,
@@ -166,7 +171,7 @@ Widget overViewWeb(Stock company, BuildContext context) {
                           'All Time High',
                           oCcy.format(state.data).toString(),
                           false,
-                          false);
+                          true);
                     }),
                 StreamBuilder<Int64>(
                     stream: allTimeLowStream,
@@ -177,7 +182,7 @@ Widget overViewWeb(Stock company, BuildContext context) {
                           'All Time Low',
                           oCcy.format(state.data).toString(),
                           true,
-                          false);
+                          true);
                     }),
               ],
             ),
