@@ -102,19 +102,19 @@ class ChangePasswordPage extends StatelessWidget {
               ReactivePasswordField(
                 formControlName: 'temp password',
                 label: 'Temporary Password',
-                validation: requiredValidation('temporary password'),
+                validation: requiredValidation('Temporary password'),
               ),
               const SizedBox(height: 20),
               ReactivePasswordField(
                 formControlName: 'new password',
                 label: 'New Password',
-                validation: passwordValidation('new password'),
+                validation: passwordValidation('New password'),
               ),
               const SizedBox(height: 20),
               ReactivePasswordField(
                 formControlName: 'confirm new password',
                 label: 'Confirm New Password',
-                validation: passwordValidation('confirm new password'),
+                validation: passwordValidation('Confirm new password'),
               ),
               const SizedBox(height: 40),
               SizedBox(

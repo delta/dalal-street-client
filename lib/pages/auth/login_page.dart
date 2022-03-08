@@ -116,7 +116,7 @@ class LoginPage extends StatelessWidget {
             const SizedBox(height: 20),
             ReactivePasswordField(
               formControlName: 'password',
-              validation: requiredValidation('password'),
+              validation: requiredValidation('Password'),
               autofillHints: const [AutofillHints.password],
               textInputAction: TextInputAction.done,
               onSubmitted: () => _onLoginClicked(context),

@@ -117,7 +117,7 @@ class RegisterPage extends StatelessWidget {
                 labelText: 'Name',
                 prefixIcon: Icon(Icons.person_outlined),
               ),
-              validationMessages: (control) => requiredValidation('name'),
+              validationMessages: (control) => requiredValidation('Name'),
               autofillHints: const [AutofillHints.name],
               textInputAction: TextInputAction.next,
             ),
@@ -136,7 +136,7 @@ class RegisterPage extends StatelessWidget {
             const SizedBox(height: 20),
             ReactivePasswordField(
               formControlName: 'password',
-              validation: passwordValidation('password'),
+              validation: passwordValidation('Password'),
               autofillHints: const [AutofillHints.newPassword],
               textInputAction: TextInputAction.next,
             ),
@@ -144,7 +144,7 @@ class RegisterPage extends StatelessWidget {
             ReactivePasswordField(
               formControlName: 'confirmPassword',
               label: 'Confirm Password',
-              validation: passwordValidation('confirm password'),
+              validation: passwordValidation('Confirm password'),
               textInputAction: TextInputAction.done,
               onSubmitted: () => _onRegisterClick(context),
             ),
