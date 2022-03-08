@@ -50,7 +50,7 @@ class _CompanyPageState extends State<CompanyPage>
     return SafeArea(
       child: Responsive(
         mobile: Scaffold(
-            backgroundColor: Colors.black,
+            backgroundColor: background2,
             body: Stack(
               alignment: Alignment.bottomCenter,
               children: [
@@ -106,18 +106,20 @@ class _CompanyPageState extends State<CompanyPage>
         tablet: Container(),
         desktop: Scaffold(
             backgroundColor: Colors.black,
-            body: Column(children: [
-              const StockBar(),
-              const SizedBox(
-                height: 0,
-              ),
-              companyPricesForWeb(company, context, cash),
-              CompanyTabViewWeb(company: company),
-              const SizedBox(
-                height: 10,
-              ),
-              CompanyNewsPage(stockId: stockId)
-            ])),
+            body: SingleChildScrollView(
+              child: Column(children: [
+                const StockBar(),
+                const SizedBox(
+                  height: 0,
+                ),
+                companyPricesForWeb(company, context, cash),
+                CompanyTabViewWeb(company: company),
+                const SizedBox(
+                  height: 10,
+                ),
+                CompanyNewsPage(stockId: stockId)
+              ]),
+            )),
       ),
     );
   }

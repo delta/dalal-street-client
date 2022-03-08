@@ -26,39 +26,41 @@ class _CompanyTabViewWebState extends State<CompanyTabViewWeb>
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: const EdgeInsets.only(left: 100, right: 100),
-        color: background2,
+        color: Colors.black,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            TabBar(
-              controller: _controller,
-              tabs: const [
-                Tab(
-                  child: Text(
-                    'Overview',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500,
-                      color: lightGray,
+            Container(
+              color: background2,
+              child: TabBar(
+                controller: _controller,
+                tabs: const [
+                  Tab(
+                    child: Text(
+                      'Overview',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                        color: lightGray,
+                      ),
+                      textAlign: TextAlign.start,
                     ),
-                    textAlign: TextAlign.start,
                   ),
-                ),
-                Tab(
-                  child: Text(
-                    'Market Depth',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500,
-                      color: lightGray,
+                  Tab(
+                    child: Text(
+                      'Market Depth',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                        color: lightGray,
+                      ),
+                      textAlign: TextAlign.start,
                     ),
-                    textAlign: TextAlign.start,
                   ),
-                ),
-              ],
-              indicatorColor: lightGray,
-              indicatorPadding: const EdgeInsets.symmetric(horizontal: 20),
+                ],
+                indicatorColor: lightGray,
+                indicatorPadding: const EdgeInsets.symmetric(horizontal: 20),
+              ),
             ),
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.7,

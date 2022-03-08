@@ -12,7 +12,7 @@ import 'package:intl/intl.dart';
 
 final oCcy = NumberFormat('#,##0.00', 'en_US');
 
-Widget _companyGraph(Stock stock) {
+Widget _companyGraph(Stock stock, double height) {
   if (stock.isBankrupt) {
     return SizedBox(
       width: 800,
@@ -33,7 +33,7 @@ Widget _companyGraph(Stock stock) {
       ),
     );
   } else {
-    return StockChart(stockId: stock.id);
+    return StockChart(stockId: stock.id, height: height);
   }
 }
 
@@ -48,127 +48,142 @@ Widget overViewWeb(Stock company, BuildContext context) {
       getIt<GlobalStreams>().stockMapStream.allTimeHighStream(company.id);
   final Stream<Int64> allTimeLowStream =
       getIt<GlobalStreams>().stockMapStream.allTimeLowStream(company.id);
-  return Container(
-    color: Colors.black,
-    child: Row(
-      children: [
-        _companyGraph(company),
-        SizedBox(
-          width: 450,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(
-                height: 15,
-              ),
-              const Text(
-                'About Company',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w500,
-                  color: white,
+  return Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 100.0, vertical: 20),
+    child: Container(
+      color: Colors.black,
+      child: Wrap(
+        spacing: 20,
+        children: [
+          Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                  color: background2, borderRadius: BorderRadius.circular(20)),
+              height: 550,
+              width: 800,
+              child: _companyGraph(company, 550)),
+          Container(
+            padding: const EdgeInsets.all(20),
+            width: 450,
+            height: 550,
+            decoration: BoxDecoration(
+                color: background2, borderRadius: BorderRadius.circular(20)),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(
+                  height: 15,
                 ),
-                textAlign: TextAlign.start,
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    company.description.toString(),
-                    softWrap: true,
-                    maxLines: 4,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                      color: lightGray,
-                    ),
-                    textAlign: TextAlign.start,
+                const Text(
+                  'About Company',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500,
+                    color: white,
                   ),
-                  InkWell(
-                    onTap: () => _showDescriptionBottomSheet(company, context),
-                    child: const Text(
-                      'Read more',
-                      style: TextStyle(
+                  textAlign: TextAlign.start,
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      company.description.toString(),
+                      softWrap: true,
+                      maxLines: 4,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
-                        color: secondaryColor,
+                        color: lightGray,
                       ),
                       textAlign: TextAlign.start,
                     ),
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 30,
-              ),
-              const Text(
-                'Market Status',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w500,
-                  color: lightGray,
+                    InkWell(
+                      onTap: () =>
+                          _showDescriptionBottomSheet(company, context),
+                      child: const Text(
+                        'Read more',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                          color: secondaryColor,
+                        ),
+                        textAlign: TextAlign.start,
+                      ),
+                    ),
+                  ],
                 ),
-                textAlign: TextAlign.start,
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              StreamBuilder<Int64>(
-                  stream: priceStream,
-                  initialData: company.currentPrice,
-                  builder: (context, state) {
-                    return marketStatusTile(
-                        AppIcons.currentPrice,
-                        'Current Price',
-                        oCcy.format(state.data).toString(),
-                        false,
-                        false);
-                  }),
-              StreamBuilder<Int64>(
-                  stream: dayHighStream,
-                  initialData: company.dayHigh,
-                  builder: (context, state) {
-                    return marketStatusTile(AppIcons.dayHigh, 'Day High',
-                        oCcy.format(state.data).toString(), false, false);
-                  }),
-              StreamBuilder<Int64>(
-                  stream: dayLowStream,
-                  initialData: company.dayLow,
-                  builder: (context, state) {
-                    return marketStatusTile(AppIcons.dayHigh, 'Day Low',
-                        oCcy.format(state.data).toString(), true, false);
-                  }),
-              StreamBuilder<Int64>(
-                  stream: allTimeHighStream,
-                  initialData: company.allTimeHigh,
-                  builder: (context, state) {
-                    return marketStatusTile(
-                        AppIcons.alltimeHigh,
-                        'All Time High',
-                        oCcy.format(state.data).toString(),
-                        false,
-                        false);
-                  }),
-              StreamBuilder<Int64>(
-                  stream: allTimeLowStream,
-                  initialData: company.allTimeLow,
-                  builder: (context, state) {
-                    return marketStatusTile(
-                        AppIcons.alltimeHigh,
-                        'All Time Low',
-                        oCcy.format(state.data).toString(),
-                        true,
-                        false);
-                  }),
-            ],
+                const SizedBox(
+                  height: 30,
+                ),
+                const Text(
+                  'Market Status',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w500,
+                    color: lightGray,
+                  ),
+                  textAlign: TextAlign.start,
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                StreamBuilder<Int64>(
+                    stream: priceStream,
+                    initialData: company.currentPrice,
+                    builder: (context, state) {
+                      return marketStatusTile(
+                          AppIcons.currentPrice,
+                          'Current Price',
+                          oCcy.format(state.data).toString(),
+                          false,
+                          false);
+                    }),
+                StreamBuilder<Int64>(
+                    stream: dayHighStream,
+                    initialData: company.dayHigh,
+                    builder: (context, state) {
+                      return marketStatusTile(AppIcons.dayHigh, 'Day High',
+                          oCcy.format(state.data).toString(), false, false);
+                    }),
+                StreamBuilder<Int64>(
+                    stream: dayLowStream,
+                    initialData: company.dayLow,
+                    builder: (context, state) {
+                      return marketStatusTile(AppIcons.dayHigh, 'Day Low',
+                          oCcy.format(state.data).toString(), true, false);
+                    }),
+                StreamBuilder<Int64>(
+                    stream: allTimeHighStream,
+                    initialData: company.allTimeHigh,
+                    builder: (context, state) {
+                      return marketStatusTile(
+                          AppIcons.alltimeHigh,
+                          'All Time High',
+                          oCcy.format(state.data).toString(),
+                          false,
+                          false);
+                    }),
+                StreamBuilder<Int64>(
+                    stream: allTimeLowStream,
+                    initialData: company.allTimeLow,
+                    builder: (context, state) {
+                      return marketStatusTile(
+                          AppIcons.alltimeHigh,
+                          'All Time Low',
+                          oCcy.format(state.data).toString(),
+                          true,
+                          false);
+                    }),
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     ),
   );
 }

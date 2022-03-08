@@ -15,20 +15,25 @@ import 'package:charts_flutter/flutter.dart' as charts;
 
 class StockChart extends StatelessWidget {
   final int stockId;
-  const StockChart({Key? key, required this.stockId}) : super(key: key);
+  final double? height;
+  const StockChart({Key? key, required this.stockId, this.height})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(providers: [
       BlocProvider(create: (context) => StockHistoryCubit()),
       BlocProvider(create: (context) => StockHistoryStreamCubit())
-    ], child: CandleStickLayout(stockId: stockId));
+    ], child: CandleStickLayout(stockId: stockId, height: height ?? 250));
   }
 }
 
 class CandleStickLayout extends StatefulWidget {
   final int stockId;
-  const CandleStickLayout({Key? key, required this.stockId}) : super(key: key);
+  final double height;
+  const CandleStickLayout(
+      {Key? key, required this.stockId, required this.height})
+      : super(key: key);
 
   @override
   _CandleStickLayoutState createState() => _CandleStickLayoutState();
@@ -71,25 +76,26 @@ class _CandleStickLayoutState extends State<CandleStickLayout> {
     return Column(
       children: [
         const SizedBox(height: 20),
-        _chart(), //graph
+        _chart(widget.height), //graph
         const SizedBox(height: 10.0),
         _resolutionTab(context) // resolution tab
       ],
     );
   }
 
-  Widget _chart() => BlocBuilder<StockHistoryCubit, StockHistoryState>(
+  Widget _chart(double height) =>
+      BlocBuilder<StockHistoryCubit, StockHistoryState>(
         builder: (context, state) {
           if (state is StockHistoryInitial) {
-            return const SizedBox(
-                height: 250, child: Center(child: DalalLoadingBar()));
+            return SizedBox(
+                height: height, child: Center(child: DalalLoadingBar()));
           } else if (state is StockHistorySuccess) {
             var stockHistoryMap = state.stockHistoryMap;
 
             /// better to fill the db with dummy data or running the server for a hour will do
             if (stockHistoryMap.length <= 3) {
-              return const SizedBox(
-                height: 250,
+              return SizedBox(
+                height: height,
                 child: Center(
                   child: Text('chart data is insufficient, try again later'),
                 ),
@@ -97,7 +103,7 @@ class _CandleStickLayoutState extends State<CandleStickLayout> {
             }
 
             return SizedBox(
-              height: 250,
+              height: height,
               child: chart == ChartType.candlestick
                   ? _candleStickChart(stockHistoryMap)
                   : _lineChart(stockHistoryMap),
@@ -105,9 +111,9 @@ class _CandleStickLayoutState extends State<CandleStickLayout> {
           }
 
           // return error
-          return const SizedBox(
-              height: 250,
-              child: Center(
+          return SizedBox(
+              height: height,
+              child: const Center(
                   child: Text(
                 'error loading graph',
                 style: TextStyle(color: heartRed, backgroundColor: redOpacity),
