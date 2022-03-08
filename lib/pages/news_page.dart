@@ -56,26 +56,52 @@ class _NewsPageState extends State<NewsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: SafeArea(
-            child: Container(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                color: Colors.black,
-                child: SingleChildScrollView(
+            child: (() {
+      var screenWidth = MediaQuery.of(context).size.width;
+
+      return screenWidth > 1000
+          ? Center(
+              child: Container(
+                  margin: EdgeInsets.fromLTRB(
+                      screenWidth * 0.20,
+                      screenWidth * 0.03,
+                      screenWidth * 0.20,
+                      screenWidth * 0.03),
+                  child: SingleChildScrollView(
                     controller: _scrollController,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        news(),
+                        news(true),
                         const SizedBox.square(
                           dimension: 20,
                         ),
-                        feed(),
+                        feed(true),
                       ],
-                    )))));
+                    ),
+                  )),
+            )
+          : Container(
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+              color: Colors.black,
+              child: SingleChildScrollView(
+                  controller: _scrollController,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      news(false),
+                      const SizedBox.square(
+                        dimension: 20,
+                      ),
+                      feed(false),
+                    ],
+                  )));
+    }())));
   }
 
-  Widget feedlist() =>
+  Widget feedlist(bool isWeb) =>
       BlocBuilder<NewsBloc, NewsState>(builder: (context, state) {
         if (state is GetNewsSucess) {
           moreExists = state.marketEventsList.moreExists;
@@ -114,7 +140,7 @@ class _NewsPageState extends State<NewsPage> {
               String text = marketEvent.text;
               String dur = getdur(createdAt);
               return GestureDetector(
-                  child: newsItem(headline, imagePath, createdAt, false),
+                  child: newsItem(headline, imagePath, createdAt, false, isWeb),
                   onTap: () => Navigator.push(
                       context,
                       CupertinoPageRoute(
@@ -150,17 +176,18 @@ class _NewsPageState extends State<NewsPage> {
         }
       });
 
-  Widget feed() {
+  Widget feed(bool isWeb) {
     return Container(
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
         decoration: BoxDecoration(
             color: background2, borderRadius: BorderRadius.circular(10)),
         child: Column(
           children: <Widget>[
             Container(
-              child: const Text(
+              child: Text(
                 'Feed',
                 style: TextStyle(
-                    fontSize: 18,
+                    fontSize: isWeb ? 36 : 18,
                     fontWeight: FontWeight.w500,
                     color: whiteWithOpacity75),
                 textAlign: TextAlign.left,
@@ -168,20 +195,22 @@ class _NewsPageState extends State<NewsPage> {
               alignment: Alignment.topLeft,
               margin: const EdgeInsets.all(10),
             ),
-            feedlist()
+            const SizedBox(height: 10,),
+            feedlist(isWeb)
           ],
         ));
   }
 
-  Widget news() => Container(
+  Widget news(bool isWeb) => Container(
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
         decoration: BoxDecoration(
             color: background2, borderRadius: BorderRadius.circular(10)),
         child: Column(children: <Widget>[
           Container(
-            child: const Text(
+            child: Text(
               'News',
               style: TextStyle(
-                  fontSize: 18,
+                  fontSize: isWeb ? 36 : 18,
                   fontWeight: FontWeight.w500,
                   color: whiteWithOpacity75),
               textAlign: TextAlign.left,
@@ -189,12 +218,14 @@ class _NewsPageState extends State<NewsPage> {
             alignment: Alignment.topLeft,
             margin: const EdgeInsets.all(10),
           ),
+          const SizedBox(height: 10,),
           SizedBox(
-              child: latestnews(),
+              child: latestnews(isWeb),
               height: MediaQuery.of(context).size.height * 0.40),
         ]),
       );
-  Widget latestnews() =>
+
+  Widget latestnews(bool isWeb) =>
       BlocBuilder<SubscribeCubit, SubscribeState>(builder: (context, state) {
         if (state is SubscriptionDataLoaded) {
           context
@@ -210,7 +241,7 @@ class _NewsPageState extends State<NewsPage> {
               String text = marketEvent.text;
               String dur = getdur(createdAt);
               return GestureDetector(
-                  child: newsItem(headline, imagePath, createdAt, true),
+                  child: newsItem(headline, imagePath, createdAt, true, isWeb),
                   onTap: () => Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -243,12 +274,12 @@ class _NewsPageState extends State<NewsPage> {
                   builder: (context, state) {
                 if (state is GetNewsSucess) {
                   if (state.marketEventsList.marketEvents.isEmpty) {
-                    return const Align(
+                    return Align(
                         alignment: Alignment.center,
                         child: Text(
                           'No latest News',
                           style: TextStyle(
-                              fontSize: 20,
+                              fontSize: isWeb ? 24 : 20,
                               color: white,
                               fontWeight: FontWeight.bold),
                           textAlign: TextAlign.center,
@@ -263,7 +294,8 @@ class _NewsPageState extends State<NewsPage> {
                   String text = marketEvent.text;
                   String dur = getdur(createdAt);
                   return GestureDetector(
-                      child: newsItem(headline, imagePath, createdAt, true),
+                      child:
+                          newsItem(headline, imagePath, createdAt, true, isWeb),
                       onTap: () => Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -325,12 +357,8 @@ class _NewsPageState extends State<NewsPage> {
         }
       });
 
-  Widget newsItem(
-    String text,
-    String imagePath,
-    String createdAt,
-    bool islatest,
-  ) {
+  Widget newsItem(String text, String imagePath, String createdAt,
+      bool islatest, bool isWeb) {
     String dur = getdur(createdAt);
     if (!islatest) {
       return (Container(
@@ -342,67 +370,64 @@ class _NewsPageState extends State<NewsPage> {
             ClipRRect(
               borderRadius: BorderRadius.circular(20),
               child: Image(
-                width: 100,
-                height: 100,
+                width: isWeb ? 200 : 150,
+                height: isWeb? 100 : 75,
                 fit: BoxFit.contain,
                 image: NetworkImage(imagePath),
               ),
             ),
-            Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  SizedBox(
-                    width: (MediaQuery.of(context).size.width - 100) * 0.8,
-                    child: Padding(
+            const SizedBox(width: 10,),
+            Expanded(
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    Padding(
                       padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
                       child: Text(text,
-                          style: const TextStyle(
-                              color: Colors.white, fontSize: 15)),
+                          style: TextStyle(
+                              color: Colors.white, fontSize: isWeb ? 24 : 18)),
                     ),
-                  ),
-                  const SizedBox.square(
-                    dimension: 5,
-                  ),
-                  Padding(
-                      padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-                      child: Text('Published on ' + dur,
-                          style: const TextStyle(
-                              fontStyle: FontStyle.italic,
-                              color: lightGray,
-                              fontSize: 12)))
-                ]),
+                    const SizedBox.square(
+                      dimension: 5,
+                    ),
+                    Padding(
+                        padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                        child: Text('Published on ' + dur,
+                            style: TextStyle(
+                                fontStyle: FontStyle.italic,
+                                color: lightGray,
+                                fontSize: isWeb ? 18 : 14)))
+                  ]),
+            ),
           ],
         ),
       ));
     } else {
       return Container(
-          padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 10),
+          padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 5),
           child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.8,
-                        child: Text(text,
-                            style: const TextStyle(
-                                color: Colors.white, fontSize: 15)),
-                      ),
-                      const SizedBox.square(
-                        dimension: 5,
+                      Text(text,
+                          style: TextStyle(
+                              color: Colors.white, fontSize: isWeb ? 24 : 18)),
+                      SizedBox.square(
+                        dimension: isWeb ? 20 : 10,
                       ),
                       Text('Published on ' + dur,
-                          style: const TextStyle(
+                          style: TextStyle(
                               fontStyle: FontStyle.italic,
                               color: lightGray,
-                              fontSize: 12))
+                              fontSize: isWeb ? 18 : 14))
                     ]),
-                const SizedBox.square(
-                  dimension: 20,
+                SizedBox.square(
+                  dimension: isWeb ? 30 : 20,
                 ),
                 ClipRRect(
                   borderRadius: BorderRadius.circular(20),
