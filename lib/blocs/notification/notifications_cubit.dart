@@ -17,10 +17,12 @@ class NotificationsCubit extends Cubit<NotificationsCubitState> {
 
   Future<void> getNotifications() async {
     try {
-      logger.d('requested  $lastNotificationId');
-
       if (lastNotificationId == 0) {
         emit(NotificationsCubitInitial());
+      }
+
+      if (!moreExist) {
+        return;
       }
 
       final GetNotificationsResponse response =
