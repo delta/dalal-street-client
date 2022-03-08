@@ -374,7 +374,7 @@ class _NewsPageState extends State<NewsPage> {
             ClipRRect(
               borderRadius: BorderRadius.circular(20),
               child: Image(
-                width: isWeb ? 200 : 150,
+                width: isWeb ? 200 : 125,
                 height: isWeb ? 100 : 75,
                 fit: BoxFit.contain,
                 image: NetworkImage(imagePath),
@@ -392,7 +392,9 @@ class _NewsPageState extends State<NewsPage> {
                       padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
                       child: Text(text,
                           style: TextStyle(
-                              color: Colors.white, fontSize: isWeb ? 24 : 18)),
+                              color: Colors.white, fontSize: isWeb ? 24 : 18),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 3),
                     ),
                     const SizedBox.square(
                       dimension: 5,
@@ -422,7 +424,9 @@ class _NewsPageState extends State<NewsPage> {
                     children: <Widget>[
                       Text(text,
                           style: TextStyle(
-                              color: Colors.white, fontSize: isWeb ? 24 : 18)),
+                              color: Colors.white, fontSize: isWeb ? 24 : 18),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 3),
                       SizedBox.square(
                         dimension: isWeb ? 20 : 10,
                       ),
