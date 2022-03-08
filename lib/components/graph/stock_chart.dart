@@ -167,7 +167,6 @@ class _CandleStickLayoutState extends State<CandleStickLayout> {
             // TODO dont sort data for stream updates
             stockHistoryMap[state.stockHistory.createdAt] = state.stockHistory;
             data = _getLineChartData(stockHistoryMap);
-            logger.d(state.stockHistory, 'line chart update');
           }
         }
 

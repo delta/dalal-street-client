@@ -1,6 +1,7 @@
 import 'package:dalal_street_client/blocs/subscribe/subscribe_cubit.dart';
 import 'package:dalal_street_client/components/stock_bar.dart';
 import 'package:dalal_street_client/config/get_it.dart';
+import 'package:dalal_street_client/config/log.dart';
 import 'package:dalal_street_client/pages/company_page/components/news.dart';
 import 'package:dalal_street_client/proto_build/datastreams/Subscribe.pb.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
@@ -35,6 +36,8 @@ class _CompanyPageState extends State<CompanyPage>
     // Subscribe to the stream of Market Depth Updates
     context.read<SubscribeCubit>().subscribe(DataStreamType.MARKET_DEPTH,
         dataStreamId: widget.stockId.toString());
+
+    logger.i('company page initiated');
   }
 
   @override
@@ -43,7 +46,6 @@ class _CompanyPageState extends State<CompanyPage>
     final globalStreams = getIt<GlobalStreams>();
     final stockList = globalStreams.latestStockMap;
     final int stockId = widget.stockId;
-    final int cash = globalStreams.latestUserInfo.cash;
     Stock company = stockList[stockId]!;
     return SafeArea(
       child: Responsive(
@@ -91,8 +93,7 @@ class _CompanyPageState extends State<CompanyPage>
                             width: double.infinity,
                             child: ElevatedButton(
                               onPressed: () {
-                                chooseBuyOrSellBottomSheet(
-                                    context, company, cash);
+                                chooseBuyOrSellBottomSheet(context, company);
                               },
                               child: const Text('Place Your Order'),
                             ),

@@ -102,7 +102,6 @@ class _CompanyNewsPageState extends State<CompanyNewsPage> {
           mapMarketEvents.addAll(state.marketEventsList.marketEvents);
           // Sort MarketEvents according to there created time
           mapMarketEvents.sort((a, b) => b.createdAt.compareTo(a.createdAt));
-          logger.i(mapMarketEvents);
           if (mapMarketEvents.isNotEmpty) {
             return ListView.separated(
               shrinkWrap: true,
