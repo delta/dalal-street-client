@@ -153,13 +153,16 @@ void tradingBottomSheet(BuildContext context, int stockId, bool isAsk) {
                                                 orderType = OrderType.MARKET;
                                                 price = company.currentPrice
                                                     .toInt();
+                                                isValid = true;
                                               } else if (selectedOrderType ==
                                                   'Limit') {
                                                 orderType = OrderType.LIMIT;
                                                 price = 0;
+                                                isValid = false;
                                               } else if (selectedOrderType ==
                                                   'Stop Loss') {
                                                 orderType = OrderType.STOPLOSS;
+                                                isValid = false;
                                                 price = 0;
                                               }
 
@@ -260,11 +263,14 @@ void tradingBottomSheet(BuildContext context, int stockId, bool isAsk) {
                                             RegExp(r'[0-9]'))
                                       ],
                                       decoration: const InputDecoration(
-                                        border: OutlineInputBorder(),
-                                        labelText: 'Price per stock',
-                                        contentPadding: EdgeInsets.all(8),
-                                        labelStyle: TextStyle(fontSize: 11.0),
-                                      ),
+                                          border: OutlineInputBorder(),
+                                          labelText: 'Price per stock',
+                                          contentPadding: EdgeInsets.all(8),
+                                          labelStyle: TextStyle(fontSize: 11.0),
+                                          errorStyle: TextStyle(
+                                            fontSize: 11.0,
+                                            color: bronze,
+                                          )),
                                       onChanged: (String? value) {
                                         if (value != null) {
                                           price = int.parse(value);
@@ -289,6 +295,8 @@ void tradingBottomSheet(BuildContext context, int stockId, bool isAsk) {
 
                                           return 'Enter a valid price';
                                         }
+
+                                        isValid = true;
 
                                         return null;
                                       },

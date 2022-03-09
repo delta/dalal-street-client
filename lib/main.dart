@@ -17,7 +17,7 @@ void main() async {
   // Remove # from web urls
   GoRouter.setUrlPathStrategy(UrlPathStrategy.path);
 
-  // Read GrpcConfig from config.json and initialise ActionClient, StreamClient
+  // Read GrpcConfig from config.json and initialize ActionClient, StreamClient
   await readConfig();
   await initClients();
 
