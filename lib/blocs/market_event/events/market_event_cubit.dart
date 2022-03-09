@@ -1,6 +1,5 @@
 import 'package:bloc/bloc.dart';
 import 'package:dalal_street_client/config/get_it.dart';
-import 'package:dalal_street_client/config/log.dart';
 import 'package:dalal_street_client/constants/error_messages.dart';
 import 'package:dalal_street_client/grpc/client.dart';
 import 'package:dalal_street_client/proto_build/actions/GetMarketEvents.pb.dart';
@@ -17,7 +16,7 @@ class MarketEventCubit extends Cubit<MarketEventState> {
 
   Future<void> getMarketEvents() async {
     try {
-      if (lastMarketEventsId == 0) {
+      if (lastMarketEventsId == 1) {
         emit(MarketEventInitial());
       }
 
@@ -26,7 +25,9 @@ class MarketEventCubit extends Cubit<MarketEventState> {
       }
 
       final response = await actionClient.getMarketEvents(
-          GetMarketEventsRequest(lastEventId: lastMarketEventsId),
+          GetMarketEventsRequest(
+              lastEventId:
+                  lastMarketEventsId == 0 ? 0 : lastMarketEventsId - 1),
           options: sessionOptions(getIt()));
 
       if (response.statusCode == GetMarketEventsResponse_StatusCode.OK) {
@@ -40,11 +41,14 @@ class MarketEventCubit extends Cubit<MarketEventState> {
         }
 
         emit(MarketEventSuccess(response.marketEvents));
-        logger.d(lastMarketEventsId, moreExist);
       } else {
+        lastMarketEventsId = 0;
+        moreExist = true;
         emit(MarketEventFailure(response.statusMessage));
       }
     } catch (e) {
+      lastMarketEventsId = 0;
+      moreExist = true;
       emit(const MarketEventFailure(failedToReachServer));
     }
   }

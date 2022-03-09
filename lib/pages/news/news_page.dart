@@ -84,24 +84,26 @@ class _NewsPageState extends State<NewsPage> {
     return BlocBuilder<MarketEventCubit, MarketEventState>(
       builder: (context, state) {
         if (state is MarketEventInitial) {
-          return const DalalLoadingBar();
+          return const Center(child: DalalLoadingBar());
         }
 
         if (state is MarketEventFailure) {
-          return Column(
-            children: [
-              const Text('Failed to reach server'),
-              const SizedBox(height: 20),
-              SizedBox(
-                width: 100,
-                height: 50,
-                child: OutlinedButton(
-                  onPressed: () =>
-                      context.read<MarketEventCubit>().getMarketEvents(),
-                  child: const Text('Retry'),
+          return Center(
+            child: Column(
+              children: [
+                const Text('Failed to reach server'),
+                const SizedBox(height: 20),
+                SizedBox(
+                  width: 100,
+                  height: 50,
+                  child: OutlinedButton(
+                    onPressed: () =>
+                        context.read<MarketEventCubit>().getMarketEvents(),
+                    child: const Text('Retry'),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           );
         }
 

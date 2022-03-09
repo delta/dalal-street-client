@@ -26,7 +26,9 @@ class NotificationsCubit extends Cubit<NotificationsCubitState> {
 
       final GetNotificationsResponse response =
           await actionClient.getNotifications(
-        GetNotificationsRequest(lastNotificationId: lastNotificationId),
+        GetNotificationsRequest(
+            lastNotificationId:
+                lastNotificationId == 0 ? 0 : lastNotificationId - 1),
         options: sessionOptions(getIt()),
       );
 
@@ -42,9 +44,13 @@ class NotificationsCubit extends Cubit<NotificationsCubitState> {
 
         emit(GetNotificationSuccess(response.notifications));
       } else {
+        lastNotificationId = 0;
+        moreExist = true;
         emit(GetNotificationFailure(response.statusMessage));
       }
     } catch (e) {
+      lastNotificationId = 0;
+      moreExist = true;
       emit(const GetNotificationFailure(failedToReachServer));
     }
   }
