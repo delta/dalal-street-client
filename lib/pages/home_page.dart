@@ -9,7 +9,7 @@ import 'package:dalal_street_client/proto_build/models/Notification.pb.dart'
     as notification;
 import 'package:dalal_street_client/config/get_it.dart';
 import 'package:dalal_street_client/constants/format.dart';
-import 'package:dalal_street_client/pages/newsdetail_page.dart';
+import 'package:dalal_street_client/pages/news/newsdetail_page.dart';
 import 'package:dalal_street_client/proto_build/models/MarketEvent.pb.dart';
 import 'package:dalal_street_client/streams/transformations.dart';
 import 'package:dalal_street_client/utils/iso_to_datetime.dart';

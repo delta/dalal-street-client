@@ -1,7 +1,7 @@
 import 'package:dalal_street_client/components/dalal_back_button.dart';
 import 'package:flutter/material.dart';
 
-import '../theme/colors.dart';
+import '../../theme/colors.dart';
 
 class NewsDetail extends StatelessWidget {
   final String text;
