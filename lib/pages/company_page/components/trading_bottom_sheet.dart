@@ -309,18 +309,20 @@ void tradingBottomSheet(BuildContext context, int stockId, bool isAsk) {
                           SizedBox(
                             width: double.infinity,
                             child: ElevatedButton(
-                              onPressed: isValid
-                                  ? () {
-                                      context
-                                          .read<PlaceOrderCubit>()
-                                          .placeOrder(
-                                              isAsk,
-                                              company.id,
-                                              orderType,
-                                              Int64(price),
-                                              Int64(quantity));
-                                    }
-                                  : null,
+                              onPressed: () {
+                                if (!isValid) {
+                                  showSnackBar(
+                                      context, 'Invalid price per stock',
+                                      type: SnackBarType.error);
+                                  return;
+                                }
+                                context.read<PlaceOrderCubit>().placeOrder(
+                                    isAsk,
+                                    company.id,
+                                    orderType,
+                                    Int64(price),
+                                    Int64(quantity));
+                              },
                               child: const Text('Place Order'),
                             ),
                           )
