@@ -28,6 +28,10 @@ class DalalSideBar extends StatelessWidget {
         selectedTextColor: baseColor,
         unselectedTextColor: white,
         unselectedIconColor: lightGray,
+        textStyle: const TextStyle(
+          fontSize: 17,
+          fontWeight: FontWeight.w600,
+        ),
         sidebarBoxShadow: const [],
         screenPadding: 0,
         borderRadius: 8,
@@ -45,7 +49,7 @@ class DalalSideBar extends StatelessWidget {
         return CollapsibleItem(
           text: menuItem.name,
           icon: Padding(
-            padding: const EdgeInsets.all(2),
+            padding: const EdgeInsets.all(3),
             child: SvgPicture.asset(
               menuItem.icon,
               color: selected ? baseColor : lightGray,
