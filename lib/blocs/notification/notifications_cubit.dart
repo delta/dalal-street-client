@@ -1,6 +1,5 @@
 import 'package:bloc/bloc.dart';
 import 'package:dalal_street_client/config/get_it.dart';
-import 'package:dalal_street_client/config/log.dart';
 import 'package:dalal_street_client/constants/error_messages.dart';
 import 'package:dalal_street_client/grpc/client.dart';
 import 'package:dalal_street_client/proto_build/actions/GetNotifications.pb.dart';
@@ -17,15 +16,19 @@ class NotificationsCubit extends Cubit<NotificationsCubitState> {
 
   Future<void> getNotifications() async {
     try {
-      logger.d('requested  $lastNotificationId');
-
       if (lastNotificationId == 0) {
         emit(NotificationsCubitInitial());
       }
 
+      if (!moreExist) {
+        return;
+      }
+
       final GetNotificationsResponse response =
           await actionClient.getNotifications(
-        GetNotificationsRequest(lastNotificationId: lastNotificationId),
+        GetNotificationsRequest(
+            lastNotificationId:
+                lastNotificationId == 0 ? 0 : lastNotificationId - 1),
         options: sessionOptions(getIt()),
       );
 
@@ -41,9 +44,13 @@ class NotificationsCubit extends Cubit<NotificationsCubitState> {
 
         emit(GetNotificationSuccess(response.notifications));
       } else {
+        lastNotificationId = 0;
+        moreExist = true;
         emit(GetNotificationFailure(response.statusMessage));
       }
     } catch (e) {
+      lastNotificationId = 0;
+      moreExist = true;
       emit(const GetNotificationFailure(failedToReachServer));
     }
   }

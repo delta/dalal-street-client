@@ -1,5 +1,5 @@
 import 'package:dalal_street_client/blocs/exchange/exchange_cubit.dart';
-import 'package:dalal_street_client/blocs/news/news_bloc.dart';
+import 'package:dalal_street_client/blocs/market_event/events/market_event_cubit.dart';
 import 'package:dalal_street_client/blocs/notification/notifications_cubit.dart';
 import 'package:dalal_street_client/blocs/portfolio/userWorth/portfolio_cubit.dart';
 import 'package:dalal_street_client/components/stock_bar.dart';
@@ -92,7 +92,7 @@ class _DalalHomeState extends State<DalalHome> {
   List<Widget> get _pageViewChildren => [
         MultiBlocProvider(
           providers: [
-            BlocProvider(create: (context) => NewsBloc()),
+            BlocProvider(create: (context) => MarketEventCubit()),
             BlocProvider(create: (context) => NotificationsCubit()),
           ],
           child: HomePage(user: widget.user),

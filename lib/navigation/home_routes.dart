@@ -1,15 +1,12 @@
 import 'package:dalal_street_client/blocs/daily_challenges/daily_challenges_page_cubit.dart';
 import 'package:dalal_street_client/blocs/my_orders/my_orders_cubit.dart';
-import 'package:dalal_street_client/blocs/news/news_bloc.dart';
-import 'package:dalal_street_client/blocs/news_subscription/news_subscription_cubit.dart';
 import 'package:dalal_street_client/blocs/notification/notifications_cubit.dart';
 import 'package:dalal_street_client/blocs/referral/referral_cubit.dart';
-import 'package:dalal_street_client/blocs/subscribe/subscribe_cubit.dart';
 import 'package:dalal_street_client/constants/icons.dart';
 import 'package:dalal_street_client/models/menu_item.dart';
 import 'package:dalal_street_client/pages/daily_challenges/daily_challenges_page.dart';
 import 'package:dalal_street_client/pages/mortgage/mortgage_home.dart';
-import 'package:dalal_street_client/pages/news_page.dart';
+import 'package:dalal_street_client/pages/news/news_page.dart';
 import 'package:dalal_street_client/pages/notifications_page.dart';
 import 'package:dalal_street_client/pages/open_orders/open_orders_page.dart';
 import 'package:dalal_street_client/pages/referral_page.dart';
@@ -58,16 +55,7 @@ final homeRoutesWeb = homeRoutesMobile + moreRoutesMobile;
 
 /// Widgets for routes in more section in mobile
 Map<String, Widget> mobileHomePagesMore(User extra) => {
-      '/news': MultiBlocProvider(
-        providers: [
-          BlocProvider(create: (context) => NewsBloc()),
-          BlocProvider(create: (context) => SubscribeCubit()),
-          BlocProvider(
-            create: (context) => NewsSubscriptionCubit(),
-          )
-        ],
-        child: const NewsPage(),
-      ),
+      '/news': const NewsPageWrapper(),
       '/mortgage': const MortgageHome(),
       '/dailyChallenges': BlocProvider(
         create: (context) => DailyChallengesPageCubit()..getChallengesConfig(),

@@ -1,7 +1,7 @@
 import 'package:dalal_street_client/blocs/dalal/dalal_bloc.dart';
+import 'package:dalal_street_client/blocs/market_event/events/market_event_cubit.dart';
 import 'package:dalal_street_client/blocs/notification/notifications_cubit.dart';
 import 'package:dalal_street_client/components/graph/line_area.dart';
-import 'package:dalal_street_client/blocs/news/news_bloc.dart';
 import 'package:dalal_street_client/components/buttons/tertiary_button.dart';
 import 'package:dalal_street_client/components/loading.dart';
 import 'package:dalal_street_client/models/dynamic_user_info.dart';
@@ -9,9 +9,10 @@ import 'package:dalal_street_client/proto_build/models/Notification.pb.dart'
     as notification;
 import 'package:dalal_street_client/config/get_it.dart';
 import 'package:dalal_street_client/constants/format.dart';
-import 'package:dalal_street_client/pages/newsdetail_page.dart';
+import 'package:dalal_street_client/pages/news/newsdetail_page.dart';
 import 'package:dalal_street_client/proto_build/models/MarketEvent.pb.dart';
 import 'package:dalal_street_client/streams/transformations.dart';
+import 'package:dalal_street_client/utils/iso_to_datetime.dart';
 import 'package:fixnum/fixnum.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
 import 'package:dalal_street_client/proto_build/models/User.pb.dart';
@@ -35,8 +36,6 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage>
     with AutomaticKeepAliveClientMixin {
   final userInfoStream = getIt<GlobalStreams>().dynamicUserInfoStream;
-  List<MarketEvent> mapMarketEvents = [];
-  int i = 1;
   final Map<int, Stock> stocks = getIt<GlobalStreams>().stockMapStream.value;
   final stockMapStream = getIt<GlobalStreams>().stockMapStream;
 
@@ -45,7 +44,7 @@ class _HomePageState extends State<HomePage>
   @override
   void initState() {
     super.initState();
-    context.read<NewsBloc>().add(const GetNews());
+    context.read<MarketEventCubit>().getLatestEvents();
     context.read<NotificationsCubit>().getNotifications();
   }
 
@@ -177,12 +176,15 @@ class _HomePageState extends State<HomePage>
                     fontSize: 12,
                     title: 'See All',
                     onPressed: () {
-                      context.go('/news');
+                      context.push('/news');
                     },
                   ),
                 ],
               ),
-              feedlist()
+              const SizedBox(
+                height: 10,
+              ),
+              newsFeed(false)
             ]));
   }
 
@@ -227,33 +229,29 @@ class _HomePageState extends State<HomePage>
               ),
               SizedBox(
                   height: MediaQuery.of(context).size.height * 0.4,
-                  child:
-                      SingleChildScrollView(primary: false, child: feedlist()))
+                  child: SingleChildScrollView(
+                      primary: false, child: newsFeed(true)))
             ]));
   }
 
-  Widget feedlist() =>
-      BlocBuilder<NewsBloc, NewsState>(builder: (context, state) {
-        if (state is GetNewsSucess) {
-          mapMarketEvents.clear();
-          mapMarketEvents.addAll(state.marketEventsList.marketEvents);
-          // Sort MarketEvents according to there created time
-          mapMarketEvents.sort((a, b) => b.createdAt.compareTo(a.createdAt));
-          mapMarketEvents.take(10).toList();
-          if (mapMarketEvents.isNotEmpty) {
+  Widget newsFeed(bool isWeb) =>
+      BlocBuilder<MarketEventCubit, MarketEventState>(
+          builder: (context, state) {
+        if (state is MarketEventSuccess) {
+          if (state.marketEvents.isNotEmpty) {
             return ListView.separated(
               shrinkWrap: true,
               physics: const ScrollPhysics(),
-              itemCount: mapMarketEvents.length,
+              itemCount: state.marketEvents.length,
               itemBuilder: (context, index) {
-                MarketEvent marketEvent = mapMarketEvents[index];
+                MarketEvent marketEvent = state.marketEvents[index];
                 String headline = marketEvent.headline;
                 String imagePath = marketEvent.imagePath;
                 String createdAt = marketEvent.createdAt;
                 String text = marketEvent.text;
-                String dur = getdur(createdAt);
+                String dur = ISOtoDateTime(createdAt);
                 return GestureDetector(
-                    child: newsItem(headline, imagePath, createdAt),
+                    child: newsItem(headline, imagePath, createdAt, isWeb),
                     onTap: () => Navigator.push(
                         context,
                         CupertinoPageRoute(
@@ -269,27 +267,30 @@ class _HomePageState extends State<HomePage>
               },
             );
           } else {
-            return const Center(
-              child: Text(
-                'No News',
-                style: TextStyle(
-                  fontSize: 14,
-                  color: secondaryColor,
+            return const SizedBox(
+              height: 150,
+              child: Center(
+                child: Text(
+                  'No recent news',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: secondaryColor,
+                  ),
                 ),
               ),
             );
           }
-        } else if (state is GetNewsFailure) {
+        } else if (state is MarketEventFailure) {
           return Column(
             children: [
-              const Text('Failed to reach server'),
+              const Text('Failed to load latest news'),
               const SizedBox(height: 20),
               SizedBox(
                 width: 100,
                 height: 50,
                 child: OutlinedButton(
-                  onPressed: () => context.read<NewsBloc>().add(GetMoreNews(
-                      mapMarketEvents[mapMarketEvents.length - 1].id - 1)),
+                  onPressed: () =>
+                      context.read<MarketEventCubit>().getLatestEvents(),
                   child: const Text('Retry'),
                 ),
               ),
@@ -392,12 +393,8 @@ class _HomePageState extends State<HomePage>
     );
   }
 
-  Widget newsItem(
-    String text,
-    String imagePath,
-    String createdAt,
-  ) {
-    String dur = getdur(createdAt);
+  Widget newsItem(String text, String imagePath, String createdAt, bool isWeb) {
+    String dur = ISOtoDateTime(createdAt);
     return (Container(
       padding: const EdgeInsets.symmetric(vertical: 2),
       child: Row(
@@ -407,7 +404,7 @@ class _HomePageState extends State<HomePage>
           ClipRRect(
             borderRadius: BorderRadius.circular(20),
             child: Image(
-              width: 200,
+              width: isWeb ? 200 : 125,
               height: 100,
               fit: BoxFit.contain,
               image: NetworkImage(imagePath),
@@ -422,7 +419,7 @@ class _HomePageState extends State<HomePage>
                     padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
                     child: Text(
                       text,
-                      style: const TextStyle(color: white, fontSize: 24),
+                      style: TextStyle(color: white, fontSize: isWeb ? 24 : 18),
                       overflow: TextOverflow.ellipsis,
                       maxLines: 2,
                     ),
@@ -433,30 +430,15 @@ class _HomePageState extends State<HomePage>
                   Padding(
                       padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
                       child: Text('Published on ' + dur,
-                          style: const TextStyle(
+                          style: TextStyle(
                               fontStyle: FontStyle.italic,
                               color: lightGray,
-                              fontSize: 18)))
+                              fontSize: isWeb ? 18 : 14)))
                 ]),
           ),
         ],
       ),
     ));
-  }
-
-  String getdur(String createdAt) {
-    DateTime dt1 = DateTime.parse(createdAt);
-    DateTime dt2 = DateTime.now();
-    Duration diff = dt2.difference(dt1);
-    if (diff.inDays == 0) {
-      if (diff.inHours == 0) {
-        return (diff.inMinutes.toString() + ' minutes ago');
-      } else {
-        return (diff.inHours.toString() + ' hour ago');
-      }
-    } else {
-      return (diff.inDays.toString() + ' day ago');
-    }
   }
 
   Widget _userworth() {

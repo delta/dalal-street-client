@@ -6,7 +6,7 @@ import 'package:dalal_street_client/blocs/auth/forgot_password/forgot_password_c
 import 'package:dalal_street_client/blocs/auth/login/login_cubit.dart';
 import 'package:dalal_street_client/blocs/dalal/dalal_bloc.dart';
 import 'package:dalal_street_client/blocs/market_depth/market_depth_bloc.dart';
-import 'package:dalal_street_client/blocs/news/news_bloc.dart';
+import 'package:dalal_street_client/blocs/market_event/events/market_event_cubit.dart';
 import 'package:dalal_street_client/blocs/resend_mail/resend_mail_cubit.dart';
 import 'package:dalal_street_client/blocs/subscribe/subscribe_cubit.dart';
 import 'package:dalal_street_client/config/get_it.dart';
@@ -85,7 +85,7 @@ GoRouter generateRouter(BuildContext context) => GoRouter(
             providers: [
               BlocProvider(create: (_) => MarketDepthBloc()),
               BlocProvider(create: (_) => SubscribeCubit()),
-              BlocProvider(create: (_) => NewsBloc()),
+              BlocProvider(create: (_) => MarketEventCubit()),
             ],
             child: CompanyPage(stockId: stockId),
           );
