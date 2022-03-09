@@ -18,14 +18,25 @@ class NewsDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: SafeArea(
-            child: Container(
-      alignment: Alignment.topCenter,
-      decoration: BoxDecoration(
-          color: background2, borderRadius: BorderRadius.circular(10)),
-      margin: const EdgeInsets.all(10),
-      child: Column(
+    var screenWidth = MediaQuery.of(context).size.width;
+    return Scaffold(body: SafeArea(child: () {
+      return screenWidth > 1000
+          ? Container(
+              margin: EdgeInsets.fromLTRB(screenWidth * 0.15,
+                  screenWidth * 0.03, screenWidth * 0.15, screenWidth * 0.03),
+              decoration: BoxDecoration(
+                  color: background2, borderRadius: BorderRadius.circular(10)),
+              child: newsDetailColumn(context, true))
+          : Container(
+              alignment: Alignment.topCenter,
+              decoration: BoxDecoration(
+                  color: background2, borderRadius: BorderRadius.circular(10)),
+              margin: const EdgeInsets.all(10),
+              child: newsDetailColumn(context, false));
+    }()));
+  }
+
+  Widget newsDetailColumn(BuildContext context, bool isWeb) => Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -39,12 +50,12 @@ class NewsDetail extends StatelessWidget {
             const SizedBox.square(
               dimension: 5,
             ),
-            const Padding(
-                padding: EdgeInsets.all(15),
+            Padding(
+                padding: const EdgeInsets.all(15),
                 child: Text(
                   'News',
                   style: TextStyle(
-                      fontSize: 18,
+                      fontSize: isWeb ? 36 : 18,
                       fontWeight: FontWeight.w500,
                       color: whiteWithOpacity75),
                   textAlign: TextAlign.left,
@@ -55,23 +66,31 @@ class NewsDetail extends StatelessWidget {
               child: Image(
                 image: NetworkImage(imagePath),
                 fit: BoxFit.fill,
-                width: MediaQuery.of(context).size.width * 0.85,
-                height: MediaQuery.of(context).size.height * 0.25,
+                width: isWeb
+                    ? MediaQuery.of(context).size.width * 0.5
+                    : MediaQuery.of(context).size.width * 0.85,
+                height: isWeb
+                    ? MediaQuery.of(context).size.height * 0.45
+                    : MediaQuery.of(context).size.height * 0.25,
               ),
             )),
             Padding(
-                padding: const EdgeInsets.all(15),
-                child: Text('Published on ' + dur,
-                    style: const TextStyle(
-                        fontStyle: FontStyle.italic,
-                        color: lightGray,
-                        fontSize: 12))),
+                padding: const EdgeInsets.fromLTRB(15,15,45,15),
+                child: Align(
+                  alignment: Alignment.bottomRight,
+                  child: Text('Published on ' + dur,
+                      style: const TextStyle(
+                          fontStyle: FontStyle.italic,
+                          color: lightGray,
+                          fontSize: 12),textAlign: TextAlign.right,),
+                )
+                        ),
             Padding(
               padding: const EdgeInsets.all(15),
               child: Text(
                 headline,
-                style:
-                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                    fontSize: isWeb ? 24 : 18, fontWeight: FontWeight.bold),
               ),
             ),
             Padding(
@@ -79,10 +98,9 @@ class NewsDetail extends StatelessWidget {
               child: Text(
                 text,
                 textAlign: TextAlign.start,
-                style: const TextStyle(fontSize: 16, color: lightGray),
+                style: TextStyle(
+                    fontSize: isWeb ? 22 : 16, color: lightGray),
               ),
             )
-          ]),
-    )));
-  }
+          ]);
 }
