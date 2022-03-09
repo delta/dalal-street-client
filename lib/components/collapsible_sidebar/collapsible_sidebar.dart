@@ -1,4 +1,4 @@
-/// From: https://github.com/RyuuKenshi/flutter_collapsible_sidebar
+/// Credits: https://github.com/RyuuKenshi/flutter_collapsible_sidebar
 import 'dart:math' as math show pi;
 
 import 'package:flutter/material.dart';
@@ -309,9 +309,6 @@ class _CollapsibleSidebarState extends State<CollapsibleSidebar>
             onTap: () {
               if (item.isSelected) return;
               item.onPressed();
-              item.isSelected = true;
-              widget.items[_selectedItemIndex].isSelected = false;
-              setState(() => _selectedItemIndex = index);
             },
           );
         },
