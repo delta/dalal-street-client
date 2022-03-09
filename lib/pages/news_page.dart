@@ -277,7 +277,7 @@ class _NewsPageState extends State<NewsPage> {
                         ),
                         Expanded(
                           child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
                                 Text(headline,
@@ -285,13 +285,17 @@ class _NewsPageState extends State<NewsPage> {
                                         color: Colors.white, fontSize: 24),
                                     overflow: TextOverflow.ellipsis,
                                     maxLines: 3),
-                                const SizedBox(height: 20,),
+                                const SizedBox(
+                                  height: 20,
+                                ),
                                 Text(text,
                                     style: const TextStyle(
                                         color: lightGray, fontSize: 18),
                                     overflow: TextOverflow.ellipsis,
                                     maxLines: 5),
-                                const SizedBox(height: 20,),
+                                const SizedBox(
+                                  height: 20,
+                                ),
                                 Text('Published on ' + dur,
                                     style: const TextStyle(
                                         fontStyle: FontStyle.italic,
