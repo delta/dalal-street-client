@@ -280,10 +280,8 @@ class _CollapsibleSidebarState extends State<CollapsibleSidebar>
         widget.items.length,
         (index) {
           var item = widget.items[index];
-          var iconColor = widget.unselectedIconColor;
           var textColor = widget.unselectedTextColor;
           if (item.isSelected) {
-            iconColor = widget.selectedIconColor;
             textColor = widget.selectedTextColor;
           }
           return CollapsibleItemWidget(
@@ -291,10 +289,10 @@ class _CollapsibleSidebarState extends State<CollapsibleSidebar>
             padding: widget.itemPadding,
             offsetX: _offsetX,
             scale: _fraction,
-            leading: Icon(
-              item.icon,
-              size: widget.iconSize,
-              color: iconColor,
+            leading: SizedBox(
+              width: widget.iconSize,
+              height: widget.iconSize,
+              child: item.icon,
             ),
             title: item.text,
             textStyle: _textStyle(textColor, widget.textStyle),

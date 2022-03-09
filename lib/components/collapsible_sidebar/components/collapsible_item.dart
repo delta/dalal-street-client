@@ -10,7 +10,7 @@ class CollapsibleItem {
   });
 
   final String text;
-  final IconData icon;
+w  final Widget icon;
   final Function onPressed;
   bool isSelected;
 }
