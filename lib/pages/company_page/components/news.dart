@@ -169,7 +169,8 @@ class _CompanyNewsPageState extends State<CompanyNewsPage> {
   Widget build(BuildContext context) {
     return Container(
         width: double.infinity,
-        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+        margin: const EdgeInsets.fromLTRB(0, 0, 45, 0),
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 45),
         decoration: BoxDecoration(
           color: background2,
           borderRadius: BorderRadius.circular(10),
@@ -181,19 +182,22 @@ class _CompanyNewsPageState extends State<CompanyNewsPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    'Company Related News',
-                    style: TextStyle(
-                      fontSize: widget.isWeb ? 24 : 18,
-                      fontWeight: FontWeight.w500,
-                      color: white,
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: 20),
+                    child: Text(
+                      'Company Related News',
+                      style: TextStyle(
+                        fontSize: widget.isWeb ? 32 : 18,
+                        fontWeight: FontWeight.w500,
+                        color: white,
+                      ),
+                      textAlign: TextAlign.start,
                     ),
-                    textAlign: TextAlign.start,
                   ),
                   TertiaryButton(
-                    width: 80,
-                    height: 25,
-                    fontSize: 12,
+                    width: 90,
+                    height: 35,
+                    fontSize: 16,
                     title: 'See All',
                     onPressed: () {
                       Navigator.pushNamed(context, '/news');

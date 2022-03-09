@@ -31,34 +31,48 @@ class _CompanyTabViewWebState extends State<CompanyTabViewWeb>
           children: [
             Container(
               color: background2,
-              child: TabBar(
-                controller: _controller,
-                tabs: const [
-                  Tab(
-                    child: Text(
-                      'Overview',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        color: lightGray,
-                      ),
-                      textAlign: TextAlign.start,
-                    ),
+              padding: const EdgeInsets.fromLTRB(0, 50, 0, 0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  const SizedBox(
+                    width: 100,
                   ),
-                  Tab(
-                    child: Text(
-                      'Market Depth',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        color: lightGray,
+                  TabBar(
+                    indicatorColor: white,
+                    indicatorWeight: 4,
+                    indicator: const UnderlineTabIndicator(
+                      borderSide: BorderSide(
+                        width: 2.5,
+                        color: white,
                       ),
-                      textAlign: TextAlign.start,
+                      insets: EdgeInsets.symmetric(horizontal: 32.0),
                     ),
+                    labelPadding: const EdgeInsets.symmetric(
+                        horizontal: 30, vertical: 10),
+                    isScrollable: true,
+                    controller: _controller,
+                    labelColor: white,
+                    labelStyle: TextStyle(fontWeight: FontWeight.w800),
+                    unselectedLabelColor: blurredGray,
+                    unselectedLabelStyle: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.normal,
+                        color: Colors.grey),
+                    tabs: const [
+                      Tab(
+                        child: Text(
+                          'Overview',
+                        ),
+                      ),
+                      Tab(
+                        child: Text(
+                          'Market Depth',
+                        ),
+                      ),
+                    ],
                   ),
                 ],
-                indicatorColor: lightGray,
-                indicatorPadding: const EdgeInsets.symmetric(horizontal: 20),
               ),
             ),
             SizedBox(

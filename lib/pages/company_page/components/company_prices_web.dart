@@ -46,14 +46,14 @@ Container companyPricesForWeb(Stock company, BuildContext context, int cash) {
                           Text(
                             company.fullName,
                             style: const TextStyle(
-                              fontSize: 18,
+                              fontSize: 22,
                               fontWeight: FontWeight.w500,
                               color: white,
                             ),
                             textAlign: TextAlign.start,
                           ),
                           const SizedBox(
-                            width: 5,
+                            width: 10,
                           ),
                           SvgPicture.asset(AppIcons.dollar)
                         ],
@@ -88,13 +88,14 @@ Container companyPricesForWeb(Stock company, BuildContext context, int cash) {
                                     previousDayClose.toDouble()) /
                                 previousDayClose.toDouble());
                           }
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                          return Row(
+                            crossAxisAlignment: CrossAxisAlignment.baseline,
+                            textBaseline: TextBaseline.alphabetic,
                             children: [
                               Text(
                                 '₹ ' + oCcy.format(state.data).toString(),
                                 style: const TextStyle(
-                                  fontSize: 24,
+                                  fontSize: 30,
                                   fontWeight: FontWeight.w700,
                                   color: white,
                                 ),
@@ -103,18 +104,20 @@ Container companyPricesForWeb(Stock company, BuildContext context, int cash) {
                               !company.isBankrupt
                                   ? Row(
                                       children: [
+                                        const SizedBox(width: 10),
+                                        
                                         Text(
                                             '+${oCcy.format(priceChange.abs()).toString()} ',
                                             style: TextStyle(
-                                                fontSize: 14,
+                                                fontSize: 20,
                                                 fontWeight: FontWeight.w500,
                                                 color: isLowOrHigh
                                                     ? secondaryColor
                                                     : heartRed)),
                                         Text(
-                                            '( ${oCcy.format(percentageHighOrLow.abs()).toString()}% ) ',
+                                            '(${oCcy.format(percentageHighOrLow.abs()).toString()}%) ',
                                             style: TextStyle(
-                                                fontSize: 14,
+                                                fontSize: 20,
                                                 fontWeight: FontWeight.w500,
                                                 color: isLowOrHigh
                                                     ? secondaryColor
@@ -131,14 +134,17 @@ Container companyPricesForWeb(Stock company, BuildContext context, int cash) {
                   height: 70,
                   alignment: Alignment.centerRight,
                   padding:
-                      const EdgeInsets.symmetric(vertical: 10, horizontal: 30),
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 75),
                   child: Align(
                     alignment: Alignment.centerRight,
                     child: ElevatedButton(
                       onPressed: () {
                         chooseBuyOrSellBottomSheet(context, company, cash);
                       },
-                      child: const Text('Place Your Order'),
+                      child: const Padding(
+                          padding: EdgeInsets.symmetric(
+                              vertical: 10, horizontal: 60),
+                          child: Text('Place Your Order')),
                     ),
                   ),
                 ),
