@@ -6,15 +6,14 @@ class CollapsibleAvatar extends StatelessWidget {
     required this.avatarSize,
     required this.backgroundColor,
     required this.name,
-    this.avatarImg,
+    required this.avatarImg,
     required this.textStyle,
   }) : super(key: key);
 
   final double avatarSize;
   final Color backgroundColor;
   final String name;
-  // ignore: prefer_typing_uninitialized_variables
-  final avatarImg;
+  final Widget avatarImg;
   final TextStyle textStyle;
 
   @override
@@ -29,13 +28,9 @@ class CollapsibleAvatar extends StatelessWidget {
       );
 
   Widget get _avatar => ClipRRect(
-      borderRadius: BorderRadius.circular(avatarSize),
-      child: Image(
-        image: avatarImg,
-        fit: BoxFit.fill,
-        height: avatarSize,
-        width: avatarSize,
-      ));
+        borderRadius: BorderRadius.circular(avatarSize),
+        child: avatarImg,
+      );
 
   Widget get _initials => Center(
         child: Text(

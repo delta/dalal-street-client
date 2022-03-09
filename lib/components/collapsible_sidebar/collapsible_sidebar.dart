@@ -62,8 +62,7 @@ class CollapsibleSidebar extends StatefulWidget {
   final bool titleBack;
   final IconData titleBackIcon;
   final Widget body;
-  // ignore: prefer_typing_uninitialized_variables
-  final avatarImg;
+  final Widget? avatarImg;
   final bool showToggleButton, fitItemsToBottom, isCollapsed;
   final List<CollapsibleItem> items;
   final double height,
@@ -284,7 +283,7 @@ class _CollapsibleSidebarState extends State<CollapsibleSidebar>
                 backgroundColor: widget.unselectedIconColor,
                 avatarSize: widget.iconSize,
                 name: widget.title,
-                avatarImg: widget.avatarImg,
+                avatarImg: widget.avatarImg!,
                 textStyle:
                     _textStyle(widget.backgroundColor, widget.titleStyle),
               ),
