@@ -14,10 +14,12 @@ import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
 import 'package:dalal_street_client/theme/colors.dart';
 import 'package:dalal_street_client/utils/snackbar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinbox/flutter_spinbox.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
+import 'package:reactive_forms/reactive_forms.dart';
 
 final oCcy = NumberFormat('#,##0.00', 'en_US');
 
@@ -33,6 +35,14 @@ void tradingBottomSheet(BuildContext context, int stockId, bool isAsk) {
   int orderFee = 0;
   var orderType = OrderType.LIMIT;
   var selectedOrderType = 'Limit';
+
+  final form = FormGroup({
+    'price per stock': FormControl<int>(value: price),
+  }, validators: [
+    Validators.required,
+    Validators.number,
+    Validators.minLength(11),
+  ]);
 
   Widget _tradingBottomSheetBody() {
     return StatefulBuilder(
@@ -203,40 +213,25 @@ void tradingBottomSheet(BuildContext context, int stockId, bool isAsk) {
                                     children: [
                                       SizedBox(
                                           width: 150,
-                                          child: TextFormField(
-                                            keyboardType: TextInputType.number,
-                                            decoration: const InputDecoration(
-                                                border: OutlineInputBorder(),
-                                                labelText: 'Price per stock',
-                                                labelStyle:
-                                                    TextStyle(fontSize: 14),
-                                                contentPadding:
-                                                    EdgeInsets.all(8),
-                                                errorStyle: TextStyle(
-                                                  fontSize: 11.0,
-                                                  color: bronze,
-                                                )),
-                                            onChanged: (String? value) {
-                                              if (value != null) {
-                                                price = int.parse(value);
-                                              } else {
-                                                price = 0;
-                                              }
-                                              setBottomSheetState(() {
-                                                orderFee = calculateOrderFee(
-                                                    price * quantity);
-                                              });
-                                            },
-                                            validator: (value) {
-                                              if (value == null ||
-                                                  value == '0') {
-                                                return 'Enter a positive value';
-                                              }
-
-                                              return null;
-                                            },
-                                            autovalidateMode: AutovalidateMode
-                                                .onUserInteraction,
+                                          child: ReactiveForm(
+                                            formGroup: form,
+                                            child: ReactiveTextField(
+                                              formControlName:
+                                                  'price per stock',
+                                              keyboardType:
+                                                  TextInputType.number,
+                                              decoration: const InputDecoration(
+                                                  border: OutlineInputBorder(),
+                                                  labelText: 'Price per stock',
+                                                  labelStyle:
+                                                      TextStyle(fontSize: 14),
+                                                  contentPadding:
+                                                      EdgeInsets.all(8),
+                                                  errorStyle: TextStyle(
+                                                    fontSize: 11.0,
+                                                    color: bronze,
+                                                  )),
+                                            ),
                                           )),
                                     ],
                                   )
@@ -291,14 +286,18 @@ void tradingBottomSheet(BuildContext context, int stockId, bool isAsk) {
                           SizedBox(
                             width: double.infinity,
                             child: ElevatedButton(
-                              onPressed: () {
-                                context.read<PlaceOrderCubit>().placeOrder(
-                                    isAsk,
-                                    company.id,
-                                    orderType,
-                                    Int64(price),
-                                    Int64(quantity));
-                              },
+                              onPressed: form.valid
+                                  ? () {
+                                      context
+                                          .read<PlaceOrderCubit>()
+                                          .placeOrder(
+                                              isAsk,
+                                              company.id,
+                                              orderType,
+                                              Int64(price),
+                                              Int64(quantity));
+                                    }
+                                  : null,
                               child: const Text('Place Order'),
                             ),
                           )
