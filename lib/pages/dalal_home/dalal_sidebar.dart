@@ -26,8 +26,8 @@ class DalalSideBar extends StatelessWidget {
   @override
   build(context) => CollapsibleSidebar(
         title: 'Dalal Street',
-        onTitleTap:() => onTitleClick(context),
-        onAvatarTap:() => onAvatarClick(context),
+        onTitleTap: () => onTitleClick(context),
+        onAvatarTap: () => onAvatarClick(context),
         avatarImg: Image.asset(AppIcons.appLogo),
         backgroundColor: baseColor,
         selectedTextColor: baseColor,
