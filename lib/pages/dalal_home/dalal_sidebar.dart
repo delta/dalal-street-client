@@ -1,12 +1,11 @@
 import 'package:dalal_street_client/components/collapsible_sidebar/collapsible_sidebar.dart';
 import 'package:dalal_street_client/components/collapsible_sidebar/components/collapsible_item.dart';
 import 'package:dalal_street_client/constants/icons.dart';
-import 'package:dalal_street_client/constants/urls.dart';
 import 'package:dalal_street_client/models/menu_item.dart';
 import 'package:dalal_street_client/theme/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:go_router/go_router.dart';
 
 class DalalSideBar extends StatelessWidget {
   final List<MenuItem> menu;
@@ -27,8 +26,8 @@ class DalalSideBar extends StatelessWidget {
   @override
   build(context) => CollapsibleSidebar(
         title: 'Dalal Street',
-        onTitleTap: onTitleClick,
-        onAvatarTap: onAvatarClick,
+        onTitleTap:() => onTitleClick(context),
+        onAvatarTap:() => onAvatarClick(context),
         avatarImg: Image.asset(AppIcons.appLogo),
         backgroundColor: baseColor,
         selectedTextColor: baseColor,
@@ -72,7 +71,7 @@ class DalalSideBar extends StatelessWidget {
         );
       }).toList();
 
-  void onTitleClick() => launch(bestStandupComedyInTheWorld);
+  void onTitleClick(BuildContext context) => context.go('/home');
 
-  void onAvatarClick() => launch(sigmaChad);
+  void onAvatarClick(BuildContext context) => context.go('/home');
 }
