@@ -47,6 +47,7 @@ class _NewsPageState extends State<NewsPage> {
   @override
   void dispose() {
     context.read<MarketEventsStreamCubit>().unsubscribe();
+    _scrollController.dispose();
     super.dispose();
   }
 
