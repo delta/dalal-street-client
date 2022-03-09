@@ -75,16 +75,18 @@ class NewsDetail extends StatelessWidget {
               ),
             )),
             Padding(
-                padding: const EdgeInsets.fromLTRB(15,15,45,15),
+                padding: const EdgeInsets.fromLTRB(15, 15, 45, 15),
                 child: Align(
                   alignment: Alignment.bottomRight,
-                  child: Text('Published on ' + dur,
-                      style: const TextStyle(
-                          fontStyle: FontStyle.italic,
-                          color: lightGray,
-                          fontSize: 12),textAlign: TextAlign.right,),
-                )
-                        ),
+                  child: Text(
+                    'Published on ' + dur,
+                    style: const TextStyle(
+                        fontStyle: FontStyle.italic,
+                        color: lightGray,
+                        fontSize: 12),
+                    textAlign: TextAlign.right,
+                  ),
+                )),
             Padding(
               padding: const EdgeInsets.all(15),
               child: Text(
@@ -98,8 +100,7 @@ class NewsDetail extends StatelessWidget {
               child: Text(
                 text,
                 textAlign: TextAlign.start,
-                style: TextStyle(
-                    fontSize: isWeb ? 22 : 16, color: lightGray),
+                style: TextStyle(fontSize: isWeb ? 22 : 16, color: lightGray),
               ),
             )
           ]);
