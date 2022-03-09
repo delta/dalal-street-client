@@ -62,9 +62,9 @@ class _NewsPageState extends State<NewsPage> {
           ? Center(
               child: Container(
                   margin: EdgeInsets.fromLTRB(
-                      screenWidth * 0.20,
+                      screenWidth * 0.15,
                       screenWidth * 0.03,
-                      screenWidth * 0.20,
+                      screenWidth * 0.15,
                       screenWidth * 0.03),
                   child: SingleChildScrollView(
                     controller: _scrollController,
@@ -238,9 +238,7 @@ class _NewsPageState extends State<NewsPage> {
           const SizedBox(
             height: 10,
           ),
-          SizedBox(
-              child: topNewsItem(latestMarketEvent, isWeb),
-              height: MediaQuery.of(context).size.height * 0.40),
+          topNewsItem(latestMarketEvent, isWeb),
         ]),
       );
 
@@ -251,43 +249,107 @@ class _NewsPageState extends State<NewsPage> {
     String text = marketEvent.text;
     String dur = ISOtoDateTime(createdAt);
     return GestureDetector(
-        child: Container(
-            padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 5),
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
+        child: () {
+          return isWeb
+              ? Container(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 2, horizontal: 5),
+                  alignment: Alignment.centerLeft,
+                  child: IntrinsicHeight(
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Text(text,
-                            style: TextStyle(
-                                color: Colors.white, fontSize: isWeb ? 24 : 18),
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 3),
-                        SizedBox.square(
-                          dimension: isWeb ? 20 : 10,
+                        Expanded(
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(20),
+                            child: Image(
+                              width: MediaQuery.of(context).size.width * 0.35,
+                              height: MediaQuery.of(context).size.height * 0.35,
+                              fit: BoxFit.fill,
+                              image: NetworkImage(imagePath),
+                            ),
+                          ),
                         ),
-                        Text('Published on ' + dur,
-                            style: TextStyle(
-                                fontStyle: FontStyle.italic,
-                                color: lightGray,
-                                fontSize: isWeb ? 18 : 14))
-                      ]),
-                  SizedBox.square(
-                    dimension: isWeb ? 30 : 20,
-                  ),
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: Image(
-                      image: NetworkImage(imagePath),
-                      width: MediaQuery.of(context).size.width * 0.8,
-                      height: MediaQuery.of(context).size.height * 0.20,
-                      fit: BoxFit.contain,
+                        const SizedBox(
+                          width: 30,
+                        ),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Text(headline,
+                                    style: const TextStyle(
+                                        color: Colors.white, fontSize: 24),
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 3),
+                                const SizedBox(height: 20,),
+                                Text(text,
+                                    style: const TextStyle(
+                                        color: lightGray, fontSize: 18),
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 5),
+                                const SizedBox(height: 20,),
+                                Text('Published on ' + dur,
+                                    style: const TextStyle(
+                                        fontStyle: FontStyle.italic,
+                                        color: lightGray,
+                                        fontSize: 18))
+                              ]),
+                        ),
+                      ],
                     ),
-                  )
-                ])),
+                  ),
+                )
+              : Container(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 2, horizontal: 5),
+                  alignment: Alignment.centerLeft,
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: <Widget>[
+                        Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(headline,
+                                  style: const TextStyle(
+                                      color: Colors.white, fontSize: 18),
+                                  overflow: TextOverflow.ellipsis,
+                                  textAlign: TextAlign.left,
+                                  maxLines: 3),
+                              SizedBox.square(
+                                dimension: isWeb ? 20 : 10,
+                              ),
+                              Text(
+                                'Published on ' + dur,
+                                style: const TextStyle(
+                                    fontStyle: FontStyle.italic,
+                                    color: lightGray,
+                                    fontSize: 14),
+                                textAlign: TextAlign.left,
+                              )
+                            ]),
+                        SizedBox.square(
+                          dimension: isWeb ? 30 : 20,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(20),
+                            child: Image(
+                              image: NetworkImage(imagePath),
+                              width: MediaQuery.of(context).size.width * 0.65,
+                              height: MediaQuery.of(context).size.height * 0.30,
+                              fit: BoxFit.fill,
+                            ),
+                          ),
+                        )
+                      ]));
+        }(),
         onTap: () => Navigator.push(
             context,
             MaterialPageRoute(
@@ -313,7 +375,7 @@ class _NewsPageState extends State<NewsPage> {
             child: Image(
               width: isWeb ? 200 : 125,
               height: isWeb ? 100 : 75,
-              fit: BoxFit.contain,
+              fit: BoxFit.fill,
               image: NetworkImage(imagePath),
             ),
           ),
