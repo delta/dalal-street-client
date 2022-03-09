@@ -8,8 +8,6 @@ import 'package:dalal_street_client/navigation/home_routes.dart';
 import 'package:dalal_street_client/pages/dalal_home/dalal_home_bottom_sheet.dart';
 import 'package:dalal_street_client/pages/dalal_home/dalal_bottom_bar.dart';
 import 'package:dalal_street_client/pages/dalal_home/dalal_sidebar.dart';
-import 'package:dalal_street_client/pages/faq_page.dart';
-import 'package:dalal_street_client/pages/help_page.dart';
 import 'package:dalal_street_client/pages/home_page.dart';
 import 'package:dalal_street_client/pages/leaderboard_page/leaderboard_page.dart';
 import 'package:dalal_street_client/pages/portfolio/portfolio_page.dart';
