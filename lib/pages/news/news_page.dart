@@ -84,7 +84,10 @@ class _NewsPageState extends State<NewsPage> {
     return BlocBuilder<MarketEventCubit, MarketEventState>(
       builder: (context, state) {
         if (state is MarketEventInitial) {
-          return const Center(child: DalalLoadingBar());
+          return Center(
+              child: SizedBox(
+                  height: MediaQuery.of(context).size.height,
+                  child: const DalalLoadingBar()));
         }
 
         if (state is MarketEventFailure) {
