@@ -1,3 +1,4 @@
+import 'package:dalal_street_client/components/dalal_back_button.dart';
 import 'package:flutter/material.dart';
 
 import '../theme/colors.dart';
@@ -29,6 +30,13 @@ class NewsDetail extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             const SizedBox.square(
+              dimension: 10,
+            ),
+            const Padding(
+              padding:  EdgeInsets.fromLTRB(10,10,0,0),
+              child:  DalalBackButton(),
+            ),
+            const SizedBox.square(
               dimension: 5,
             ),
             const Padding(
@@ -46,9 +54,9 @@ class NewsDetail extends StatelessWidget {
               borderRadius: BorderRadius.circular(20),
               child: Image(
                 image: NetworkImage(imagePath),
-                fit: BoxFit.contain,
-                width: MediaQuery.of(context).size.width * 0.9,
-                height: MediaQuery.of(context).size.height * 0.2,
+                fit: BoxFit.fill,
+                width: MediaQuery.of(context).size.width * 0.85,
+                height: MediaQuery.of(context).size.height * 0.25,
               ),
             )),
             Padding(

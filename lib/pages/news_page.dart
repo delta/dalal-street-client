@@ -347,7 +347,7 @@ class _NewsPageState extends State<NewsPage> {
                             child: Image(
                               image: NetworkImage(imagePath),
                               width: MediaQuery.of(context).size.width * 0.65,
-                              height: MediaQuery.of(context).size.height * 0.30,
+                              height: MediaQuery.of(context).size.height * 0.25,
                               fit: BoxFit.fill,
                             ),
                           ),
