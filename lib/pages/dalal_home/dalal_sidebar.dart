@@ -27,12 +27,15 @@ class DalalSideBar extends StatelessWidget {
         backgroundColor: baseColor,
         selectedTextColor: baseColor,
         unselectedTextColor: white,
+        unselectedIconColor: lightGray,
         sidebarBoxShadow: const [],
-        items: collapsibleItems,
+        screenPadding: 0,
+        borderRadius: 8,
         itemSelectorDecoration: BoxDecoration(
           color: primaryColor,
           borderRadius: BorderRadius.circular(100),
         ),
+        items: collapsibleItems,
         body: body,
       );
 

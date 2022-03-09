@@ -9,6 +9,7 @@ import 'components/collapsible_item.dart';
 import 'components/collapsible_item_selection.dart';
 import 'components/collapsible_item_widget.dart';
 
+// TODO(enhancement): close the sidebar when esc is pressed
 class CollapsibleSidebar extends StatefulWidget {
   const CollapsibleSidebar({
     Key? key,
