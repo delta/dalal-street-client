@@ -279,13 +279,16 @@ class _CollapsibleSidebarState extends State<CollapsibleSidebar>
                 size: widget.iconSize,
                 color: widget.unselectedIconColor,
               )
-            : CollapsibleAvatar(
-                backgroundColor: widget.unselectedIconColor,
-                avatarSize: widget.iconSize,
-                name: widget.title,
-                avatarImg: widget.avatarImg!,
-                textStyle:
-                    _textStyle(widget.backgroundColor, widget.titleStyle),
+            : GestureDetector(
+                onTap: widget.onTitleTap,
+                child: CollapsibleAvatar(
+                  backgroundColor: widget.unselectedIconColor,
+                  avatarSize: widget.iconSize,
+                  name: widget.title,
+                  avatarImg: widget.avatarImg!,
+                  textStyle:
+                      _textStyle(widget.backgroundColor, widget.titleStyle),
+                ),
               ),
         title: widget.title,
         textStyle: _textStyle(widget.unselectedTextColor, widget.titleStyle),
