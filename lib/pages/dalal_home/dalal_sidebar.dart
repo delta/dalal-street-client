@@ -36,13 +36,13 @@ class DalalSideBar extends StatelessWidget {
           text: menuItem.name,
           icon: SvgPicture.asset(
             menuItem.icon,
-            color: selected ? primaryColor : Colors.red,
+            color: selected ? primaryColor : lightGray,
           ),
           onPressed: () {
             if (selected) {
-              onItemSelect(index);
-            } else {
               onItemReselect(index);
+            } else {
+              onItemSelect(index);
             }
           },
           isSelected: selected,
