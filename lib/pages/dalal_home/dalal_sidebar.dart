@@ -24,8 +24,15 @@ class DalalSideBar extends StatelessWidget {
   @override
   build(context) => CollapsibleSidebar(
         title: 'Dalal Street',
+        backgroundColor: baseColor,
+        selectedTextColor: baseColor,
+        unselectedTextColor: white,
         sidebarBoxShadow: const [],
         items: collapsibleItems,
+        itemSelectorDecoration: BoxDecoration(
+          color: primaryColor,
+          borderRadius: BorderRadius.circular(100),
+        ),
         body: body,
       );
 
@@ -34,9 +41,12 @@ class DalalSideBar extends StatelessWidget {
         final selected = index == currentIndex;
         return CollapsibleItem(
           text: menuItem.name,
-          icon: SvgPicture.asset(
-            menuItem.icon,
-            color: selected ? primaryColor : lightGray,
+          icon: Padding(
+            padding: const EdgeInsets.all(2),
+            child: SvgPicture.asset(
+              menuItem.icon,
+              color: selected ? baseColor : lightGray,
+            ),
           ),
           onPressed: () {
             if (selected) {

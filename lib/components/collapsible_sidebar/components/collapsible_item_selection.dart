@@ -5,12 +5,14 @@ class CollapsibleItemSelection extends StatefulWidget {
     required this.height,
     required this.offsetY,
     required this.color,
+    this.decoration,
     required this.duration,
     required this.curve,
   });
 
   final double height, offsetY;
   final Color color;
+  final Decoration? decoration;
   final Duration duration;
   final Curve curve;
 
@@ -70,10 +72,11 @@ class _CollapsibleItemSelectionState extends State<CollapsibleItemSelection>
         child: Container(
           width: double.infinity,
           height: widget.height,
-          decoration: BoxDecoration(
-            color: widget.color,
-            borderRadius: BorderRadius.circular(10),
-          ),
+          decoration: widget.decoration ??
+              BoxDecoration(
+                color: widget.color,
+                borderRadius: BorderRadius.circular(10),
+              ),
         ),
       );
 

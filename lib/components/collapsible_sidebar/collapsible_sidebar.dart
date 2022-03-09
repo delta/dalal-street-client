@@ -33,6 +33,7 @@ class CollapsibleSidebar extends StatefulWidget {
     this.selectedTextColor = const Color(0xffF3F7F7),
     this.unselectedIconColor = const Color(0xff6A7886),
     this.unselectedTextColor = const Color(0xffC0C7D0),
+    this.itemSelectorDecoration,
     this.duration = const Duration(milliseconds: 500),
     this.curve = Curves.fastLinearToSlowEaseIn,
     this.screenPadding = 4,
@@ -79,6 +80,7 @@ class CollapsibleSidebar extends StatefulWidget {
       selectedTextColor,
       unselectedIconColor,
       unselectedTextColor;
+  final Decoration? itemSelectorDecoration;
   final Duration duration;
   final Curve curve;
   final VoidCallback? onTitleTap;
@@ -228,6 +230,7 @@ class _CollapsibleSidebarState extends State<CollapsibleSidebar>
                               height: _maxOffsetY,
                               offsetY: _maxOffsetY * _selectedItemIndex,
                               color: widget.selectedIconBox,
+                              decoration: widget.itemSelectorDecoration,
                               duration: widget.duration,
                               curve: widget.curve,
                             ),
