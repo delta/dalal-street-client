@@ -5,6 +5,7 @@ import 'package:dalal_street_client/blocs/referral/referral_cubit.dart';
 import 'package:dalal_street_client/constants/icons.dart';
 import 'package:dalal_street_client/models/menu_item.dart';
 import 'package:dalal_street_client/pages/daily_challenges/daily_challenges_page.dart';
+import 'package:dalal_street_client/pages/help_page.dart';
 import 'package:dalal_street_client/pages/mortgage/mortgage_home.dart';
 import 'package:dalal_street_client/pages/news/news_page.dart';
 import 'package:dalal_street_client/pages/notifications_page.dart';
@@ -31,6 +32,7 @@ final moreMenuMobile = {
   '/referAndEarn': MenuItem('Refer and Earn', AppIcons.referAndEarn),
   '/mediaPartners': MenuItem('Media Partners', AppIcons.mobileAd),
   '/notifications': MenuItem('Notifications', AppIcons.notificationBell),
+  '/help': MenuItem('Help', AppIcons.help)
 };
 
 // Sorry for wierd hack. Dart sucks
@@ -74,4 +76,5 @@ Map<String, Widget> mobileHomePagesMore(User extra) => {
         create: ((context) => NotificationsCubit()),
         child: const NotificationsPage(),
       ),
+      '/help': const HelpPage(),
     };

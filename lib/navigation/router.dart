@@ -25,6 +25,7 @@ import 'package:dalal_street_client/pages/auth/login_page.dart';
 import 'package:dalal_street_client/pages/auth/register_page.dart';
 import 'package:dalal_street_client/pages/auth/verify_phone/enter_otp_page.dart';
 import 'package:dalal_street_client/pages/auth/verify_phone/enter_phone_page.dart';
+import 'package:dalal_street_client/pages/faq_page.dart';
 import 'package:dalal_street_client/pages/landing_page.dart';
 import 'package:dalal_street_client/streams/global_streams.dart';
 import 'package:dalal_street_client/utils/regex_util.dart';
@@ -53,7 +54,7 @@ GoRouter generateRouter(BuildContext context) => GoRouter(
         /// only required by gorouter, and will give incorrect regex results
         path:
             // TODO: do this without hardcoding
-            '/:p(home|portfolio|exchange|ranking|news|mortgage|dailyChallenges|openOrders|referAndEarn|mediaPartners|notifications)',
+            '/:p(home|portfolio|exchange|ranking|news|mortgage|dailyChallenges|openOrders|referAndEarn|mediaPartners|notifications|help)',
         builder: (_, state) {
           final userState = context.read<DalalBloc>().state as DalalDataLoaded;
           final location = state.location;
@@ -108,6 +109,10 @@ GoRouter generateRouter(BuildContext context) => GoRouter(
           return null;
         },
       ),
+      GoRoute(
+        path: '/faqs',
+        builder: (_, __) => const FAQPage(),
+      )
     ],
     // Show snackbar and navigate to Home or Login page whenever UserState changes
     navigatorBuilder: (context, state, child) => DalalNavBuilder(
@@ -135,6 +140,7 @@ final userRoutes = [
   ...verifyRoutes,
   '/company/:id',
   '/admin',
+  '/faqs'
 ];
 
 bool isVerifyRoute(GoRouterState routerState) =>
