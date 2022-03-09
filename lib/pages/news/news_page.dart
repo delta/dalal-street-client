@@ -162,12 +162,16 @@ class _NewsPageState extends State<NewsPage> {
   }
 
   Widget feedList(List<MarketEvent> marketEvents, bool isWeb) {
-    marketEvents.removeAt(0);
     return ListView.separated(
       shrinkWrap: true,
       physics: const ScrollPhysics(),
       itemCount: marketEvents.length,
       itemBuilder: (context, index) {
+        // first news will be show in top news container
+        // skipping here
+        if (index == 0) {
+          return Container();
+        }
         MarketEvent marketEvent = marketEvents[index];
         String headline = marketEvent.headline;
         String imagePath = marketEvent.imagePath;
