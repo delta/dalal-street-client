@@ -28,7 +28,6 @@ class _CompanyNewsPageState extends State<CompanyNewsPage> {
   @override
   initState() {
     super.initState();
-    logger.i('CompanyNewsPage initState');
     context.read<NewsBloc>().add(GetNewsById(widget.stockId));
   }
 

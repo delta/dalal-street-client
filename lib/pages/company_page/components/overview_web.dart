@@ -1,5 +1,6 @@
 import 'package:dalal_street_client/components/graph/stock_chart.dart';
 import 'package:dalal_street_client/config/get_it.dart';
+import 'package:dalal_street_client/config/log.dart';
 import 'package:dalal_street_client/constants/icons.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
 import 'package:dalal_street_client/pages/company_page/components/market_status_tile.dart';
@@ -17,11 +18,10 @@ Widget _companyGraph(Stock stock, double height) {
     return SizedBox(
       width: 800,
       child: Container(
-          child: Image.asset('assets/images/bankrupt.png', height: 200)
-      ),
+          child: Image.asset('assets/images/bankrupt.png', height: 200)),
     );
   } else {
-    return StockChart(stockId: stock.id, height: height);
+    return StockChart(stockId: stock.id, height: 490);
   }
 }
 
@@ -52,7 +52,7 @@ Widget overViewWeb(Stock company, BuildContext context) {
                   color: background2, borderRadius: BorderRadius.circular(20)),
               height: screenHeight * 0.3,
               width: screenWidth * 0.6,
-              child: _companyGraph(company, screenHeight * 0.3)),
+              child: _companyGraph(company, screenHeight)),
           const SizedBox(width: 50),
           Container(
             padding: const EdgeInsets.all(20),
@@ -67,9 +67,6 @@ Widget overViewWeb(Stock company, BuildContext context) {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // const SizedBox(
-                    //   height: 25,
-                    // ),
                     const Text(
                       'About Company',
                       style: TextStyle(
@@ -88,9 +85,6 @@ Widget overViewWeb(Stock company, BuildContext context) {
                       children: [
                         Text(
                           company.description.toString(),
-                          // softWrap: true,
-                          // maxLines: 4,
-                          // overflow: TextOverflow.ellipsis,
                           style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.w500,

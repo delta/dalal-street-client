@@ -105,7 +105,6 @@ Container companyPricesForWeb(Stock company, BuildContext context, int cash) {
                                   ? Row(
                                       children: [
                                         const SizedBox(width: 10),
-                                        
                                         Text(
                                             '+${oCcy.format(priceChange.abs()).toString()} ',
                                             style: TextStyle(

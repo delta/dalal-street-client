@@ -70,7 +70,7 @@ class _CompanyTabViewState extends State<CompanyTabView>
                       parent: AlwaysScrollableScrollPhysics()),
                   children: <Widget>[
                     overView(widget.company, context),
-                    marketDepth(widget.company),
+                    marketDepthMobile(widget.company),
                   ]),
             ),
           ],

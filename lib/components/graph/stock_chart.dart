@@ -78,7 +78,7 @@ class _CandleStickLayoutState extends State<CandleStickLayout> {
         const SizedBox(height: 20),
         _chart(widget.height), //graph
         const SizedBox(height: 10.0),
-        _resolutionTab(context) // resolution tab
+        _resolutionTab(context), // resolution tab
       ],
     );
   }
@@ -102,12 +102,9 @@ class _CandleStickLayoutState extends State<CandleStickLayout> {
               );
             }
 
-            return SizedBox(
-              height: height,
-              child: chart == ChartType.candlestick
-                  ? _candleStickChart(stockHistoryMap)
-                  : _lineChart(stockHistoryMap),
-            );
+            return chart == ChartType.candlestick
+                ? _candleStickChart(stockHistoryMap)
+                : _lineChart(stockHistoryMap);
           }
 
           // return error
@@ -140,23 +137,26 @@ class _CandleStickLayoutState extends State<CandleStickLayout> {
           }
         }
 
-        return InteractiveChart(
-          candles: data,
-          style: const ChartStyle(
-              volumeHeightFactor: 0,
-              priceGainColor: primaryColor,
-              priceLossColor: red,
-              overlayBackgroundColor: backgroundColor,
-              timeLabelStyle: TextStyle(fontSize: 10),
-              overlayTextStyle: TextStyle(fontSize: 12)),
-          overlayInfo: (candle) => {
-            'open': candle.open.toString(),
-            'close': candle.close.toString(),
-            'low': candle.low.toString(),
-            'high': candle.high.toString(),
-            'timestamp': DateTime.fromMillisecondsSinceEpoch(candle.timestamp)
-                .toString() // TODO use IST format
-          },
+        return SizedBox(
+          height: widget.height,
+          child: InteractiveChart(
+            candles: data,
+            style: const ChartStyle(
+                volumeHeightFactor: 0,
+                priceGainColor: primaryColor,
+                priceLossColor: red,
+                overlayBackgroundColor: backgroundColor,
+                timeLabelStyle: TextStyle(fontSize: 10),
+                overlayTextStyle: TextStyle(fontSize: 12)),
+            overlayInfo: (candle) => {
+              'open': candle.open.toString(),
+              'close': candle.close.toString(),
+              'low': candle.low.toString(),
+              'high': candle.high.toString(),
+              'timestamp': DateTime.fromMillisecondsSinceEpoch(candle.timestamp)
+                  .toString() // TODO use IST format
+            },
+          ),
         );
       },
     );
@@ -177,21 +177,24 @@ class _CandleStickLayoutState extends State<CandleStickLayout> {
           }
         }
 
-        return charts.TimeSeriesChart(
-          data,
-          animate: false,
-          domainAxis: const charts.EndPointsTimeAxisSpec(),
-          dateTimeFactory: const charts.LocalDateTimeFactory(),
-          // defaultRenderer: charts.BarRendererConfig<DateTime>(), uncomment this for bar chart :)
-          customSeriesRenderers: [
-            charts.LineRendererConfig(
-                customRendererId: 'area',
-                areaOpacity: 0.2,
-                strokeWidthPx: 2,
-                includeLine: true,
-                includePoints: false,
-                roundEndCaps: true)
-          ],
+        return SizedBox(
+          height: widget.height,
+          child: charts.TimeSeriesChart(
+            data,
+            animate: false,
+            domainAxis: const charts.EndPointsTimeAxisSpec(),
+            dateTimeFactory: const charts.LocalDateTimeFactory(),
+            // defaultRenderer: charts.BarRendererConfig<DateTime>(), uncomment this for bar chart :)
+            customSeriesRenderers: [
+              charts.LineRendererConfig(
+                  customRendererId: 'area',
+                  areaOpacity: 0.2,
+                  strokeWidthPx: 2,
+                  includeLine: true,
+                  includePoints: false,
+                  roundEndCaps: true)
+            ],
+          ),
         );
       },
     );
@@ -217,7 +220,7 @@ class _CandleStickLayoutState extends State<CandleStickLayout> {
             },
             child: Text(resolution.shortHand),
             style: TextButton.styleFrom(
-                padding: const EdgeInsets.all(8),
+                padding: const EdgeInsets.all(15),
                 primary: currentResolution == r ? white : whiteWithOpacity50,
                 textStyle:
                     const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),

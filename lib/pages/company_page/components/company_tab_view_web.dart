@@ -53,7 +53,7 @@ class _CompanyTabViewWebState extends State<CompanyTabViewWeb>
                     isScrollable: true,
                     controller: _controller,
                     labelColor: white,
-                    labelStyle: TextStyle(fontWeight: FontWeight.w800),
+                    labelStyle: const TextStyle(fontWeight: FontWeight.w800),
                     unselectedLabelColor: blurredGray,
                     unselectedLabelStyle: const TextStyle(
                         fontSize: 20,
@@ -83,7 +83,7 @@ class _CompanyTabViewWebState extends State<CompanyTabViewWeb>
                       parent: AlwaysScrollableScrollPhysics()),
                   children: <Widget>[
                     overViewWeb(widget.company, context),
-                    marketDepth(widget.company),
+                    marketDepthWeb(widget.company),
                   ]),
             ),
           ],
