@@ -19,11 +19,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinbox/flutter_spinbox.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
-import 'package:reactive_forms/reactive_forms.dart';
 
 final oCcy = NumberFormat('#,##0.00', 'en_US');
 
-// TODO: text field validation message
 void tradingBottomSheet(BuildContext context, int stockId, bool isAsk) {
   // getting user cash and company data from global streams
   var cash = getIt<GlobalStreams>().dynamicUserInfoStream.value.cash;
@@ -36,13 +34,7 @@ void tradingBottomSheet(BuildContext context, int stockId, bool isAsk) {
   var orderType = OrderType.LIMIT;
   var selectedOrderType = 'Limit';
 
-  final form = FormGroup({
-    'price per stock': FormControl<int>(value: price),
-  }, validators: [
-    Validators.required,
-    Validators.number,
-    Validators.minLength(11),
-  ]);
+  var isValid = false;
 
   Widget _tradingBottomSheetBody() {
     return StatefulBuilder(
@@ -208,70 +200,101 @@ void tradingBottomSheet(BuildContext context, int stockId, bool isAsk) {
                                     ],
                                   )
                                 ] else if (selectedOrderType == 'Limit') ...[
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: [
-                                      SizedBox(
-                                          width: 150,
-                                          child: ReactiveForm(
-                                            formGroup: form,
-                                            child: ReactiveTextField(
-                                              formControlName:
-                                                  'price per stock',
-                                              keyboardType:
-                                                  TextInputType.number,
-                                              decoration: const InputDecoration(
-                                                  border: OutlineInputBorder(),
-                                                  labelText: 'Price per stock',
-                                                  labelStyle:
-                                                      TextStyle(fontSize: 14),
-                                                  contentPadding:
-                                                      EdgeInsets.all(8),
-                                                  errorStyle: TextStyle(
-                                                    fontSize: 11.0,
-                                                    color: bronze,
-                                                  )),
-                                            ),
-                                          )),
-                                    ],
-                                  )
-                                ] else ...[
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: [
-                                      SizedBox(
-                                        width: 150,
-                                        child: TextFormField(
-                                          keyboardType: TextInputType.number,
-                                          decoration: const InputDecoration(
-                                              border: OutlineInputBorder(),
-                                              labelText: 'Price per stock',
-                                              contentPadding: EdgeInsets.all(8),
-                                              labelStyle:
-                                                  TextStyle(fontSize: 11.0)),
-                                          onChanged: (String? value) {
-                                            if (value != null) {
-                                              price = int.parse(value);
-                                            } else {
-                                              price = 0;
-                                            }
-                                            setBottomSheetState(() {
-                                              orderFee = calculateOrderFee(
-                                                  price * quantity);
-                                            });
-                                          },
-                                          validator: (value) {
-                                            if (value == null || value == '0') {
-                                              return 'Enter a positive value';
-                                            }
+                                  SizedBox(
+                                      width: 150,
+                                      child: TextFormField(
+                                        keyboardType: TextInputType.number,
+                                        inputFormatters: <TextInputFormatter>[
+                                          FilteringTextInputFormatter.allow(
+                                              RegExp(r'[0-9]'))
+                                        ],
+                                        decoration: const InputDecoration(
+                                            border: OutlineInputBorder(),
+                                            labelText: 'Price per stock',
+                                            labelStyle: TextStyle(fontSize: 14),
+                                            contentPadding: EdgeInsets.all(8),
+                                            errorStyle: TextStyle(
+                                              fontSize: 11.0,
+                                              color: bronze,
+                                            )),
+                                        onChanged: (String? value) {
+                                          if (value != null) {
+                                            price = int.parse(value);
+                                          } else {
+                                            price = 0;
+                                          }
+                                          setBottomSheetState(() {
+                                            orderFee = calculateOrderFee(
+                                                price * quantity);
+                                          });
+                                        },
+                                        validator: (value) {
+                                          if (value == null ||
+                                              value == '' ||
+                                              value == '0') {
+                                            isValid = false;
 
-                                            return null;
-                                          },
-                                          autovalidateMode: AutovalidateMode
-                                              .onUserInteraction,
-                                        ),
+                                            return 'Enter a positive value';
+                                          }
+
+                                          if (value.isNotEmpty &&
+                                              value[0] == '0') {
+                                            isValid = false;
+
+                                            return 'Enter a valid price';
+                                          }
+                                          isValid = true;
+
+                                          return null;
+                                        },
+                                        autovalidateMode:
+                                            AutovalidateMode.onUserInteraction,
+                                      ))
+                                ] else ...[
+                                  SizedBox(
+                                    width: 150,
+                                    child: TextFormField(
+                                      keyboardType: TextInputType.number,
+                                      inputFormatters: <TextInputFormatter>[
+                                        FilteringTextInputFormatter.allow(
+                                            RegExp(r'[0-9]'))
+                                      ],
+                                      decoration: const InputDecoration(
+                                        border: OutlineInputBorder(),
+                                        labelText: 'Price per stock',
+                                        contentPadding: EdgeInsets.all(8),
+                                        labelStyle: TextStyle(fontSize: 11.0),
                                       ),
-                                    ],
+                                      onChanged: (String? value) {
+                                        if (value != null) {
+                                          price = int.parse(value);
+                                        } else {
+                                          price = 0;
+                                        }
+                                        setBottomSheetState(() {
+                                          orderFee = calculateOrderFee(
+                                              price * quantity);
+                                        });
+                                      },
+                                      validator: (value) {
+                                        if (value == null ||
+                                            value == '' ||
+                                            value == '0') {
+                                          isValid = false;
+                                          return 'Enter a positive value';
+                                        }
+                                        if (value.isNotEmpty &&
+                                            value[0] == '0') {
+                                          isValid = false;
+
+                                          return 'Enter a valid price';
+                                        }
+
+                                        return null;
+                                      },
+                                      autovalidateMode:
+                                          AutovalidateMode.onUserInteraction,
+                                    ),
                                   )
                                 ],
                               ]),
@@ -286,7 +309,7 @@ void tradingBottomSheet(BuildContext context, int stockId, bool isAsk) {
                           SizedBox(
                             width: double.infinity,
                             child: ElevatedButton(
-                              onPressed: form.valid
+                              onPressed: isValid
                                   ? () {
                                       context
                                           .read<PlaceOrderCubit>()
