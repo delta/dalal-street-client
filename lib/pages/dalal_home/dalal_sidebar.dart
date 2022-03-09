@@ -28,6 +28,7 @@ class DalalSideBar extends StatelessWidget {
   build(context) => CollapsibleSidebar(
         title: 'Dalal Street',
         onTitleTap: onTitleClick,
+        onAvatarTap: onAvatarClick,
         avatarImg: Image.asset(AppIcons.appLogo),
         backgroundColor: baseColor,
         selectedTextColor: baseColor,
@@ -72,4 +73,6 @@ class DalalSideBar extends StatelessWidget {
       }).toList();
 
   void onTitleClick() => launch(bestStandupComedyInTheWorld);
+
+  void onAvatarClick() => launch(sigmaChad);
 }

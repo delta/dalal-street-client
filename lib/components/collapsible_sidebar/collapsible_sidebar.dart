@@ -45,6 +45,7 @@ class CollapsibleSidebar extends StatefulWidget {
     this.fitItemsToBottom = false,
     required this.body,
     this.onTitleTap,
+    this.onAvatarTap,
     this.isCollapsed = true,
     this.sidebarBoxShadow = const [
       BoxShadow(
@@ -85,7 +86,7 @@ class CollapsibleSidebar extends StatefulWidget {
   final Decoration? itemSelectorDecoration;
   final Duration duration;
   final Curve curve;
-  final VoidCallback? onTitleTap;
+  final VoidCallback? onTitleTap, onAvatarTap;
   final List<BoxShadow> sidebarBoxShadow;
 
   @override
@@ -280,7 +281,7 @@ class _CollapsibleSidebarState extends State<CollapsibleSidebar>
                 color: widget.unselectedIconColor,
               )
             : GestureDetector(
-                onTap: widget.onTitleTap,
+                onTap: widget.onAvatarTap,
                 child: CollapsibleAvatar(
                   backgroundColor: widget.unselectedIconColor,
                   avatarSize: widget.iconSize,
