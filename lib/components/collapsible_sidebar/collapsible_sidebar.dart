@@ -11,6 +11,7 @@ import 'components/collapsible_item_widget.dart';
 
 class CollapsibleSidebar extends StatefulWidget {
   const CollapsibleSidebar({
+    Key? key,
     required this.items,
     this.title = 'Lorem Ipsum',
     this.titleStyle,
@@ -52,7 +53,7 @@ class CollapsibleSidebar extends StatefulWidget {
         offset: Offset(3, 3),
       ),
     ],
-  });
+  }) : super(key: key);
 
   final String title, toggleTitle;
   final MouseCursor onHoverPointer;
@@ -60,6 +61,7 @@ class CollapsibleSidebar extends StatefulWidget {
   final bool titleBack;
   final IconData titleBackIcon;
   final Widget body;
+  // ignore: prefer_typing_uninitialized_variables
   final avatarImg;
   final bool showToggleButton, fitItemsToBottom, isCollapsed;
   final List<CollapsibleItem> items;
@@ -97,6 +99,7 @@ class _CollapsibleSidebarState extends State<CollapsibleSidebar>
   late CurvedAnimation _curvedAnimation;
   late double tempWidth;
 
+  // ignore: prefer_typing_uninitialized_variables
   var _isCollapsed;
   late double _currWidth,
       _delta,

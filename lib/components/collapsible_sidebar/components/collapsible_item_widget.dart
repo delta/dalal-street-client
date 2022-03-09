@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class CollapsibleItemWidget extends StatefulWidget {
   const CollapsibleItemWidget({
+    Key? key,
     required this.onHoverPointer,
     required this.leading,
     required this.title,
@@ -10,7 +11,7 @@ class CollapsibleItemWidget extends StatefulWidget {
     required this.offsetX,
     required this.scale,
     this.onTap,
-  });
+  }) : super(key: key);
 
   final MouseCursor onHoverPointer;
   final Widget leading;
@@ -66,8 +67,8 @@ class _CollapsibleItemWidgetState extends State<CollapsibleItemWidget> {
               child: Text(
                 widget.title,
                 style: _underline
-                    ? widget.textStyle
-                        .merge(TextStyle(decoration: TextDecoration.underline))
+                    ? widget.textStyle.merge(
+                        const TextStyle(decoration: TextDecoration.underline))
                     : widget.textStyle,
                 softWrap: false,
                 overflow: TextOverflow.fade,
