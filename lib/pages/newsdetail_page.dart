@@ -33,8 +33,8 @@ class NewsDetail extends StatelessWidget {
               dimension: 10,
             ),
             const Padding(
-              padding:  EdgeInsets.fromLTRB(10,10,0,0),
-              child:  DalalBackButton(),
+              padding: EdgeInsets.fromLTRB(10, 10, 0, 0),
+              child: DalalBackButton(),
             ),
             const SizedBox.square(
               dimension: 5,
