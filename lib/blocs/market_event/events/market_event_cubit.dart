@@ -16,7 +16,7 @@ class MarketEventCubit extends Cubit<MarketEventState> {
 
   Future<void> getMarketEvents() async {
     try {
-      if (lastMarketEventsId == 1) {
+      if (lastMarketEventsId == 0) {
         emit(MarketEventInitial());
       }
 
