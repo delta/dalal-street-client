@@ -13,7 +13,7 @@ class CollapsibleAvatar extends StatelessWidget {
   final double avatarSize;
   final Color backgroundColor;
   final String name;
-  final Widget avatarImg;
+  final Widget? avatarImg;
   final TextStyle textStyle;
 
   @override
