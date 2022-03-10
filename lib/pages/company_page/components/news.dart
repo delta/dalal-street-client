@@ -8,6 +8,7 @@ import 'package:dalal_street_client/utils/iso_to_datetime.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class CompanyNewsPage extends StatefulWidget {
   // ignore: prefer_typing_uninitialized_variables
@@ -182,7 +183,7 @@ class _CompanyNewsPageState extends State<CompanyNewsPage> {
                     fontSize: 16,
                     title: 'See All',
                     onPressed: () {
-                      Navigator.pushNamed(context, '/news');
+                      context.push('/news');
                     },
                   ),
                 ],
