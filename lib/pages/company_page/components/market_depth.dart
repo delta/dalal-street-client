@@ -202,7 +202,8 @@ Widget marketDepthWeb(Stock company) {
                             Column(
                               children: [
                                 Container(
-                                  constraints: const BoxConstraints(minWidth: 330),
+                                  constraints:
+                                      const BoxConstraints(minWidth: 330),
                                   alignment: Alignment.center,
                                   padding: const EdgeInsets.symmetric(
                                       vertical: 10, horizontal: 75),
@@ -248,7 +249,8 @@ Widget marketDepthWeb(Stock company) {
                             Column(
                               children: [
                                 Container(
-                                  constraints: const BoxConstraints(minWidth: 330),
+                                  constraints:
+                                      const BoxConstraints(minWidth: 330),
                                   alignment: Alignment.center,
                                   padding: const EdgeInsets.symmetric(
                                       vertical: 10, horizontal: 75),
