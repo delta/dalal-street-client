@@ -100,20 +100,28 @@ class _DalalNavBuilderState extends State<DalalNavBuilder> {
         },
       );
 
-  Widget _retryScreen(void Function() onRetryClick) => Column(
-        children: [
-          const Text('Failed to reach server'),
-          const SizedBox(height: 20),
-          SizedBox(
-            width: 100,
-            height: 50,
-            child: OutlinedButton(
-              onPressed: onRetryClick,
-              child: const Text('Retry'),
+  Widget _retryScreen(void Function() onRetryClick) => SafeArea(
+    child: Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const Text('Failed to reach server'),
+                const SizedBox(height: 20),
+                SizedBox(
+                  width: 100,
+                  height: 50,
+                  child: OutlinedButton(
+                    onPressed: onRetryClick,
+                    child: const Text('Retry'),
+                  ),
+                ),
+              ],
             ),
-          ),
-        ],
-      );
+      ),
+    ),
+  );
 
   Widget _loadingScreen() => Scaffold(
         body: Center(
