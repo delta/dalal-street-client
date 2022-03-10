@@ -94,18 +94,18 @@ class _DalalNavBuilderState extends State<DalalNavBuilder> {
             return widget.child;
           }
           if (state is DalalLoginFailed) {
-            return _retryScreen(() {});
+            return _retryScreen(() {context.read<DalalBloc>().add( GetUserData(state.sessionId));});
           }
           return _loadingScreen();
         },
       );
 
   Widget _retryScreen(void Function() onRetryClick) => SafeArea(
-    child: Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
+        child: Scaffold(
+          body: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const Text('Failed to reach server'),
                 const SizedBox(height: 20),
@@ -119,9 +119,9 @@ class _DalalNavBuilderState extends State<DalalNavBuilder> {
                 ),
               ],
             ),
-      ),
-    ),
-  );
+          ),
+        ),
+      );
 
   Widget _loadingScreen() => Scaffold(
         body: Center(
