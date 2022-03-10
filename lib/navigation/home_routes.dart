@@ -5,6 +5,7 @@ import 'package:dalal_street_client/blocs/referral/referral_cubit.dart';
 import 'package:dalal_street_client/constants/icons.dart';
 import 'package:dalal_street_client/models/menu_item.dart';
 import 'package:dalal_street_client/pages/daily_challenges/daily_challenges_page.dart';
+import 'package:dalal_street_client/pages/mediapartners_page.dart';
 import 'package:dalal_street_client/pages/mortgage/mortgage_home.dart';
 import 'package:dalal_street_client/pages/news/news_page.dart';
 import 'package:dalal_street_client/pages/notifications_page.dart';
@@ -69,7 +70,7 @@ Map<String, Widget> mobileHomePagesMore(User extra) => {
         create: (context) => ReferralCubit(),
         child: ReferralPage(user: extra),
       ),
-      '/mediaPartners': const Text('Media partners tbd'),
+      '/mediaPartners': const MediaPartners(),
       '/notifications': BlocProvider(
         create: ((context) => NotificationsCubit()),
         child: const NotificationsPage(),
