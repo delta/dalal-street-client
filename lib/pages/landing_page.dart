@@ -1,4 +1,3 @@
-import 'package:dalal_street_client/components/fill_max_height_scroll_view.dart';
 import 'package:dalal_street_client/constants/app_info.dart';
 import 'package:dalal_street_client/constants/urls.dart';
 import 'package:dalal_street_client/theme/buttons.dart';
@@ -31,7 +30,7 @@ class LandingPage extends StatelessWidget {
   @override
   Widget build(context) => Scaffold(
         body: Responsive(
-          desktop: const LandingPage_web(),
+          desktop: const LandingPageWeb(),
           tablet: SafeArea(
             child: (buildBody(context)),
           ),
@@ -141,8 +140,8 @@ class LandingPage extends StatelessWidget {
   void onDeltaClick() => launch(deltaUrl);
 }
 
-class LandingPage_web extends StatelessWidget {
-  const LandingPage_web({Key? key}) : super(key: key);
+class LandingPageWeb extends StatelessWidget {
+  const LandingPageWeb({Key? key}) : super(key: key);
   void onRegisterClick(BuildContext context) => context.push('/register');
 
   void onLoginClick(BuildContext context) => context.push('/login');
@@ -307,7 +306,7 @@ class LandingPage_web extends StatelessWidget {
                       ],
                     ),
                   ),
-                  Container(
+                  SizedBox(
                     width: screenwidth * 0.25,
                     height: screenHeight,
                     child: Image.asset('assets/images/bull_image.png',
@@ -321,8 +320,7 @@ class LandingPage_web extends StatelessWidget {
                 ],
               ),
             ),
-            Container(
-                child: RichText(
+            RichText(
               textAlign: TextAlign.center,
               text: TextSpan(
                 style:
@@ -349,7 +347,7 @@ class LandingPage_web extends StatelessWidget {
                   ),
                 ],
               ),
-            ))
+            )
           ],
         ) /* add child content here */,
       ),
