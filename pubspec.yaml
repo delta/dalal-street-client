@@ -16,6 +16,10 @@ dependencies:
 
   google_fonts: ^2.1.1
 
+  showcaseview: ^1.1.0
+
+  shared_preferences: ^2.0.13
+
   # Logging
   logger: ^1.1.0
 

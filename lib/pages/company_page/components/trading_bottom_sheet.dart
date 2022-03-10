@@ -18,6 +18,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinbox/flutter_spinbox.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
+import 'package:showcaseview/showcaseview.dart';
 
 final oCcy = NumberFormat('#,##0.00', 'en_US');
 
@@ -62,8 +63,19 @@ void tradingBottomSheet(
               } else if (state is PlaceOrderFailure) {
                 logger.i('unsuccessful');
               }
-              return _tradingBottomSheetBody(priceChange, company, quantity,
-                  totalPrice, orderFee, orderType, error, cash, flag);
+              return ShowCaseWidget(
+                builder: Builder(
+                    builder: (context) => _tradingBottomSheetBody(
+                        priceChange,
+                        company,
+                        quantity,
+                        totalPrice,
+                        orderFee,
+                        orderType,
+                        error,
+                        cash,
+                        flag)),
+              );
             },
           ),
         );
@@ -82,6 +94,13 @@ Widget _tradingBottomSheetBody(
     int flag) {
   return StatefulBuilder(
     builder: (context, setBottomSheetState) {
+      GlobalKey _key1 = GlobalKey();
+      GlobalKey _key2 = GlobalKey();
+      WidgetsBinding.instance!.addPostFrameCallback(
+        (_) => ShowCaseWidget.of(context)!.startShowCase(
+          [_key1, _key2],
+        ),
+      );
       List<String> priceTypeMap = [
         'Limit',
         'Market',
@@ -185,39 +204,44 @@ Widget _tradingBottomSheetBody(
                                       color: Colors.white70,
                                     ),
                                   ),
-                                  SizedBox(
-                                    width: 80,
-                                    child: DropdownButtonHideUnderline(
-                                      child: DropdownButton(
-                                        isExpanded: true,
-                                        value: selectedPriceType,
-                                        onChanged: (newValue) {
-                                          setBottomSheetState(() {
-                                            selectedPriceType =
-                                                newValue.toString();
-                                            logger.i(selectedPriceType);
-                                            if (selectedPriceType == 'Market') {
-                                              priceType = OrderType.MARKET;
-                                            } else if (selectedPriceType ==
-                                                'Limit') {
-                                              priceType = OrderType.LIMIT;
-                                            } else if (selectedPriceType ==
-                                                'Stop Loss') {
-                                              priceType = OrderType.STOPLOSS;
-                                            }
-                                            logger.i(priceType.toString());
-                                          });
-                                        },
-                                        items: priceTypeMap.map((type) {
-                                          return DropdownMenuItem(
-                                            child: Text(
-                                              type,
-                                              style: const TextStyle(
-                                                  fontSize: 14, color: gold),
-                                            ),
-                                            value: type,
-                                          );
-                                        }).toList(),
+                                  Showcase(
+                                    key: _key1,
+                                    description: 'Order Type',
+                                    child: SizedBox(
+                                      width: 80,
+                                      child: DropdownButtonHideUnderline(
+                                        child: DropdownButton(
+                                          isExpanded: true,
+                                          value: selectedPriceType,
+                                          onChanged: (newValue) {
+                                            setBottomSheetState(() {
+                                              selectedPriceType =
+                                                  newValue.toString();
+                                              logger.i(selectedPriceType);
+                                              if (selectedPriceType ==
+                                                  'Market') {
+                                                priceType = OrderType.MARKET;
+                                              } else if (selectedPriceType ==
+                                                  'Limit') {
+                                                priceType = OrderType.LIMIT;
+                                              } else if (selectedPriceType ==
+                                                  'Stop Loss') {
+                                                priceType = OrderType.STOPLOSS;
+                                              }
+                                              logger.i(priceType.toString());
+                                            });
+                                          },
+                                          items: priceTypeMap.map((type) {
+                                            return DropdownMenuItem(
+                                              child: Text(
+                                                type,
+                                                style: const TextStyle(
+                                                    fontSize: 14, color: gold),
+                                              ),
+                                              value: type,
+                                            );
+                                          }).toList(),
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -333,7 +357,10 @@ Widget _tradingBottomSheetBody(
                           height: 30,
                         ),
                         _orderFee(orderFee),
-                        _userBalance(cash),
+                        Showcase(
+                            key: _key2,
+                            description: 'Your balance',
+                            child: _userBalance(cash)),
                         const SizedBox(
                           height: 15,
                         ),

@@ -13,6 +13,7 @@ import 'package:dalal_street_client/utils/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:showcaseview/showcaseview.dart';
 
 final oCcy = NumberFormat('#,##0.00', 'en_US');
 
@@ -61,7 +62,10 @@ class _CompanyPageState extends State<CompanyPage>
                       const SizedBox(
                         height: 10,
                       ),
-                      companyPrices(company),
+                      ShowCaseWidget(
+                          builder: Builder(
+                              builder: (context) =>
+                                  companyPrices(company, context))),
                       const SizedBox(
                         height: 10,
                       ),

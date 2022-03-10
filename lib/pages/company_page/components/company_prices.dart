@@ -10,14 +10,21 @@ import 'package:fixnum/fixnum.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
+import 'package:showcaseview/showcaseview.dart';
 
 final oCcy = NumberFormat('#,##0.00', 'en_US');
 
-Container companyPrices(Stock company) {
+Container companyPrices(Stock company, BuildContext context) {
   Int64 previousDayClose = company.previousDayClose;
   Int64 priceChange = company.currentPrice - previousDayClose;
   Stream<Int64> priceStream =
       getIt<GlobalStreams>().stockMapStream.priceStream(company.id);
+  final _key1 = GlobalKey();
+  WidgetsBinding.instance!.addPostFrameCallback(
+    (_) => ShowCaseWidget.of(context)!.startShowCase(
+      [_key1],
+    ),
+  );
   return Container(
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
       decoration: BoxDecoration(
@@ -140,7 +147,10 @@ Container companyPrices(Stock company) {
                 ),
               ],
             ),
-            _companyGraph(company)
+            Showcase(
+                key: _key1,
+                child: _companyGraph(company),
+                description: 'Company Graph')
           ]));
 }
 

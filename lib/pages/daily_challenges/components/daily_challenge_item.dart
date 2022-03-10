@@ -10,6 +10,7 @@ import 'package:dalal_street_client/theme/colors.dart';
 import 'package:dalal_street_client/utils/challenge_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:showcaseview/showcaseview.dart';
 
 class DailyChallengeItem extends StatelessWidget {
   final bool isCurrentDay;
@@ -38,50 +39,65 @@ class DailyChallengeItem extends StatelessWidget {
       .distinct();
 
   @override
-  build(context) => Card(
-        color: baseColor,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 20),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Flexible(
-                flex: 2,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(challenge.title),
-                    const SizedBox(height: 10),
-                    Text(
-                      challenge.description(stock),
-                      style: const TextStyle(color: silver),
-                    ),
-                    const SizedBox(height: 25),
-                    _challengeProgress(),
-                  ],
-                ),
-              ),
-              Flexible(
-                flex: 1,
-                child: BlocProvider(
-                  create: (_) => ChallengeRewardCubit(
-                    challenge,
-                    userState,
+  Widget build(context) {
+    final _key1 = GlobalKey();
+    final _key2 = GlobalKey();
+    WidgetsBinding.instance!.addPostFrameCallback(
+      (_) => ShowCaseWidget.of(context)!.startShowCase(
+        [_key1, _key2],
+      ),
+    );
+    return Card(
+      color: baseColor,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 20),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Flexible(
+              flex: 2,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(challenge.title),
+                  const SizedBox(height: 10),
+                  Text(
+                    challenge.description(stock),
+                    style: const TextStyle(color: silver),
                   ),
-                  child: ChallengeReward(
-                    userState: userState,
-                    challenge: challenge,
-                  ),
-                ),
+                  const SizedBox(height: 25),
+                  Showcase(
+                      key: _key1,
+                      description: 'Daily challenge progress',
+                      child: _challengeProgress()),
+                ],
               ),
-            ],
-          ),
+            ),
+            Flexible(
+              flex: 1,
+              child: BlocProvider(
+                create: (_) => ChallengeRewardCubit(
+                  challenge,
+                  userState,
+                ),
+                child: Showcase(
+                    key: _key2,
+                    description: 'Daily challenge rewards earned',
+                    child: ChallengeReward(
+                      userState: userState,
+                      challenge: challenge,
+                    )),
+              ),
+            ),
+          ],
         ),
-      );
+      ),
+    );
+  }
 
   // TODO: animate between changes in userInfoStream
   Widget _challengeProgress() {

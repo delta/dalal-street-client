@@ -14,6 +14,7 @@ import 'package:dalal_street_client/pages/referral_page.dart';
 import 'package:dalal_street_client/proto_build/models/User.pb.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:showcaseview/showcaseview.dart';
 
 /// Home Menu items for mobile
 final homeMenuMobile = {
@@ -58,7 +59,10 @@ final homeRoutesWeb = homeRoutesMobile + moreRoutesMobile;
 /// Widgets for routes in more section in mobile
 Map<String, Widget> mobileHomePagesMore(User extra) => {
       '/news': const NewsPageWrapper(),
-      '/mortgage': const MortgageHome(),
+      '/mortgage': ShowCaseWidget(
+          builder: Builder(
+        builder: (context) => const MortgageHome(),
+      )),
       '/dailyChallenges': BlocProvider(
         create: (context) => DailyChallengesPageCubit()..getChallengesConfig(),
         child: const DailyChallengesPage(),

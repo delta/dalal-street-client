@@ -82,14 +82,11 @@ GoRouter generateRouter(BuildContext context) => GoRouter(
             throw Exception('Company with id $stockId doesn\'t exist');
           }
 
-          return MultiBlocProvider(
-            providers: [
-              BlocProvider(create: (_) => MarketDepthBloc()),
-              BlocProvider(create: (_) => SubscribeCubit()),
-              BlocProvider(create: (_) => MarketEventCubit()),
-            ],
-            child: CompanyPage(stockId: stockId),
-          );
+          return MultiBlocProvider(providers: [
+            BlocProvider(create: (_) => MarketDepthBloc()),
+            BlocProvider(create: (_) => SubscribeCubit()),
+            BlocProvider(create: (_) => MarketEventCubit()),
+          ], child: CompanyPage(stockId: stockId));
         },
       ),
       GoRoute(

@@ -101,7 +101,6 @@ class _DalalHomeState extends State<DalalHome> {
           create: (context) => PortfolioCubit(),
           child: const PortfolioPage(),
         ),
-        // const FAQPage(),
         BlocProvider(
           create: (context) => ExchangeCubit(),
           child: const ExchangePage(),

@@ -10,6 +10,7 @@ import 'package:dalal_street_client/theme/colors.dart';
 import 'package:dalal_street_client/utils/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:showcaseview/showcaseview.dart';
 
 class SingleDayChallenges extends StatefulWidget {
   final bool isChallengesOpen;
@@ -114,14 +115,16 @@ class _SingleDayChallengesState extends State<SingleDayChallenges>
                 itemCount: challengeInfos.length,
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                itemBuilder: (_, i) => DailyChallengeItem(
-                  isCurrentDay: widget.isCurrentDay,
-                  challenge: challengeInfos[i].challenge,
-                  userState: challengeInfos[i].userState,
-                  stock: challengeInfos[i].challenge.hasStockId()
-                      ? stocks[challengeInfos[i].challenge.stockId]
-                      : null,
-                ),
+                itemBuilder: (_, i) => ShowCaseWidget(
+                    builder: Builder(
+                        builder: (context) => DailyChallengeItem(
+                              isCurrentDay: widget.isCurrentDay,
+                              challenge: challengeInfos[i].challenge,
+                              userState: challengeInfos[i].userState,
+                              stock: challengeInfos[i].challenge.hasStockId()
+                                  ? stocks[challengeInfos[i].challenge.stockId]
+                                  : null,
+                            ))),
                 separatorBuilder: (_, __) => const SizedBox(height: 10),
               ),
             ],

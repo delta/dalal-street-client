@@ -8,15 +8,34 @@ import 'package:dalal_street_client/theme/colors.dart';
 import 'package:dalal_street_client/utils/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:showcaseview/showcaseview.dart';
+
+final _key1 = GlobalKey();
+final _key2 = GlobalKey();
 
 class MortgageHome extends StatefulWidget {
-  const MortgageHome({Key? key}) : super(key: key);
+  static const PREFERENCES_IS_FIRST_LAUNCH_STRING =
+      'PREFERENCES_IS_FIRST_LAUNCH_STRING';
 
+  const MortgageHome({Key? key}) : super(key: key);
   @override
   _MortgageHomeState createState() => _MortgageHomeState();
 }
 
 class _MortgageHomeState extends State<MortgageHome> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      _isFirstLaunch().then((result) {
+        if (result) {
+          ShowCaseWidget.of(context)!.startShowCase([_key1, _key2]);
+        }
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -34,6 +53,20 @@ class _MortgageHomeState extends State<MortgageHome> {
             )),
       ),
     );
+  }
+
+  Future<bool> _isFirstLaunch() async {
+    final sharedPreferences = await SharedPreferences.getInstance();
+    bool isFirstLaunch = sharedPreferences
+            .getBool(MortgageHome.PREFERENCES_IS_FIRST_LAUNCH_STRING) ??
+        true;
+
+    if (isFirstLaunch) {
+      sharedPreferences.setBool(
+          MortgageHome.PREFERENCES_IS_FIRST_LAUNCH_STRING, false);
+    }
+
+    return isFirstLaunch;
   }
 }
 
@@ -219,33 +252,45 @@ Widget _mortgageTabView(BuildContext context) {
         length: 2,
         child: Column(
           children: [
-            const TabBar(
+            TabBar(
               tabs: [
-                Tab(
-                  child: Text(
-                    'Mortgage',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                      color: lightGray,
+                Showcase(
+                  key: _key1,
+                  title: 'How to Mortgage',
+                  description:
+                      'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.',
+                  child: const Tab(
+                    child: Text(
+                      'Mortgage',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                        color: lightGray,
+                      ),
+                      textAlign: TextAlign.start,
                     ),
-                    textAlign: TextAlign.start,
                   ),
                 ),
-                Tab(
-                  child: Text(
-                    'Retrieve',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                      color: lightGray,
+                Showcase(
+                  key: _key2,
+                  title: 'How to Retrieve',
+                  description:
+                      'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.',
+                  child: const Tab(
+                    child: Text(
+                      'Retrieve',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                        color: lightGray,
+                      ),
+                      textAlign: TextAlign.start,
                     ),
-                    textAlign: TextAlign.start,
                   ),
                 ),
               ],
               indicatorColor: lightGray,
-              indicatorPadding: EdgeInsets.symmetric(horizontal: 20),
+              indicatorPadding: const EdgeInsets.symmetric(horizontal: 20),
             ),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),

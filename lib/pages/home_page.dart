@@ -23,8 +23,12 @@ import 'package:flutter/material.dart';
 import 'package:dalal_street_client/theme/colors.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:showcaseview/showcaseview.dart';
 
 class HomePage extends StatefulWidget {
+  static const PREFERENCES_IS_FIRST_LAUNCH_STRING =
+      'PREFERENCES_IS_FIRST_LAUNCH_STRING';
   const HomePage({Key? key, required this.user}) : super(key: key);
 
   final User user;
@@ -379,12 +383,16 @@ class _HomePageState extends State<HomePage>
 
   Widget _stockList(bool isWeb) {
     List<Widget> stockItems = stocks.entries
-        .map((entry) => StockItem(
-            stock: entry.value,
-            isBankruptStream: stockMapStream.isBankruptStream(entry.value.id),
-            givesDividendStream: stockMapStream.givesDividents(entry.value.id),
-            stockPriceStream: stockMapStream.priceStream(entry.key),
-            isWeb: isWeb))
+        .map((entry) => ShowCaseWidget(
+            builder: Builder(
+                builder: (context) => StockItem(
+                    stock: entry.value,
+                    isBankruptStream:
+                        stockMapStream.isBankruptStream(entry.value.id),
+                    givesDividendStream:
+                        stockMapStream.givesDividents(entry.value.id),
+                    stockPriceStream: stockMapStream.priceStream(entry.key),
+                    isWeb: isWeb))))
         .toList();
     return ListView(
       physics: const NeverScrollableScrollPhysics(),
@@ -622,16 +630,53 @@ class StockItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final _key1 = GlobalKey();
+    final _key2 = GlobalKey();
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      _isFirstLaunch().then((result) {
+        if (result) {
+          ShowCaseWidget.of(context)!.startShowCase([_key1, _key2]);
+        }
+      });
+    });
     return GestureDetector(
       onTap: () => context.push('/company/${stock.id}'),
       child: Container(
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
           child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-            _stockNames(stock, isWeb),
-            _stockGraph(stock.id),
-            _stockPrices(isWeb),
+            if (stock.id == 1) ...[
+              _stockNames(stock, isWeb),
+              // _stockGraph(stock.id),
+              // _stockPrices(isWeb),
+              Showcase(
+                  key: _key1,
+                  description: 'Company Graph',
+                  child: _stockGraph(stock.id)),
+              Showcase(
+                  key: _key2,
+                  description: 'Stock Price',
+                  child: _stockPrices(isWeb)),
+            ] else ...[
+              _stockNames(stock, isWeb),
+              _stockGraph(stock.id),
+              _stockPrices(isWeb),
+            ]
           ])),
     );
+  }
+
+  Future<bool> _isFirstLaunch() async {
+    final sharedPreferences = await SharedPreferences.getInstance();
+    bool isFirstLaunch = sharedPreferences
+            .getBool(HomePage.PREFERENCES_IS_FIRST_LAUNCH_STRING) ??
+        true;
+
+    if (isFirstLaunch) {
+      sharedPreferences.setBool(
+          HomePage.PREFERENCES_IS_FIRST_LAUNCH_STRING, false);
+    }
+
+    return isFirstLaunch;
   }
 
   Expanded _stockNames(Stock company, bool isWeb) {
