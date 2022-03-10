@@ -50,7 +50,7 @@ Widget overViewWeb(Stock company, BuildContext context) {
                   color: background2, borderRadius: BorderRadius.circular(20)),
               height: screenHeight * 0.3,
               width: screenWidth * 0.6,
-              child: _companyGraph(company, screenHeight)),
+              child: SingleChildScrollView(child: _companyGraph(company, screenHeight))),
           const SizedBox(width: 50),
           Container(
             padding: const EdgeInsets.all(20),
@@ -58,110 +58,112 @@ Widget overViewWeb(Stock company, BuildContext context) {
             height: screenHeight * 0.3,
             decoration: BoxDecoration(
                 color: background2, borderRadius: BorderRadius.circular(20)),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'About Company',
-                      style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.w500,
-                        color: white,
-                      ),
-                      textAlign: TextAlign.start,
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          company.description.toString(),
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w500,
-                            color: lightGray,
-                          ),
-                          textAlign: TextAlign.start,
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'About Company',
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.w500,
+                          color: white,
                         ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 30,
-                    ),
-                  ],
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Market Status',
-                      style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.w500,
-                        color: white,
+                        textAlign: TextAlign.start,
                       ),
-                      textAlign: TextAlign.start,
-                    ),
-                    const SizedBox(
-                      height: 25,
-                    ),
-                    StreamBuilder<Int64>(
-                        stream: priceStream,
-                        initialData: company.currentPrice,
-                        builder: (context, state) {
-                          return marketStatusTile(
-                              AppIcons.currentPrice,
-                              'Current Price',
-                              oCcy.format(state.data).toString(),
-                              false,
-                              true);
-                        }),
-                    StreamBuilder<Int64>(
-                        stream: dayHighStream,
-                        initialData: company.dayHigh,
-                        builder: (context, state) {
-                          return marketStatusTile(AppIcons.dayHigh, 'Day High',
-                              oCcy.format(state.data).toString(), false, true);
-                        }),
-                    StreamBuilder<Int64>(
-                        stream: dayLowStream,
-                        initialData: company.dayLow,
-                        builder: (context, state) {
-                          return marketStatusTile(AppIcons.dayHigh, 'Day Low',
-                              oCcy.format(state.data).toString(), true, true);
-                        }),
-                    StreamBuilder<Int64>(
-                        stream: allTimeHighStream,
-                        initialData: company.allTimeHigh,
-                        builder: (context, state) {
-                          return marketStatusTile(
-                              AppIcons.alltimeHigh,
-                              'All Time High',
-                              oCcy.format(state.data).toString(),
-                              false,
-                              true);
-                        }),
-                    StreamBuilder<Int64>(
-                        stream: allTimeLowStream,
-                        initialData: company.allTimeLow,
-                        builder: (context, state) {
-                          return marketStatusTile(
-                              AppIcons.alltimeHigh,
-                              'All Time Low',
-                              oCcy.format(state.data).toString(),
-                              true,
-                              true);
-                        }),
-                  ],
-                ),
-              ],
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            company.description.toString(),
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500,
+                              color: lightGray,
+                            ),
+                            textAlign: TextAlign.start,
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 30,
+                      ),
+                    ],
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Market Status',
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.w500,
+                          color: white,
+                        ),
+                        textAlign: TextAlign.start,
+                      ),
+                      const SizedBox(
+                        height: 25,
+                      ),
+                      StreamBuilder<Int64>(
+                          stream: priceStream,
+                          initialData: company.currentPrice,
+                          builder: (context, state) {
+                            return marketStatusTile(
+                                AppIcons.currentPrice,
+                                'Current Price',
+                                oCcy.format(state.data).toString(),
+                                false,
+                                true);
+                          }),
+                      StreamBuilder<Int64>(
+                          stream: dayHighStream,
+                          initialData: company.dayHigh,
+                          builder: (context, state) {
+                            return marketStatusTile(AppIcons.dayHigh, 'Day High',
+                                oCcy.format(state.data).toString(), false, true);
+                          }),
+                      StreamBuilder<Int64>(
+                          stream: dayLowStream,
+                          initialData: company.dayLow,
+                          builder: (context, state) {
+                            return marketStatusTile(AppIcons.dayHigh, 'Day Low',
+                                oCcy.format(state.data).toString(), true, true);
+                          }),
+                      StreamBuilder<Int64>(
+                          stream: allTimeHighStream,
+                          initialData: company.allTimeHigh,
+                          builder: (context, state) {
+                            return marketStatusTile(
+                                AppIcons.alltimeHigh,
+                                'All Time High',
+                                oCcy.format(state.data).toString(),
+                                false,
+                                true);
+                          }),
+                      StreamBuilder<Int64>(
+                          stream: allTimeLowStream,
+                          initialData: company.allTimeLow,
+                          builder: (context, state) {
+                            return marketStatusTile(
+                                AppIcons.alltimeHigh,
+                                'All Time Low',
+                                oCcy.format(state.data).toString(),
+                                true,
+                                true);
+                          }),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ],
