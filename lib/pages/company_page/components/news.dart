@@ -29,7 +29,7 @@ class _CompanyNewsPageState extends State<CompanyNewsPage> {
     context.read<MarketEventCubit>().getStockNews(widget.stockId);
   }
 
-   Widget newsItem(String text, String imagePath, String createdAt, bool isWeb) {
+  Widget newsItem(String text, String imagePath, String createdAt, bool isWeb) {
     String dur = ISOtoDateTime(createdAt);
     return (Container(
       padding: const EdgeInsets.symmetric(vertical: 2),
@@ -93,7 +93,8 @@ class _CompanyNewsPageState extends State<CompanyNewsPage> {
                 String text = marketEvent.text;
                 String dur = ISOtoDateTime(createdAt);
                 return GestureDetector(
-                    child: newsItem(headline, imagePath, createdAt,widget.isWeb),
+                    child:
+                        newsItem(headline, imagePath, createdAt, widget.isWeb),
                     onTap: () => Navigator.push(
                         context,
                         CupertinoPageRoute(
