@@ -63,14 +63,14 @@ class _CompanyTabViewState extends State<CompanyTabView>
               indicatorPadding: const EdgeInsets.symmetric(horizontal: 20),
             ),
             SizedBox(
-              height: MediaQuery.of(context).size.height * 0.7,
+              height: MediaQuery.of(context).size.height * 0.55,
               child: TabBarView(
                   controller: _controller,
                   physics: const BouncingScrollPhysics(
                       parent: AlwaysScrollableScrollPhysics()),
                   children: <Widget>[
                     overView(widget.company, context),
-                    marketDepth(widget.company),
+                    marketDepthMobile(widget.company),
                   ]),
             ),
           ],

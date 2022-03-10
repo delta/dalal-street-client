@@ -1,7 +1,6 @@
-import 'package:dalal_street_client/components/buttons/secondary_button.dart';
-import 'package:dalal_street_client/components/graph/stock_chart.dart';
 import 'package:dalal_street_client/config/get_it.dart';
 import 'package:dalal_street_client/constants/icons.dart';
+import 'package:dalal_street_client/pages/company_page/components/choose_buy_or_sell_bottom_sheet.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
 import 'package:dalal_street_client/streams/global_streams.dart';
 import 'package:dalal_street_client/streams/transformations.dart';
@@ -13,24 +12,21 @@ import 'package:intl/intl.dart';
 
 final oCcy = NumberFormat('#,##0.00', 'en_US');
 
-Container companyPrices(Stock company) {
+Container companyPricesForWeb(Stock company, BuildContext context, int cash) {
   Int64 previousDayClose = company.previousDayClose;
   Int64 priceChange = company.currentPrice - previousDayClose;
   Stream<Int64> priceStream =
       getIt<GlobalStreams>().stockMapStream.priceStream(company.id);
   return Container(
-      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-      decoration: BoxDecoration(
-        color: background2,
-        borderRadius: BorderRadius.circular(10),
-      ),
+      padding: const EdgeInsets.only(top: 40, left: 100, right: 100),
+      color: background2,
       child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Column(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -50,14 +46,14 @@ Container companyPrices(Stock company) {
                           Text(
                             company.fullName,
                             style: const TextStyle(
-                              fontSize: 18,
+                              fontSize: 22,
                               fontWeight: FontWeight.w500,
                               color: white,
                             ),
                             textAlign: TextAlign.start,
                           ),
                           const SizedBox(
-                            width: 5,
+                            width: 10,
                           ),
                           SvgPicture.asset(AppIcons.dollar)
                         ],
@@ -92,13 +88,14 @@ Container companyPrices(Stock company) {
                                     previousDayClose.toDouble()) /
                                 previousDayClose.toDouble());
                           }
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                          return Row(
+                            crossAxisAlignment: CrossAxisAlignment.baseline,
+                            textBaseline: TextBaseline.alphabetic,
                             children: [
                               Text(
                                 '₹ ' + oCcy.format(state.data).toString(),
                                 style: const TextStyle(
-                                  fontSize: 24,
+                                  fontSize: 30,
                                   fontWeight: FontWeight.w700,
                                   color: white,
                                 ),
@@ -107,18 +104,19 @@ Container companyPrices(Stock company) {
                               !company.isBankrupt
                                   ? Row(
                                       children: [
+                                        const SizedBox(width: 10),
                                         Text(
                                             '+${oCcy.format(priceChange.abs()).toString()} ',
                                             style: TextStyle(
-                                                fontSize: 14,
+                                                fontSize: 20,
                                                 fontWeight: FontWeight.w500,
                                                 color: isLowOrHigh
                                                     ? secondaryColor
                                                     : heartRed)),
                                         Text(
-                                            '( ${oCcy.format(percentageHighOrLow.abs()).toString()}% ) ',
+                                            '(${oCcy.format(percentageHighOrLow.abs()).toString()}%) ',
                                             style: TextStyle(
-                                                fontSize: 14,
+                                                fontSize: 20,
                                                 fontWeight: FontWeight.w500,
                                                 color: isLowOrHigh
                                                     ? secondaryColor
@@ -131,32 +129,25 @@ Container companyPrices(Stock company) {
                         }),
                   ],
                 ),
-                SecondaryButton(
-                  height: 25,
-                  width: 135,
-                  fontSize: 14,
-                  title: company.shortName,
-                  onPressed: () {},
+                Container(
+                  height: 70,
+                  alignment: Alignment.centerRight,
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 75),
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        chooseBuyOrSellBottomSheet(context, company, cash);
+                      },
+                      child: const Padding(
+                          padding: EdgeInsets.symmetric(
+                              vertical: 10, horizontal: 60),
+                          child: Text('Place Your Order')),
+                    ),
+                  ),
                 ),
               ],
             ),
-            _companyGraph(company)
           ]));
-}
-
-Widget _companyGraph(Stock stock) {
-  if (stock.isBankrupt) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        const SizedBox(
-          height: 10,
-        ),
-        Image.asset('assets/images/bankrupt.png', height: 200)
-      ],
-    );
-  } else {
-    return StockChart(stockId: stock.id);
-  }
 }

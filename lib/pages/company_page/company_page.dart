@@ -1,6 +1,8 @@
 import 'package:dalal_street_client/blocs/subscribe/subscribe_cubit.dart';
 import 'package:dalal_street_client/components/stock_bar.dart';
 import 'package:dalal_street_client/config/get_it.dart';
+import 'package:dalal_street_client/pages/company_page/components/company_prices_web.dart';
+import 'package:dalal_street_client/pages/company_page/components/company_tab_view_web.dart';
 import 'package:dalal_street_client/pages/company_page/components/news.dart';
 import 'package:dalal_street_client/proto_build/datastreams/Subscribe.pb.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
@@ -47,63 +49,119 @@ class _CompanyPageState extends State<CompanyPage>
     Stock company = stockList[stockId]!;
     return SafeArea(
       child: Responsive(
-        mobile: Scaffold(
-            backgroundColor: Colors.black,
-            body: Stack(
-              alignment: Alignment.bottomCenter,
-              children: [
-                SingleChildScrollView(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    physics: const BouncingScrollPhysics(
-                        parent: AlwaysScrollableScrollPhysics()),
-                    child: Column(children: [
-                      const StockBar(),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      companyPrices(company),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      CompanyTabView(company: company),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      CompanyNewsPage(stockId: stockId)
-                    ])),
-                // Hide Place Order Button if company went Bankrupt
-                company.isBankrupt
-                    ? const SizedBox()
-                    : Container(
-                        height: 70,
-                        decoration: const BoxDecoration(
-                            color: baseColor,
-                            borderRadius: BorderRadius.only(
-                              topRight: Radius.circular(15),
-                              topLeft: Radius.circular(15),
-                            )),
-                        alignment: Alignment.bottomCenter,
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 10, horizontal: 30),
-                        child: Align(
-                          alignment: Alignment.bottomCenter,
-                          child: SizedBox(
-                            width: double.infinity,
-                            child: ElevatedButton(
-                              onPressed: () {
-                                chooseBuyOrSellBottomSheet(
-                                    context, company, cash);
-                              },
-                              child: const Text('Place Your Order'),
-                            ),
-                          ),
-                        ),
-                      ),
-              ],
-            )),
-        tablet: Container(),
-        desktop: Container(),
+        mobile: MobileBody(company: company, stockId: stockId, cash: cash),
+        tablet: MobileBody(company: company, stockId: stockId, cash: cash),
+        desktop: WebBody(company: company, cash: cash, stockId: stockId),
       ),
     );
+  }
+}
+
+class WebBody extends StatelessWidget {
+  const WebBody({
+    Key? key,
+    required this.company,
+    required this.cash,
+    required this.stockId,
+  }) : super(key: key);
+
+  final Stock company;
+  final int cash;
+  final int stockId;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        backgroundColor: Colors.black,
+        body: SingleChildScrollView(
+          child: Column(children: [
+            const StockBar(),
+            companyPricesForWeb(company, context, cash),
+            CompanyTabViewWeb(company: company),
+            const SizedBox(
+              height: 10,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 10),
+              child: CompanyNewsPage(
+                stockId: stockId,
+                isWeb: true,
+              ),
+            ),
+          ]),
+        ));
+  }
+}
+
+class MobileBody extends StatelessWidget {
+  const MobileBody({
+    Key? key,
+    required this.company,
+    required this.stockId,
+    required this.cash,
+  }) : super(key: key);
+
+  final Stock company;
+  final int stockId;
+  final int cash;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        backgroundColor: background2,
+        body: Stack(
+          alignment: Alignment.bottomCenter,
+          children: [
+            SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                physics: const BouncingScrollPhysics(
+                    parent: AlwaysScrollableScrollPhysics()),
+                child: Column(children: [
+                  const StockBar(),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  companyPrices(company),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  CompanyTabView(company: company),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  CompanyNewsPage(stockId: stockId, isWeb: false),
+                  const SizedBox(
+                    height: 50,
+                  )
+                ])),
+            // Hide Place Order Button if company went Bankrupt
+            company.isBankrupt
+                ? const SizedBox()
+                : Container(
+                    height: 70,
+                    decoration: const BoxDecoration(
+                        color: baseColor,
+                        borderRadius: BorderRadius.only(
+                          topRight: Radius.circular(15),
+                          topLeft: Radius.circular(15),
+                        )),
+                    alignment: Alignment.bottomCenter,
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10, horizontal: 30),
+                    child: Align(
+                      alignment: Alignment.bottomCenter,
+                      child: SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            chooseBuyOrSellBottomSheet(context, company, cash);
+                          },
+                          child: const Text('Place Your Order'),
+                        ),
+                      ),
+                    ),
+                  ),
+          ],
+        ));
   }
 }

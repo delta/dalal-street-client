@@ -8,12 +8,15 @@ import 'package:dalal_street_client/utils/iso_to_datetime.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class CompanyNewsPage extends StatefulWidget {
   // ignore: prefer_typing_uninitialized_variables
   final stockId;
+  final bool isWeb;
 
-  const CompanyNewsPage({Key? key, required this.stockId}) : super(key: key);
+  const CompanyNewsPage({Key? key, required this.stockId, required this.isWeb})
+      : super(key: key);
 
   @override
   State<CompanyNewsPage> createState() => _CompanyNewsPageState();
@@ -26,11 +29,7 @@ class _CompanyNewsPageState extends State<CompanyNewsPage> {
     context.read<MarketEventCubit>().getStockNews(widget.stockId);
   }
 
-  Widget newsItem(
-    String text,
-    String imagePath,
-    String createdAt,
-  ) {
+  Widget newsItem(String text, String imagePath, String createdAt, bool isWeb) {
     String dur = ISOtoDateTime(createdAt);
     return (Container(
       padding: const EdgeInsets.symmetric(vertical: 2),
@@ -41,42 +40,44 @@ class _CompanyNewsPageState extends State<CompanyNewsPage> {
           ClipRRect(
             borderRadius: BorderRadius.circular(20),
             child: Image(
-              width: 100,
+              width: isWeb ? 200 : 125,
               height: 100,
               fit: BoxFit.contain,
               image: NetworkImage(imagePath),
             ),
           ),
-          Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                SizedBox(
-                  width: (MediaQuery.of(context).size.width - 100) * 0.8,
-                  child: Padding(
+          Expanded(
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Padding(
                     padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-                    child: Text(text,
-                        style:
-                            const TextStyle(color: Colors.white, fontSize: 15)),
+                    child: Text(
+                      text,
+                      style: TextStyle(color: white, fontSize: isWeb ? 24 : 18),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 2,
+                    ),
                   ),
-                ),
-                const SizedBox.square(
-                  dimension: 5,
-                ),
-                Padding(
-                    padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-                    child: Text('Published on ' + dur,
-                        style: const TextStyle(
-                            fontStyle: FontStyle.italic,
-                            color: lightGray,
-                            fontSize: 12)))
-              ]),
+                  const SizedBox.square(
+                    dimension: 5,
+                  ),
+                  Padding(
+                      padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                      child: Text('Published on ' + dur,
+                          style: TextStyle(
+                              fontStyle: FontStyle.italic,
+                              color: lightGray,
+                              fontSize: isWeb ? 18 : 14)))
+                ]),
+          ),
         ],
       ),
     ));
   }
 
-  Widget feedlist() => BlocBuilder<MarketEventCubit, MarketEventState>(
+  Widget feedList() => BlocBuilder<MarketEventCubit, MarketEventState>(
           builder: (context, state) {
         if (state is MarketEventSuccess) {
           if (state.marketEvents.isNotEmpty) {
@@ -92,7 +93,8 @@ class _CompanyNewsPageState extends State<CompanyNewsPage> {
                 String text = marketEvent.text;
                 String dur = ISOtoDateTime(createdAt);
                 return GestureDetector(
-                    child: newsItem(headline, imagePath, createdAt),
+                    child:
+                        newsItem(headline, imagePath, createdAt, widget.isWeb),
                     onTap: () => Navigator.push(
                         context,
                         CupertinoPageRoute(
@@ -141,11 +143,12 @@ class _CompanyNewsPageState extends State<CompanyNewsPage> {
           );
         }
       });
+
   @override
   Widget build(BuildContext context) {
     return Container(
         width: double.infinity,
-        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
         decoration: BoxDecoration(
           color: background2,
           borderRadius: BorderRadius.circular(10),
@@ -157,27 +160,33 @@ class _CompanyNewsPageState extends State<CompanyNewsPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
-                    'Company Related News',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500,
-                      color: white,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 20),
+                    child: Text(
+                      'Company Related News',
+                      style: TextStyle(
+                        fontSize: widget.isWeb ? 32 : 18,
+                        fontWeight: FontWeight.w500,
+                        color: white,
+                      ),
+                      textAlign: TextAlign.start,
                     ),
-                    textAlign: TextAlign.start,
                   ),
                   TertiaryButton(
-                    width: 80,
-                    height: 25,
-                    fontSize: 12,
+                    width: 90,
+                    height: 35,
+                    fontSize: 16,
                     title: 'See All',
                     onPressed: () {
-                      Navigator.pushNamed(context, '/news');
+                      context.push('/news');
                     },
                   ),
                 ],
               ),
-              feedlist()
+              const SizedBox(
+                height: 20,
+              ),
+              feedList()
             ]));
   }
 }

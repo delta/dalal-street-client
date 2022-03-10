@@ -15,20 +15,25 @@ import 'package:charts_flutter/flutter.dart' as charts;
 
 class StockChart extends StatelessWidget {
   final int stockId;
-  const StockChart({Key? key, required this.stockId}) : super(key: key);
+  final double? height;
+  const StockChart({Key? key, required this.stockId, this.height})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(providers: [
       BlocProvider(create: (context) => StockHistoryCubit()),
       BlocProvider(create: (context) => StockHistoryStreamCubit())
-    ], child: CandleStickLayout(stockId: stockId));
+    ], child: CandleStickLayout(stockId: stockId, height: height ?? 250));
   }
 }
 
 class CandleStickLayout extends StatefulWidget {
   final int stockId;
-  const CandleStickLayout({Key? key, required this.stockId}) : super(key: key);
+  final double height;
+  const CandleStickLayout(
+      {Key? key, required this.stockId, required this.height})
+      : super(key: key);
 
   @override
   _CandleStickLayoutState createState() => _CandleStickLayoutState();
@@ -71,43 +76,41 @@ class _CandleStickLayoutState extends State<CandleStickLayout> {
     return Column(
       children: [
         const SizedBox(height: 20),
-        _chart(), //graph
+        _chart(widget.height), //graph
         const SizedBox(height: 10.0),
-        _resolutionTab(context) // resolution tab
+        _resolutionTab(context), // resolution tab
       ],
     );
   }
 
-  Widget _chart() => BlocBuilder<StockHistoryCubit, StockHistoryState>(
+  Widget _chart(double height) =>
+      BlocBuilder<StockHistoryCubit, StockHistoryState>(
         builder: (context, state) {
           if (state is StockHistoryInitial) {
-            return const SizedBox(
-                height: 250, child: Center(child: DalalLoadingBar()));
+            return SizedBox(
+                height: height, child: const Center(child: DalalLoadingBar()));
           } else if (state is StockHistorySuccess) {
             var stockHistoryMap = state.stockHistoryMap;
 
             /// better to fill the db with dummy data or running the server for a hour will do
             if (stockHistoryMap.length <= 3) {
-              return const SizedBox(
-                height: 250,
-                child: Center(
+              return SizedBox(
+                height: height,
+                child: const Center(
                   child: Text('chart data is insufficient, try again later'),
                 ),
               );
             }
 
-            return SizedBox(
-              height: 250,
-              child: chart == ChartType.candlestick
-                  ? _candleStickChart(stockHistoryMap)
-                  : _lineChart(stockHistoryMap),
-            );
+            return chart == ChartType.candlestick
+                ? _candleStickChart(stockHistoryMap)
+                : _lineChart(stockHistoryMap);
           }
 
           // return error
-          return const SizedBox(
-              height: 250,
-              child: Center(
+          return SizedBox(
+              height: height,
+              child: const Center(
                   child: Text(
                 'error loading graph',
                 style: TextStyle(color: heartRed, backgroundColor: redOpacity),
@@ -134,23 +137,26 @@ class _CandleStickLayoutState extends State<CandleStickLayout> {
           }
         }
 
-        return InteractiveChart(
-          candles: data,
-          style: const ChartStyle(
-              volumeHeightFactor: 0,
-              priceGainColor: primaryColor,
-              priceLossColor: red,
-              overlayBackgroundColor: backgroundColor,
-              timeLabelStyle: TextStyle(fontSize: 10),
-              overlayTextStyle: TextStyle(fontSize: 12)),
-          overlayInfo: (candle) => {
-            'open': candle.open.toString(),
-            'close': candle.close.toString(),
-            'low': candle.low.toString(),
-            'high': candle.high.toString(),
-            'timestamp': DateTime.fromMillisecondsSinceEpoch(candle.timestamp)
-                .toString() // TODO use IST format
-          },
+        return SizedBox(
+          height: widget.height,
+          child: InteractiveChart(
+            candles: data,
+            style: const ChartStyle(
+                volumeHeightFactor: 0,
+                priceGainColor: primaryColor,
+                priceLossColor: red,
+                overlayBackgroundColor: backgroundColor,
+                timeLabelStyle: TextStyle(fontSize: 10),
+                overlayTextStyle: TextStyle(fontSize: 12)),
+            overlayInfo: (candle) => {
+              'open': candle.open.toString(),
+              'close': candle.close.toString(),
+              'low': candle.low.toString(),
+              'high': candle.high.toString(),
+              'timestamp': DateTime.fromMillisecondsSinceEpoch(candle.timestamp)
+                  .toString() // TODO use IST format
+            },
+          ),
         );
       },
     );
@@ -171,21 +177,24 @@ class _CandleStickLayoutState extends State<CandleStickLayout> {
           }
         }
 
-        return charts.TimeSeriesChart(
-          data,
-          animate: false,
-          domainAxis: const charts.EndPointsTimeAxisSpec(),
-          dateTimeFactory: const charts.LocalDateTimeFactory(),
-          // defaultRenderer: charts.BarRendererConfig<DateTime>(), uncomment this for bar chart :)
-          customSeriesRenderers: [
-            charts.LineRendererConfig(
-                customRendererId: 'area',
-                areaOpacity: 0.2,
-                strokeWidthPx: 2,
-                includeLine: true,
-                includePoints: false,
-                roundEndCaps: true)
-          ],
+        return SizedBox(
+          height: widget.height,
+          child: charts.TimeSeriesChart(
+            data,
+            animate: false,
+            domainAxis: const charts.EndPointsTimeAxisSpec(),
+            dateTimeFactory: const charts.LocalDateTimeFactory(),
+            // defaultRenderer: charts.BarRendererConfig<DateTime>(), uncomment this for bar chart :)
+            customSeriesRenderers: [
+              charts.LineRendererConfig(
+                  customRendererId: 'area',
+                  areaOpacity: 0.2,
+                  strokeWidthPx: 2,
+                  includeLine: true,
+                  includePoints: false,
+                  roundEndCaps: true)
+            ],
+          ),
         );
       },
     );
@@ -211,7 +220,7 @@ class _CandleStickLayoutState extends State<CandleStickLayout> {
             },
             child: Text(resolution.shortHand),
             style: TextButton.styleFrom(
-                padding: const EdgeInsets.all(8),
+                padding: const EdgeInsets.all(15),
                 primary: currentResolution == r ? white : whiteWithOpacity50,
                 textStyle:
                     const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
