@@ -128,11 +128,6 @@ class _HomePageState extends State<HomePage>
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
       child: Column(
         children: [
-          ElevatedButton(
-              onPressed: () {
-                context.read<DalalBloc>().add(const DalalLogOut());
-              },
-              child: const Text('Logout')),
           const SizedBox(
             height: 5,
           ),

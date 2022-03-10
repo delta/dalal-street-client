@@ -4,6 +4,8 @@ import 'package:dalal_street_client/blocs/notification/notifications_cubit.dart'
 import 'package:dalal_street_client/blocs/portfolio/userWorth/portfolio_cubit.dart';
 import 'package:dalal_street_client/components/stock_bar.dart';
 import 'package:dalal_street_client/config/log.dart';
+import 'package:dalal_street_client/constants/icons.dart';
+import 'package:dalal_street_client/models/menu_item.dart';
 import 'package:dalal_street_client/navigation/home_routes.dart';
 import 'package:dalal_street_client/pages/dalal_home/dalal_home_bottom_sheet.dart';
 import 'package:dalal_street_client/pages/dalal_home/dalal_bottom_bar.dart';
@@ -48,11 +50,14 @@ class DalalHome extends StatefulWidget {
 /// - When the page is rebuilt with change in route, [didUpdateWidget] is called
 /// - So in [didUpdateWidget], update the bottom/side bar selection and the [PageView] item
 class _DalalHomeState extends State<DalalHome> {
+  MenuItem get _logoutItem => MenuItem('Logout', AppIcons.logout);
+
   final _bottomMenu = homeMenuMobile.values.toList();
 
   final _sideMenu = homeMenuWeb.values.toList();
 
-  final _sheetMenu = moreMenuMobile.values.toList();
+  List<MenuItem> get _sheetMenu =>
+      moreMenuMobile.values.toList() + [_logoutItem];
 
   List<String> get _homeRoutes => kIsWeb ? homeRoutesWeb : homeRoutesMobile;
 
@@ -155,7 +160,17 @@ class _DalalHomeState extends State<DalalHome> {
             borderRadius: BorderRadius.vertical(top: Radius.circular(10))),
         builder: (_) => DalalHomeBottomSheet(
           items: _sheetMenu,
-          onItemClick: (index) => context.push(_sheetRoutes[index]),
+          onItemClick: (index) {
+            if (index != _sheetMenu.length - 1) {
+              context.push(_sheetRoutes[index]);
+            } else {
+              _onLogoutClick();
+            }
+          },
         ),
       );
+
+  void _onLogoutClick() {
+    logger.e('logout');
+  }
 }
