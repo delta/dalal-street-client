@@ -63,7 +63,7 @@ Widget marketDepthMobile(Stock company) {
                           ),
                         ],
                         rows: buildRowsOfMarketDepth(
-                            state.askDepth, state.bidDepth, false),
+                            state.askDepth, state.bidDepth),
                         dataRowHeight: 20,
                       ),
                     ),
@@ -106,11 +106,11 @@ Widget marketDepthMobile(Stock company) {
   );
 }
 
-List<DataRow> buildRowsOfMarketDepth(List<MarketOrders> askDepthArray,
-    List<MarketOrders> bidDepthArray, bool isWeb) {
+List<DataRow> buildRowsOfMarketDepth(
+    List<MarketOrders> askDepthArray, List<MarketOrders> bidDepthArray) {
   List<DataRow> rows = [];
 
-  for (int i = 0; i < (isWeb ? 17 : 13); i++) {
+  for (int i = 0; i < 13; i++) {
     String askPrice =
         i < askDepthArray.length ? askDepthArray[i].price.toString() : '';
     String askVolume =
@@ -120,14 +120,14 @@ List<DataRow> buildRowsOfMarketDepth(List<MarketOrders> askDepthArray,
     String bidVolume =
         i < bidDepthArray.length ? bidDepthArray[i].volume.toString() : '';
 
-    rows.add(marketDepthRow(bidPrice, bidVolume, askPrice, askVolume, isWeb));
+    rows.add(marketDepthRow(bidPrice, bidVolume, askPrice, askVolume));
   }
 
   return rows;
 }
 
-DataRow marketDepthRow(String bidPrice, String bidVolume, String askPrice,
-    String askVolume, bool isWeb) {
+DataRow marketDepthRow(
+    String bidPrice, String bidVolume, String askPrice, String askVolume) {
   return DataRow(
     cells: [
       DataCell(
@@ -142,8 +142,8 @@ DataRow marketDepthRow(String bidPrice, String bidVolume, String askPrice,
       DataCell(
         Text(
           bidPrice == '0' ? 'market' : bidPrice,
-          style: TextStyle(
-            fontSize: isWeb ? 15 : 12,
+          style: const TextStyle(
+            fontSize: 12,
             color: secondaryColor,
           ),
         ),
@@ -151,8 +151,8 @@ DataRow marketDepthRow(String bidPrice, String bidVolume, String askPrice,
       DataCell(
         Text(
           askVolume,
-          style: TextStyle(
-            fontSize: isWeb ? 15 : 12,
+          style: const TextStyle(
+            fontSize: 12,
             color: white,
           ),
         ),
@@ -160,8 +160,8 @@ DataRow marketDepthRow(String bidPrice, String bidVolume, String askPrice,
       DataCell(
         Text(
           askPrice == '0' ? 'market' : askPrice,
-          style: TextStyle(
-            fontSize: isWeb ? 15 : 12,
+          style: const TextStyle(
+            fontSize: 12,
             color: heartRed,
           ),
         ),
@@ -196,30 +196,96 @@ Widget marketDepthWeb(Stock company) {
                       scrollDirection: Axis.vertical,
                       child: SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
-                        child: DataTable(
-                          columnSpacing: 120,
-                          dataRowHeight: 30,
-                          headingRowHeight: 30,
-                          headingTextStyle: const TextStyle(
-                              color: white,
-                              fontSize: 18,
-                              fontWeight: FontWeight.w500),
-                          columns: const <DataColumn>[
-                            DataColumn(
-                              label: Text('Volume'),
+                        child: Row(
+                          children: [
+                            Column(
+                              children: [
+                                Container(
+                                  alignment: Alignment.center,
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 10, horizontal: 75),
+                                  decoration: BoxDecoration(
+                                    color: primaryColor,
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: const Text(
+                                    'Buy',
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w700,
+                                        color: backgroundColor),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 5,
+                                ),
+                                DataTable(
+                                  columns: <DataColumn>[
+                                    _buildDataColumn('Volume'),
+                                    _buildDataColumn('Price')
+                                  ],
+                                  rows:
+                                      buildRowsOfMarketDepthWeb(state.bidDepth),
+                                  columnSpacing: 80,
+                                  dataRowHeight: 50,
+                                  headingRowHeight: 50,
+                                  headingRowColor:
+                                      MaterialStateProperty.all(background3),
+                                  border: TableBorder.all(
+                                      width: 1,
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.circular(10)),
+                                      style: BorderStyle.solid),
+                                ),
+                              ],
                             ),
-                            DataColumn(
-                              label: Text('Price'),
+                            const SizedBox(
+                              width: 20,
                             ),
-                            DataColumn(
-                              label: Text('Volume'),
-                            ),
-                            DataColumn(
-                              label: Text('Price'),
+                            Column(
+                              children: [
+                                Container(
+                                  alignment: Alignment.center,
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 10, horizontal: 75),
+                                  decoration: BoxDecoration(
+                                    color: primaryColor,
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: const Text(
+                                    'Sell',
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w700,
+                                        color: backgroundColor),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 5,
+                                ),
+                                DataTable(
+                                  columns: <DataColumn>[
+                                    _buildDataColumn('Volume'),
+                                    _buildDataColumn('Price')
+                                  ],
+                                  rows:
+                                      buildRowsOfMarketDepthWeb(state.askDepth),
+                                  columnSpacing: 80,
+                                  dataRowHeight: 50,
+                                  headingRowHeight: 50,
+                                  headingRowColor:
+                                      MaterialStateProperty.all(background3),
+                                  border: TableBorder.all(
+                                      width: 1,
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.circular(10)),
+                                      style: BorderStyle.solid),
+                                ),
+                              ],
                             ),
                           ],
-                          rows: buildRowsOfMarketDepth(
-                              state.askDepth, state.bidDepth, true),
                         ),
                       ),
                     ),
@@ -260,4 +326,44 @@ Widget marketDepthWeb(Stock company) {
       ),
     ],
   );
+}
+
+DataColumn _buildDataColumn(String heading) => DataColumn(
+      numeric: true,
+      label: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+        child: Text(heading,
+            style: const TextStyle(
+                fontSize: 20, fontWeight: FontWeight.bold, color: primaryColor),
+            textAlign: TextAlign.center),
+      ),
+    );
+
+List<DataRow> buildRowsOfMarketDepthWeb(List<MarketOrders> depthArray) {
+  List<DataRow> rows = [];
+  for (int i = 0; i < 10; i++) {
+    String price = i < depthArray.length ? depthArray[i].price.toString() : '';
+    String volume =
+        i < depthArray.length ? depthArray[i].volume.toString() : '';
+    rows.add(marketDepthRowWeb(
+        price, volume, i % 2 != 0 ? background3 : background2));
+  }
+  return rows;
+}
+
+DataRow marketDepthRowWeb(String price, String volume, Color bgColor) {
+  return DataRow(color: MaterialStateProperty.all(bgColor), cells: <DataCell>[
+    DataCell(Center(
+        child: Text(
+      volume,
+      textAlign: TextAlign.center,
+      style: const TextStyle(fontSize: 20, color: white),
+    ))),
+    DataCell(Center(
+        child: Text(
+      price == '0' ? 'Market' : price,
+      textAlign: TextAlign.center,
+      style: const TextStyle(fontSize: 20, color: white),
+    )))
+  ]);
 }
