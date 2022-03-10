@@ -1,6 +1,8 @@
 class AppIcons {
   static const String _iconsDir = 'assets/icon/';
 
+  static const String appLogo = _iconsDir + 'dalal_street_icon.png';
+
   // Menu Icons
   static const String home = _iconsDir + 'home.svg';
   static const String portfolio = _iconsDir + 'portfolio.svg';

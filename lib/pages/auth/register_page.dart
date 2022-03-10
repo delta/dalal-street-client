@@ -4,6 +4,8 @@ import 'package:dalal_street_client/components/fill_max_height_scroll_view.dart'
 import 'package:dalal_street_client/components/loading.dart';
 import 'package:dalal_street_client/components/reactive_password_field.dart';
 import 'package:dalal_street_client/navigation/nav_utils.dart';
+import 'package:dalal_street_client/theme/colors.dart';
+import 'package:dalal_street_client/utils/form_validation_messages.dart';
 import 'package:dalal_street_client/utils/snackbar.dart';
 import 'package:dalal_street_client/utils/tooltip.dart';
 import 'package:flutter/gestures.dart';
@@ -49,7 +51,23 @@ class RegisterPage extends StatelessWidget {
               if (state is RegisterLoading) {
                 return const Center(child: DalalLoadingBar());
               } else {
-                return buildBody();
+                var screenwidth = MediaQuery.of(context).size.width;
+
+                return screenwidth > 1000
+                    ? (Center(
+                        child: Container(
+                        decoration: BoxDecoration(
+                            border: Border.all(color: secondaryColor, width: 2),
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(10))),
+                        child: buildBody(),
+                        margin: EdgeInsets.fromLTRB(
+                            screenwidth * 0.35,
+                            screenwidth * 0.03,
+                            screenwidth * 0.35,
+                            screenwidth * 0.05),
+                      )))
+                    : buildBody();
               }
             },
           ),
@@ -74,7 +92,7 @@ class RegisterPage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const DalalBackButton(),
-          const SizedBox(height: 18),
+          const SizedBox(height: 15),
           Text(
             'Create An Account',
             style: Theme.of(context).textTheme.headline1,
@@ -82,8 +100,15 @@ class RegisterPage extends StatelessWidget {
         ],
       );
 
-  Widget buildForm(BuildContext context) => ReactiveForm(
-        formGroup: form,
+  Widget buildForm(BuildContext context) {
+    var screenwidth = MediaQuery.of(context).size.width;
+    bool isWeb = screenwidth > 1000;
+    return ReactiveForm(
+      formGroup: form,
+      child: Padding(
+        padding: !isWeb
+            ? const EdgeInsets.all(0.0)
+            : const EdgeInsets.fromLTRB(0, 0, 25, 0),
         child: Column(
           children: [
             ReactiveTextField(
@@ -92,6 +117,9 @@ class RegisterPage extends StatelessWidget {
                 labelText: 'Name',
                 prefixIcon: Icon(Icons.person_outlined),
               ),
+              validationMessages: (control) => requiredValidation('Name'),
+              autofillHints: const [AutofillHints.name],
+              textInputAction: TextInputAction.next,
             ),
             const SizedBox(height: 20),
             ReactiveTextField(
@@ -101,13 +129,24 @@ class RegisterPage extends StatelessWidget {
                 prefixIcon: Icon(Icons.mail_outline),
               ),
               keyboardType: TextInputType.emailAddress,
+              validationMessages: (control) => emailValidation(),
+              autofillHints: const [AutofillHints.email],
+              textInputAction: TextInputAction.next,
             ),
             const SizedBox(height: 20),
-            const ReactivePasswordField(formControlName: 'password'),
+            ReactivePasswordField(
+              formControlName: 'password',
+              validation: passwordValidation('Password'),
+              autofillHints: const [AutofillHints.newPassword],
+              textInputAction: TextInputAction.next,
+            ),
             const SizedBox(height: 20),
-            const ReactivePasswordField(
+            ReactivePasswordField(
               formControlName: 'confirmPassword',
               label: 'Confirm Password',
+              validation: passwordValidation('Confirm password'),
+              textInputAction: TextInputAction.done,
+              onSubmitted: () => _onRegisterClick(context),
             ),
             const SizedBox(height: 20),
             ReactiveTextField(
@@ -117,17 +156,18 @@ class RegisterPage extends StatelessWidget {
                 labelText: 'Referral Code',
                 suffixIcon: Builder(
                   builder: (context) => IconButton(
-                    // TODO: When we show tooltip and click back button, current page is popped but tooltip is not disappearing
                     onPressed: () => showTooltip(
                         context, 'Enter referral code to get cash reward'),
                     icon: const Icon(Icons.info_outline),
                   ),
                 ),
               ),
+              textInputAction: TextInputAction.done,
+              onSubmitted: () => _onRegisterClick(context),
             ),
             const SizedBox(height: 50),
             SizedBox(
-              width: 300,
+              width: isWeb ? double.infinity : 300,
               child: ElevatedButton(
                 onPressed: () => _onRegisterClick(context),
                 child: const Text('Sign Up'),
@@ -135,7 +175,9 @@ class RegisterPage extends StatelessWidget {
             ),
           ],
         ),
-      );
+      ),
+    );
+  }
 
   Widget buildFooter(BuildContext context) => Padding(
         padding: const EdgeInsets.all(24),

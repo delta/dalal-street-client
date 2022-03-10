@@ -110,20 +110,24 @@ class _NotificationsState extends State<NotificationsPage> {
           },
         );
       } else if (state is GetNotificationFailure) {
-        return Column(
-          children: [
-            const Text('Failed to reach server'),
-            const SizedBox(height: 20),
-            SizedBox(
-              width: 100,
-              height: 50,
-              child: OutlinedButton(
-                onPressed: () =>
-                    context.read<NotificationsCubit>().getNotifications(),
-                child: const Text('Retry'),
+        return Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const Text('Failed to reach server'),
+              const SizedBox(height: 20),
+              SizedBox(
+                width: 100,
+                height: 50,
+                child: OutlinedButton(
+                  onPressed: () =>
+                      context.read<NotificationsCubit>().getNotifications(),
+                  child: const Text('Retry'),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         );
       } else {
         return const Center(

@@ -6,7 +6,8 @@ import 'package:dalal_street_client/blocs/auth/forgot_password/forgot_password_c
 import 'package:dalal_street_client/blocs/auth/login/login_cubit.dart';
 import 'package:dalal_street_client/blocs/dalal/dalal_bloc.dart';
 import 'package:dalal_street_client/blocs/market_depth/market_depth_bloc.dart';
-import 'package:dalal_street_client/blocs/news/news_bloc.dart';
+import 'package:dalal_street_client/blocs/market_event/events/market_event_cubit.dart';
+import 'package:dalal_street_client/blocs/resend_mail/resend_mail_cubit.dart';
 import 'package:dalal_street_client/blocs/subscribe/subscribe_cubit.dart';
 import 'package:dalal_street_client/config/get_it.dart';
 import 'package:dalal_street_client/navigation/dalal_nav_buidler.dart';
@@ -41,6 +42,7 @@ GoRouter generateRouter(BuildContext context) => GoRouter(
     routes: [
       ..._initialRoutes,
       ..._authRoutes,
+      ...verifyGoRoutes,
       GoRoute(
         /// A regular expression to match all home routes
         /// Note: Sorry for hardcoding everything, i am noob in regex
@@ -83,7 +85,7 @@ GoRouter generateRouter(BuildContext context) => GoRouter(
             providers: [
               BlocProvider(create: (_) => MarketDepthBloc()),
               BlocProvider(create: (_) => SubscribeCubit()),
-              BlocProvider(create: (_) => NewsBloc()),
+              BlocProvider(create: (_) => MarketEventCubit()),
             ],
             child: CompanyPage(stockId: stockId),
           );
@@ -127,6 +129,41 @@ GoRouter generateRouter(BuildContext context) => GoRouter(
 bool isUserRoute(GoRouterState routerState) =>
     userRoutes.hasMatch(routerState.location);
 
+/// Routes that can be accessed by only authenticated users
+final userRoutes = [
+  ...homeRoutesWeb,
+  ...verifyRoutes,
+  '/company/:id',
+  '/admin',
+];
+
+bool isVerifyRoute(GoRouterState routerState) =>
+    verifyRoutes.hasMatch(routerState.location);
+
+final verifyRoutes = [
+  '/enterPhone',
+  '/enterOtp',
+];
+
+// TODO: Add redirects
+final verifyGoRoutes = [
+  GoRoute(
+    path: '/enterPhone',
+    builder: (_, __) => BlocProvider(
+      create: (context) => EnterPhoneCubit(context.read()),
+      child: EnterPhonePage(),
+    ),
+  ),
+  GoRoute(
+    path: '/enterOtp',
+    builder: (_, state) => BlocProvider(
+      create: (context) =>
+          EnterOtpCubit(context.read(), state.extra! as String),
+      child: const EnterOtpPage(),
+    ),
+  ),
+];
+
 final _initialRoutes = [
   GoRoute(
     path: '/',
@@ -165,25 +202,9 @@ final _authRoutes = [
   ),
   GoRoute(
     path: '/checkMail',
-    builder: (_, state) => CheckMailPage(mail: state.extra! as String),
-  ),
-  ..._verifyRoutes,
-];
-
-final _verifyRoutes = [
-  GoRoute(
-    path: '/enterPhone',
-    builder: (_, __) => BlocProvider(
-      create: (context) => EnterPhoneCubit(context.read()),
-      child: EnterPhonePage(),
-    ),
-  ),
-  GoRoute(
-    path: '/enterOtp',
     builder: (_, state) => BlocProvider(
-      create: (context) =>
-          EnterOtpCubit(context.read(), state.extra! as String),
-      child: const EnterOtpPage(),
+      create: (_) => ResendMailCubit(),
+      child: CheckMailPage(mail: state.extra! as String),
     ),
   ),
 ];

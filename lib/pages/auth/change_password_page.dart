@@ -1,8 +1,11 @@
 import 'package:dalal_street_client/blocs/auth/change_password/change_password_cubit.dart';
 import 'package:dalal_street_client/components/dalal_back_button.dart';
 import 'package:dalal_street_client/components/fill_max_height_scroll_view.dart';
+import 'package:dalal_street_client/components/loading.dart';
 import 'package:dalal_street_client/components/reactive_password_field.dart';
 import 'package:dalal_street_client/models/snackbar/snackbar_type.dart';
+import 'package:dalal_street_client/theme/colors.dart';
+import 'package:dalal_street_client/utils/form_validation_messages.dart';
 import 'package:dalal_street_client/utils/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -35,8 +38,26 @@ class ChangePasswordPage extends StatelessWidget {
             },
             builder: (context, state) {
               if (state is ChangePasswordLoading) {
-                return const Center(child: CircularProgressIndicator());
+                return const Center(child: DalalLoadingBar());
               }
+
+              var screenwidth = MediaQuery.of(context).size.width;
+
+              if (screenwidth > 1000) {
+                return Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(color: secondaryColor, width: 2),
+                    borderRadius: const BorderRadius.all(Radius.circular(10)),
+                  ),
+                  child: body(),
+                  margin: EdgeInsets.fromLTRB(
+                      screenwidth * 0.35,
+                      screenwidth * 0.03,
+                      screenwidth * 0.35,
+                      screenwidth * 0.125),
+                );
+              }
+
               return body();
             },
           ),
@@ -49,7 +70,7 @@ class ChangePasswordPage extends StatelessWidget {
           child: Column(
             children: [
               header(context),
-              const SizedBox(height: 150),
+              const SizedBox(height: 50),
               form(context),
             ],
           ),
@@ -74,23 +95,27 @@ class ChangePasswordPage extends StatelessWidget {
       );
 
   Widget form(BuildContext context) => SizedBox(
-        width: 320,
         child: ReactiveForm(
           formGroup: formGroup,
           child: Column(
             children: [
-              const ReactivePasswordField(
+              ReactivePasswordField(
                 formControlName: 'temp password',
                 label: 'Temporary Password',
+                validation: requiredValidation('Temporary password'),
               ),
               const SizedBox(height: 20),
-              const ReactivePasswordField(
-                  formControlName: 'new password', label: 'New Password'),
+              ReactivePasswordField(
+                formControlName: 'new password',
+                label: 'New Password',
+                validation: passwordValidation('New password'),
+              ),
               const SizedBox(height: 20),
-              const ReactivePasswordField(
-                  formControlName: 'confirm new password',
-                  label: 'Confirm New Password'),
-              const SizedBox(height: 20),
+              ReactivePasswordField(
+                formControlName: 'confirm new password',
+                label: 'Confirm New Password',
+                validation: passwordValidation('Confirm new password'),
+              ),
               const SizedBox(height: 40),
               SizedBox(
                 width: double.infinity,

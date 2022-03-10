@@ -1,5 +1,5 @@
 import 'package:dalal_street_client/blocs/exchange/exchange_cubit.dart';
-import 'package:dalal_street_client/blocs/news/news_bloc.dart';
+import 'package:dalal_street_client/blocs/market_event/events/market_event_cubit.dart';
 import 'package:dalal_street_client/blocs/notification/notifications_cubit.dart';
 import 'package:dalal_street_client/blocs/portfolio/userWorth/portfolio_cubit.dart';
 import 'package:dalal_street_client/components/stock_bar.dart';
@@ -7,7 +7,7 @@ import 'package:dalal_street_client/config/log.dart';
 import 'package:dalal_street_client/navigation/home_routes.dart';
 import 'package:dalal_street_client/pages/dalal_home/dalal_home_bottom_sheet.dart';
 import 'package:dalal_street_client/pages/dalal_home/dalal_bottom_bar.dart';
-import 'package:dalal_street_client/pages/dalal_home/dalal_side_drawer.dart';
+import 'package:dalal_street_client/pages/dalal_home/dalal_sidebar.dart';
 import 'package:dalal_street_client/pages/home_page.dart';
 import 'package:dalal_street_client/pages/leaderboard_page/leaderboard_page.dart';
 import 'package:dalal_street_client/pages/portfolio/portfolio_page.dart';
@@ -92,7 +92,7 @@ class _DalalHomeState extends State<DalalHome> {
   List<Widget> get _pageViewChildren => [
         MultiBlocProvider(
           providers: [
-            BlocProvider(create: (context) => NewsBloc()),
+            BlocProvider(create: (context) => MarketEventCubit()),
             BlocProvider(create: (context) => NotificationsCubit()),
           ],
           child: HomePage(user: widget.user),
@@ -113,20 +113,7 @@ class _DalalHomeState extends State<DalalHome> {
   build(context) => SafeArea(
         child: Scaffold(
           appBar: const StockBar(),
-          body: PageView(
-            controller: _pageController,
-            physics: const NeverScrollableScrollPhysics(),
-            children: _pageViewChildren,
-          ),
-          drawer: kIsWeb
-              ? DalalSideDrawer(
-                  menu: _sideMenu,
-                  currentIndex: currentMenuItem,
-                  onItemSelect: (index) =>
-                      _onMenuItemSelect(_homeRoutes[index]),
-                  onItemReselect: (index) {},
-                )
-              : null,
+          body: body(),
           bottomNavigationBar: !kIsWeb
               ? DalalBottomBar(
                   menu: _bottomMenu,
@@ -141,6 +128,22 @@ class _DalalHomeState extends State<DalalHome> {
               : null,
         ),
       );
+
+  Widget body() {
+    final content = PageView(
+      controller: _pageController,
+      physics: const NeverScrollableScrollPhysics(),
+      children: _pageViewChildren,
+    );
+    if (!kIsWeb) return content;
+    return DalalSideBar(
+      menu: _sideMenu,
+      currentIndex: currentMenuItem,
+      onItemSelect: (index) => _onMenuItemSelect(_homeRoutes[index]),
+      onItemReselect: (index) {},
+      body: content,
+    );
+  }
 
   void _onMenuItemSelect(String route) => context.go(route);
 

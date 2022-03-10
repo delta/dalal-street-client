@@ -9,14 +9,14 @@ import 'package:dalal_street_client/config/get_it.dart';
 import 'package:dalal_street_client/streams/global_streams.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
 
-class PortfolioUserWorth extends StatefulWidget {
-  const PortfolioUserWorth({Key? key}) : super(key: key);
+class PortfolioUserWorthWeb extends StatefulWidget {
+  const PortfolioUserWorthWeb({Key? key}) : super(key: key);
 
   @override
-  _PortfolioUserWorthState createState() => _PortfolioUserWorthState();
+  _PortfolioUserWorthWebState createState() => _PortfolioUserWorthWebState();
 }
 
-class _PortfolioUserWorthState extends State<PortfolioUserWorth> {
+class _PortfolioUserWorthWebState extends State<PortfolioUserWorthWeb> {
   Map<int, Stock> mapOfStocks = getIt<GlobalStreams>().latestStockMap;
   final userInfoStream = getIt<GlobalStreams>().dynamicUserInfoStream;
 
@@ -26,57 +26,64 @@ class _PortfolioUserWorthState extends State<PortfolioUserWorth> {
   }
 
   @override
-  Widget build(BuildContext context) => userWorth();
+  Widget build(BuildContext context) => userWorthWeb();
 
-  Widget userWorth() =>
+  Widget userWorthWeb() =>
       BlocBuilder<PortfolioCubit, PortfolioState>(builder: (context, state) {
         if (state is PortfolioLoading) {
           return const Center(
             child: DalalLoadingBar(),
           );
         } else if (state is UserWorthLoaded) {
-          return Wrap(children: [
-            Container(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                decoration: BoxDecoration(
-                  color: background2,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: _userWorthDetails()),
-            Container(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                margin: const EdgeInsets.only(top: 15),
-                decoration: BoxDecoration(
-                  color: background2,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Padding(
-                        padding: EdgeInsets.only(top: 15),
+          return Padding(
+            padding: const EdgeInsets.only(top: 25),
+            child: SizedBox(
+              height: 350,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Container(
+                      margin: const EdgeInsets.only(left: 100),
+                      height: double.infinity,
+                      width: MediaQuery.of(context).size.width * 0.3,
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 10, horizontal: 10),
+                      decoration: BoxDecoration(
+                        color: background2,
+                        borderRadius: BorderRadius.circular(10),
                       ),
-                      const Text(
-                        'Your Holdings',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w500,
-                          color: white,
-                        ),
-                        textAlign: TextAlign.center,
+                      child: _userWorthDetails()),
+                  Container(
+                      margin: const EdgeInsets.only(right: 100),
+                      width: MediaQuery.of(context).size.width * 0.40,
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 25, horizontal: 15),
+                      decoration: BoxDecoration(
+                        color: background2,
+                        borderRadius: BorderRadius.circular(10),
                       ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      _holdings(state),
-                      Container(
-                        width: double.infinity,
-                      )
-                    ])),
-          ]);
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'Your Holdings',
+                              style: TextStyle(
+                                fontSize: 21,
+                                fontWeight: FontWeight.w900,
+                                color: white,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            _holdings(state),
+                          ])),
+                ],
+              ),
+            ),
+          );
         } else if (state is UserWorthFailure) {
           return Center(
             child: Text(state.message),
@@ -102,13 +109,13 @@ class _PortfolioUserWorthState extends State<PortfolioUserWorth> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Padding(
-                  padding: EdgeInsets.only(top: 15),
+                  padding: EdgeInsets.only(top: 10),
                 ),
                 const Text(
                   'Portfolio',
                   style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w500,
+                    fontSize: 21,
+                    fontWeight: FontWeight.w900,
                     color: white,
                   ),
                   textAlign: TextAlign.center,
@@ -116,24 +123,24 @@ class _PortfolioUserWorthState extends State<PortfolioUserWorth> {
                 const SizedBox(
                   height: 20,
                 ),
-                Column(
+                Wrap(
                   children: [
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 50),
                     _eachField('Cash in Hand', data.cash.toString()),
-                    const SizedBox(height: 15),
+                    const SizedBox(height: 50),
                     _eachField('Stock Worth', data.stockWorth.toString()),
-                    const SizedBox(height: 15),
+                    const SizedBox(height: 50),
                     _eachField('Reserved Cash', data.reservedCash.toString()),
-                    const SizedBox(height: 15),
+                    const SizedBox(height: 50),
                     _eachField('Reserved Stock Worth',
                         data.reservedStocksWorth.toString()),
-                    const SizedBox(height: 15),
+                    const SizedBox(height: 50),
                     Row(children: [
                       const Padding(padding: EdgeInsets.only(left: 20)),
                       const Text(
                         'Total Worth',
                         style: TextStyle(
-                          fontSize: 18,
+                          fontSize: 21,
                           fontWeight: FontWeight.w800,
                         ),
                       ),
@@ -143,7 +150,7 @@ class _PortfolioUserWorthState extends State<PortfolioUserWorth> {
                         child: Text(
                           data.totalWorth.toString(),
                           style: TextStyle(
-                              fontSize: 18,
+                              fontSize: 21,
                               fontWeight: FontWeight.w800,
                               color: data.totalWorth.toInt() >= 0
                                   ? secondaryColor
@@ -186,18 +193,26 @@ class _PortfolioUserWorthState extends State<PortfolioUserWorth> {
           Map<int, Int64> stocksReservedMap,
           Map<int, Int64> stocksOwnedMap,
           Map<int, Int64> cashSpentMap) =>
-      ListView.builder(
-          primary: false,
-          shrinkWrap: true,
-          itemCount: stocksHeld.length,
-          itemBuilder: (context, index) {
-            return _eachStock(
-                stocksOwnedMap[keyList[index]],
-                stocksReservedMap[keyList[index]],
-                cashSpentMap[keyList[index]],
-                mapOfStocks[keyList[index]]?.fullName ?? '',
-                mapOfStocks[keyList[index]]?.currentPrice);
-          });
+      Expanded(
+        child: RawScrollbar(
+          isAlwaysShown: true,
+          thumbColor: const Color(0xFF388E3C),
+          radius: const Radius.circular(5.0),
+          thickness: 10.0,
+          child: ListView.builder(
+              primary: false,
+              shrinkWrap: true,
+              itemCount: stocksHeld.length,
+              itemBuilder: (context, index) {
+                return _eachStock(
+                    stocksOwnedMap[keyList[index]],
+                    stocksReservedMap[keyList[index]],
+                    cashSpentMap[keyList[index]],
+                    mapOfStocks[keyList[index]]?.fullName ?? '',
+                    mapOfStocks[keyList[index]]?.currentPrice);
+              }),
+        ),
+      );
 
   Widget _eachStock(Int64? owned, Int64? reserved, Int64? cashSpent,
       String name, Int64? price) {
@@ -206,7 +221,7 @@ class _PortfolioUserWorthState extends State<PortfolioUserWorth> {
         Row(
           children: [
             Padding(
-              padding: const EdgeInsets.only(bottom: 15, left: 5, top: 10),
+              padding: const EdgeInsets.only(bottom: 15, left: 25, top: 10),
               child: Text(
                 name.toUpperCase(),
                 style: const TextStyle(fontSize: 18),
@@ -225,12 +240,13 @@ class _PortfolioUserWorthState extends State<PortfolioUserWorth> {
                     padding: EdgeInsets.only(bottom: 10),
                     child: Text(
                       'Owned',
-                      style: TextStyle(color: blurredGray),
+                      style: TextStyle(color: blurredGray, fontSize: 18),
                     )),
                 Text(
                   owned.toString(),
                   style: TextStyle(
-                      color: (owned!.toInt()) >= 0 ? secondaryColor : heartRed),
+                      color: (owned!.toInt()) >= 0 ? secondaryColor : heartRed,
+                      fontSize: 18),
                 )
               ],
             ),
@@ -242,13 +258,14 @@ class _PortfolioUserWorthState extends State<PortfolioUserWorth> {
                     padding: EdgeInsets.only(bottom: 10),
                     child: Text(
                       'Reserved',
-                      style: TextStyle(color: blurredGray),
+                      style: TextStyle(color: blurredGray, fontSize: 18),
                     )),
                 Text(
                   reserved.toString(),
                   style: TextStyle(
                       color:
-                          (reserved!.toInt()) >= 0 ? secondaryColor : heartRed),
+                          (reserved!.toInt()) >= 0 ? secondaryColor : heartRed,
+                      fontSize: 18),
                 )
               ],
             ),
@@ -260,9 +277,12 @@ class _PortfolioUserWorthState extends State<PortfolioUserWorth> {
                     padding: EdgeInsets.only(bottom: 10),
                     child: Text(
                       'Current Price',
-                      style: TextStyle(color: blurredGray),
+                      style: TextStyle(color: blurredGray, fontSize: 18),
                     )),
-                Text(price.toString())
+                Text(
+                  price.toString(),
+                  style: const TextStyle(fontSize: 18),
+                )
               ],
             ),
             Column(
@@ -272,14 +292,16 @@ class _PortfolioUserWorthState extends State<PortfolioUserWorth> {
                 const Padding(
                     padding: EdgeInsets.only(bottom: 10),
                     child: Text(
-                      'Cash spent',
-                      style: TextStyle(color: blurredGray),
+                      'Cash Spent',
+                      style: TextStyle(color: blurredGray, fontSize: 18),
                     )),
-                Text(cashSpent.toString(),
-                    style: TextStyle(
-                      color:
-                          (cashSpent!.toInt() >= 0 ? secondaryColor : heartRed),
-                    ))
+                Text(
+                  cashSpent.toString(),
+                  style: TextStyle(
+                      color: (cashSpent!.toInt() >= 0
+                          ? secondaryColor
+                          : heartRed)),
+                )
               ],
             ),
           ],
@@ -294,7 +316,7 @@ class _PortfolioUserWorthState extends State<PortfolioUserWorth> {
       Text(
         field,
         style: const TextStyle(
-          fontSize: 18,
+          fontSize: 21,
         ),
       ),
       const Spacer(),
@@ -302,7 +324,7 @@ class _PortfolioUserWorthState extends State<PortfolioUserWorth> {
         padding: const EdgeInsets.only(right: 25),
         child: Text(
           value,
-          style: const TextStyle(fontSize: 18),
+          style: const TextStyle(fontSize: 21),
         ),
       )
     ]);

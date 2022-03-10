@@ -1,16 +1,13 @@
-import 'package:dalal_street_client/blocs/news/news_bloc.dart';
+import 'package:dalal_street_client/blocs/market_event/events/market_event_cubit.dart';
 import 'package:dalal_street_client/components/buttons/tertiary_button.dart';
 import 'package:dalal_street_client/components/loading.dart';
-import 'package:dalal_street_client/config/log.dart';
-import 'package:dalal_street_client/pages/newsdetail_page.dart';
+import 'package:dalal_street_client/pages/news/newsdetail_page.dart';
 import 'package:dalal_street_client/proto_build/models/MarketEvent.pb.dart';
 import 'package:dalal_street_client/theme/colors.dart';
+import 'package:dalal_street_client/utils/iso_to_datetime.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-List<MarketEvent> mapMarketEvents = [];
-int i = 1;
 
 class CompanyNewsPage extends StatefulWidget {
   // ignore: prefer_typing_uninitialized_variables
@@ -28,11 +25,15 @@ class _CompanyNewsPageState extends State<CompanyNewsPage> {
   @override
   initState() {
     super.initState();
-    context.read<NewsBloc>().add(GetNewsById(widget.stockId));
+    context.read<MarketEventCubit>().getStockNews(widget.stockId);
   }
 
-  Widget newsItem(String text, String imagePath, String createdAt, bool isWeb) {
-    String dur = getdur(createdAt);
+  Widget newsItem(
+    String text,
+    String imagePath,
+    String createdAt,
+  ) {
+    String dur = ISOtoDateTime(createdAt);
     return (Container(
       padding: const EdgeInsets.symmetric(vertical: 2),
       child: Row(
@@ -42,7 +43,7 @@ class _CompanyNewsPageState extends State<CompanyNewsPage> {
           ClipRRect(
             borderRadius: BorderRadius.circular(20),
             child: Image(
-              width: isWeb ? 200 : 125,
+              width: widget.isWeb ? 200 : 125,
               height: 100,
               fit: BoxFit.contain,
               image: NetworkImage(imagePath),
@@ -57,7 +58,8 @@ class _CompanyNewsPageState extends State<CompanyNewsPage> {
                     padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
                     child: Text(
                       text,
-                      style: TextStyle(color: white, fontSize: isWeb ? 24 : 18),
+                      style: TextStyle(
+                          color: white, fontSize: widget.isWeb ? 24 : 18),
                       overflow: TextOverflow.ellipsis,
                       maxLines: 2,
                     ),
@@ -71,7 +73,7 @@ class _CompanyNewsPageState extends State<CompanyNewsPage> {
                           style: TextStyle(
                               fontStyle: FontStyle.italic,
                               color: lightGray,
-                              fontSize: isWeb ? 18 : 14)))
+                              fontSize: widget.isWeb ? 18 : 14)))
                 ]),
           ),
         ],
@@ -79,44 +81,23 @@ class _CompanyNewsPageState extends State<CompanyNewsPage> {
     ));
   }
 
-  String getdur(String createdAt) {
-    DateTime dt1 = DateTime.parse(createdAt);
-    DateTime dt2 = DateTime.now();
-    Duration diff = dt2.difference(dt1);
-    if (diff.inDays == 0) {
-      if (diff.inHours == 0) {
-        return (diff.inMinutes.toString() + ' minutes ago');
-      } else {
-        return (diff.inHours.toString() + ' hour ago');
-      }
-    } else {
-      return (diff.inDays.toString() + ' day ago');
-    }
-  }
-
-  Widget feedlist() =>
-      BlocBuilder<NewsBloc, NewsState>(builder: (context, state) {
-        if (state is GetNewsSucess) {
-          mapMarketEvents.clear();
-          mapMarketEvents.addAll(state.marketEventsList.marketEvents);
-          // Sort MarketEvents according to there created time
-          mapMarketEvents.sort((a, b) => b.createdAt.compareTo(a.createdAt));
-          logger.i(mapMarketEvents);
-          if (mapMarketEvents.isNotEmpty) {
+  Widget feedList() => BlocBuilder<MarketEventCubit, MarketEventState>(
+          builder: (context, state) {
+        if (state is MarketEventSuccess) {
+          if (state.marketEvents.isNotEmpty) {
             return ListView.separated(
               shrinkWrap: true,
               physics: const ScrollPhysics(),
-              itemCount: mapMarketEvents.length,
+              itemCount: state.marketEvents.length,
               itemBuilder: (context, index) {
-                MarketEvent marketEvent = mapMarketEvents[index];
+                MarketEvent marketEvent = state.marketEvents[index];
                 String headline = marketEvent.headline;
                 String imagePath = marketEvent.imagePath;
                 String createdAt = marketEvent.createdAt;
                 String text = marketEvent.text;
-                String dur = getdur(createdAt);
+                String dur = ISOtoDateTime(createdAt);
                 return GestureDetector(
-                    child:
-                        newsItem(headline, imagePath, createdAt, widget.isWeb),
+                    child: newsItem(headline, imagePath, createdAt),
                     onTap: () => Navigator.push(
                         context,
                         CupertinoPageRoute(
@@ -142,7 +123,7 @@ class _CompanyNewsPageState extends State<CompanyNewsPage> {
               ),
             );
           }
-        } else if (state is GetNewsFailure) {
+        } else if (state is MarketEventFailure) {
           return Column(
             children: [
               const Text('Failed to reach server'),
@@ -151,8 +132,9 @@ class _CompanyNewsPageState extends State<CompanyNewsPage> {
                 width: 100,
                 height: 50,
                 child: OutlinedButton(
-                  onPressed: () => context.read<NewsBloc>().add(GetMoreNews(
-                      mapMarketEvents[mapMarketEvents.length - 1].id - 1)),
+                  onPressed: () => context
+                      .read<MarketEventCubit>()
+                      .getStockNews(widget.stockId),
                   child: const Text('Retry'),
                 ),
               ),
@@ -164,6 +146,7 @@ class _CompanyNewsPageState extends State<CompanyNewsPage> {
           );
         }
       });
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -207,7 +190,7 @@ class _CompanyNewsPageState extends State<CompanyNewsPage> {
               const SizedBox(
                 height: 20,
               ),
-              feedlist()
+              feedList()
             ]));
   }
 }

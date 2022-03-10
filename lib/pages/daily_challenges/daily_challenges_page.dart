@@ -27,13 +27,7 @@ class DailyChallengesPage extends StatelessWidget {
                   );
                 }
                 if (state is DailyChallengesPageSuccess) {
-                  if (state.isDailyChallengesOpen) {
-                    return _DailyChallengesPageBody(successState: state);
-                  } else {
-                    return const Center(
-                      child: Text('Daily Challenges is closed now'),
-                    );
-                  }
+                  return _DailyChallengesPageBody(successState: state);
                 }
                 return const Center(child: DalalLoadingBar());
               },
@@ -66,6 +60,7 @@ class _DailyChallengesPageBodyState extends State<_DailyChallengesPageBody>
 
   List<int> get days => 1.to(widget.successState.totalMarketDays);
   int get marketDay => widget.successState.marketDay;
+  bool get isChallengesOpen => widget.successState.isChallengesOpen;
 
   String dateForIndex(int tabIndex) {
     final diff = marketDay - (tabIndex + 1);
@@ -114,7 +109,8 @@ class _DailyChallengesPageBodyState extends State<_DailyChallengesPageBody>
                   BlocProvider(
                     create: (_) => SingleDayChallengesCubit(),
                     child: SingleDayChallenges(
-                      marketDay: marketDay,
+                      isChallengesOpen: isChallengesOpen,
+                      isCurrentDay: marketDay == day,
                       day: day,
                     ),
                   )
