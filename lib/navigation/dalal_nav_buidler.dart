@@ -94,7 +94,9 @@ class _DalalNavBuilderState extends State<DalalNavBuilder> {
             return widget.child;
           }
           if (state is DalalLoginFailed) {
-            return _retryScreen(() {context.read<DalalBloc>().add( GetUserData(state.sessionId));});
+            return _retryScreen(() {
+              context.read<DalalBloc>().add(GetUserData(state.sessionId));
+            });
           }
           return _loadingScreen();
         },
