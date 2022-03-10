@@ -188,19 +188,21 @@ Widget marketDepthWeb(Stock company) {
               builder: (context, state) {
                 if (state is MarketDepthUpdateState) {
                   return Container(
+                    height: MediaQuery.of(context).size.height * 0.65,
                     padding: const EdgeInsets.all(15),
                     decoration: BoxDecoration(
                         color: background2,
                         borderRadius: BorderRadius.circular(10)),
                     child: SingleChildScrollView(
                       scrollDirection: Axis.vertical,
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
+                      child: IntrinsicWidth(
                         child: Row(
+                          mainAxisSize: MainAxisSize.min,
                           children: [
                             Column(
                               children: [
                                 Container(
+                                  constraints: const BoxConstraints(minWidth: 330),
                                   alignment: Alignment.center,
                                   padding: const EdgeInsets.symmetric(
                                       vertical: 10, horizontal: 75),
@@ -218,7 +220,7 @@ Widget marketDepthWeb(Stock company) {
                                   ),
                                 ),
                                 const SizedBox(
-                                  height: 5,
+                                  height: 10,
                                 ),
                                 DataTable(
                                   columns: <DataColumn>[
@@ -233,7 +235,7 @@ Widget marketDepthWeb(Stock company) {
                                   headingRowColor:
                                       MaterialStateProperty.all(background3),
                                   border: TableBorder.all(
-                                      width: 1,
+                                      width: 4,
                                       borderRadius: const BorderRadius.all(
                                           Radius.circular(10)),
                                       style: BorderStyle.solid),
@@ -241,11 +243,12 @@ Widget marketDepthWeb(Stock company) {
                               ],
                             ),
                             const SizedBox(
-                              width: 20,
+                              width: 10,
                             ),
                             Column(
                               children: [
                                 Container(
+                                  constraints: const BoxConstraints(minWidth: 330),
                                   alignment: Alignment.center,
                                   padding: const EdgeInsets.symmetric(
                                       vertical: 10, horizontal: 75),
@@ -263,7 +266,7 @@ Widget marketDepthWeb(Stock company) {
                                   ),
                                 ),
                                 const SizedBox(
-                                  height: 5,
+                                  height: 10,
                                 ),
                                 DataTable(
                                   columns: <DataColumn>[
@@ -278,7 +281,7 @@ Widget marketDepthWeb(Stock company) {
                                   headingRowColor:
                                       MaterialStateProperty.all(background3),
                                   border: TableBorder.all(
-                                      width: 1,
+                                      width: 4,
                                       borderRadius: const BorderRadius.all(
                                           Radius.circular(10)),
                                       style: BorderStyle.solid),
