@@ -54,7 +54,7 @@ class _DalalHomeState extends State<DalalHome> {
 
   final _bottomMenu = homeMenuMobile.values.toList();
 
-  final _sideMenu = homeMenuWeb.values.toList();
+  List<MenuItem> get _sideMenu => homeMenuWeb.values.toList() + [_logoutItem];
 
   List<MenuItem> get _sheetMenu =>
       moreMenuMobile.values.toList() + [_logoutItem];
@@ -144,7 +144,13 @@ class _DalalHomeState extends State<DalalHome> {
     return DalalSideBar(
       menu: _sideMenu,
       currentIndex: currentMenuItem,
-      onItemSelect: (index) => _onMenuItemSelect(_homeRoutes[index]),
+      onItemSelect: (index) {
+        if (index != _sideMenu.length - 1) {
+          _onMenuItemSelect(_homeRoutes[index]);
+        } else {
+          _onLogoutClick();
+        }
+      },
       onItemReselect: (index) {},
       body: content,
     );
