@@ -29,11 +29,7 @@ class _CompanyNewsPageState extends State<CompanyNewsPage> {
     context.read<MarketEventCubit>().getStockNews(widget.stockId);
   }
 
-  Widget newsItem(
-    String text,
-    String imagePath,
-    String createdAt,
-  ) {
+   Widget newsItem(String text, String imagePath, String createdAt, bool isWeb) {
     String dur = ISOtoDateTime(createdAt);
     return (Container(
       padding: const EdgeInsets.symmetric(vertical: 2),
@@ -44,7 +40,7 @@ class _CompanyNewsPageState extends State<CompanyNewsPage> {
           ClipRRect(
             borderRadius: BorderRadius.circular(20),
             child: Image(
-              width: widget.isWeb ? 200 : 125,
+              width: isWeb ? 200 : 125,
               height: 100,
               fit: BoxFit.contain,
               image: NetworkImage(imagePath),
@@ -59,8 +55,7 @@ class _CompanyNewsPageState extends State<CompanyNewsPage> {
                     padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
                     child: Text(
                       text,
-                      style: TextStyle(
-                          color: white, fontSize: widget.isWeb ? 24 : 18),
+                      style: TextStyle(color: white, fontSize: isWeb ? 24 : 18),
                       overflow: TextOverflow.ellipsis,
                       maxLines: 2,
                     ),
@@ -74,7 +69,7 @@ class _CompanyNewsPageState extends State<CompanyNewsPage> {
                           style: TextStyle(
                               fontStyle: FontStyle.italic,
                               color: lightGray,
-                              fontSize: widget.isWeb ? 18 : 14)))
+                              fontSize: isWeb ? 18 : 14)))
                 ]),
           ),
         ],
@@ -98,7 +93,7 @@ class _CompanyNewsPageState extends State<CompanyNewsPage> {
                 String text = marketEvent.text;
                 String dur = ISOtoDateTime(createdAt);
                 return GestureDetector(
-                    child: newsItem(headline, imagePath, createdAt),
+                    child: newsItem(headline, imagePath, createdAt,widget.isWeb),
                     onTap: () => Navigator.push(
                         context,
                         CupertinoPageRoute(
@@ -152,8 +147,7 @@ class _CompanyNewsPageState extends State<CompanyNewsPage> {
   Widget build(BuildContext context) {
     return Container(
         width: double.infinity,
-        margin: const EdgeInsets.fromLTRB(0, 0, 45, 0),
-        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 45),
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
         decoration: BoxDecoration(
           color: background2,
           borderRadius: BorderRadius.circular(10),

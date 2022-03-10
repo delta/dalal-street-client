@@ -150,15 +150,10 @@ Widget _companyGraph(Stock stock) {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        const Text(
-          'This Company went Bankrupt',
-          style: TextStyle(
-              color: heartRed, fontSize: 14, fontWeight: FontWeight.w600),
-        ),
         const SizedBox(
           height: 10,
         ),
-        Image.asset('assets/images/sad_bull.png', height: 200)
+        Image.asset('assets/images/bankrupt.png', height: 200)
       ],
     );
   } else {

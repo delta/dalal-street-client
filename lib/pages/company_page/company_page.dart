@@ -87,7 +87,7 @@ class WebBody extends StatelessWidget {
                 stockId: stockId,
                 isWeb: true,
               ),
-            )
+            ),
           ]),
         ));
   }
@@ -129,7 +129,8 @@ class MobileBody extends StatelessWidget {
                   const SizedBox(
                     height: 10,
                   ),
-                  CompanyNewsPage(stockId: stockId, isWeb: false)
+                  CompanyNewsPage(stockId: stockId, isWeb: false),
+                  const SizedBox(height: 50,)
                 ])),
             // Hide Place Order Button if company went Bankrupt
             company.isBankrupt
