@@ -50,7 +50,8 @@ Widget overViewWeb(Stock company, BuildContext context) {
                   color: background2, borderRadius: BorderRadius.circular(20)),
               height: screenHeight * 0.3,
               width: screenWidth * 0.6,
-              child: SingleChildScrollView(child: _companyGraph(company, screenHeight))),
+              child: SingleChildScrollView(
+                  child: _companyGraph(company, screenHeight))),
           const SizedBox(width: 50),
           Container(
             padding: const EdgeInsets.all(20),
@@ -128,8 +129,12 @@ Widget overViewWeb(Stock company, BuildContext context) {
                           stream: dayHighStream,
                           initialData: company.dayHigh,
                           builder: (context, state) {
-                            return marketStatusTile(AppIcons.dayHigh, 'Day High',
-                                oCcy.format(state.data).toString(), false, true);
+                            return marketStatusTile(
+                                AppIcons.dayHigh,
+                                'Day High',
+                                oCcy.format(state.data).toString(),
+                                false,
+                                true);
                           }),
                       StreamBuilder<Int64>(
                           stream: dayLowStream,
