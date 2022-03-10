@@ -113,17 +113,17 @@ class DalalBloc extends HydratedBloc<DalalEvent, DalalState> {
     return super.close();
   }
 
+  /// To maintain constand storage name across different app versions
   @override
   String get storagePrefix => 'DalalBloc';
 
   // Methods required by HydratedBloc to persist state
   @override
   DalalState? fromJson(Map<String, dynamic> json) {
-    try {
+    if (json.containsKey('sessionId')) {
       return DalalLoggedIn(json['sessionId']);
-    } catch (_) {
-      return const DalalLoggedOut();
     }
+    return const DalalLoggedOut();
   }
 
   @override
