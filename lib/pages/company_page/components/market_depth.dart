@@ -190,9 +190,8 @@ Widget marketDepthWeb(Stock company) {
                   return Container(
                     height: MediaQuery.of(context).size.height * 0.65,
                     padding: const EdgeInsets.all(15),
-                    decoration: BoxDecoration(
-                        color: background2,
-                        borderRadius: BorderRadius.circular(10)),
+                    decoration:
+                        BoxDecoration(borderRadius: BorderRadius.circular(10)),
                     child: SingleChildScrollView(
                       scrollDirection: Axis.vertical,
                       child: IntrinsicWidth(

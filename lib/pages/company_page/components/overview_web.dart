@@ -15,8 +15,12 @@ final oCcy = NumberFormat('#,##0.00', 'en_US');
 Widget _companyGraph(Stock stock, double height) {
   if (stock.isBankrupt) {
     return SizedBox(
-      width: 800,
-      child: Image.asset('assets/images/bankrupt.png', height: 200),
+      height: 490,
+      child: Image.asset(
+        'assets/images/bankrupt.png',
+        height: 100,
+        width: 100,
+      ),
     );
   } else {
     return StockChart(stockId: stock.id, height: 490);
