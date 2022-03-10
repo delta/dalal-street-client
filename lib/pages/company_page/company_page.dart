@@ -49,16 +49,16 @@ class _CompanyPageState extends State<CompanyPage>
     Stock company = stockList[stockId]!;
     return SafeArea(
       child: Responsive(
-        mobile: mobileBody(company: company, stockId: stockId, cash: cash),
-        tablet: mobileBody(company: company, stockId: stockId, cash: cash),
-        desktop: webBody(company: company, cash: cash, stockId: stockId),
+        mobile: MobileBody(company: company, stockId: stockId, cash: cash),
+        tablet: MobileBody(company: company, stockId: stockId, cash: cash),
+        desktop: WebBody(company: company, cash: cash, stockId: stockId),
       ),
     );
   }
 }
 
-class webBody extends StatelessWidget {
-  const webBody({
+class WebBody extends StatelessWidget {
+  const WebBody({
     Key? key,
     required this.company,
     required this.cash,
@@ -93,8 +93,8 @@ class webBody extends StatelessWidget {
   }
 }
 
-class mobileBody extends StatelessWidget {
-  const mobileBody({
+class MobileBody extends StatelessWidget {
+  const MobileBody({
     Key? key,
     required this.company,
     required this.stockId,

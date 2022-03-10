@@ -1,6 +1,5 @@
 import 'package:dalal_street_client/components/graph/stock_chart.dart';
 import 'package:dalal_street_client/config/get_it.dart';
-import 'package:dalal_street_client/config/log.dart';
 import 'package:dalal_street_client/constants/icons.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
 import 'package:dalal_street_client/pages/company_page/components/market_status_tile.dart';
@@ -17,8 +16,7 @@ Widget _companyGraph(Stock stock, double height) {
   if (stock.isBankrupt) {
     return SizedBox(
       width: 800,
-      child: Container(
-          child: Image.asset('assets/images/bankrupt.png', height: 200)),
+      child: Image.asset('assets/images/bankrupt.png', height: 200),
     );
   } else {
     return StockChart(stockId: stock.id, height: 490);
@@ -172,7 +170,7 @@ Widget overViewWeb(Stock company, BuildContext context) {
   );
 }
 
-_showDescriptionBottomSheet(Stock company, BuildContext context) {
+/*_showDescriptionBottomSheet(Stock company, BuildContext context) {
   showModalBottomSheet(
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(25.0))),
@@ -223,4 +221,4 @@ _showDescriptionBottomSheet(Stock company, BuildContext context) {
           ),
         );
       });
-}
+}*/

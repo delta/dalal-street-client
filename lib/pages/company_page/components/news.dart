@@ -182,7 +182,7 @@ class _CompanyNewsPageState extends State<CompanyNewsPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Padding(
-                    padding: EdgeInsets.symmetric(vertical: 20),
+                    padding: const EdgeInsets.symmetric(vertical: 20),
                     child: Text(
                       'Company Related News',
                       style: TextStyle(
