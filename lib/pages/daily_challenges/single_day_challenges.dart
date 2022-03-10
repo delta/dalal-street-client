@@ -1,11 +1,11 @@
 import 'package:dalal_street_client/blocs/daily_challenges/single_day_challenges/single_day_challenges_cubit.dart';
+import 'package:dalal_street_client/components/loading.dart';
 import 'package:dalal_street_client/config/get_it.dart';
 import 'package:dalal_street_client/models/daily_challenge_info.dart';
 import 'package:dalal_street_client/models/snackbar/snackbar_type.dart';
 import 'package:dalal_street_client/pages/daily_challenges/components/single_day_progress.dart';
 import 'package:dalal_street_client/pages/daily_challenges/components/daily_challenge_item.dart';
 import 'package:dalal_street_client/streams/global_streams.dart';
-import 'package:dalal_street_client/streams/transformations.dart';
 import 'package:dalal_street_client/theme/colors.dart';
 import 'package:dalal_street_client/utils/snackbar.dart';
 import 'package:flutter/material.dart';
@@ -31,11 +31,6 @@ class _SingleDayChallengesState extends State<SingleDayChallenges>
     with AutomaticKeepAliveClientMixin {
   final stocks = getIt<GlobalStreams>().latestStockMap;
 
-  Stream<bool> get isOpenStream => getIt<GlobalStreams>()
-      .gameStateStream
-      .isDailyChallengesOpenStream()
-      .distinct();
-
   @override
   void initState() {
     super.initState();
@@ -53,24 +48,9 @@ class _SingleDayChallengesState extends State<SingleDayChallenges>
       },
       builder: (context, state) {
         if (state is SingleDayChallengesLoaded) {
-          if (!widget.isCurrentDay) {
-            return content(state);
-          }
-          // Update isOpen state only for current day challenges
-          return StreamBuilder<bool>(
-            stream: isOpenStream,
-            initialData: widget.isChallengesOpen,
-            builder: (context, snapshot) {
-              final isOpen = snapshot.data!;
-              if (isOpen) {
-                return content(state);
-              }
-              return const Center(
-                  child: Text('Daily Challenges is closed for now'));
-            },
-          );
+          return content(state);
         }
-        return const Center(child: CircularProgressIndicator());
+        return const Center(child: DalalLoadingBar());
       },
     );
   }

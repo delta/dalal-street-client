@@ -99,26 +99,37 @@ class _DailyChallengesPageBodyState extends State<_DailyChallengesPageBody>
             child: header(),
           ),
           const SizedBox(height: 12),
-          Expanded(
-            child: TabBarView(
-              controller: _tabController,
-              // Disable Scrolling
-              physics: const NeverScrollableScrollPhysics(),
-              children: [
-                for (final day in days)
-                  BlocProvider(
-                    create: (_) => SingleDayChallengesCubit(),
-                    child: SingleDayChallenges(
-                      isChallengesOpen: isChallengesOpen,
-                      isCurrentDay: marketDay == day,
-                      day: day,
-                    ),
-                  )
-              ],
-            ),
-          ),
+          dailyChallengesBody(),
         ],
       );
+
+  Widget dailyChallengesBody() {
+    var screenWidth = MediaQuery.of(context).size.width;
+    var isWeb = screenWidth > 1000;
+    return Expanded(
+      child: Container(
+        margin: isWeb
+            ? EdgeInsets.fromLTRB(screenWidth * 0.2, 0, screenWidth * 0.2, 0)
+            : null,
+        child: TabBarView(
+          controller: _tabController,
+          // Disable Scrolling
+          physics: const NeverScrollableScrollPhysics(),
+          children: [
+            for (final day in days)
+              BlocProvider(
+                create: (_) => SingleDayChallengesCubit(),
+                child: SingleDayChallenges(
+                  isChallengesOpen: isChallengesOpen,
+                  isCurrentDay: marketDay == day,
+                  day: day,
+                ),
+              )
+          ],
+        ),
+      ),
+    );
+  }
 
   Widget header() => Card(
         color: background2,
