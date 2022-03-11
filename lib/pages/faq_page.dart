@@ -57,22 +57,24 @@ class _FAQPageState extends State<FAQPage> {
           Padding(
             padding:
                 const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16.0),
-            child: Column(
-              children: const [
-                Text(
-                  'Have Questions?',
-                  style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(height: 15),
-                Text(
-                  'Mr Bull has got exceptional answers for you!',
-                  style: TextStyle(
-                    fontSize: 16,
+            child: Center(
+              child: Column(
+                children: const [
+                  Text(
+                    'Have Questions?',
+                    style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.center,
                   ),
-                  textAlign: TextAlign.center,
-                ),
-              ],
+                  SizedBox(height: 15),
+                  Text(
+                    'Mr Bull has got exceptional answers for you!',
+                    style: TextStyle(
+                      fontSize: 16,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
             ),
           ),
           const SizedBox(height: 20),
