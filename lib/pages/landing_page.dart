@@ -16,16 +16,16 @@ class LandingPage extends StatelessWidget {
     var screenwidth = MediaQuery.of(context).size.width;
 
     return screenwidth > 1000
-            ? SingleChildScrollView(
-        child:  Container(
-                decoration: BoxDecoration(
-                    border: Border.all(color: secondaryColor, width: 2),
-                    borderRadius: const BorderRadius.all(Radius.circular(10))),
-                child: body(context),
-                margin: EdgeInsets.fromLTRB(screenwidth * 0.25,
-                    screenwidth * 0.03, screenwidth * 0.25, screenwidth * 0.05),
-              ))
-            : FillMaxHeightScrollView(builder: (context ) => body(context));
+        ? SingleChildScrollView(
+            child: Container(
+            decoration: BoxDecoration(
+                border: Border.all(color: secondaryColor, width: 2),
+                borderRadius: const BorderRadius.all(Radius.circular(10))),
+            child: body(context),
+            margin: EdgeInsets.fromLTRB(screenwidth * 0.25, screenwidth * 0.03,
+                screenwidth * 0.25, screenwidth * 0.05),
+          ))
+        : FillMaxHeightScrollView(builder: (context) => body(context));
   }
 
   @override
