@@ -1,6 +1,8 @@
+import 'package:dalal_street_client/blocs/place_order/place_order_cubit.dart';
 import 'package:dalal_street_client/blocs/subscribe/subscribe_cubit.dart';
 import 'package:dalal_street_client/components/stock_bar.dart';
 import 'package:dalal_street_client/config/get_it.dart';
+import 'package:dalal_street_client/models/snackbar/snackbar_type.dart';
 import 'package:dalal_street_client/pages/company_page/components/company_prices_web.dart';
 import 'package:dalal_street_client/pages/company_page/components/company_tab_view_web.dart';
 import 'package:dalal_street_client/pages/company_page/components/news.dart';
@@ -12,6 +14,7 @@ import 'package:dalal_street_client/pages/company_page/components/choose_buy_or_
 import 'package:dalal_street_client/streams/global_streams.dart';
 import 'package:dalal_street_client/theme/colors.dart';
 import 'package:dalal_street_client/utils/responsive.dart';
+import 'package:dalal_street_client/utils/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -47,11 +50,22 @@ class _CompanyPageState extends State<CompanyPage>
     final int stockId = widget.stockId;
     final int cash = globalStreams.latestUserInfo.cash;
     Stock company = stockList[stockId]!;
-    return SafeArea(
-      child: Responsive(
-        mobile: MobileBody(company: company, stockId: stockId, cash: cash),
-        tablet: MobileBody(company: company, stockId: stockId, cash: cash),
-        desktop: WebBody(company: company, cash: cash, stockId: stockId),
+    return BlocProvider(
+      create: (context) => PlaceOrderCubit(),
+      child: BlocListener<PlaceOrderCubit, PlaceOrderState>(
+        listener: (context, state) {
+          if (state is PlaceOrderFailure) {
+            showSnackBar(context, state.statusMessage,
+                type: SnackBarType.error);
+          }
+        },
+        child: SafeArea(
+          child: Responsive(
+            mobile: MobileBody(company: company, stockId: stockId, cash: cash),
+            tablet: MobileBody(company: company, stockId: stockId, cash: cash),
+            desktop: WebBody(company: company, cash: cash, stockId: stockId),
+          ),
+        ),
       ),
     );
   }

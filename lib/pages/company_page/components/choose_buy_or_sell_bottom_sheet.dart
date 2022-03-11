@@ -12,6 +12,7 @@ final oCcy = NumberFormat('#,##0.00', 'en_US');
 
 void chooseBuyOrSellBottomSheet(BuildContext context, Stock company, int cash) {
   int priceChange = (company.currentPrice - company.previousDayClose).toInt();
+  var placeOrderCubit = BlocProvider.of<PlaceOrderCubit>(context);
   showModalBottomSheet(
       backgroundColor: background2,
       isScrollControlled: true,
@@ -105,7 +106,7 @@ void chooseBuyOrSellBottomSheet(BuildContext context, Stock company, int cash) {
                                 title: 'Sell',
                                 fontSize: 18,
                                 onPressed: () async {
-                                  Navigator.pop(context);
+                                  Navigator.pop(context, true);
                                   await showModalBottomSheet(
                                       shape: const RoundedRectangleBorder(
                                           borderRadius: BorderRadius.vertical(
@@ -114,8 +115,11 @@ void chooseBuyOrSellBottomSheet(BuildContext context, Stock company, int cash) {
                                       isScrollControlled: true,
                                       context: context,
                                       builder: (context) {
-                                        return PlaceOrder(
-                                            isAsk: true, stockId: company.id);
+                                        return BlocProvider.value(
+                                            value: placeOrderCubit,
+                                            child: PlaceOrder(
+                                                isAsk: true,
+                                                stockId: company.id));
                                       });
                                 },
                               ),
@@ -125,7 +129,7 @@ void chooseBuyOrSellBottomSheet(BuildContext context, Stock company, int cash) {
                                 title: 'Buy',
                                 fontSize: 18,
                                 onPressed: () async {
-                                  Navigator.pop(context);
+                                  Navigator.pop(context, true);
                                   await showModalBottomSheet(
                                       shape: const RoundedRectangleBorder(
                                           borderRadius: BorderRadius.vertical(
@@ -134,28 +138,12 @@ void chooseBuyOrSellBottomSheet(BuildContext context, Stock company, int cash) {
                                       isScrollControlled: true,
                                       context: context,
                                       builder: (context) {
-                                        return PlaceOrder(
-                                            isAsk: false, stockId: company.id);
+                                        return BlocProvider.value(
+                                            value: placeOrderCubit,
+                                            child: PlaceOrder(
+                                                isAsk: false,
+                                                stockId: company.id));
                                       });
-                                  // await showDialog(
-                                  //     context: context,
-                                  //     builder: (BuildContext context) {
-                                  //       return Dialog(
-                                  //         shape: const RoundedRectangleBorder(
-                                  //             borderRadius: BorderRadius.all(
-                                  //                 Radius.circular(10))),
-                                  //         backgroundColor: background2,
-                                  //         child: BlocProvider(
-                                  //           create: (context) =>
-                                  //               PlaceOrderCubit(),
-                                  //           child: SizedBox.expand(
-                                  //             child: PlaceOrder(
-                                  //                 isAsk: false,
-                                  //                 stockId: company.id),
-                                  //           ),
-                                  //         ),
-                                  //       );
-                                  //     });
                                 },
                               ),
                             ]),

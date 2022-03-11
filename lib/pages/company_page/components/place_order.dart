@@ -325,7 +325,7 @@ class _PlaceOrderState extends State<PlaceOrder> {
                             Int64(_price),
                             Int64(_quantity));
 
-                        Navigator.pop(context);
+                        Navigator.pop(context, true);
                       },
                       child: const Text('Place Order'),
                     ),
