@@ -176,7 +176,20 @@ class _DalalHomeState extends State<DalalHome> {
         ),
       );
 
-  void _onLogoutClick() {
-    logger.e('logout');
-  }
+  void _onLogoutClick() => showDialog(
+        context: context,
+        builder: (_) => AlertDialog(
+          title: const Text('Log out of Dalal Street?'),
+          actions: [
+            ElevatedButton(
+              onPressed: () {},
+              child: const Text('Cancel'),
+            ),
+            ElevatedButton(
+              onPressed: () {},
+              child: const Text('Log out'),
+            ),
+          ],
+        ),
+      );
 }
