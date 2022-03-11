@@ -1,6 +1,6 @@
 FROM ubuntu:20.04 AS build-env
 
-RUN     apt-get update &&\  
+RUN apt-get update &&\  
     apt-get install -y curl unzip git &&\ 
     apt install -y protobuf-compiler &&\
     apt-get clean
@@ -15,7 +15,7 @@ WORKDIR /app
 
 COPY pubspec.* ./
 
-RUN  protoc --version \ 
+RUN protoc --version \ 
     flutter channel stable &&\
     flutter config --no-enable-android \
     --no-enable-linux-desktop \
@@ -31,3 +31,6 @@ RUN  protoc --version \
 
 COPY . .
 
+ENV PATH="$HOME/.pub-cache/bin:${PATH}"
+
+RUN flutter build web --release 

@@ -1,3 +1,5 @@
 .git
 .gitmodules
 Dockerfile
+build
+.dart_tool
