@@ -13,11 +13,12 @@ void showSnackBar(BuildContext context, String msg,
   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       backgroundColor: baseColor,
       behavior: SnackBarBehavior.floating,
-      margin: const EdgeInsets.all(10),
+      margin: isWeb
+          ? EdgeInsets.fromLTRB(screenWidth * 0.3, 10, screenWidth * 0.3, 10)
+          : const EdgeInsets.all(10),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       duration: const Duration(milliseconds: 1500),
-      content: Container(
-        width: isWeb ? screenWidth * 0.5 : null,
+      content: SizedBox(
         child: Wrap(
           children: [
             Row(

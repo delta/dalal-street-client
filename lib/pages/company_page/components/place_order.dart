@@ -26,7 +26,7 @@ class PlaceOrder extends StatefulWidget {
   PlaceOrder({Key? key, required this.isAsk, required this.stockId})
       : super(key: key);
 
-  List<OrderType> orderTypes = [
+  final List<OrderType> orderTypes = [
     OrderType.LIMIT,
     OrderType.MARKET,
     OrderType.STOPLOSS
