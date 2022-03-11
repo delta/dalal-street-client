@@ -37,7 +37,6 @@ class _LeaderboardTableState extends State<LeaderboardTable> {
                     BlocBuilder<LeaderboardCubit, LeaderboardState>(
                         builder: (context, state) {
                   if (state is OverallLeaderboardSuccess) {
-                  
                     if (state.rankList.isNotEmpty) {
                       return Center(
                           child: SizedBox(
