@@ -19,8 +19,8 @@ class ReferralPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(body: Center(
-        child:
-            BlocBuilder<ReferralCubit, ReferralState>(builder: (context, state) {
+        child: BlocBuilder<ReferralCubit, ReferralState>(
+            builder: (context, state) {
           if (state is ReferralSuccess) {
             return referralPageUi(!showbutton, state.referralCode, context);
           } else if (state is ReferralFailed) {
@@ -54,48 +54,48 @@ class ReferralPage extends StatelessWidget {
       bool showbutton, String? referralcode, BuildContext context) {
     return Center(
       child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: <Widget>[
-        Stack(children: <Widget>[
-          Positioned(
-            child: Image.asset('assets/images/Background.png'),
-          ),
-          Positioned(
-            child: Image.asset('assets/images/Referral.png'),
-            left: 60,
-            top: 50,
-          )
-        ]),
-        const Padding(
-            padding: EdgeInsets.fromLTRB(0, 40, 0, 40),
-            child: Text(
-              'Referral Code',
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Stack(children: <Widget>[
+              Positioned(
+                child: Image.asset('assets/images/Background.png'),
+              ),
+              Positioned(
+                child: Image.asset('assets/images/Referral.png'),
+                left: 60,
+                top: 50,
+              )
+            ]),
+            const Padding(
+                padding: EdgeInsets.fromLTRB(0, 40, 0, 40),
+                child: Text(
+                  'Referral Code',
+                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                )),
+            const Flexible(
+                child: Text(
+              'Refer your friends to earn a cash reward',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 18),
             )),
-        const Flexible(
-            child: Text(
-          'Refer your friends to earn a cash reward',
-          textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 18),
-        )),
-        const SizedBox(height: 50),
-        buttonWidget(showbutton, referralcode, context),
-        const Padding(
-            padding: EdgeInsets.fromLTRB(0, 40, 0, 10),
-            child: Text('How it works ?',
-                style:
-                    TextStyle(fontSize: 18, fontWeight: FontWeight.bold))),
-        const Flexible(
-            child: Text(
-          'Refer your friends to Dalal Street, and if they sign up, both of you will get a cash reward.',
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: 15,
-            fontWeight: FontWeight.normal,
-          ),
-        ))
-      ]),
+            const SizedBox(height: 50),
+            buttonWidget(showbutton, referralcode, context),
+            const Padding(
+                padding: EdgeInsets.fromLTRB(0, 40, 0, 10),
+                child: Text('How it works ?',
+                    style:
+                        TextStyle(fontSize: 18, fontWeight: FontWeight.bold))),
+            const Flexible(
+                child: Text(
+              'Refer your friends to Dalal Street, and if they sign up, both of you will get a cash reward.',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.normal,
+              ),
+            ))
+          ]),
     );
   }
 
@@ -149,8 +149,7 @@ class ReferralPage extends StatelessWidget {
               context.read<ReferralCubit>().getReferralcode(user.email);
             },
             child: const Text('Generate Referral Code',
-                style:
-                    TextStyle(fontSize: 18, fontWeight: FontWeight.bold))),
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold))),
       );
     }
   }
