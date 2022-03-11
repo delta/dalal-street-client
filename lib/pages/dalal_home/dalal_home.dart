@@ -3,6 +3,7 @@ import 'package:dalal_street_client/blocs/exchange/exchange_cubit.dart';
 import 'package:dalal_street_client/blocs/market_event/events/market_event_cubit.dart';
 import 'package:dalal_street_client/blocs/notification/notifications_cubit.dart';
 import 'package:dalal_street_client/blocs/portfolio/userWorth/portfolio_cubit.dart';
+import 'package:dalal_street_client/components/dialogs/logout_dialog.dart';
 import 'package:dalal_street_client/components/stock_bar.dart';
 import 'package:dalal_street_client/config/log.dart';
 import 'package:dalal_street_client/constants/icons.dart';
@@ -16,7 +17,6 @@ import 'package:dalal_street_client/pages/leaderboard_page/leaderboard_page.dart
 import 'package:dalal_street_client/pages/portfolio/portfolio_page.dart';
 import 'package:dalal_street_client/pages/stock_exchange/exchange_page.dart';
 import 'package:dalal_street_client/proto_build/models/User.pb.dart';
-import 'package:dalal_street_client/theme/buttons.dart';
 import 'package:dalal_street_client/theme/colors.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -180,26 +180,9 @@ class _DalalHomeState extends State<DalalHome> {
 
   void _onLogoutClick() => showDialog(
         context: context,
-        builder: (_) => AlertDialog(
-          title: const Text('Are you sure you want to logout?'),
-          titleTextStyle:
-              Theme.of(context).textTheme.headline6!.copyWith(color: white),
-          backgroundColor: background2,
-          contentPadding: const EdgeInsets.all(16),
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-          actions: [
-            ElevatedButton(
-              onPressed: () =>
-                  context.read<DalalBloc>().add(const DalalLogOut()),
-              child: const Text('Yes'),
-              style: secondaryButtonStyle,
-            ),
-            ElevatedButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('No'),
-            ),
-          ],
+        builder: (_) => LogoutDialog(
+          onLogoutClick: () =>
+              context.read<DalalBloc>().add(const DalalLogOut()),
         ),
       );
 }
