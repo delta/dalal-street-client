@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:dalal_street_client/utils/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:dalal_street_client/theme/colors.dart';
-import 'package:flutter/services.dart' as rootBundle;
+import 'package:flutter/services.dart' as rootbundle;
 
 class FAQPage extends StatefulWidget {
   const FAQPage({Key? key}) : super(key: key);
@@ -103,7 +103,7 @@ class _FAQPageState extends State<FAQPage> {
               )),
           const SizedBox(height: 20),
           FutureBuilder(
-            future: ReadJsonData(),
+            future: readJsonData(),
             builder: (context, data) {
               if (data.hasError) {
                 return const Center(child: Text('Some error occured'));
@@ -246,8 +246,8 @@ class FAQDataModel {
   }
 }
 
-Future<List<FAQDataModel>> ReadJsonData() async {
-  final jsondata = await rootBundle.rootBundle.loadString('faqs.json');
+Future<List<FAQDataModel>> readJsonData() async {
+  final jsondata = await rootbundle.rootBundle.loadString('faqs.json');
 
   final list = json.decode(jsondata) as List<dynamic>;
 
