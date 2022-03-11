@@ -20,7 +20,7 @@ class _HelpPageState extends State<HelpPage> {
         body: SingleChildScrollView(
           child: Responsive(
             mobile: _mobileBody(),
-            tablet: _tabletBody(),
+            tablet: _desktopBody(),
             desktop: _desktopBody(),
           ),
         ),
@@ -28,28 +28,17 @@ class _HelpPageState extends State<HelpPage> {
     );
   }
 
-  Center _tabletBody() {
-    return const Center(
-      child: Text(
-        'Tablet UI will design soon :)',
-        style: TextStyle(
-          fontSize: 14,
-          color: secondaryColor,
-        ),
-      ),
-    );
-  }
-
   Center _desktopBody() {
-    return const Center(
-      child: Text(
-        'Desktop UI will design soon :)',
-        style: TextStyle(
-          fontSize: 14,
-          color: secondaryColor,
-        ),
-      ),
-    );
+    var screenwidth = MediaQuery.of(context).size.width;
+    return Center(
+        child: Container(
+      decoration: BoxDecoration(
+          border: Border.all(color: secondaryColor, width: 2),
+          borderRadius: const BorderRadius.all(Radius.circular(10))),
+      child: _mobileBody(),
+      margin: EdgeInsets.fromLTRB(screenwidth * 0.35, screenwidth * 0.03,
+          screenwidth * 0.35, screenwidth * 0.1),
+    ));
   }
 
   Widget _mobileBody() {
@@ -63,36 +52,28 @@ class _HelpPageState extends State<HelpPage> {
             const SizedBox(
               height: 10,
             ),
-            Container(
-                alignment: Alignment.center,
-                decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                    color: background2),
-                child: Padding(
-                  padding:
-                      const EdgeInsets.only(left: 16.0, right: 16.0, top: 16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                      Text(
-                        'Do you need help?',
-                        style: TextStyle(
-                            fontSize: 25, fontWeight: FontWeight.bold),
-                        textAlign: TextAlign.center,
-                      ),
-                      SizedBox(height: 15),
-                      Text(
-                        'Our Mr Bull is standing here for your service and support',
-                        style: TextStyle(
-                          fontSize: 20,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                      Image(image: AssetImage('assets/images/helpPage.png'))
-                    ],
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Text(
+                    'Do you need help?',
+                    style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.center,
                   ),
-                )),
+                  SizedBox(height: 15),
+                  Text(
+                    'Our Mr Bull is standing here for your service and support',
+                    style: TextStyle(
+                      fontSize: 20,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+            ),
             const SizedBox(height: 20),
             Container(
                 alignment: Alignment.centerLeft,

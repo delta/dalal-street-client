@@ -21,7 +21,7 @@ class _FAQPageState extends State<FAQPage> {
         body: SingleChildScrollView(
           child: Responsive(
             mobile: _mobileBody(),
-            tablet: _tabletBody(),
+            tablet: _desktopBody(),
             desktop: _desktopBody(),
           ),
         ),
@@ -29,35 +29,24 @@ class _FAQPageState extends State<FAQPage> {
     );
   }
 
-  Center _tabletBody() {
-    return const Center(
-      child: Text(
-        'Tablet UI will design soon :)',
-        style: TextStyle(
-          fontSize: 16,
-          color: secondaryColor,
-        ),
-      ),
-    );
-  }
-
   Center _desktopBody() {
-    return const Center(
-      child: Text(
-        'Desktop UI will design soon :)',
-        style: TextStyle(
-          fontSize: 16,
-          color: secondaryColor,
-        ),
-      ),
-    );
+    var screenwidth = MediaQuery.of(context).size.width;
+    return Center(
+        child: Container(
+      decoration: BoxDecoration(
+          border: Border.all(color: secondaryColor, width: 2),
+          borderRadius: const BorderRadius.all(Radius.circular(10))),
+      child: _mobileBody(),
+      margin: EdgeInsets.fromLTRB(screenwidth * 0.35, screenwidth * 0.03,
+          screenwidth * 0.35, screenwidth * 0.1),
+    ));
   }
 
   Widget _mobileBody() {
     String? question = '';
     String? answer = '';
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+      padding: const EdgeInsets.all(10.0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -65,42 +54,27 @@ class _FAQPageState extends State<FAQPage> {
           const SizedBox(
             height: 10,
           ),
-          Container(
-              alignment: Alignment.center,
-              decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                  color: background2),
-              child: Padding(
-                padding:
-                    const EdgeInsets.only(left: 8.0, right: 8.0, top: 16.0),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Image(image: AssetImage('assets/images/faqPage.png')),
-                    Flexible(
-                      child: Column(
-                        children: const [
-                          Text(
-                            'Have Questions?',
-                            style: TextStyle(
-                                fontSize: 25, fontWeight: FontWeight.bold),
-                            textAlign: TextAlign.center,
-                          ),
-                          SizedBox(height: 15),
-                          Text(
-                            'Mr Bull has got exceptional answers for you!',
-                            style: TextStyle(
-                              fontSize: 16,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ],
-                      ),
-                    )
-                  ],
+          Padding(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16.0),
+            child: Column(
+              children: const [
+                Text(
+                  'Have Questions?',
+                  style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.center,
                 ),
-              )),
+                SizedBox(height: 15),
+                Text(
+                  'Mr Bull has got exceptional answers for you!',
+                  style: TextStyle(
+                    fontSize: 16,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+          ),
           const SizedBox(height: 20),
           FutureBuilder(
             future: readJsonData(),
