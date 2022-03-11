@@ -37,7 +37,7 @@ class _LeaderboardTableState extends State<LeaderboardTable> {
                     BlocBuilder<LeaderboardCubit, LeaderboardState>(
                         builder: (context, state) {
                   if (state is OverallLeaderboardSuccess) {
-                    if (state.rankList.isNotEmpty) {
+                    if (state.rankList.isEmpty) {
                       return Center(
                           child: SizedBox(
                         height: MediaQuery.of(context).size.height,
@@ -51,7 +51,7 @@ class _LeaderboardTableState extends State<LeaderboardTable> {
                     return _leaderboardTable(state.rankList, state.totalUsers,
                         noOfEntries, startingIndex);
                   } else if (state is DailyLeaderboardSuccess) {
-                    if (state.rankList.isNotEmpty) {
+                    if (state.rankList.isEmpty) {
                       return Center(
                           child: SizedBox(
                         height: MediaQuery.of(context).size.height,

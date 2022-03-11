@@ -13,7 +13,7 @@ Widget topContainer(leaderboardType, BuildContext context) {
       builder: (context, state) {
     if (state is OverallLeaderboardSuccess) {
       var rankListSize = state.rankList.length;
-      return rankListSize <= 3
+      return rankListSize < 3
           ? Container()
           : Container(
               padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
@@ -289,7 +289,7 @@ Widget topContainer(leaderboardType, BuildContext context) {
               ));
     } else if (state is DailyLeaderboardSuccess) {
       var rankListSize = state.rankList.length;
-      return rankListSize <= 3
+      return rankListSize < 3
           ? Container()
           : Container(
               padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
