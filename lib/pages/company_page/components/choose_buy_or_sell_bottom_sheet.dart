@@ -1,9 +1,11 @@
+import 'package:dalal_street_client/blocs/place_order/place_order_cubit.dart';
 import 'package:dalal_street_client/components/buttons/secondary_button.dart';
 import 'package:dalal_street_client/components/buttons/tertiary_button.dart';
+import 'package:dalal_street_client/pages/company_page/components/place_order.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
-import 'package:dalal_street_client/pages/company_page/components/trading_bottom_sheet.dart';
 import 'package:dalal_street_client/theme/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
 final oCcy = NumberFormat('#,##0.00', 'en_US');
@@ -14,7 +16,7 @@ void chooseBuyOrSellBottomSheet(BuildContext context, Stock company, int cash) {
       backgroundColor: background2,
       isScrollControlled: true,
       context: context,
-      builder: (ctx) {
+      builder: (context) {
         return Wrap(
           children: [
             SizedBox(
@@ -102,10 +104,19 @@ void chooseBuyOrSellBottomSheet(BuildContext context, Stock company, int cash) {
                                 width: 150,
                                 title: 'Sell',
                                 fontSize: 18,
-                                onPressed: () {
+                                onPressed: () async {
                                   Navigator.pop(context);
-                                  tradingBottomSheet(
-                                      context, company, 'Sell', cash);
+                                  await showModalBottomSheet(
+                                      shape: const RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.vertical(
+                                              top: Radius.circular(25.0))),
+                                      backgroundColor: background2,
+                                      isScrollControlled: true,
+                                      context: context,
+                                      builder: (context) {
+                                        return PlaceOrder(
+                                            isAsk: true, stockId: company.id);
+                                      });
                                 },
                               ),
                               TertiaryButton(
@@ -113,10 +124,38 @@ void chooseBuyOrSellBottomSheet(BuildContext context, Stock company, int cash) {
                                 width: 150,
                                 title: 'Buy',
                                 fontSize: 18,
-                                onPressed: () {
+                                onPressed: () async {
                                   Navigator.pop(context);
-                                  tradingBottomSheet(
-                                      context, company, 'Buy', cash);
+                                  await showModalBottomSheet(
+                                      shape: const RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.vertical(
+                                              top: Radius.circular(25.0))),
+                                      backgroundColor: background2,
+                                      isScrollControlled: true,
+                                      context: context,
+                                      builder: (context) {
+                                        return PlaceOrder(
+                                            isAsk: false, stockId: company.id);
+                                      });
+                                  // await showDialog(
+                                  //     context: context,
+                                  //     builder: (BuildContext context) {
+                                  //       return Dialog(
+                                  //         shape: const RoundedRectangleBorder(
+                                  //             borderRadius: BorderRadius.all(
+                                  //                 Radius.circular(10))),
+                                  //         backgroundColor: background2,
+                                  //         child: BlocProvider(
+                                  //           create: (context) =>
+                                  //               PlaceOrderCubit(),
+                                  //           child: SizedBox.expand(
+                                  //             child: PlaceOrder(
+                                  //                 isAsk: false,
+                                  //                 stockId: company.id),
+                                  //           ),
+                                  //         ),
+                                  //       );
+                                  //     });
                                 },
                               ),
                             ]),

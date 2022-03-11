@@ -48,7 +48,7 @@ class StockBarMarquee extends StatelessWidget {
 
     // in larger screen, doubling the list to have proper marquee effect
     var screenWidth = MediaQuery.of(context).size.width;
-    if (screenWidth > 1000) {
+    if (screenWidth > 800) {
       stockBarItemList.addAll(stockBarItemList);
     }
 
