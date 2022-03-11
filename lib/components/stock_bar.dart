@@ -48,9 +48,7 @@ class StockBarMarquee extends StatelessWidget {
 
     // in larger screen, doubling the list to have proper marquee effect
     var screenWidth = MediaQuery.of(context).size.width;
-    if (screenWidth > 800) {
-      stockBarItemList.addAll(stockBarItemList);
-    }
+    var isWeb = screenWidth > 800;
 
     return Marquee(
       child: Container(
@@ -60,6 +58,8 @@ class StockBarMarquee extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             ...stockBarItemList,
+            if (isWeb)
+              ...stockBarItemList // appending the list again for marquee effect in web
           ],
         ),
       ),
@@ -108,22 +108,18 @@ class StockBarItem extends StatelessWidget {
           builder: (context, state) {
             Int64 stockPrice = state.data!;
 
-            bool isLowOrHigh = stockPrice >= previousDayClosePrice;
+            bool isLowOrHigh = stockPrice > previousDayClosePrice;
 
             double percentageHighOrLow;
 
-            if (isBankrupt) {
-              percentageHighOrLow = 0;
+            if (previousDayClosePrice == 0) {
+              percentageHighOrLow = stockPrice.toDouble();
             } else {
-              if (previousDayClosePrice == 0) {
-                percentageHighOrLow = stockPrice.toDouble();
-              } else {
-                percentageHighOrLow = ((stockPrice.toDouble() -
-                        previousDayClosePrice.toDouble()) /
-                    previousDayClosePrice.toDouble());
+              percentageHighOrLow =
+                  ((stockPrice.toDouble() - previousDayClosePrice.toDouble()) /
+                      previousDayClosePrice.toDouble());
 
-                percentageHighOrLow *= 100;
-              }
+              percentageHighOrLow *= 100;
             }
 
             return Row(

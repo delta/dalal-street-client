@@ -13,7 +13,10 @@ final oCcy = NumberFormat('#,##0.00', 'en_US');
 void chooseBuyOrSellBottomSheet(BuildContext context, Stock company, int cash) {
   int priceChange = (company.currentPrice - company.previousDayClose).toInt();
   var placeOrderCubit = BlocProvider.of<PlaceOrderCubit>(context);
+  var screenWidth = MediaQuery.of(context).size.width;
+  var isWeb = screenWidth > 900;
   showModalBottomSheet(
+      constraints: BoxConstraints(maxWidth: isWeb ? 600 : double.infinity),
       backgroundColor: background2,
       isScrollControlled: true,
       context: context,
@@ -108,6 +111,9 @@ void chooseBuyOrSellBottomSheet(BuildContext context, Stock company, int cash) {
                                 onPressed: () async {
                                   Navigator.pop(context, true);
                                   await showModalBottomSheet(
+                                      constraints: BoxConstraints(
+                                          maxWidth:
+                                              isWeb ? 600 : double.infinity),
                                       shape: const RoundedRectangleBorder(
                                           borderRadius: BorderRadius.vertical(
                                               top: Radius.circular(25.0))),
@@ -131,6 +137,9 @@ void chooseBuyOrSellBottomSheet(BuildContext context, Stock company, int cash) {
                                 onPressed: () async {
                                   Navigator.pop(context, true);
                                   await showModalBottomSheet(
+                                      constraints: BoxConstraints(
+                                          maxWidth:
+                                              isWeb ? 600 : double.infinity),
                                       shape: const RoundedRectangleBorder(
                                           borderRadius: BorderRadius.vertical(
                                               top: Radius.circular(25.0))),
