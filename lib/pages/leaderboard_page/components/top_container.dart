@@ -12,7 +12,8 @@ Widget topContainer(leaderboardType, BuildContext context) {
   return BlocBuilder<LeaderboardCubit, LeaderboardState>(
       builder: (context, state) {
     if (state is OverallLeaderboardSuccess) {
-      return Container(
+      var rankListSize = state.rankList.length;
+      return rankListSize <= 3 ? Container() : Container(
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
           decoration: const BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(10)),
