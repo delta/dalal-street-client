@@ -1,3 +1,4 @@
+import 'package:dalal_street_client/components/fill_max_height_scroll_view.dart';
 import 'package:dalal_street_client/constants/app_info.dart';
 import 'package:dalal_street_client/constants/urls.dart';
 import 'package:dalal_street_client/theme/buttons.dart';
@@ -14,17 +15,17 @@ class LandingPage extends StatelessWidget {
   Widget buildBody(BuildContext context) {
     var screenwidth = MediaQuery.of(context).size.width;
 
-    return SingleChildScrollView(
-        child: screenwidth > 1000
-            ? Container(
-                decoration: BoxDecoration(
-                    border: Border.all(color: secondaryColor, width: 2),
-                    borderRadius: const BorderRadius.all(Radius.circular(10))),
-                child: body(context),
-                margin: EdgeInsets.fromLTRB(screenwidth * 0.25,
-                    screenwidth * 0.03, screenwidth * 0.25, screenwidth * 0.05),
-              )
-            : body(context));
+    return screenwidth > 1000
+        ? SingleChildScrollView(
+            child: Container(
+            decoration: BoxDecoration(
+                border: Border.all(color: secondaryColor, width: 2),
+                borderRadius: const BorderRadius.all(Radius.circular(10))),
+            child: body(context),
+            margin: EdgeInsets.fromLTRB(screenwidth * 0.25, screenwidth * 0.03,
+                screenwidth * 0.25, screenwidth * 0.05),
+          ))
+        : FillMaxHeightScrollView(builder: (context) => body(context));
   }
 
   @override
