@@ -111,16 +111,8 @@ class _HomePageState extends State<HomePage>
     );
   }
 
-  Center _tabletBody() {
-    return const Center(
-      child: Text(
-        'Tablet UI will design soon :)',
-        style: TextStyle(
-          fontSize: 14,
-          color: secondaryColor,
-        ),
-      ),
-    );
+  Widget _tabletBody() {
+    return _mobileBody();
   }
 
   Padding _mobileBody() {
@@ -717,7 +709,8 @@ class StockItem extends StatelessWidget {
           } else {
             percentageHighOrLow =
                 ((stockPrice.toDouble() - stock.previousDayClose.toDouble()) /
-                    stock.previousDayClose.toDouble());
+                        stock.previousDayClose.toDouble()) *
+                    100;
           }
           return Column(
             crossAxisAlignment: CrossAxisAlignment.end,

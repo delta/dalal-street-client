@@ -85,8 +85,9 @@ Container companyPricesForWeb(Stock company, BuildContext context, int cash) {
                             percentageHighOrLow = stockPrice.toDouble();
                           } else {
                             percentageHighOrLow = ((stockPrice.toDouble() -
-                                    previousDayClose.toDouble()) /
-                                previousDayClose.toDouble());
+                                        previousDayClose.toDouble()) /
+                                    previousDayClose.toDouble()) *
+                                100;
                           }
                           return Row(
                             crossAxisAlignment: CrossAxisAlignment.baseline,

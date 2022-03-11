@@ -89,8 +89,9 @@ Container companyPrices(Stock company) {
                             percentageHighOrLow = stockPrice.toDouble();
                           } else {
                             percentageHighOrLow = ((stockPrice.toDouble() -
-                                    previousDayClose.toDouble()) /
-                                previousDayClose.toDouble());
+                                        previousDayClose.toDouble()) /
+                                    previousDayClose.toDouble()) *
+                                100;
                           }
                           return Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
