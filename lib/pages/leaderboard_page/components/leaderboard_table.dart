@@ -38,9 +38,12 @@ class _LeaderboardTableState extends State<LeaderboardTable> {
                         builder: (context, state) {
                   if (state is OverallLeaderboardSuccess) {
                     if (state.rankList.isEmpty) {
-                      return const Center(
-                          child: Text(
-                              'Leaderboard will be created after registration of atleast 5 players'));
+                      return Center(
+                          child: SizedBox(
+                        height: MediaQuery.of(context).size.height,
+                        child: const Text(
+                            'Leaderboard will be created after registration of atleast 5 players'),
+                      ));
                     }
                     startingIndex = state.rankList[0].id;
                     noOfEntries = 8;
@@ -48,9 +51,12 @@ class _LeaderboardTableState extends State<LeaderboardTable> {
                         noOfEntries, startingIndex);
                   } else if (state is DailyLeaderboardSuccess) {
                     if (state.rankList.isEmpty) {
-                      return const Center(
-                          child: Text(
-                              'Leaderboard will be created after registration of atleast 5 players'));
+                      return Center(
+                          child: SizedBox(
+                        height: MediaQuery.of(context).size.height,
+                        child: const Text(
+                            'Leaderboard will be created after registration of atleast 5 players'),
+                      ));
                     }
                     startingIndex = state.rankList[0].id;
                     noOfEntries = 8;
