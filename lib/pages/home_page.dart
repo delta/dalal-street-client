@@ -719,7 +719,8 @@ class StockItem extends StatelessWidget {
           } else {
             percentageHighOrLow =
                 ((stockPrice.toDouble() - stock.previousDayClose.toDouble()) /
-                    stock.previousDayClose.toDouble());
+                        stock.previousDayClose.toDouble()) *
+                    100;
           }
           return Column(
             crossAxisAlignment: CrossAxisAlignment.end,

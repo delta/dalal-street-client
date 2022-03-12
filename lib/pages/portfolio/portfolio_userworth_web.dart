@@ -205,17 +205,17 @@ class _PortfolioUserWorthWebState extends State<PortfolioUserWorthWeb> {
               itemCount: stocksHeld.length,
               itemBuilder: (context, index) {
                 return _eachStock(
-                    stocksOwnedMap[keyList[index]],
-                    stocksReservedMap[keyList[index]],
-                    cashSpentMap[keyList[index]],
+                    stocksOwnedMap[keyList[index]] ?? Int64(0),
+                    stocksReservedMap[keyList[index]] ?? Int64(0),
+                    cashSpentMap[keyList[index]] ?? Int64(0),
                     mapOfStocks[keyList[index]]?.fullName ?? '',
-                    mapOfStocks[keyList[index]]?.currentPrice);
+                    mapOfStocks[keyList[index]]?.currentPrice ?? Int64(0));
               }),
         ),
       );
 
-  Widget _eachStock(Int64? owned, Int64? reserved, Int64? cashSpent,
-      String name, Int64? price) {
+  Widget _eachStock(
+      Int64 owned, Int64 reserved, Int64 cashSpent, String name, Int64 price) {
     return Wrap(children: [
       Column(mainAxisAlignment: MainAxisAlignment.start, children: [
         Row(
@@ -245,7 +245,7 @@ class _PortfolioUserWorthWebState extends State<PortfolioUserWorthWeb> {
                 Text(
                   owned.toString(),
                   style: TextStyle(
-                      color: (owned!.toInt()) >= 0 ? secondaryColor : heartRed,
+                      color: (owned.toInt()) >= 0 ? secondaryColor : heartRed,
                       fontSize: 18),
                 )
               ],
@@ -264,7 +264,7 @@ class _PortfolioUserWorthWebState extends State<PortfolioUserWorthWeb> {
                   reserved.toString(),
                   style: TextStyle(
                       color:
-                          (reserved!.toInt()) >= 0 ? secondaryColor : heartRed,
+                          (reserved.toInt()) >= 0 ? secondaryColor : heartRed,
                       fontSize: 18),
                 )
               ],
@@ -298,9 +298,8 @@ class _PortfolioUserWorthWebState extends State<PortfolioUserWorthWeb> {
                 Text(
                   cashSpent.toString(),
                   style: TextStyle(
-                      color: (cashSpent!.toInt() >= 0
-                          ? secondaryColor
-                          : heartRed)),
+                      color:
+                          (cashSpent.toInt() >= 0 ? secondaryColor : heartRed)),
                 )
               ],
             ),

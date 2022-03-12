@@ -50,7 +50,7 @@ class LandingPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Image.asset(
-              'assets/images/army_bull.png',
+              'assets/images/bull_image.png',
               height: 300,
             ),
             Column(

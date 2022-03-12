@@ -2,7 +2,6 @@ import 'package:dalal_street_client/blocs/stock_history/history/stock_history_cu
 import 'package:dalal_street_client/blocs/stock_history/stream/stock_history_stream_cubit.dart';
 import 'package:dalal_street_client/components/graph/chart_type.dart';
 import 'package:dalal_street_client/components/loading.dart';
-import 'package:dalal_street_client/config/log.dart';
 import 'package:dalal_street_client/models/time_series_data.dart';
 import 'package:dalal_street_client/proto_build/actions/GetStockHistory.pbenum.dart';
 import 'package:dalal_street_client/proto_build/models/StockHistory.pb.dart';
@@ -62,13 +61,6 @@ class _CandleStickLayoutState extends State<CandleStickLayout> {
         .then((value) => context
             .read<StockHistoryStreamCubit>()
             .getStockHistoryUpdates(widget.stockId));
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    // unsubscring stock history stream
-    context.read<StockHistoryStreamCubit>().unsubscribe();
   }
 
   @override
@@ -133,7 +125,6 @@ class _CandleStickLayoutState extends State<CandleStickLayout> {
           if (state.stockHistory.interval ==
               resolutionToInt(currentResolution)) {
             data.add(_extractCandleData(state.stockHistory));
-            logger.d(state.stockHistory, 'candle-chart rl update');
           }
         }
 
@@ -173,7 +164,6 @@ class _CandleStickLayoutState extends State<CandleStickLayout> {
             // TODO dont sort data for stream updates
             stockHistoryMap[state.stockHistory.createdAt] = state.stockHistory;
             data = _getLineChartData(stockHistoryMap);
-            logger.d(state.stockHistory, 'line chart update');
           }
         }
 
