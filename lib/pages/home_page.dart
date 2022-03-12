@@ -267,13 +267,13 @@ class _HomePageState extends State<HomePage>
               },
             );
           } else {
-            return const SizedBox(
+            return SizedBox(
               height: 150,
               child: Center(
                 child: Text(
                   'No recent news',
                   style: TextStyle(
-                    fontSize: 14,
+                    fontSize: isWeb ? 24 : 14,
                     color: secondaryColor,
                   ),
                 ),
@@ -443,7 +443,7 @@ class _HomePageState extends State<HomePage>
 
   Widget _userworth() {
     return Container(
-      width: MediaQuery.of(context).size.width * 0.35,
+      width: MediaQuery.of(context).size.width * 0.30,
       //  height: MediaQuery.of(context).size.height * 0.25,
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
       decoration: BoxDecoration(
@@ -527,7 +527,7 @@ class _HomePageState extends State<HomePage>
   Widget _notifications() {
     List<notification.Notification> notifications = [];
     return Container(
-        width: MediaQuery.of(context).size.width * 0.35,
+        width: MediaQuery.of(context).size.width * 0.30,
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
           color: background2,
@@ -550,6 +550,20 @@ class _HomePageState extends State<HomePage>
                       builder: (context, state) {
                 if (state is GetNotificationSuccess) {
                   notifications.addAll(state.notifications);
+                  if (notifications.isEmpty) {
+                    return  SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.25,
+                      child: const Center(
+                        child: Text(
+                          'No recent notifications',
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: secondaryColor,
+                          ),softWrap: true,
+                        ),
+                      ),
+                    );
+                  }
                   return ListView.separated(
                     shrinkWrap: true,
                     physics: const ScrollPhysics(),
@@ -599,7 +613,7 @@ class _HomePageState extends State<HomePage>
         text,
         style: const TextStyle(color: white, fontSize: 16),
       ),
-      padding: const EdgeInsets.all(10),
+      padding: const EdgeInsets.fromLTRB(10,10,0,10),
     );
   }
 }
