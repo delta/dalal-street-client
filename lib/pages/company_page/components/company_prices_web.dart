@@ -1,3 +1,4 @@
+import 'package:dalal_street_client/config/config.dart';
 import 'package:dalal_street_client/config/get_it.dart';
 import 'package:dalal_street_client/constants/icons.dart';
 import 'package:dalal_street_client/pages/company_page/components/choose_buy_or_sell_bottom_sheet.dart';
@@ -33,7 +34,7 @@ Container companyPricesForWeb(Stock company, BuildContext context, int cash) {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Image.network(
-                      'https://i.imgur.com/v5E2Cv7.png',
+                      '$assetUrl${company.shortName}.png',
                       width: 50,
                       height: 50,
                     ),

@@ -42,7 +42,6 @@ void main() async {
   );
 }
 
-// TODO: add proper validationMessages in all ReactiveForms
 class DalalApp extends StatefulWidget {
   const DalalApp({Key? key}) : super(key: key);
 

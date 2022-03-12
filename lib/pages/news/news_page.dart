@@ -1,6 +1,7 @@
 import 'package:dalal_street_client/blocs/market_event/events/market_event_cubit.dart';
 import 'package:dalal_street_client/blocs/market_event/stream/market_events_stream_cubit.dart';
 import 'package:dalal_street_client/components/loading.dart';
+import 'package:dalal_street_client/config/config.dart';
 import 'package:dalal_street_client/pages/news/newsdetail_page.dart';
 import 'package:dalal_street_client/proto_build/models/MarketEvent.pb.dart';
 import 'package:dalal_street_client/theme/colors.dart';
@@ -277,7 +278,7 @@ class _NewsPageState extends State<NewsPage> {
                               width: MediaQuery.of(context).size.width * 0.35,
                               height: MediaQuery.of(context).size.height * 0.35,
                               fit: BoxFit.fill,
-                              image: NetworkImage(imagePath),
+                              image: NetworkImage(assetUrl + imagePath),
                             ),
                           ),
                         ),
@@ -354,7 +355,7 @@ class _NewsPageState extends State<NewsPage> {
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(20),
                             child: Image(
-                              image: NetworkImage(imagePath),
+                              image: NetworkImage(assetUrl + imagePath),
                               width: MediaQuery.of(context).size.width * 0.65,
                               height: MediaQuery.of(context).size.height * 0.25,
                               fit: BoxFit.fill,
@@ -389,7 +390,7 @@ class _NewsPageState extends State<NewsPage> {
               width: isWeb ? 200 : 125,
               height: isWeb ? 100 : 75,
               fit: BoxFit.fill,
-              image: NetworkImage(imagePath),
+              image: NetworkImage(assetUrl + imagePath),
             ),
           ),
           const SizedBox(

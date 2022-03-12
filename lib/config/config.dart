@@ -24,6 +24,7 @@ class GrpcWebConfig {
 
 late GrpcMobileConfig mobileConfig;
 late GrpcWebConfig webConfig;
+late String assetUrl;
 
 Future<void> readConfig() async {
   final jsonString = await rootBundle.loadString('config.json');
@@ -31,4 +32,5 @@ Future<void> readConfig() async {
 
   mobileConfig = GrpcMobileConfig.fromJson(jsonMap['mobile']);
   webConfig = GrpcWebConfig.fromJson(jsonMap['web']);
+  assetUrl = jsonMap['assetUrl'];
 }
