@@ -199,8 +199,8 @@ class _PortfolioUserWorthState extends State<PortfolioUserWorth> {
                 mapOfStocks[keyList[index]]?.currentPrice ?? Int64(0));
           });
 
-  Widget _eachStock(Int64 owned, Int64 reserved, Int64 cashSpent,
-      String name, Int64 price) {
+  Widget _eachStock(
+      Int64 owned, Int64 reserved, Int64 cashSpent, String name, Int64 price) {
     return Wrap(children: [
       Column(mainAxisAlignment: MainAxisAlignment.start, children: [
         Row(

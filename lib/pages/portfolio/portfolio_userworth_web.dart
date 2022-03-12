@@ -214,8 +214,8 @@ class _PortfolioUserWorthWebState extends State<PortfolioUserWorthWeb> {
         ),
       );
 
-  Widget _eachStock(Int64 owned, Int64 reserved, Int64 cashSpent,
-      String name, Int64 price) {
+  Widget _eachStock(
+      Int64 owned, Int64 reserved, Int64 cashSpent, String name, Int64 price) {
     return Wrap(children: [
       Column(mainAxisAlignment: MainAxisAlignment.start, children: [
         Row(
@@ -298,9 +298,8 @@ class _PortfolioUserWorthWebState extends State<PortfolioUserWorthWeb> {
                 Text(
                   cashSpent.toString(),
                   style: TextStyle(
-                      color: (cashSpent.toInt() >= 0
-                          ? secondaryColor
-                          : heartRed)),
+                      color:
+                          (cashSpent.toInt() >= 0 ? secondaryColor : heartRed)),
                 )
               ],
             ),
