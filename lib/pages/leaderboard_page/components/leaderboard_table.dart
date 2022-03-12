@@ -37,11 +37,29 @@ class _LeaderboardTableState extends State<LeaderboardTable> {
                     BlocBuilder<LeaderboardCubit, LeaderboardState>(
                         builder: (context, state) {
                   if (state is OverallLeaderboardSuccess) {
+                    if (state.rankList.isEmpty) {
+                      return Center(
+                          child: SizedBox(
+                        height: MediaQuery.of(context).size.height,
+                        width: MediaQuery.of(context).size.width * 0.8,
+                        child: const Text(
+                            'Leaderboard will be created after registration of atleast 5 players'),
+                      ));
+                    }
                     startingIndex = state.rankList[0].id;
                     noOfEntries = 8;
                     return _leaderboardTable(state.rankList, state.totalUsers,
                         noOfEntries, startingIndex);
                   } else if (state is DailyLeaderboardSuccess) {
+                    if (state.rankList.isEmpty) {
+                      return Center(
+                          child: SizedBox(
+                        height: MediaQuery.of(context).size.height,
+                        width: MediaQuery.of(context).size.width * 0.8,
+                        child: const Text(
+                            'Leaderboard will be created after registration of atleast 5 players'),
+                      ));
+                    }
                     startingIndex = state.rankList[0].id;
                     noOfEntries = 8;
                     return _leaderboardTable(state.rankList, state.totalUsers,

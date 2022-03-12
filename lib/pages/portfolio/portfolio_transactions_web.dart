@@ -31,6 +31,9 @@ class _UserTransactionsWebState extends State<UserTransactionsWeb> {
       BlocBuilder<PortfolioTransactionsCubit, PortfolioTransactionsState>(
           builder: (context, state) {
         if (state is PortfolioTransactionsLoaded) {
+          if (state.transactions.isEmpty) {
+            return Container(); // return empty widget if there are no container
+          }
           transactions.addAll(state.transactions);
           var lastId = state.transactions.last.id;
           bool moreExists = state.moreExists;

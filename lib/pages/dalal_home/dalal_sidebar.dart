@@ -39,7 +39,7 @@ class DalalSideBar extends StatelessWidget {
         ),
         sidebarBoxShadow: const [],
         screenPadding: 0,
-        borderRadius: 8,
+        borderRadius: 0,
         itemSelectorDecoration: BoxDecoration(
           color: primaryColor,
           borderRadius: BorderRadius.circular(100),

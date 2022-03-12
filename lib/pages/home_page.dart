@@ -1,9 +1,9 @@
-import 'package:dalal_street_client/blocs/dalal/dalal_bloc.dart';
 import 'package:dalal_street_client/blocs/market_event/events/market_event_cubit.dart';
 import 'package:dalal_street_client/blocs/notification/notifications_cubit.dart';
 import 'package:dalal_street_client/components/graph/line_area.dart';
 import 'package:dalal_street_client/components/buttons/tertiary_button.dart';
 import 'package:dalal_street_client/components/loading.dart';
+import 'package:dalal_street_client/config/config.dart';
 import 'package:dalal_street_client/models/dynamic_user_info.dart';
 import 'package:dalal_street_client/proto_build/models/Notification.pb.dart'
     as notification;
@@ -120,11 +120,6 @@ class _HomePageState extends State<HomePage>
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
       child: Column(
         children: [
-          ElevatedButton(
-              onPressed: () {
-                context.read<DalalBloc>().add(const DalalLogOut());
-              },
-              child: const Text('Logout')),
           const SizedBox(
             height: 5,
           ),
@@ -259,13 +254,13 @@ class _HomePageState extends State<HomePage>
               },
             );
           } else {
-            return const SizedBox(
+            return SizedBox(
               height: 150,
               child: Center(
                 child: Text(
                   'No recent news',
                   style: TextStyle(
-                    fontSize: 14,
+                    fontSize: isWeb ? 24 : 14,
                     color: secondaryColor,
                   ),
                 ),
@@ -399,7 +394,7 @@ class _HomePageState extends State<HomePage>
               width: isWeb ? 200 : 125,
               height: 100,
               fit: BoxFit.contain,
-              image: NetworkImage(imagePath),
+              image: NetworkImage(assetUrl + imagePath),
             ),
           ),
           Expanded(
@@ -435,7 +430,7 @@ class _HomePageState extends State<HomePage>
 
   Widget _userworth() {
     return Container(
-      width: MediaQuery.of(context).size.width * 0.35,
+      width: MediaQuery.of(context).size.width * 0.30,
       //  height: MediaQuery.of(context).size.height * 0.25,
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
       decoration: BoxDecoration(
@@ -519,7 +514,7 @@ class _HomePageState extends State<HomePage>
   Widget _notifications() {
     List<notification.Notification> notifications = [];
     return Container(
-        width: MediaQuery.of(context).size.width * 0.35,
+        width: MediaQuery.of(context).size.width * 0.30,
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
           color: background2,
@@ -542,6 +537,21 @@ class _HomePageState extends State<HomePage>
                       builder: (context, state) {
                 if (state is GetNotificationSuccess) {
                   notifications.addAll(state.notifications);
+                  if (notifications.isEmpty) {
+                    return SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.25,
+                      child: const Center(
+                        child: Text(
+                          'No recent notifications',
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: secondaryColor,
+                          ),
+                          softWrap: true,
+                        ),
+                      ),
+                    );
+                  }
                   return ListView.separated(
                     shrinkWrap: true,
                     physics: const ScrollPhysics(),
@@ -591,7 +601,7 @@ class _HomePageState extends State<HomePage>
         text,
         style: const TextStyle(color: white, fontSize: 16),
       ),
-      padding: const EdgeInsets.all(10),
+      padding: const EdgeInsets.fromLTRB(10, 10, 0, 10),
     );
   }
 }

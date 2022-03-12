@@ -1,6 +1,7 @@
 import 'package:dalal_street_client/blocs/market_event/events/market_event_cubit.dart';
 import 'package:dalal_street_client/components/buttons/tertiary_button.dart';
 import 'package:dalal_street_client/components/loading.dart';
+import 'package:dalal_street_client/config/config.dart';
 import 'package:dalal_street_client/pages/news/newsdetail_page.dart';
 import 'package:dalal_street_client/proto_build/models/MarketEvent.pb.dart';
 import 'package:dalal_street_client/theme/colors.dart';
@@ -43,7 +44,7 @@ class _CompanyNewsPageState extends State<CompanyNewsPage> {
               width: isWeb ? 200 : 125,
               height: 100,
               fit: BoxFit.contain,
-              image: NetworkImage(imagePath),
+              image: NetworkImage(assetUrl + imagePath),
             ),
           ),
           Expanded(

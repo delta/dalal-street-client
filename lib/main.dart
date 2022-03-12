@@ -42,7 +42,6 @@ void main() async {
   );
 }
 
-// TODO: add proper validationMessages in all ReactiveForms
 class DalalApp extends StatefulWidget {
   const DalalApp({Key? key}) : super(key: key);
 
@@ -61,7 +60,7 @@ class _DalalAppState extends State<DalalApp> {
 
   @override
   build(context) => MaterialApp.router(
-        title: 'Dalal Street 2022',
+        title: 'Dalal Street 22',
         debugShowCheckedModeBanner: false,
         theme: appTheme,
         themeMode: ThemeMode.dark,
