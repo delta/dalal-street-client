@@ -125,7 +125,7 @@ Future<void> _listenTransactionStream(BuildContext context) async {
 
       case TransactionType.MORTGAGE_TRANSACTION:
         showSnackBar(context,
-            'You have ${total < 0 ? 'retrived' : 'mortgaged'} ${stockQty.abs()} $stockOrStocks of ${stock.fullName} at ₹${total.toDouble() / stockQty.toDouble()}',
+            'You have ${total < 0 ? 'retrived' : 'mortgaged'} ${stockQty.abs()} $stockOrStocks of ${stock.fullName} at ₹${(-total.toDouble() / stockQty.toDouble()).toStringAsFixed(2)}',
             type: SnackBarType.success);
         break;
 

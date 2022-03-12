@@ -53,9 +53,7 @@ class _RetrieveTableState extends State<RetrieveTable> {
         if (state is MortgageSheetSuccess) {
           String companyName = stockList[state.stockId]!.fullName;
           int quantity = state.stockQuantity;
-          showSnackBar(
-              context, 'Successfully retrieved $quantity $companyName stocks',
-              type: SnackBarType.success);
+
           context.read<MortgageDetailsCubit>().getMortgageDetails();
         } else if (state is MortgageSheetFailure) {
           showSnackBar(context, state.msg, type: SnackBarType.error);

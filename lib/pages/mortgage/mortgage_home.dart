@@ -30,23 +30,15 @@ class _MortgageHomeState extends State<MortgageHome> {
             child: Responsive(
               desktop: _desktopBody(context),
               mobile: _mobileBody(context),
-              tablet: _tabletBody(),
+              tablet: _tabletBody(context),
             )),
       ),
     );
   }
 }
 
-Center _tabletBody() {
-  return const Center(
-    child: Text(
-      'Tablet UI will design soon :)',
-      style: TextStyle(
-        fontSize: 14,
-        color: secondaryColor,
-      ),
-    ),
-  );
+Widget _tabletBody(BuildContext context) {
+  return _mobileBody(context);
 }
 
 Widget _desktopBody(BuildContext context) {

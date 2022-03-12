@@ -1,5 +1,6 @@
 import 'package:dalal_street_client/blocs/my_orders/my_orders_cubit.dart';
 import 'package:dalal_street_client/components/loading.dart';
+import 'package:dalal_street_client/config/config.dart';
 import 'package:dalal_street_client/config/get_it.dart';
 import 'package:dalal_street_client/models/open_order_type.dart';
 import 'package:dalal_street_client/models/snackbar/snackbar_type.dart';
@@ -192,8 +193,6 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
             BlocConsumer<MyOrdersCubit, MyOrdersState>(
                 listener: (context, state) {
               if (state is CancelOrderSuccess) {
-                showSnackBar(context, 'Order Cancelled Successfully',
-                    type: SnackBarType.success);
                 context.read<MyOrdersCubit>().getMyOpenOrders();
               } else if (state is CancelOrderFailure) {
                 showSnackBar(context, state.error, type: SnackBarType.error);
@@ -274,7 +273,7 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
 
   Widget buildItem(openorder, OpenOrderType ordertype) {
     final stockList = getIt<GlobalStreams>().latestStockMap;
-    Stock? company = stockList[openorder.stockId];
+    Stock company = stockList[openorder.stockId]!;
 
     return Card(
         color: background2,
@@ -287,7 +286,7 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
                   child: Padding(
                       padding: const EdgeInsets.fromLTRB(0, 10, 10, 10),
                       child: Image.network(
-                        'https://assets.airtel.in/static-assets/new-home/img/favicon-32x32.png',
+                        '$assetUrl${company.shortName}.png',
                         height: 25,
                         width: 25,
                       )),
