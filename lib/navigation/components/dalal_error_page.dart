@@ -12,20 +12,23 @@ class DalalErrorPage extends StatelessWidget {
       routerState.error?.toString().replaceFirst('Exception: ', '');
 
   @override
-  build(context) => Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset(AppImages.error),
-            const SizedBox(height: 20),
-            Text(
-              msg ?? 'Looks like something went wrong',
-              style: Theme.of(context)
-                  .textTheme
-                  .headline5!
-                  .copyWith(color: primaryColor),
-            ),
-          ],
+  build(context) => Container(
+        color: backgroundColor,
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(AppImages.error),
+              const SizedBox(height: 20),
+              Text(
+                msg ?? 'Looks like something went wrong',
+                style: Theme.of(context)
+                    .textTheme
+                    .headline6!
+                    .copyWith(color: primaryColor),
+              ),
+            ],
+          ),
         ),
       );
 }
