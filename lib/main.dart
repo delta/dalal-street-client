@@ -60,7 +60,7 @@ class _DalalAppState extends State<DalalApp> {
 
   @override
   build(context) => MaterialApp.router(
-        title: 'Dalal Street 2022',
+        title: 'Dalal Street 22',
         debugShowCheckedModeBanner: false,
         theme: appTheme,
         themeMode: ThemeMode.dark,
