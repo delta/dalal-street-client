@@ -40,6 +40,7 @@ class _PlaceOrderState extends State<PlaceOrder> {
   int _quantity = 1;
   int _price = 0;
   OrderType _orderType = OrderType.LIMIT;
+  bool _isValid = false;
 
   get orderTypeString => (OrderType orderType) {
         if (orderType == OrderType.LIMIT) {
@@ -56,8 +57,35 @@ class _PlaceOrderState extends State<PlaceOrder> {
   final priceTextController = TextEditingController();
 
   @override
+  void initState() {
+    priceTextController.addListener(() {
+      if (priceTextController.value.text == '') {
+        setState(() {
+          _isValid = false;
+        });
+
+        return;
+      }
+
+      var price = int.parse(priceTextController.value.text);
+
+      if (price >= 0) {
+        setState(() {
+          _isValid = true;
+        });
+      } else {
+        setState(() {
+          _isValid = false;
+        });
+      }
+    });
+    super.initState();
+  }
+
+  @override
   void dispose() {
     priceTextController.dispose();
+
     super.dispose();
   }
 
@@ -153,12 +181,10 @@ class _PlaceOrderState extends State<PlaceOrder> {
                                   isExpanded: true,
                                   value: orderTypeString(_orderType),
                                   onChanged: (value) {
-                                    logger.d(value);
                                     String orderTypeString = value.toString();
                                     OrderType selectedOrderType;
 
                                     if (orderTypeString == 'Market') {
-                                      logger.i('market');
                                       selectedOrderType = OrderType.MARKET;
 
                                       setState(() {
@@ -166,7 +192,6 @@ class _PlaceOrderState extends State<PlaceOrder> {
                                         _orderType = selectedOrderType;
                                       });
                                     } else if (orderTypeString == 'Stoploss') {
-                                      logger.i('stoploss');
                                       selectedOrderType = OrderType.STOPLOSS;
 
                                       setState(() {
@@ -174,7 +199,6 @@ class _PlaceOrderState extends State<PlaceOrder> {
                                         _price = 0;
                                       });
                                     } else if (orderTypeString == 'Limit') {
-                                      logger.i('limit');
                                       selectedOrderType = OrderType.LIMIT;
 
                                       setState(() {
@@ -244,7 +268,10 @@ class _PlaceOrderState extends State<PlaceOrder> {
                                     onChanged: (String? value) {
                                       if (value != null) {
                                         setState(() {
-                                          _price = int.parse(value);
+                                          if (value == '') {
+                                            value = '0';
+                                          }
+                                          _price = int.parse(value!);
                                         });
                                       }
                                     },
@@ -289,7 +316,10 @@ class _PlaceOrderState extends State<PlaceOrder> {
                                   onChanged: (String? value) {
                                     if (value != null) {
                                       setState(() {
-                                        _price = int.parse(value);
+                                        if (value == '') {
+                                          value = '0';
+                                        }
+                                        _price = int.parse(value!);
                                       });
                                     }
                                   },
@@ -317,16 +347,18 @@ class _PlaceOrderState extends State<PlaceOrder> {
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
-                      onPressed: () {
-                        context.read<PlaceOrderCubit>().placeOrder(
-                            widget.isAsk,
-                            company.id,
-                            _orderType,
-                            Int64(_price),
-                            Int64(_quantity));
+                      onPressed: _isValid
+                          ? () {
+                              context.read<PlaceOrderCubit>().placeOrder(
+                                  widget.isAsk,
+                                  company.id,
+                                  _orderType,
+                                  Int64(_price),
+                                  Int64(_quantity));
 
-                        Navigator.pop(context, true);
-                      },
+                              Navigator.pop(context, true);
+                            }
+                          : null,
                       child: const Text('Place Order'),
                     ),
                   )
@@ -365,7 +397,6 @@ Row _userBalance() {
 }
 
 Row _orderFee(int price, int quantity) {
-  logger.d(price, quantity);
   var orderFee = calculateOrderFee(price * quantity);
   return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
     const Text(

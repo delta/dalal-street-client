@@ -36,11 +36,9 @@ class StockHistoryStreamCubit extends Cubit<StockHistoryStreamState> {
     }
   }
 
-  void unsubscribe() async {
-    try {
-      unSubscribe(subscribtionId, getIt<String>());
-    } catch (e) {
-      logger.e('error unsubscribing stock history request', e);
-    }
+  @override
+  Future<void> close() {
+    unSubscribe(subscribtionId, getIt<String>());
+    return super.close();
   }
 }

@@ -107,6 +107,7 @@ Future<void> _listenTransactionStream(BuildContext context) async {
   var transactionStream = getIt<GlobalStreams>().transactionStream;
 
   await for (var update in transactionStream) {
+    logger.d(update.toString());
     var stock = getIt<GlobalStreams>()
         .stockMapStream
         .value[update.transaction.stockId]!;
