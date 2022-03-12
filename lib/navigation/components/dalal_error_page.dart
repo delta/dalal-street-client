@@ -8,9 +8,6 @@ class DalalErrorPage extends StatelessWidget {
 
   const DalalErrorPage({Key? key, required this.routerState}) : super(key: key);
 
-  String? get msg =>
-      routerState.error?.toString().replaceFirst('Exception: ', '');
-
   @override
   build(context) => Container(
         color: backgroundColor,
@@ -21,7 +18,7 @@ class DalalErrorPage extends StatelessWidget {
               Image.asset(AppImages.error),
               const SizedBox(height: 20),
               Text(
-                msg ?? 'Looks like something went wrong',
+                'oops!  Mr dalal has lost its way. Return back to home',
                 style: Theme.of(context)
                     .textTheme
                     .headline6!
