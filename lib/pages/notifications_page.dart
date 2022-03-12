@@ -52,6 +52,7 @@ class _NotificationsState extends State<NotificationsPage> {
   Widget build(context) => SafeArea(
         child: Scaffold(
           body: SingleChildScrollView(
+            primary: false,
             controller: _scrollController,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -139,6 +140,7 @@ class _NotificationsState extends State<NotificationsPage> {
 
   Widget notificationItem(String text, String createdAt, int id) {
     Color iconColor = colors[id % colors.length];
+    var screenWidth = MediaQuery.of(context).size.width;
     return Card(
       color: const Color.fromRGBO(19, 22, 20, 1),
       shape: RoundedRectangleBorder(
@@ -152,7 +154,7 @@ class _NotificationsState extends State<NotificationsPage> {
           child: Column(children: <Widget>[
             Column(
                 mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
                   Row(
                     children: [
@@ -171,7 +173,7 @@ class _NotificationsState extends State<NotificationsPage> {
                       ),
                       const SizedBox(width: 20),
                       SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.7,
+                        width: screenWidth > 1000 ? screenWidth * 0.7 : screenWidth * 0.5,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
