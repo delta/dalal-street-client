@@ -7,5 +7,5 @@
         "url" : "http://localhost:3000"
     },
 
-    "assestUrl" : "http://localhost:3000/public/"
+    "assetUrl" : "http://localhost:3000/public/"
 }
