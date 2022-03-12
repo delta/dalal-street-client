@@ -18,7 +18,7 @@ class DalalErrorPage extends StatelessWidget {
               Image.asset(AppImages.error),
               const SizedBox(height: 20),
               Text(
-                'oops!  Mr dalal has lost its way. Return back to home',
+                'Oops!  Mr dalal has lost its way. Return back to home',
                 style: Theme.of(context)
                     .textTheme
                     .headline6!
