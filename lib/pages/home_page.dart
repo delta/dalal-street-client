@@ -3,6 +3,7 @@ import 'package:dalal_street_client/blocs/notification/notifications_cubit.dart'
 import 'package:dalal_street_client/components/graph/line_area.dart';
 import 'package:dalal_street_client/components/buttons/tertiary_button.dart';
 import 'package:dalal_street_client/components/loading.dart';
+import 'package:dalal_street_client/config/config.dart';
 import 'package:dalal_street_client/models/dynamic_user_info.dart';
 import 'package:dalal_street_client/proto_build/models/Notification.pb.dart'
     as notification;
@@ -110,16 +111,8 @@ class _HomePageState extends State<HomePage>
     );
   }
 
-  Center _tabletBody() {
-    return const Center(
-      child: Text(
-        'Tablet UI will design soon :)',
-        style: TextStyle(
-          fontSize: 14,
-          color: secondaryColor,
-        ),
-      ),
-    );
+  Widget _tabletBody() {
+    return _mobileBody();
   }
 
   Padding _mobileBody() {
@@ -401,7 +394,7 @@ class _HomePageState extends State<HomePage>
               width: isWeb ? 200 : 125,
               height: 100,
               fit: BoxFit.contain,
-              image: NetworkImage(imagePath),
+              image: NetworkImage(assetUrl + imagePath),
             ),
           ),
           Expanded(

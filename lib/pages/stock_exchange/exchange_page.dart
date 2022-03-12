@@ -159,16 +159,8 @@ class _ExchangePageState extends State<ExchangePage>
     );
   }
 
-  Center _tabletBody() {
-    return const Center(
-      child: Text(
-        'Tablet UI will design soon :)',
-        style: TextStyle(
-          fontSize: 14,
-          color: secondaryColor,
-        ),
-      ),
-    );
+  Widget _tabletBody() {
+    return _mobileBody();
   }
 
   Widget _mobileBody() {

@@ -1,5 +1,6 @@
 import 'package:dalal_street_client/components/buttons/secondary_button.dart';
 import 'package:dalal_street_client/components/graph/stock_chart.dart';
+import 'package:dalal_street_client/config/config.dart';
 import 'package:dalal_street_client/config/get_it.dart';
 import 'package:dalal_street_client/constants/icons.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
@@ -37,7 +38,7 @@ Container companyPrices(Stock company) {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Image.network(
-                      'https://i.imgur.com/v5E2Cv7.png',
+                      '$assetUrl${company.fullName}.png',
                       width: 50,
                       height: 50,
                     ),

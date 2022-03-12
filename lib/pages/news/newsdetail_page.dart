@@ -1,4 +1,5 @@
 import 'package:dalal_street_client/components/dalal_back_button.dart';
+import 'package:dalal_street_client/config/config.dart';
 import 'package:flutter/material.dart';
 
 import '../../theme/colors.dart';
@@ -64,7 +65,7 @@ class NewsDetail extends StatelessWidget {
                 child: ClipRRect(
               borderRadius: BorderRadius.circular(20),
               child: Image(
-                image: NetworkImage(imagePath),
+                image: NetworkImage(assetUrl + imagePath),
                 fit: BoxFit.fill,
                 width: isWeb
                     ? MediaQuery.of(context).size.width * 0.5

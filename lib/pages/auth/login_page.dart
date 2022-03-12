@@ -3,6 +3,7 @@ import 'package:dalal_street_client/components/dalal_back_button.dart';
 import 'package:dalal_street_client/components/fill_max_height_scroll_view.dart';
 import 'package:dalal_street_client/components/loading.dart';
 import 'package:dalal_street_client/components/reactive_password_field.dart';
+import 'package:dalal_street_client/navigation/nav_utils.dart';
 import 'package:dalal_street_client/theme/colors.dart';
 import 'package:dalal_street_client/utils/snackbar.dart';
 import 'package:flutter/gestures.dart';
@@ -25,10 +26,9 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(context) => BlocConsumer<LoginCubit, LoginState>(
         listener: (context, state) {
-          if (state is LoginFailure) {
-            if (!state.isMailVerified) {
-              context.push('/checkMail');
-            }
+          // redirecting to mail verification page if user tries to login without verifying
+          if (state is EmailNotVerified) {
+            context.webGo('/checkMail', extra: state.email);
             showSnackBar(context, state.msg, type: SnackBarType.error);
           }
         },

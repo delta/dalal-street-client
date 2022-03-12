@@ -1,6 +1,7 @@
 import 'package:dalal_street_client/blocs/exchange/exchange_cubit.dart';
 import 'package:dalal_street_client/blocs/exchange/sheet/exchange_sheet_cubit.dart';
 import 'package:dalal_street_client/components/loading.dart';
+import 'package:dalal_street_client/config/config.dart';
 import 'package:dalal_street_client/config/get_it.dart';
 import 'package:dalal_street_client/constants/format.dart';
 import 'package:dalal_street_client/constants/icons.dart';
@@ -77,8 +78,8 @@ class _StockDetailState extends State<StockDetail> {
                 child: SizedBox(
                   height: 60,
                   width: 100,
-                  child: Image.asset(
-                    'assets/images/DalalImage.png',
+                  child: Image.network(
+                    '$assetUrl${company.shortName}.png',
                     fit: BoxFit.contain,
                   ),
                 )),
