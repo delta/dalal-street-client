@@ -551,7 +551,7 @@ class _HomePageState extends State<HomePage>
                 if (state is GetNotificationSuccess) {
                   notifications.addAll(state.notifications);
                   if (notifications.isEmpty) {
-                    return  SizedBox(
+                    return SizedBox(
                       height: MediaQuery.of(context).size.height * 0.25,
                       child: const Center(
                         child: Text(
@@ -559,7 +559,8 @@ class _HomePageState extends State<HomePage>
                           style: TextStyle(
                             fontSize: 18,
                             color: secondaryColor,
-                          ),softWrap: true,
+                          ),
+                          softWrap: true,
                         ),
                       ),
                     );
@@ -613,7 +614,7 @@ class _HomePageState extends State<HomePage>
         text,
         style: const TextStyle(color: white, fontSize: 16),
       ),
-      padding: const EdgeInsets.fromLTRB(10,10,0,10),
+      padding: const EdgeInsets.fromLTRB(10, 10, 0, 10),
     );
   }
 }
