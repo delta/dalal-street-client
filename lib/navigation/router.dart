@@ -128,7 +128,7 @@ GoRouter generateRouter(BuildContext context) => GoRouter(
         }
         return null;
       },
-      errorBuilder: (context, routerState) => const DalalErrorPage(),
+      errorBuilder: (context, state) => DalalErrorPage(routerState: state),
     );
 
 /// Returns if the route is for an authenticated user
