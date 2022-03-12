@@ -300,7 +300,7 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
                       SizedBox(
                         width: 80,
                         child: Text(
-                          (company?.fullName.toUpperCase())!,
+                          (company.fullName.toUpperCase()),
                           style:
                               const TextStyle(fontSize: 12, color: lightGray),
                           textAlign: TextAlign.left,
@@ -309,7 +309,7 @@ class _OpenOrdersPageState extends State<OpenOrdersPage> {
                       ),
                       const SizedBox.square(dimension: 10),
                       Text(
-                        (company?.shortName.toUpperCase())!,
+                        (company.shortName.toUpperCase()),
                         style: const TextStyle(fontSize: 12),
                         textAlign: TextAlign.left,
                       ),

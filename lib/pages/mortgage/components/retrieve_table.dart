@@ -51,9 +51,6 @@ class _RetrieveTableState extends State<RetrieveTable> {
     return BlocListener<MortgageSheetCubit, MortgageSheetState>(
       listener: (context, state) {
         if (state is MortgageSheetSuccess) {
-          String companyName = stockList[state.stockId]!.fullName;
-          int quantity = state.stockQuantity;
-
           context.read<MortgageDetailsCubit>().getMortgageDetails();
         } else if (state is MortgageSheetFailure) {
           showSnackBar(context, state.msg, type: SnackBarType.error);
