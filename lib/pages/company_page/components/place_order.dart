@@ -60,7 +60,7 @@ class _PlaceOrderState extends State<PlaceOrder> {
     priceTextController.addListener(() {
       if (priceTextController.value.text == '') {
         setState(() {
-          _isValid = false;
+          if (_orderType != OrderType.MARKET) _isValid = false;
         });
 
         return;
@@ -189,6 +189,7 @@ class _PlaceOrderState extends State<PlaceOrder> {
                                       setState(() {
                                         _price = company.currentPrice.toInt();
                                         _orderType = selectedOrderType;
+                                        _isValid = true;
                                       });
                                     } else if (orderTypeString == 'Stoploss') {
                                       selectedOrderType = OrderType.STOPLOSS;
@@ -196,6 +197,7 @@ class _PlaceOrderState extends State<PlaceOrder> {
                                       setState(() {
                                         _orderType = selectedOrderType;
                                         _price = 0;
+                                        _isValid = false;
                                       });
                                     } else if (orderTypeString == 'Limit') {
                                       selectedOrderType = OrderType.LIMIT;
@@ -203,6 +205,7 @@ class _PlaceOrderState extends State<PlaceOrder> {
                                       setState(() {
                                         _orderType = selectedOrderType;
                                         _price = 0;
+                                        _isValid = false;
                                       });
                                     }
 
