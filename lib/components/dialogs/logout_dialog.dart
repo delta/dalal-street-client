@@ -11,45 +11,43 @@ class LogoutDialog extends StatelessWidget {
   build(context) => Dialog(
         backgroundColor: background2,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-        child: Wrap(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 26),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 26),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                'Are you sure you want to logout?',
+                style: Theme.of(context)
+                    .textTheme
+                    .headline6!
+                    .copyWith(color: white),
+              ),
+              const SizedBox(height: 30),
+              Row(
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(
-                    'Are you sure you want to logout?',
-                    style: Theme.of(context)
-                        .textTheme
-                        .headline6!
-                        .copyWith(color: white),
+                  SizedBox(
+                    width: 120,
+                    child: ElevatedButton(
+                      onPressed: onLogoutClick,
+                      child: const Text('Yes'),
+                      style: secondaryButtonStyle,
+                    ),
                   ),
-                  const SizedBox(height: 30),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      SizedBox(
-                        width: 120,
-                        child: ElevatedButton(
-                          onPressed: onLogoutClick,
-                          child: const Text('Yes'),
-                          style: secondaryButtonStyle,
-                        ),
-                      ),
-                      SizedBox(
-                        width: 120,
-                        child: ElevatedButton(
-                          onPressed: () => Navigator.pop(context),
-                          child: const Text('No'),
-                        ),
-                      ),
-                    ],
+                  const SizedBox(width: 20),
+                  SizedBox(
+                    width: 120,
+                    child: ElevatedButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: const Text('No'),
+                    ),
                   ),
                 ],
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       );
 }
