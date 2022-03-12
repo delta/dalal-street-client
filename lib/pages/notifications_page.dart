@@ -173,7 +173,9 @@ class _NotificationsState extends State<NotificationsPage> {
                       ),
                       const SizedBox(width: 20),
                       SizedBox(
-                        width: screenWidth > 1000 ? screenWidth * 0.7 : screenWidth * 0.5,
+                        width: screenWidth > 1000
+                            ? screenWidth * 0.7
+                            : screenWidth * 0.5,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
