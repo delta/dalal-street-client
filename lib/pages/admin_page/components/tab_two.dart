@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/src/provider.dart';
 import 'package:fixnum/fixnum.dart';
 
-Widget openMarketUI(
-    BuildContext context, bool updateDayHighAndLow, bool error, Function stateUpdateFunc) {
+Widget openMarketUI(BuildContext context, bool updateDayHighAndLow, bool error,
+    Function stateUpdateFunc) {
   return Container(
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
       decoration: BoxDecoration(
@@ -29,31 +29,31 @@ Widget openMarketUI(
             const SizedBox(
               height: 20,
             ),
-            Text('Do you want to update Day`s high and low ?',
-            style: const TextStyle(
-              fontSize: 16
-            ),),
+            Text(
+              'Do you want to update Day`s high and low ?',
+              style: const TextStyle(fontSize: 16),
+            ),
             ListTile(
               title: const Text('Yes'),
               leading: Radio(
-            value: true,
-            groupValue: updateDayHighAndLow,
-            onChanged: (bool? value) {
-              stateUpdateFunc(value,'openMarket');
-            },
-            activeColor: Colors.green,
-          ),
+                value: true,
+                groupValue: updateDayHighAndLow,
+                onChanged: (bool? value) {
+                  stateUpdateFunc(value, 'openMarket');
+                },
+                activeColor: Colors.green,
+              ),
             ),
             ListTile(
               title: const Text('No'),
               leading: Radio(
-            value: false,
-            groupValue: updateDayHighAndLow,
-            onChanged: (bool? value) {
-              stateUpdateFunc(value,'openMarket');
-            },
-            activeColor: Colors.green,
-          ),
+                value: false,
+                groupValue: updateDayHighAndLow,
+                onChanged: (bool? value) {
+                  stateUpdateFunc(value, 'openMarket');
+                },
+                activeColor: Colors.green,
+              ),
             ),
             TextFormField(
               decoration: const InputDecoration(
@@ -108,8 +108,8 @@ Widget openMarketUI(
           ]));
 }
 
-Widget closeMarketUI(
-    BuildContext context, bool updatePrevDayClose, bool error, Function stateUpdateFunc) {
+Widget closeMarketUI(BuildContext context, bool updatePrevDayClose, bool error,
+    Function stateUpdateFunc) {
   return Container(
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
       decoration: BoxDecoration(
@@ -132,31 +132,31 @@ Widget closeMarketUI(
             const SizedBox(
               height: 20,
             ),
-            Text('Do you want to update Previous Day Close ?',
-            style: const TextStyle(
-              fontSize: 16
-            ),),
-             ListTile(
+            Text(
+              'Do you want to update Previous Day Close ?',
+              style: const TextStyle(fontSize: 16),
+            ),
+            ListTile(
               title: const Text('Yes'),
               leading: Radio(
-            value: true,
-            groupValue: updatePrevDayClose,
-            onChanged: (bool? value) {
-              stateUpdateFunc(value,'closeMarket');
-            },
-            activeColor: Colors.green,
-          ),
+                value: true,
+                groupValue: updatePrevDayClose,
+                onChanged: (bool? value) {
+                  stateUpdateFunc(value, 'closeMarket');
+                },
+                activeColor: Colors.green,
+              ),
             ),
             ListTile(
               title: const Text('No'),
               leading: Radio(
-            value: false,
-            groupValue: updatePrevDayClose,
-            onChanged: (bool? value) {
-              stateUpdateFunc(value,'closeMarket');
-            },
-            activeColor: Colors.green,
-          ),
+                value: false,
+                groupValue: updatePrevDayClose,
+                onChanged: (bool? value) {
+                  stateUpdateFunc(value, 'closeMarket');
+                },
+                activeColor: Colors.green,
+              ),
             ),
             // TextFormField(
             //   decoration: const InputDecoration(
@@ -201,9 +201,7 @@ Widget closeMarketUI(
               onPressed: () {
                 error == true
                     ? null
-                    : context
-                        .read<Tab2Cubit>()
-                        .closeMarket(updatePrevDayClose);
+                    : context.read<Tab2Cubit>().closeMarket(updatePrevDayClose);
               },
               child: const Text('Close Market'),
             )

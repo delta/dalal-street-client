@@ -394,18 +394,30 @@ Widget addMarketEventUI(BuildContext context, String headline, String text,
           ]));
 }
 
-String dailyChallengeToString(ChallengeType challenge){
-  switch(challenge){
-    case ChallengeType.Cash: return 'Cash';
-    case ChallengeType.NetWorth: return 'NetWorth';
-    case ChallengeType.SpecificStock: return 'Specific Stock';
-    case ChallengeType.StockWorth: return 'Stock Worth';
+String dailyChallengeToString(ChallengeType challenge) {
+  switch (challenge) {
+    case ChallengeType.Cash:
+      return 'Cash';
+    case ChallengeType.NetWorth:
+      return 'NetWorth';
+    case ChallengeType.SpecificStock:
+      return 'Specific Stock';
+    case ChallengeType.StockWorth:
+      return 'Stock Worth';
   }
   return '';
 }
-Widget addDailyChallengeUI(BuildContext context, int marketDay, int? stockId,
-    int reward, Int64 values, ChallengeType challengeType, bool error, Function stateUpdateFunc) {
-      error=false;
+
+Widget addDailyChallengeUI(
+    BuildContext context,
+    int marketDay,
+    int? stockId,
+    int reward,
+    Int64 values,
+    ChallengeType challengeType,
+    bool error,
+    Function stateUpdateFunc) {
+  error = false;
   return Container(
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
       decoration: BoxDecoration(
@@ -462,24 +474,24 @@ Widget addDailyChallengeUI(BuildContext context, int marketDay, int? stockId,
             const SizedBox(
               height: 20,
             ),
-            Text('Enter Challenge Type',
-            style: const TextStyle(
-              fontSize: 16
-            ),),
+            Text(
+              'Enter Challenge Type',
+              style: const TextStyle(fontSize: 16),
+            ),
             DropdownButton(
-              value: challengeType,
-              items: 
-                        [
-                          ChallengeType.Cash,
-                          ChallengeType.NetWorth,
-                          ChallengeType.StockWorth,
-                          ChallengeType.SpecificStock
-                        ].map((e) => DropdownMenuItem(child: Text(dailyChallengeToString(e)), value: e)).toList()
-            , 
-            onChanged: (ChallengeType? challengeType){
-              stateUpdateFunc(challengeType,'dailyChallenge');
-            }),
-            
+                value: challengeType,
+                items: [
+                  ChallengeType.Cash,
+                  ChallengeType.NetWorth,
+                  ChallengeType.StockWorth,
+                  ChallengeType.SpecificStock
+                ]
+                    .map((e) => DropdownMenuItem(
+                        child: Text(dailyChallengeToString(e)), value: e))
+                    .toList(),
+                onChanged: (ChallengeType? challengeType) {
+                  stateUpdateFunc(challengeType, 'dailyChallenge');
+                }),
             const SizedBox(
               height: 20,
             ),
@@ -499,7 +511,6 @@ Widget addDailyChallengeUI(BuildContext context, int marketDay, int? stockId,
                   stockId = int.parse(value);
                 } else {
                   error = true;
-                  
                 }
               },
               autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -566,7 +577,6 @@ Widget addDailyChallengeUI(BuildContext context, int marketDay, int? stockId,
                   error = false;
                   values = Int64(int.parse(value));
                 } else {
-                 
                   values = Int64(0);
                 }
               },
@@ -589,18 +599,13 @@ Widget addDailyChallengeUI(BuildContext context, int marketDay, int? stockId,
               onPressed: () {
                 logger.i(marketDay);
                 logger.i(stockId);
-                 logger.i(reward);
+                logger.i(reward);
                 logger.i(values);
                 logger.i(challengeType);
                 error == true
                     ? null
                     : context.read<Tab3Cubit>().addDailyChallenge(
-                        marketDay,
-                        stockId,
-                        reward,
-                        values,
-                        challengeType
-                        );
+                        marketDay, stockId, reward, values, challengeType);
               },
               child: const Text('Add Daily Challenge'),
             )

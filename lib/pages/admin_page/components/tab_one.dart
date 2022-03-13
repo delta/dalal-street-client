@@ -8,7 +8,6 @@ import 'package:provider/src/provider.dart';
 import 'package:fixnum/fixnum.dart';
 import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
 
-
 Widget sendNewsUI(BuildContext context, String news, bool error) {
   return Container(
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
@@ -77,7 +76,6 @@ Widget sendNewsUI(BuildContext context, String news, bool error) {
 
 Widget sendNotifsUI(BuildContext context, String notifs, int userId,
     bool isGlobal, bool error, Function stateUpdateFunc) {
-      
   return Container(
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
       decoration: BoxDecoration(
@@ -100,31 +98,31 @@ Widget sendNotifsUI(BuildContext context, String notifs, int userId,
             const SizedBox(
               height: 20,
             ),
-            
-            Text('Is it a Global notification?',style: const TextStyle(
-              fontSize: 16
-            ),),
+            Text(
+              'Is it a Global notification?',
+              style: const TextStyle(fontSize: 16),
+            ),
             ListTile(
               title: const Text('True'),
               leading: Radio(
-            value: true,
-            groupValue: isGlobal,
-            onChanged: (bool? value) {
-              stateUpdateFunc(value,'notif');
-            },
-            activeColor: Colors.green,
-          ),
+                value: true,
+                groupValue: isGlobal,
+                onChanged: (bool? value) {
+                  stateUpdateFunc(value, 'notif');
+                },
+                activeColor: Colors.green,
+              ),
             ),
             ListTile(
               title: const Text('False'),
               leading: Radio(
-            value: false,
-            groupValue: isGlobal,
-            onChanged: (bool? value) {
-              stateUpdateFunc(value,'notif');
-            },
-            activeColor: Colors.green,
-          ),
+                value: false,
+                groupValue: isGlobal,
+                onChanged: (bool? value) {
+                  stateUpdateFunc(value, 'notif');
+                },
+                activeColor: Colors.green,
+              ),
             ),
             const SizedBox(
               height: 20,
@@ -373,14 +371,20 @@ Widget sendDividendsUI(
 }
 
 Widget setGivesDividendsUI(
-    BuildContext context, int? stockId, bool givesDividends, bool error,Map<int,Stock> mapOfStocks, Function stateUpdateFunc) {
-    Map<int,String> stockNameMap={};
-    mapOfStocks.forEach((stockid,value){
-      stockNameMap[stockid] = value.fullName;
-    });
-   List<DropdownMenuItem<dynamic>> options = stockNameMap.entries.map((entry) => 
-      DropdownMenuItem<dynamic>(child: Text(entry.value), value: entry.key)
-   ).toList();
+    BuildContext context,
+    int? stockId,
+    bool givesDividends,
+    bool error,
+    Map<int, Stock> mapOfStocks,
+    Function stateUpdateFunc) {
+  Map<int, String> stockNameMap = {};
+  mapOfStocks.forEach((stockid, value) {
+    stockNameMap[stockid] = value.fullName;
+  });
+  List<DropdownMenuItem<dynamic>> options = stockNameMap.entries
+      .map((entry) =>
+          DropdownMenuItem<dynamic>(child: Text(entry.value), value: entry.key))
+      .toList();
   return Container(
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
       decoration: BoxDecoration(
@@ -400,21 +404,21 @@ Widget setGivesDividendsUI(
               ),
               textAlign: TextAlign.start,
             ),
-             const SizedBox(
+            const SizedBox(
               height: 20,
             ),
-            Text('Choose Stock:',
-            style: const TextStyle(
-              fontSize: 16,
+            Text(
+              'Choose Stock:',
+              style: const TextStyle(
+                fontSize: 16,
+              ),
+              textAlign: TextAlign.start,
             ),
-            textAlign: TextAlign.start,),
             DropdownButton(
-              isExpanded: true,
-              value: stockId,
-              items: options, 
-              onChanged: (dynamic a)=>{
-                stateUpdateFunc(a,'setDiv')
-              }),
+                isExpanded: true,
+                value: stockId,
+                items: options,
+                onChanged: (dynamic a) => {stateUpdateFunc(a, 'setDiv')}),
             const SizedBox(
               height: 20,
             ),
@@ -431,15 +435,16 @@ Widget setGivesDividendsUI(
           ]));
 }
 
-Widget setBankruptcyUI(
-    BuildContext context, int? stockId, bool isBankrupt, bool error,Map<int,Stock> mapOfStocks, Function stateUpdateFunc) {
-      Map<int,String> stockNameMap={};
-    mapOfStocks.forEach((stockid,value){
-      stockNameMap[stockid] = value.fullName;
-    });
-   List<DropdownMenuItem<dynamic>> options = stockNameMap.entries.map((entry) => 
-      DropdownMenuItem<dynamic>(child: Text(entry.value), value: entry.key)
-   ).toList();
+Widget setBankruptcyUI(BuildContext context, int? stockId, bool isBankrupt,
+    bool error, Map<int, Stock> mapOfStocks, Function stateUpdateFunc) {
+  Map<int, String> stockNameMap = {};
+  mapOfStocks.forEach((stockid, value) {
+    stockNameMap[stockid] = value.fullName;
+  });
+  List<DropdownMenuItem<dynamic>> options = stockNameMap.entries
+      .map((entry) =>
+          DropdownMenuItem<dynamic>(child: Text(entry.value), value: entry.key))
+      .toList();
   return Container(
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
       decoration: BoxDecoration(
@@ -462,18 +467,18 @@ Widget setBankruptcyUI(
             const SizedBox(
               height: 20,
             ),
-            Text('Choose Stock:',
-            style: const TextStyle(
-              fontSize: 16,
+            Text(
+              'Choose Stock:',
+              style: const TextStyle(
+                fontSize: 16,
+              ),
+              textAlign: TextAlign.start,
             ),
-            textAlign: TextAlign.start,),
             DropdownButton(
-              isExpanded: true,
-              value: stockId,
-              items: options, 
-              onChanged: (dynamic a)=>{
-                stateUpdateFunc(a,'bankrupt')
-              }),
+                isExpanded: true,
+                value: stockId,
+                items: options,
+                onChanged: (dynamic a) => {stateUpdateFunc(a, 'bankrupt')}),
             const SizedBox(
               height: 20,
             ),
