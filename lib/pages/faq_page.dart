@@ -52,9 +52,28 @@ class _FaqPageState extends State<FaqPage> {
   build(context) => SafeArea(
         child: Scaffold(
           body: SingleChildScrollView(
-            child: ExpansionPanelList(
-              expansionCallback: onItemClick,
-              children: expansionList,
+            child: Center(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const SizedBox(height: 36),
+                  Text(
+                    'FAQs',
+                    style: Theme.of(context)
+                        .textTheme
+                        .headline1!
+                        .copyWith(fontSize: 60),
+                  ),
+                  const SizedBox(height: 30),
+                  Container(
+                    constraints: const BoxConstraints(maxWidth: 1000),
+                    child: ExpansionPanelList(
+                      expansionCallback: onItemClick,
+                      children: expansionList,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
