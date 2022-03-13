@@ -434,9 +434,6 @@ class _StockDetailState extends State<StockDetail> {
               child: BlocConsumer<ExchangeSheetCubit, ExchangeSheetState>(
                 listener: (context, state) {
                   if (state is ExchangeSheetSuccess) {
-                    showSnackBar(context,
-                        'Successfully bought $quantity ${company.fullName} stocks',
-                        type: SnackBarType.success);
                   } else if (state is ExchangeSheetFailure) {
                     showSnackBar(context, state.msg, type: SnackBarType.error);
                   }

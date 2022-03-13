@@ -38,9 +38,6 @@ class _RetrieveBottomSheetState extends State<RetrieveBottomSheet> {
       child: BlocConsumer<MortgageSheetCubit, MortgageSheetState>(
         listener: (context, state) {
           if (state is MortgageSheetSuccess) {
-            showSnackBar(context,
-                'Successfully retrieved $quantity ${widget.company.fullName} stocks',
-                type: SnackBarType.success);
             Navigator.maybePop(context);
           } else if (state is MortgageSheetFailure) {
             showSnackBar(context, state.msg, type: SnackBarType.error);
