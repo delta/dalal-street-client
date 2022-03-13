@@ -45,7 +45,8 @@ class _DalalNavBuilderState extends State<DalalNavBuilder> {
 
             logger.i('user logged in');
 
-            if (!isUserRoute(widget.routerState)) {
+            if (!isUserRoute(widget.routerState) &&
+                !commonRoutes.contains(widget.routerState.location)) {
               context.webGo('/home');
               logger.i(
                   'Redirecting to /home from ${widget.routerState.location}');

@@ -26,6 +26,7 @@ import 'package:dalal_street_client/pages/auth/login_page.dart';
 import 'package:dalal_street_client/pages/auth/register_page.dart';
 import 'package:dalal_street_client/pages/auth/verify_phone/enter_otp_page.dart';
 import 'package:dalal_street_client/pages/auth/verify_phone/enter_phone_page.dart';
+import 'package:dalal_street_client/pages/faq_page.dart';
 import 'package:dalal_street_client/pages/landing_page.dart';
 import 'package:dalal_street_client/streams/global_streams.dart';
 import 'package:dalal_street_client/utils/regex_util.dart';
@@ -40,8 +41,26 @@ import 'package:go_router/go_router.dart';
 /// displaying ui.
 GoRouter generateRouter(BuildContext context) => GoRouter(
       debugLogDiagnostics: true,
+      // Show snackbar and navigate to Home or Login page whenever UserState changes
+      navigatorBuilder: (context, state, child) => DalalNavBuilder(
+        routerState: state,
+        child: child,
+      ),
+      redirect: (routerState) {
+        if (commonRoutes.contains(routerState.location)) return null;
+        final loggedIn = context.read<DalalBloc>().loggedIn;
+        final userRoute = isUserRoute(routerState);
+        if (loggedIn && !userRoute) {
+          return '/home';
+        } else if (!loggedIn && userRoute) {
+          return '/';
+        }
+        return null;
+      },
+      errorBuilder: (context, state) => DalalErrorPage(routerState: state),
       routes: [
         ..._initialRoutes,
+        ..._commonGoRoutes,
         ..._authRoutes,
         ...verifyGoRoutes,
         GoRoute(
@@ -113,22 +132,6 @@ GoRouter generateRouter(BuildContext context) => GoRouter(
           },
         ),
       ],
-      // Show snackbar and navigate to Home or Login page whenever UserState changes
-      navigatorBuilder: (context, state, child) => DalalNavBuilder(
-        routerState: state,
-        child: child,
-      ),
-      redirect: (routerState) {
-        final loggedIn = context.read<DalalBloc>().loggedIn;
-        final userRoute = isUserRoute(routerState);
-        if (loggedIn && !userRoute) {
-          return '/home';
-        } else if (!loggedIn && userRoute) {
-          return '/';
-        }
-        return null;
-      },
-      errorBuilder: (context, state) => DalalErrorPage(routerState: state),
     );
 
 /// Returns if the route is for an authenticated user
@@ -142,6 +145,8 @@ final userRoutes = [
   '/company/:id',
   '/admin',
 ];
+
+final commonRoutes = ['/faq'];
 
 bool isVerifyRoute(GoRouterState routerState) =>
     verifyRoutes.hasMatch(routerState.location);
@@ -174,6 +179,13 @@ final _initialRoutes = [
   GoRoute(
     path: '/',
     builder: (_, __) => const LandingPage(),
+  ),
+];
+
+final _commonGoRoutes = [
+  GoRoute(
+    path: '/faq',
+    builder: (_, __) => const FaqPage(),
   ),
 ];
 
