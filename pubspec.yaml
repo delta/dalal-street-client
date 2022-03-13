@@ -81,5 +81,6 @@ flutter:
     - assets/lottie/
     - assets/tls_keys/dev/server.crt
     - config.json
+    - faq.json
 
   uses-material-design: true
