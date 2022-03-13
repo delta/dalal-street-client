@@ -1,8 +1,6 @@
-import 'dart:convert';
-
+import 'package:dalal_street_client/faq.dart';
 import 'package:dalal_street_client/theme/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -14,17 +12,16 @@ class FaqPage extends StatefulWidget {
 }
 
 class _FaqPageState extends State<FaqPage> {
-  Map<String, String> jsonMap = {};
-  List<bool> isOpen = [];
+  List<bool> isOpen = List<bool>.generate(faq.length, (_) => false);
 
-  List<ExpansionPanel> get expansionList => jsonMap
+  List<ExpansionPanel> get expansionList => faq
       .map(
         (question, answer) => MapEntry(
           question,
           ExpansionPanel(
             backgroundColor: background2,
             canTapOnHeader: true,
-            isExpanded: isOpen[jsonMap.keys.toList().indexOf(question)],
+            isExpanded: isOpen[faq.keys.toList().indexOf(question)],
             headerBuilder: (context, isOpen) => Align(
               alignment: Alignment.centerLeft,
               child: Padding(
@@ -46,20 +43,6 @@ class _FaqPageState extends State<FaqPage> {
       )
       .values
       .toList();
-
-  @override
-  void initState() {
-    super.initState();
-    readFaqFromJson();
-  }
-
-  Future<void> readFaqFromJson() async {
-    final jsonString = await rootBundle.loadString('faq.json');
-    setState(() {
-      jsonMap = Map<String, String>.from(jsonDecode(jsonString));
-      isOpen = List<bool>.generate(jsonMap.length, (_) => false);
-    });
-  }
 
   @override
   build(context) => SafeArea(
