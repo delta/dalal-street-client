@@ -2,6 +2,6 @@ const deltaUrl = 'https://delta.nitt.edu/';
 
 const helikopterHelikopter = 'https://www.youtube.com/watch?v=3ExGuHWdXCE';
 
-const docsLink = 'https://docs.dalal.pragyan.org';
+const docsLink = 'https://dalal-help-page.vercel.app/';
 
-const forumLink = 'https://discord.gg';
+const forumLink = 'https://discord.gg/FmkBdXSjnj/';
