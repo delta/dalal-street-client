@@ -53,13 +53,14 @@ class DalalHome extends StatefulWidget {
 /// - So in [didUpdateWidget], update the bottom/side bar selection and the [PageView] item
 class _DalalHomeState extends State<DalalHome> {
   MenuItem get _logoutItem => MenuItem('Logout', AppIcons.logout);
+  MenuItem get _faqItem => MenuItem('FAQ', AppIcons.faq);
+  List<MenuItem> get extraItems => [_faqItem, _logoutItem];
 
   final _bottomMenu = homeMenuMobile.values.toList();
 
-  List<MenuItem> get _sideMenu => homeMenuWeb.values.toList() + [_logoutItem];
+  List<MenuItem> get _sideMenu => homeMenuWeb.values.toList() + extraItems;
 
-  List<MenuItem> get _sheetMenu =>
-      moreMenuMobile.values.toList() + [_logoutItem];
+  List<MenuItem> get _sheetMenu => moreMenuMobile.values.toList() + extraItems;
 
   List<String> get _homeRoutes => kIsWeb ? homeRoutesWeb : homeRoutesMobile;
 
@@ -147,10 +148,12 @@ class _DalalHomeState extends State<DalalHome> {
       menu: _sideMenu,
       currentIndex: currentMenuItem,
       onItemSelect: (index) {
-        if (index != _sideMenu.length - 1) {
-          _onMenuItemSelect(_homeRoutes[index]);
-        } else {
+        if (index == _sideMenu.length - 1) {
           _onLogoutClick();
+        } else if (index == _sideMenu.length - 2) {
+          _onFaqClick();
+        } else {
+          _onMenuItemSelect(_homeRoutes[index]);
         }
       },
       onItemReselect: (index) {},
@@ -169,14 +172,18 @@ class _DalalHomeState extends State<DalalHome> {
         builder: (_) => DalalHomeBottomSheet(
           items: _sheetMenu,
           onItemClick: (index) {
-            if (index != _sheetMenu.length - 1) {
-              context.push(_sheetRoutes[index]);
-            } else {
+            if (index == _sheetMenu.length - 1) {
               _onLogoutClick();
+            } else if (index == _sheetMenu.length - 2) {
+              _onFaqClick();
+            } else {
+              context.push(_sheetRoutes[index]);
             }
           },
         ),
       );
+
+  void _onFaqClick() => context.push('/faq');
 
   void _onLogoutClick() => showDialog(
         context: context,
