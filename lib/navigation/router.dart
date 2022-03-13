@@ -40,7 +40,6 @@ import 'package:go_router/go_router.dart';
 /// [context] is required because some routes need to access [DalalState] for
 /// displaying ui.
 GoRouter generateRouter(BuildContext context) => GoRouter(
-      initialLocation: '/faq',
       debugLogDiagnostics: true,
       // Show snackbar and navigate to Home or Login page whenever UserState changes
       navigatorBuilder: (context, state, child) => DalalNavBuilder(
