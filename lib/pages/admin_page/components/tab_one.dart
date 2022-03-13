@@ -1,5 +1,4 @@
 import 'package:dalal_street_client/blocs/admin/tab1/tab1_cubit.dart';
-import 'package:dalal_street_client/config/log.dart';
 import 'package:dalal_street_client/theme/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -98,9 +97,9 @@ Widget sendNotifsUI(BuildContext context, String notifs, int userId,
             const SizedBox(
               height: 20,
             ),
-            Text(
+            const Text(
               'Is it a Global notification?',
-              style: const TextStyle(fontSize: 16),
+              style: TextStyle(fontSize: 16),
             ),
             ListTile(
               title: const Text('True'),
@@ -407,9 +406,9 @@ Widget setGivesDividendsUI(
             const SizedBox(
               height: 20,
             ),
-            Text(
+            const Text(
               'Choose Stock:',
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 16,
               ),
               textAlign: TextAlign.start,
@@ -467,9 +466,9 @@ Widget setBankruptcyUI(BuildContext context, int? stockId, bool isBankrupt,
             const SizedBox(
               height: 20,
             ),
-            Text(
+            const Text(
               'Choose Stock:',
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 16,
               ),
               textAlign: TextAlign.start,

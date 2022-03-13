@@ -474,9 +474,9 @@ Widget addDailyChallengeUI(
             const SizedBox(
               height: 20,
             ),
-            Text(
+            const Text(
               'Enter Challenge Type',
-              style: const TextStyle(fontSize: 16),
+              style: TextStyle(fontSize: 16),
             ),
             DropdownButton(
                 value: challengeType,

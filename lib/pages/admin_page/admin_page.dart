@@ -461,7 +461,6 @@ class _AdminPageState extends State<AdminPage> {
   }
 
   Widget _onSetBankruptcy() {
-    int stockId = 0;
     bool isBankrupt = true;
     bool error = false;
     return BlocConsumer<Tab1Cubit, Tab1State>(listener: (context, state) {

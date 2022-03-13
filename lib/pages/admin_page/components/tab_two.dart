@@ -29,9 +29,9 @@ Widget openMarketUI(BuildContext context, bool updateDayHighAndLow, bool error,
             const SizedBox(
               height: 20,
             ),
-            Text(
+            const Text(
               'Do you want to update Day`s high and low ?',
-              style: const TextStyle(fontSize: 16),
+              style: TextStyle(fontSize: 16),
             ),
             ListTile(
               title: const Text('Yes'),
@@ -132,9 +132,9 @@ Widget closeMarketUI(BuildContext context, bool updatePrevDayClose, bool error,
             const SizedBox(
               height: 20,
             ),
-            Text(
+            const Text(
               'Do you want to update Previous Day Close ?',
-              style: const TextStyle(fontSize: 16),
+              style: TextStyle(fontSize: 16),
             ),
             ListTile(
               title: const Text('Yes'),
