@@ -102,4 +102,5 @@ Daily Challenges are closed at the end of the day.
 ''',
   'Help! My account got blocked!':
       'If a user is found breaking the rules of our Code of Conduct, the user will be blocked from playing the game any further. Check out our Action against Malpractice section in Getting Started for more details. Reach out to us on our forum for any further clarification.',
+  'Join our official discord channel': '[Link](https://discord.gg/FmkBdXSjnj)',
 };
