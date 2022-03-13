@@ -158,42 +158,6 @@ Widget closeMarketUI(BuildContext context, bool updatePrevDayClose, bool error,
                 activeColor: Colors.green,
               ),
             ),
-            // TextFormField(
-            //   decoration: const InputDecoration(
-            //       border: OutlineInputBorder(),
-            //       labelText: 'Do you want to update Previous Day Close ?',
-            //       labelStyle: TextStyle(fontSize: 14),
-            //       contentPadding: EdgeInsets.all(8),
-            //       errorStyle: TextStyle(
-            //         fontSize: 11.0,
-            //         color: bronze,
-            //       )),
-            //   onChanged: (String? value) {
-            //     if (value == 'true') {
-            //       error = false;
-            //       updatePrevDayHighAndLow = true;
-            //     } else if (value == 'false') {
-            //       error = false;
-            //       updatePrevDayHighAndLow = false;
-            //     } else {
-            //       error = true;
-            //     }
-            //   },
-            //   autovalidateMode: AutovalidateMode.onUserInteraction,
-            //   validator: (text) {
-            //     if (text == null || text.isEmpty) {
-            //       error = true;
-            //       return 'Can\'t be empty';
-            //     } else if (text != 'true' && text != 'false') {
-            //       error = true;
-            //       return 'Can only be true or false';
-            //     }
-            //     {
-            //       error = false;
-            //       return null;
-            //     }
-            //   },
-            // ),
             const SizedBox(
               height: 20,
             ),

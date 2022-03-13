@@ -115,12 +115,12 @@ class Tab3Cubit extends Cubit<Tab3State> {
       if (resp.statusCode == AddDailyChallengeResponse_StatusCode.OK) {
         emit(AddDailyChallengeSuccess(resp.statusMessage));
       } else {
-        logger.i('camdaedneadnk');
+        
         emit(AddDailyChallengeFailure(resp.statusMessage));
       }
     } catch (e) {
       logger.e(e);
-      logger.i('camdaedneadnk');
+     
       emit(const AddDailyChallengeFailure(failedToReachServer));
     }
   }
