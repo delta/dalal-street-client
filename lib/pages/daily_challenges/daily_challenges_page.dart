@@ -27,7 +27,12 @@ class DailyChallengesPage extends StatelessWidget {
                   );
                 }
                 if (state is DailyChallengesPageSuccess) {
-                  return _DailyChallengesPageBody(successState: state);
+                  if (state.marketDay > 0) {
+                    return _DailyChallengesPageBody(successState: state);
+                  }
+                  return const Center(
+                    child: Text('Daily Challenges is closed for now'),
+                  );
                 }
                 return const Center(child: DalalLoadingBar());
               },
