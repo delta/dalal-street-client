@@ -15,9 +15,8 @@ class LoginLoading extends LoginState {
 
 class LoginFailure extends LoginState {
   final String msg;
-  final bool isMailVerified;
 
-  const LoginFailure(this.msg, this.isMailVerified);
+  const LoginFailure(this.msg);
 
   @override
   List<Object> get props => [msg];
