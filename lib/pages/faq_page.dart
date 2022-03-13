@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:dalal_street_client/theme/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class FaqPage extends StatefulWidget {
   const FaqPage({Key? key}) : super(key: key);
@@ -30,7 +32,15 @@ class _FaqPageState extends State<FaqPage> {
                 child: Text(question),
               ),
             ),
-            body: Center(child: Text(answer)),
+            body: Padding(
+              padding: const EdgeInsets.fromLTRB(0, 0, 0, 30),
+              child: MarkdownBody(
+                data: answer,
+                onTapLink: (text, href, title) {
+                  if (href != null) onMdLinkClick(href);
+                },
+              ),
+            ),
           ),
         ),
       )
@@ -65,4 +75,6 @@ class _FaqPageState extends State<FaqPage> {
 
   void onItemClick(int index, bool isExpanded) =>
       setState(() => isOpen[index] = !isExpanded);
+
+  void onMdLinkClick(String url) => launch(url);
 }
