@@ -29,13 +29,16 @@ class _FaqPageState extends State<FaqPage> {
                 child: Text(question),
               ),
             ),
-            body: Padding(
-              padding: const EdgeInsets.fromLTRB(0, 0, 0, 30),
-              child: MarkdownBody(
-                data: answer,
-                onTapLink: (text, href, title) {
-                  if (href != null) onMdLinkClick(href);
-                },
+            body: Align(
+              alignment: Alignment.centerLeft,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(12, 0, 0, 30),
+                child: MarkdownBody(
+                  data: answer,
+                  onTapLink: (text, href, title) {
+                    if (href != null) onMdLinkClick(href);
+                  },
+                ),
               ),
             ),
           ),
