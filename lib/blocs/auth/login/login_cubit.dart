@@ -23,12 +23,12 @@ class LoginCubit extends Cubit<LoginState> {
 
       if (loginResp.statusCode ==
           LoginResponse_StatusCode.EmailNotVerifiedError) {
-        emit(LoginFailure(loginResp.statusMessage, false));
+        emit(EmailNotVerified(loginResp.statusMessage, email));
         return;
       }
 
       if (loginResp.statusCode != LoginResponse_StatusCode.OK) {
-        emit(LoginFailure(loginResp.statusMessage, true));
+        emit(LoginFailure(loginResp.statusMessage));
         return;
       }
       emit(LoginSuccess(loginResp));
@@ -38,7 +38,7 @@ class LoginCubit extends Cubit<LoginState> {
       // Inavlid session id error not possible because this is first time login
       // No need to check for grpc error code 16
       logger.e(e);
-      emit(const LoginFailure(failedToReachServer, true));
+      emit(const LoginFailure(failedToReachServer));
     }
   }
 }

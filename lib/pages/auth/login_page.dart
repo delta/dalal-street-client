@@ -26,6 +26,9 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(context) => BlocConsumer<LoginCubit, LoginState>(
         listener: (context, state) {
+          if (state is LoginFailure) {
+            showSnackBar(context, state.msg, type: SnackBarType.error);
+          }
           // redirecting to mail verification page if user tries to login without verifying
           if (state is EmailNotVerified) {
             context.webGo('/checkMail', extra: state.email);
