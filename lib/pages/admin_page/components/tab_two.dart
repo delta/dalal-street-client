@@ -6,7 +6,7 @@ import 'package:provider/src/provider.dart';
 import 'package:fixnum/fixnum.dart';
 
 Widget openMarketUI(
-    BuildContext context, bool updateDayHighAndLow, bool error) {
+    BuildContext context, bool updateDayHighAndLow, bool error, Function stateUpdateFunc) {
   return Container(
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
       decoration: BoxDecoration(
@@ -28,6 +28,32 @@ Widget openMarketUI(
             ),
             const SizedBox(
               height: 20,
+            ),
+            Text('Do you want to update Day`s high and low ?',
+            style: const TextStyle(
+              fontSize: 16
+            ),),
+            ListTile(
+              title: const Text('Yes'),
+              leading: Radio(
+            value: true,
+            groupValue: updateDayHighAndLow,
+            onChanged: (bool? value) {
+              stateUpdateFunc(value,'openMarket');
+            },
+            activeColor: Colors.green,
+          ),
+            ),
+            ListTile(
+              title: const Text('No'),
+              leading: Radio(
+            value: false,
+            groupValue: updateDayHighAndLow,
+            onChanged: (bool? value) {
+              stateUpdateFunc(value,'openMarket');
+            },
+            activeColor: Colors.green,
+          ),
             ),
             TextFormField(
               decoration: const InputDecoration(
@@ -83,7 +109,7 @@ Widget openMarketUI(
 }
 
 Widget closeMarketUI(
-    BuildContext context, bool updatePrevDayHighAndLow, bool error) {
+    BuildContext context, bool updatePrevDayClose, bool error, Function stateUpdateFunc) {
   return Container(
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
       decoration: BoxDecoration(
@@ -106,42 +132,68 @@ Widget closeMarketUI(
             const SizedBox(
               height: 20,
             ),
-            TextFormField(
-              decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Update Previous High and Low ',
-                  labelStyle: TextStyle(fontSize: 14),
-                  contentPadding: EdgeInsets.all(8),
-                  errorStyle: TextStyle(
-                    fontSize: 11.0,
-                    color: bronze,
-                  )),
-              onChanged: (String? value) {
-                if (value == 'true') {
-                  error = false;
-                  updatePrevDayHighAndLow = true;
-                } else if (value == 'false') {
-                  error = false;
-                  updatePrevDayHighAndLow = false;
-                } else {
-                  error = true;
-                }
-              },
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-              validator: (text) {
-                if (text == null || text.isEmpty) {
-                  error = true;
-                  return 'Can\'t be empty';
-                } else if (text != 'true' && text != 'false') {
-                  error = true;
-                  return 'Can only be true or false';
-                }
-                {
-                  error = false;
-                  return null;
-                }
-              },
+            Text('Do you want to update Previous Day Close ?',
+            style: const TextStyle(
+              fontSize: 16
+            ),),
+             ListTile(
+              title: const Text('Yes'),
+              leading: Radio(
+            value: true,
+            groupValue: updatePrevDayClose,
+            onChanged: (bool? value) {
+              stateUpdateFunc(value,'closeMarket');
+            },
+            activeColor: Colors.green,
+          ),
             ),
+            ListTile(
+              title: const Text('No'),
+              leading: Radio(
+            value: false,
+            groupValue: updatePrevDayClose,
+            onChanged: (bool? value) {
+              stateUpdateFunc(value,'closeMarket');
+            },
+            activeColor: Colors.green,
+          ),
+            ),
+            // TextFormField(
+            //   decoration: const InputDecoration(
+            //       border: OutlineInputBorder(),
+            //       labelText: 'Do you want to update Previous Day Close ?',
+            //       labelStyle: TextStyle(fontSize: 14),
+            //       contentPadding: EdgeInsets.all(8),
+            //       errorStyle: TextStyle(
+            //         fontSize: 11.0,
+            //         color: bronze,
+            //       )),
+            //   onChanged: (String? value) {
+            //     if (value == 'true') {
+            //       error = false;
+            //       updatePrevDayHighAndLow = true;
+            //     } else if (value == 'false') {
+            //       error = false;
+            //       updatePrevDayHighAndLow = false;
+            //     } else {
+            //       error = true;
+            //     }
+            //   },
+            //   autovalidateMode: AutovalidateMode.onUserInteraction,
+            //   validator: (text) {
+            //     if (text == null || text.isEmpty) {
+            //       error = true;
+            //       return 'Can\'t be empty';
+            //     } else if (text != 'true' && text != 'false') {
+            //       error = true;
+            //       return 'Can only be true or false';
+            //     }
+            //     {
+            //       error = false;
+            //       return null;
+            //     }
+            //   },
+            // ),
             const SizedBox(
               height: 20,
             ),
@@ -151,7 +203,7 @@ Widget closeMarketUI(
                     ? null
                     : context
                         .read<Tab2Cubit>()
-                        .closeMarket(updatePrevDayHighAndLow);
+                        .closeMarket(updatePrevDayClose);
               },
               child: const Text('Close Market'),
             )
@@ -472,7 +524,7 @@ Widget unblockUserUI(BuildContext context, int userId, bool error) {
                     ? null
                     : context.read<Tab2Cubit>().unblockUser(userId);
               },
-              child: const Text('Set Gives Dividends'),
+              child: const Text('Unblock User'),
             )
           ]));
 }

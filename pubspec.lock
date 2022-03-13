@@ -246,7 +246,7 @@ packages:
       name: hydrated_bloc
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "8.1.0"
+    version: "8.0.0"
   interactive_chart:
     dependency: "direct main"
     description:
@@ -395,7 +395,7 @@ packages:
     source: hosted
     version: "2.0.5"
   path_to_regexp:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: path_to_regexp
       url: "https://pub.dartlang.org"

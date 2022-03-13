@@ -100,8 +100,8 @@ class Tab3Cubit extends Cubit<Tab3State> {
     }
   }
 
-  Future<void> addDailyChallenge(final marketDay, final stockID, final reward,
-      final value, final challengeType) async {
+  Future<void> addDailyChallenge(int? marketDay, int? stockID, int? reward,
+      dynamic value, ChallengeType challengeType) async {
     emit(const AddDailyChallengeLoading());
     try {
       final resp = await actionClient.addDailyChallenge(
@@ -115,10 +115,12 @@ class Tab3Cubit extends Cubit<Tab3State> {
       if (resp.statusCode == AddDailyChallengeResponse_StatusCode.OK) {
         emit(AddDailyChallengeSuccess(resp.statusMessage));
       } else {
+        logger.i('camdaedneadnk');
         emit(AddDailyChallengeFailure(resp.statusMessage));
       }
     } catch (e) {
       logger.e(e);
+      logger.i('camdaedneadnk');
       emit(const AddDailyChallengeFailure(failedToReachServer));
     }
   }

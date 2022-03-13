@@ -2,6 +2,7 @@ import 'package:dalal_street_client/blocs/admin/tab3/tab3_cubit.dart';
 import 'package:dalal_street_client/proto_build/actions/AddDailyChallenge.pbenum.dart';
 import 'package:dalal_street_client/theme/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:dalal_street_client/config/log.dart';
 // ignore: implementation_imports
 import 'package:provider/src/provider.dart';
 import 'package:fixnum/fixnum.dart';
@@ -393,8 +394,18 @@ Widget addMarketEventUI(BuildContext context, String headline, String text,
           ]));
 }
 
-Widget addDailyChallengeUI(BuildContext context, int marketDay, int stockId,
-    int reward, Int64 values, ChallengeType challengeType, bool error) {
+String dailyChallengeToString(ChallengeType challenge){
+  switch(challenge){
+    case ChallengeType.Cash: return 'Cash';
+    case ChallengeType.NetWorth: return 'NetWorth';
+    case ChallengeType.SpecificStock: return 'Specific Stock';
+    case ChallengeType.StockWorth: return 'Stock Worth';
+  }
+  return '';
+}
+Widget addDailyChallengeUI(BuildContext context, int marketDay, int? stockId,
+    int reward, Int64 values, ChallengeType challengeType, bool error, Function stateUpdateFunc) {
+      error=false;
   return Container(
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
       decoration: BoxDecoration(
@@ -451,35 +462,24 @@ Widget addDailyChallengeUI(BuildContext context, int marketDay, int stockId,
             const SizedBox(
               height: 20,
             ),
-            TextFormField(
-              decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Challenge Type',
-                  labelStyle: TextStyle(fontSize: 14),
-                  contentPadding: EdgeInsets.all(8),
-                  errorStyle: TextStyle(
-                    fontSize: 11.0,
-                    color: bronze,
-                  )),
-              onChanged: (String? value) {
-                if (value != null) {
-                  error = false;
-                } else {
-                  error = true;
-                }
-              },
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-              validator: (text) {
-                if (text == null || text.isEmpty) {
-                  error = true;
-                  return 'Can\'t be empty';
-                }
-                {
-                  error = false;
-                  return null;
-                }
-              },
-            ),
+            Text('Enter Challenge Type',
+            style: const TextStyle(
+              fontSize: 16
+            ),),
+            DropdownButton(
+              value: challengeType,
+              items: 
+                        [
+                          ChallengeType.Cash,
+                          ChallengeType.NetWorth,
+                          ChallengeType.StockWorth,
+                          ChallengeType.SpecificStock
+                        ].map((e) => DropdownMenuItem(child: Text(dailyChallengeToString(e)), value: e)).toList()
+            , 
+            onChanged: (ChallengeType? challengeType){
+              stateUpdateFunc(challengeType,'dailyChallenge');
+            }),
+            
             const SizedBox(
               height: 20,
             ),
@@ -499,7 +499,7 @@ Widget addDailyChallengeUI(BuildContext context, int marketDay, int stockId,
                   stockId = int.parse(value);
                 } else {
                   error = true;
-                  stockId = 0;
+                  
                 }
               },
               autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -566,7 +566,7 @@ Widget addDailyChallengeUI(BuildContext context, int marketDay, int stockId,
                   error = false;
                   values = Int64(int.parse(value));
                 } else {
-                  error = true;
+                 
                   values = Int64(0);
                 }
               },
@@ -587,19 +587,20 @@ Widget addDailyChallengeUI(BuildContext context, int marketDay, int stockId,
             ),
             ElevatedButton(
               onPressed: () {
+                logger.i(marketDay);
+                logger.i(stockId);
+                 logger.i(reward);
+                logger.i(values);
+                logger.i(challengeType);
                 error == true
                     ? null
                     : context.read<Tab3Cubit>().addDailyChallenge(
                         marketDay,
-                        {
-                          ChallengeType.Cash,
-                          ChallengeType.NetWorth,
-                          ChallengeType.StockWorth,
-                          ChallengeType.SpecificStock
-                        },
-                        values,
                         stockId,
-                        reward);
+                        reward,
+                        values,
+                        challengeType
+                        );
               },
               child: const Text('Add Daily Challenge'),
             )

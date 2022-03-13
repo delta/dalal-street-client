@@ -1,10 +1,13 @@
 import 'package:dalal_street_client/blocs/admin/tab1/tab1_cubit.dart';
+import 'package:dalal_street_client/config/log.dart';
 import 'package:dalal_street_client/theme/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 // ignore: implementation_imports
 import 'package:provider/src/provider.dart';
 import 'package:fixnum/fixnum.dart';
+import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
+
 
 Widget sendNewsUI(BuildContext context, String news, bool error) {
   return Container(
@@ -73,7 +76,8 @@ Widget sendNewsUI(BuildContext context, String news, bool error) {
 }
 
 Widget sendNotifsUI(BuildContext context, String notifs, int userId,
-    bool isGlobal, bool error) {
+    bool isGlobal, bool error, Function stateUpdateFunc) {
+      
   return Container(
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
       decoration: BoxDecoration(
@@ -96,10 +100,39 @@ Widget sendNotifsUI(BuildContext context, String notifs, int userId,
             const SizedBox(
               height: 20,
             ),
+            
+            Text('Is it a Global notification?',style: const TextStyle(
+              fontSize: 16
+            ),),
+            ListTile(
+              title: const Text('True'),
+              leading: Radio(
+            value: true,
+            groupValue: isGlobal,
+            onChanged: (bool? value) {
+              stateUpdateFunc(value,'notif');
+            },
+            activeColor: Colors.green,
+          ),
+            ),
+            ListTile(
+              title: const Text('False'),
+              leading: Radio(
+            value: false,
+            groupValue: isGlobal,
+            onChanged: (bool? value) {
+              stateUpdateFunc(value,'notif');
+            },
+            activeColor: Colors.green,
+          ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
             TextFormField(
               decoration: const InputDecoration(
                   border: OutlineInputBorder(),
-                  labelText: 'UserId ',
+                  labelText: 'UserId (Not necessary for global notification)',
                   labelStyle: TextStyle(fontSize: 14),
                   contentPadding: EdgeInsets.all(8),
                   errorStyle: TextStyle(
@@ -113,45 +146,6 @@ Widget sendNotifsUI(BuildContext context, String notifs, int userId,
                 } else {
                   error = false;
                   userId = 0;
-                }
-              },
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            TextFormField(
-              decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Is Global? ',
-                  labelStyle: TextStyle(fontSize: 14),
-                  contentPadding: EdgeInsets.all(8),
-                  errorStyle: TextStyle(
-                    fontSize: 11.0,
-                    color: bronze,
-                  )),
-              onChanged: (String? value) {
-                if (value == 'true') {
-                  error = false;
-                  isGlobal = true;
-                } else if (value == 'false') {
-                  error = false;
-                  isGlobal = false;
-                } else {
-                  error = true;
-                }
-              },
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-              validator: (text) {
-                if (text == null || text.isEmpty) {
-                  error = true;
-                  return 'Can\'t be empty';
-                } else if (text != 'true' && text != 'false') {
-                  error = true;
-                  return 'Can only be true or false';
-                }
-                {
-                  error = false;
-                  return null;
                 }
               },
             ),
@@ -379,7 +373,14 @@ Widget sendDividendsUI(
 }
 
 Widget setGivesDividendsUI(
-    BuildContext context, int stockId, bool givesDividends, bool error) {
+    BuildContext context, int? stockId, bool givesDividends, bool error,Map<int,Stock> mapOfStocks, Function stateUpdateFunc) {
+    Map<int,String> stockNameMap={};
+    mapOfStocks.forEach((stockid,value){
+      stockNameMap[stockid] = value.fullName;
+    });
+   List<DropdownMenuItem<dynamic>> options = stockNameMap.entries.map((entry) => 
+      DropdownMenuItem<dynamic>(child: Text(entry.value), value: entry.key)
+   ).toList();
   return Container(
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
       decoration: BoxDecoration(
@@ -399,68 +400,21 @@ Widget setGivesDividendsUI(
               ),
               textAlign: TextAlign.start,
             ),
-            const SizedBox(
+             const SizedBox(
               height: 20,
             ),
-            TextFormField(
-              decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'StockId ',
-                  labelStyle: TextStyle(fontSize: 14),
-                  contentPadding: EdgeInsets.all(8),
-                  errorStyle: TextStyle(
-                    fontSize: 11.0,
-                    color: bronze,
-                  )),
-              onChanged: (String? value) {
-                if (value != null) {
-                  error = false;
-                  stockId = int.parse(value);
-                } else {
-                  error = false;
-                  stockId = 0;
-                }
-              },
+            Text('Choose Stock:',
+            style: const TextStyle(
+              fontSize: 16,
             ),
-            const SizedBox(
-              height: 20,
-            ),
-            TextFormField(
-              decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Gives dividends? ',
-                  labelStyle: TextStyle(fontSize: 14),
-                  contentPadding: EdgeInsets.all(8),
-                  errorStyle: TextStyle(
-                    fontSize: 11.0,
-                    color: bronze,
-                  )),
-              onChanged: (String? value) {
-                if (value == 'true') {
-                  error = false;
-                  givesDividends = true;
-                } else if (value == 'false') {
-                  error = false;
-                  givesDividends = false;
-                } else {
-                  error = true;
-                }
-              },
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-              validator: (text) {
-                if (text == null || text.isEmpty) {
-                  error = true;
-                  return 'Can\'t be empty';
-                } else if (text != 'true' && text != 'false') {
-                  error = true;
-                  return 'Can only be true or false';
-                }
-                {
-                  error = false;
-                  return null;
-                }
-              },
-            ),
+            textAlign: TextAlign.start,),
+            DropdownButton(
+              isExpanded: true,
+              value: stockId,
+              items: options, 
+              onChanged: (dynamic a)=>{
+                stateUpdateFunc(a,'setDiv')
+              }),
             const SizedBox(
               height: 20,
             ),
@@ -478,7 +432,14 @@ Widget setGivesDividendsUI(
 }
 
 Widget setBankruptcyUI(
-    BuildContext context, int stockId, bool isBankrupt, bool error) {
+    BuildContext context, int? stockId, bool isBankrupt, bool error,Map<int,Stock> mapOfStocks, Function stateUpdateFunc) {
+      Map<int,String> stockNameMap={};
+    mapOfStocks.forEach((stockid,value){
+      stockNameMap[stockid] = value.fullName;
+    });
+   List<DropdownMenuItem<dynamic>> options = stockNameMap.entries.map((entry) => 
+      DropdownMenuItem<dynamic>(child: Text(entry.value), value: entry.key)
+   ).toList();
   return Container(
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
       decoration: BoxDecoration(
@@ -501,65 +462,18 @@ Widget setBankruptcyUI(
             const SizedBox(
               height: 20,
             ),
-            TextFormField(
-              decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'StockId ',
-                  labelStyle: TextStyle(fontSize: 14),
-                  contentPadding: EdgeInsets.all(8),
-                  errorStyle: TextStyle(
-                    fontSize: 11.0,
-                    color: bronze,
-                  )),
-              onChanged: (String? value) {
-                if (value != null) {
-                  error = false;
-                  stockId = int.parse(value);
-                } else {
-                  error = false;
-                  stockId = 0;
-                }
-              },
+            Text('Choose Stock:',
+            style: const TextStyle(
+              fontSize: 16,
             ),
-            const SizedBox(
-              height: 20,
-            ),
-            TextFormField(
-              decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'is bankrupt? ',
-                  labelStyle: TextStyle(fontSize: 14),
-                  contentPadding: EdgeInsets.all(8),
-                  errorStyle: TextStyle(
-                    fontSize: 11.0,
-                    color: bronze,
-                  )),
-              onChanged: (String? value) {
-                if (value == 'true') {
-                  error = false;
-                  isBankrupt = true;
-                } else if (value == 'false') {
-                  error = false;
-                  isBankrupt = false;
-                } else {
-                  error = true;
-                }
-              },
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-              validator: (text) {
-                if (text == null || text.isEmpty) {
-                  error = true;
-                  return 'Can\'t be empty';
-                } else if (text != 'true' && text != 'false') {
-                  error = true;
-                  return 'Can only be true or false';
-                }
-                {
-                  error = false;
-                  return null;
-                }
-              },
-            ),
+            textAlign: TextAlign.start,),
+            DropdownButton(
+              isExpanded: true,
+              value: stockId,
+              items: options, 
+              onChanged: (dynamic a)=>{
+                stateUpdateFunc(a,'bankrupt')
+              }),
             const SizedBox(
               height: 20,
             ),
