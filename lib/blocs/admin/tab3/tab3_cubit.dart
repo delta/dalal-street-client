@@ -77,8 +77,8 @@ class Tab3Cubit extends Cubit<Tab3State> {
     }
   }
 
-  Future<void> addMarketEvent(final stockId, final headline, final text,
-      final imageURL, final bool isGlobal) async {
+  Future<void> addMarketEvent(int? stockId, String? headline, String? text,
+      String? imageURL, bool? isGlobal) async {
     emit(const AddMarketEventLoading());
     try {
       final resp = await actionClient.addMarketEvent(

@@ -32,6 +32,7 @@ class _AdminPageState extends State<AdminPage> {
       getIt<GlobalStreams>().isMaketOpenStream;
   //Set of all isGlobal variables
   bool notifGlobal = true;
+  bool newsGlobal = true;
 
   //stockIds for dropdowns
   int? setGivesDividendStockId;
@@ -46,6 +47,7 @@ class _AdminPageState extends State<AdminPage> {
 
   //Daily Challenge type
   ChallengeType challengeType = ChallengeType.Cash;
+
   @override
   initState() {
     super.initState();
@@ -208,7 +210,13 @@ class _AdminPageState extends State<AdminPage> {
           setState(() {
             challengeType = value;
           });
+          break;
         }
+      case 'news':{
+        setState(() {
+            newsGlobal = value;
+        });
+      }
     }
   }
 
@@ -438,7 +446,6 @@ class _AdminPageState extends State<AdminPage> {
     String headline = ' ';
     String text = '';
     String imageUri = '';
-    bool isGlobal = true;
     bool error = false;
     return BlocConsumer<Tab3Cubit, Tab3State>(listener: (context, state) {
       if (state is AddMarketEventSuccess) {
@@ -456,7 +463,7 @@ class _AdminPageState extends State<AdminPage> {
         logger.i('unsuccessful');
       }
       return addMarketEventUI(
-          context, headline, text, imageUri, stockId, isGlobal, error);
+          context, headline, text, imageUri, stockId, newsGlobal, error, stateUpdateFunc);
     });
   }
 

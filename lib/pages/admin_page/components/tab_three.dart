@@ -105,7 +105,7 @@ Widget updateStockPriceUI(
             TextFormField(
               decoration: const InputDecoration(
                   border: OutlineInputBorder(),
-                  labelText: 'New stocks',
+                  labelText: 'New stock Price',
                   labelStyle: TextStyle(fontSize: 14),
                   contentPadding: EdgeInsets.all(8),
                   errorStyle: TextStyle(
@@ -210,7 +210,7 @@ Widget addStocksToExchangeUI(
             TextFormField(
               decoration: const InputDecoration(
                   border: OutlineInputBorder(),
-                  labelText: 'Dividend Amount',
+                  labelText: 'Number of Stocks',
                   labelStyle: TextStyle(fontSize: 14),
                   contentPadding: EdgeInsets.all(8),
                   errorStyle: TextStyle(
@@ -255,7 +255,7 @@ Widget addStocksToExchangeUI(
 }
 
 Widget addMarketEventUI(BuildContext context, String headline, String text,
-    String imageUri, int stockId, bool isGlobal, bool error) {
+    String imageUri, int stockId, bool isGlobal, bool error, Function stateUpdateFunc) {
   return Container(
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
       decoration: BoxDecoration(
@@ -311,6 +311,15 @@ Widget addMarketEventUI(BuildContext context, String headline, String text,
                     fontSize: 11.0,
                     color: bronze,
                   )),
+              onChanged: (String? value) {
+                if (value != null) {
+                  error = false;
+                  headline= value.toString();
+                } else {
+                  error = true;
+                  headline = ' ';
+                }
+              }
             ),
             const SizedBox(
               height: 20,
@@ -325,6 +334,15 @@ Widget addMarketEventUI(BuildContext context, String headline, String text,
                     fontSize: 11.0,
                     color: bronze,
                   )),
+              onChanged: (String? value) {
+                if (value != null) {
+                  error = false;
+                  text = value.toString();
+                } else {
+                  error = true;
+                  text = ' ';
+                }
+              }
             ),
             const SizedBox(
               height: 20,
@@ -339,54 +357,52 @@ Widget addMarketEventUI(BuildContext context, String headline, String text,
                     fontSize: 11.0,
                     color: bronze,
                   )),
+              onChanged: (String? value) {
+                if (value != null) {
+                  error = false;
+                  imageUri = value.toString();
+                } else {
+                  error = true;
+                  imageUri = ' ';
+                }
+              }
             ),
             const SizedBox(
               height: 20,
             ),
-            TextFormField(
-              decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Is Global? ',
-                  labelStyle: TextStyle(fontSize: 14),
-                  contentPadding: EdgeInsets.all(8),
-                  errorStyle: TextStyle(
-                    fontSize: 11.0,
-                    color: bronze,
-                  )),
-              onChanged: (String? value) {
-                if (value == 'true') {
-                  error = false;
-                  isGlobal = true;
-                } else if (value == 'false') {
-                  error = false;
-                  isGlobal = false;
-                } else {
-                  error = true;
-                }
-              },
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-              validator: (text) {
-                if (text == null || text.isEmpty) {
-                  error = true;
-                  return 'Can\'t be empty';
-                } else if (text != 'true' && text != 'false') {
-                  error = true;
-                  return 'Can only be true or false';
-                }
-                {
-                  error = false;
-                  return null;
-                }
-              },
+            const Text('Is Global news?',
+            style: TextStyle(
+              fontSize: 16
+            ),
+          ),
+            ListTile(
+              title: const Text('Yes'),
+              leading: Radio(
+                value: true,
+                groupValue: isGlobal,
+                onChanged: (bool? value) {
+                  stateUpdateFunc(value, 'news');
+                },
+                activeColor: Colors.green,
+              ),
+            ),
+            ListTile(
+              title: const Text('No'),
+              leading: Radio(
+                value: false,
+                groupValue: isGlobal,
+                onChanged: (bool? value) {
+                  stateUpdateFunc(value, 'news');
+                },
+                activeColor: Colors.green,
+              ),
             ),
             const SizedBox(
               height: 20,
             ),
             ElevatedButton(
               onPressed: () {
-                error == true
-                    ? null
-                    : context.read<Tab3Cubit>().addMarketEvent(
+                context.read<Tab3Cubit>().addMarketEvent(
                         stockId, headline, text, imageUri, isGlobal);
               },
               child: const Text('Add Market Event'),
@@ -597,11 +613,6 @@ Widget addDailyChallengeUI(
             ),
             ElevatedButton(
               onPressed: () {
-                logger.i(marketDay);
-                logger.i(stockId);
-                logger.i(reward);
-                logger.i(values);
-                logger.i(challengeType);
                 error == true
                     ? null
                     : context.read<Tab3Cubit>().addDailyChallenge(

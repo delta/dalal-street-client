@@ -114,6 +114,7 @@ class DalalBloc extends HydratedBloc<DalalEvent, DalalState> {
   }
 
   /// To maintain constand storage name across different app versions
+  @override
   String get storagePrefix => 'DalalBloc';
 
   // Methods required by HydratedBloc to persist state
