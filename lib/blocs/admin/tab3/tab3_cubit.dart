@@ -77,8 +77,8 @@ class Tab3Cubit extends Cubit<Tab3State> {
     }
   }
 
-  Future<void> addMarketEvent(final stockId, final headline, final text,
-      final imageURL, final bool isGlobal) async {
+  Future<void> addMarketEvent(int? stockId, String? headline, String? text,
+      String? imageURL, bool? isGlobal) async {
     emit(const AddMarketEventLoading());
     try {
       final resp = await actionClient.addMarketEvent(
@@ -100,8 +100,8 @@ class Tab3Cubit extends Cubit<Tab3State> {
     }
   }
 
-  Future<void> addDailyChallenge(final marketDay, final stockID, final reward,
-      final value, final challengeType) async {
+  Future<void> addDailyChallenge(int? marketDay, int? stockID, int? reward,
+      dynamic value, ChallengeType challengeType) async {
     emit(const AddDailyChallengeLoading());
     try {
       final resp = await actionClient.addDailyChallenge(
@@ -119,6 +119,7 @@ class Tab3Cubit extends Cubit<Tab3State> {
       }
     } catch (e) {
       logger.e(e);
+
       emit(const AddDailyChallengeFailure(failedToReachServer));
     }
   }

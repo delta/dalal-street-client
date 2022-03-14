@@ -104,7 +104,7 @@ Widget updateStockPriceUI(
             TextFormField(
               decoration: const InputDecoration(
                   border: OutlineInputBorder(),
-                  labelText: 'New stocks',
+                  labelText: 'New stock Price',
                   labelStyle: TextStyle(fontSize: 14),
                   contentPadding: EdgeInsets.all(8),
                   errorStyle: TextStyle(
@@ -209,7 +209,7 @@ Widget addStocksToExchangeUI(
             TextFormField(
               decoration: const InputDecoration(
                   border: OutlineInputBorder(),
-                  labelText: 'Dividend Amount',
+                  labelText: 'Number of Stocks',
                   labelStyle: TextStyle(fontSize: 14),
                   contentPadding: EdgeInsets.all(8),
                   errorStyle: TextStyle(
@@ -253,8 +253,15 @@ Widget addStocksToExchangeUI(
           ]));
 }
 
-Widget addMarketEventUI(BuildContext context, String headline, String text,
-    String imageUri, int stockId, bool isGlobal, bool error) {
+Widget addMarketEventUI(
+    BuildContext context,
+    String headline,
+    String text,
+    String imageUri,
+    int stockId,
+    bool isGlobal,
+    bool error,
+    Function stateUpdateFunc) {
   return Container(
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
       decoration: BoxDecoration(
@@ -301,100 +308,134 @@ Widget addMarketEventUI(BuildContext context, String headline, String text,
               height: 20,
             ),
             TextFormField(
-              decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Headline',
-                  labelStyle: TextStyle(fontSize: 14),
-                  contentPadding: EdgeInsets.all(8),
-                  errorStyle: TextStyle(
-                    fontSize: 11.0,
-                    color: bronze,
-                  )),
-            ),
+                decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Headline',
+                    labelStyle: TextStyle(fontSize: 14),
+                    contentPadding: EdgeInsets.all(8),
+                    errorStyle: TextStyle(
+                      fontSize: 11.0,
+                      color: bronze,
+                    )),
+                onChanged: (String? value) {
+                  if (value != null) {
+                    error = false;
+                    headline = value.toString();
+                  } else {
+                    error = true;
+                    headline = ' ';
+                  }
+                }),
             const SizedBox(
               height: 20,
             ),
             TextFormField(
-              decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Text',
-                  labelStyle: TextStyle(fontSize: 14),
-                  contentPadding: EdgeInsets.all(8),
-                  errorStyle: TextStyle(
-                    fontSize: 11.0,
-                    color: bronze,
-                  )),
-            ),
+                decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Text',
+                    labelStyle: TextStyle(fontSize: 14),
+                    contentPadding: EdgeInsets.all(8),
+                    errorStyle: TextStyle(
+                      fontSize: 11.0,
+                      color: bronze,
+                    )),
+                onChanged: (String? value) {
+                  if (value != null) {
+                    error = false;
+                    text = value.toString();
+                  } else {
+                    error = true;
+                    text = ' ';
+                  }
+                }),
             const SizedBox(
               height: 20,
             ),
             TextFormField(
-              decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Image URI',
-                  labelStyle: TextStyle(fontSize: 14),
-                  contentPadding: EdgeInsets.all(8),
-                  errorStyle: TextStyle(
-                    fontSize: 11.0,
-                    color: bronze,
-                  )),
-            ),
+                decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Image URI',
+                    labelStyle: TextStyle(fontSize: 14),
+                    contentPadding: EdgeInsets.all(8),
+                    errorStyle: TextStyle(
+                      fontSize: 11.0,
+                      color: bronze,
+                    )),
+                onChanged: (String? value) {
+                  if (value != null) {
+                    error = false;
+                    imageUri = value.toString();
+                  } else {
+                    error = true;
+                    imageUri = ' ';
+                  }
+                }),
             const SizedBox(
               height: 20,
             ),
-            TextFormField(
-              decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Is Global? ',
-                  labelStyle: TextStyle(fontSize: 14),
-                  contentPadding: EdgeInsets.all(8),
-                  errorStyle: TextStyle(
-                    fontSize: 11.0,
-                    color: bronze,
-                  )),
-              onChanged: (String? value) {
-                if (value == 'true') {
-                  error = false;
-                  isGlobal = true;
-                } else if (value == 'false') {
-                  error = false;
-                  isGlobal = false;
-                } else {
-                  error = true;
-                }
-              },
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-              validator: (text) {
-                if (text == null || text.isEmpty) {
-                  error = true;
-                  return 'Can\'t be empty';
-                } else if (text != 'true' && text != 'false') {
-                  error = true;
-                  return 'Can only be true or false';
-                }
-                {
-                  error = false;
-                  return null;
-                }
-              },
+            const Text(
+              'Is Global news?',
+              style: TextStyle(fontSize: 16),
+            ),
+            ListTile(
+              title: const Text('Yes'),
+              leading: Radio(
+                value: true,
+                groupValue: isGlobal,
+                onChanged: (bool? value) {
+                  stateUpdateFunc(value, 'news');
+                },
+                activeColor: Colors.green,
+              ),
+            ),
+            ListTile(
+              title: const Text('No'),
+              leading: Radio(
+                value: false,
+                groupValue: isGlobal,
+                onChanged: (bool? value) {
+                  stateUpdateFunc(value, 'news');
+                },
+                activeColor: Colors.green,
+              ),
             ),
             const SizedBox(
               height: 20,
             ),
             ElevatedButton(
               onPressed: () {
-                error == true
-                    ? null
-                    : context.read<Tab3Cubit>().addMarketEvent(
-                        stockId, headline, text, imageUri, isGlobal);
+                context.read<Tab3Cubit>().addMarketEvent(
+                    stockId, headline, text, imageUri, isGlobal);
               },
               child: const Text('Add Market Event'),
             )
           ]));
 }
 
-Widget addDailyChallengeUI(BuildContext context, int marketDay, int stockId,
-    int reward, Int64 values, ChallengeType challengeType, bool error) {
+String dailyChallengeToString(ChallengeType challenge) {
+  switch (challenge) {
+    case ChallengeType.Cash:
+      return 'Cash';
+    case ChallengeType.NetWorth:
+      return 'NetWorth';
+    case ChallengeType.SpecificStock:
+      return 'Specific Stock';
+    case ChallengeType.StockWorth:
+      return 'Stock Worth';
+  }
+  return '';
+}
+
+Widget addDailyChallengeUI(
+    BuildContext context,
+    int marketDay,
+    int? stockId,
+    int reward,
+    Int64 values,
+    ChallengeType challengeType,
+    bool error,
+    Function stateUpdateFunc) {
+  error = false;
   return Container(
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
       decoration: BoxDecoration(
@@ -451,35 +492,24 @@ Widget addDailyChallengeUI(BuildContext context, int marketDay, int stockId,
             const SizedBox(
               height: 20,
             ),
-            TextFormField(
-              decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Challenge Type',
-                  labelStyle: TextStyle(fontSize: 14),
-                  contentPadding: EdgeInsets.all(8),
-                  errorStyle: TextStyle(
-                    fontSize: 11.0,
-                    color: bronze,
-                  )),
-              onChanged: (String? value) {
-                if (value != null) {
-                  error = false;
-                } else {
-                  error = true;
-                }
-              },
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-              validator: (text) {
-                if (text == null || text.isEmpty) {
-                  error = true;
-                  return 'Can\'t be empty';
-                }
-                {
-                  error = false;
-                  return null;
-                }
-              },
+            const Text(
+              'Enter Challenge Type',
+              style: TextStyle(fontSize: 16),
             ),
+            DropdownButton(
+                value: challengeType,
+                items: [
+                  ChallengeType.Cash,
+                  ChallengeType.NetWorth,
+                  ChallengeType.StockWorth,
+                  ChallengeType.SpecificStock
+                ]
+                    .map((e) => DropdownMenuItem(
+                        child: Text(dailyChallengeToString(e)), value: e))
+                    .toList(),
+                onChanged: (ChallengeType? challengeType) {
+                  stateUpdateFunc(challengeType, 'dailyChallenge');
+                }),
             const SizedBox(
               height: 20,
             ),
@@ -499,7 +529,6 @@ Widget addDailyChallengeUI(BuildContext context, int marketDay, int stockId,
                   stockId = int.parse(value);
                 } else {
                   error = true;
-                  stockId = 0;
                 }
               },
               autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -566,7 +595,6 @@ Widget addDailyChallengeUI(BuildContext context, int marketDay, int stockId,
                   error = false;
                   values = Int64(int.parse(value));
                 } else {
-                  error = true;
                   values = Int64(0);
                 }
               },
@@ -590,16 +618,7 @@ Widget addDailyChallengeUI(BuildContext context, int marketDay, int stockId,
                 error == true
                     ? null
                     : context.read<Tab3Cubit>().addDailyChallenge(
-                        marketDay,
-                        {
-                          ChallengeType.Cash,
-                          ChallengeType.NetWorth,
-                          ChallengeType.StockWorth,
-                          ChallengeType.SpecificStock
-                        },
-                        values,
-                        stockId,
-                        reward);
+                        marketDay, stockId, reward, values, challengeType);
               },
               child: const Text('Add Daily Challenge'),
             )

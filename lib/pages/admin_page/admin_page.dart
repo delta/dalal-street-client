@@ -12,6 +12,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:fixnum/fixnum.dart';
+import 'package:dalal_street_client/config/get_it.dart';
+import 'package:dalal_street_client/proto_build/models/Stock.pb.dart';
+import 'package:dalal_street_client/streams/global_streams.dart';
+import 'package:rxdart/streams.dart';
 
 final oCcy = NumberFormat('#,##0.00', 'en_US');
 
@@ -23,9 +27,38 @@ class AdminPage extends StatefulWidget {
 }
 
 class _AdminPageState extends State<AdminPage> {
+  Map<int, Stock> mapOfStocks = getIt<GlobalStreams>().latestStockMap;
+  ValueStream<bool> isMarketOpenStream =
+      getIt<GlobalStreams>().isMaketOpenStream;
+  //Set of all isGlobal variables
+  bool notifGlobal = true;
+  bool newsGlobal = true;
+
+  //stockIds for dropdowns
+  int? setGivesDividendStockId;
+  int? setBankruptStockId;
+
+  //Update values variables
+  bool updatePrevDayClose = true; //For close market
+  bool updateDayHighAndLow = true; //For Open market
+
+  //GameState variable
+  bool? isMarketOpen;
+
+  //Daily Challenge type
+  ChallengeType challengeType = ChallengeType.Cash;
+
   @override
   initState() {
     super.initState();
+    isMarketOpen = isMarketOpenStream.value; //Initial market state value
+
+    //Listening to market state stream
+    isMarketOpenStream.listen((event) => {
+          setState(() {
+            isMarketOpen = event;
+          })
+        });
   }
 
   @override
@@ -64,11 +97,10 @@ class _AdminPageState extends State<AdminPage> {
                       const SizedBox(
                         height: 30,
                       ),
-                      _onOpenMarket(),
+                      (isMarketOpen!) ? _onCloseMarket() : _onOpenMarket(),
                       const SizedBox(
                         height: 30,
                       ),
-                      _onCloseMarket(),
                       const SizedBox(
                         height: 30,
                       ),
@@ -113,6 +145,10 @@ class _AdminPageState extends State<AdminPage> {
                       const SizedBox(
                         height: 30,
                       ),
+                      _onSetMarketDay(),
+                      const SizedBox(
+                        height: 30,
+                      ),
                       _onAddDailyChallenge(),
                       const SizedBox(
                         height: 30,
@@ -131,6 +167,60 @@ class _AdminPageState extends State<AdminPage> {
     );
   }
 
+  //The callback function for calling setState
+  void stateUpdateFunc(dynamic value, String event) {
+    switch (event) {
+      case 'notif':
+        {
+          setState(() {
+            notifGlobal = value;
+          });
+          break;
+        }
+      case 'setDiv':
+        {
+          setState(() {
+            setGivesDividendStockId = value;
+          });
+          break;
+        }
+      case 'bankrupt':
+        {
+          setState(() {
+            setBankruptStockId = value;
+          });
+          break;
+        }
+      case 'closeMarket':
+        {
+          setState(() {
+            updatePrevDayClose = value;
+          });
+          break;
+        }
+      case 'openMarket':
+        {
+          setState(() {
+            updateDayHighAndLow = value;
+          });
+          break;
+        }
+      case 'dailyChallenge':
+        {
+          setState(() {
+            challengeType = value;
+          });
+          break;
+        }
+      case 'news':
+        {
+          setState(() {
+            newsGlobal = value;
+          });
+        }
+    }
+  }
+
   Padding _mobileBody() {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
@@ -147,7 +237,6 @@ class _AdminPageState extends State<AdminPage> {
           const SizedBox(
             height: 10,
           ),
-          _onSetMarketDay(),
           const SizedBox(
             height: 10,
           ),
@@ -198,7 +287,7 @@ class _AdminPageState extends State<AdminPage> {
     return BlocConsumer<Tab2Cubit, Tab2State>(listener: (context, state) {
       if (state is BlockUserSuccess) {
         logger.i('blocked user successfully');
-        showSnackBar(context, 'blocked user with userId: $userId successfully');
+        showSnackBar(context, 'blocked user successfully');
       } else if (state is BlockUserFailure) {
         logger.i('unsuccessful');
         showSnackBar(context, state.msg);
@@ -215,7 +304,6 @@ class _AdminPageState extends State<AdminPage> {
   }
 
   Widget _onOpenMarket() {
-    bool updateDayHighAndLow = true;
     bool error = false;
     return BlocConsumer<Tab2Cubit, Tab2State>(listener: (context, state) {
       if (state is OpenMarketSuccess) {
@@ -232,21 +320,16 @@ class _AdminPageState extends State<AdminPage> {
       } else if (state is OpenMarketFailure) {
         logger.i('unsuccessful');
       }
-      return openMarketUI(context, updateDayHighAndLow, error);
+      return openMarketUI(context, updateDayHighAndLow, error, stateUpdateFunc);
     });
   }
 
   Widget _onAddDailyChallenge() {
     int marketDay = 0;
-    int stockId = 0;
+    int? stockId;
     int reward = 0;
     Int64 values = Int64(0);
-    {
-      ChallengeType.Cash;
-      ChallengeType.NetWorth;
-      ChallengeType.SpecificStock;
-      ChallengeType.StockWorth;
-    }
+
     bool error = false;
     return BlocConsumer<Tab3Cubit, Tab3State>(listener: (context, state) {
       if (state is AddDailyChallengeSuccess) {
@@ -264,7 +347,7 @@ class _AdminPageState extends State<AdminPage> {
         logger.i('unsuccessful');
       }
       return addDailyChallengeUI(context, marketDay, stockId, reward, values,
-          ChallengeType.Cash, error);
+          challengeType, error, stateUpdateFunc);
     });
   }
 
@@ -364,7 +447,6 @@ class _AdminPageState extends State<AdminPage> {
     String headline = ' ';
     String text = '';
     String imageUri = '';
-    bool isGlobal = true;
     bool error = false;
     return BlocConsumer<Tab3Cubit, Tab3State>(listener: (context, state) {
       if (state is AddMarketEventSuccess) {
@@ -381,19 +463,19 @@ class _AdminPageState extends State<AdminPage> {
       } else if (state is AddMarketEventFailure) {
         logger.i('unsuccessful');
       }
-      return addMarketEventUI(
-          context, headline, text, imageUri, stockId, isGlobal, error);
+      return addMarketEventUI(context, headline, text, imageUri, stockId,
+          newsGlobal, error, stateUpdateFunc);
     });
   }
 
   Widget _onSetBankruptcy() {
-    int stockId = 0;
     bool isBankrupt = true;
     bool error = false;
     return BlocConsumer<Tab1Cubit, Tab1State>(listener: (context, state) {
       if (state is SetBankruptcySuccess) {
         logger.i('Set Bankruptcy success');
-        showSnackBar(context, 'bankrupt F');
+        showSnackBar(context,
+            'Successfully Bankrupted company ${mapOfStocks[setBankruptStockId]?.fullName}');
       } else if (state is SetBankruptcyFailure) {
         logger.i('unsuccessful');
         showSnackBar(context, state.msg);
@@ -405,7 +487,8 @@ class _AdminPageState extends State<AdminPage> {
       } else if (state is SetBankruptcyFailure) {
         logger.i('unsuccessful');
       }
-      return setBankruptcyUI(context, stockId, isBankrupt, error);
+      return setBankruptcyUI(context, setBankruptStockId, isBankrupt, error,
+          mapOfStocks, stateUpdateFunc);
     });
   }
 
@@ -456,7 +539,6 @@ class _AdminPageState extends State<AdminPage> {
   }
 
   Widget _onSetGivesDividends() {
-    int stockId = 0;
     bool givesDividends = true;
     bool error = false;
     return BlocConsumer<Tab1Cubit, Tab1State>(listener: (context, state) {
@@ -474,14 +556,14 @@ class _AdminPageState extends State<AdminPage> {
       } else if (state is SetGivesDividendsFailure) {
         logger.i('unsuccessful');
       }
-      return setGivesDividendsUI(context, stockId, givesDividends, error);
+      return setGivesDividendsUI(context, setGivesDividendStockId,
+          givesDividends, error, mapOfStocks, stateUpdateFunc);
     });
   }
 
   Widget _onSendNotifs() {
     String notifs = ' ';
     int userId = 0;
-    bool isGlobal = true;
     bool error = false;
     return BlocConsumer<Tab1Cubit, Tab1State>(listener: (context, state) {
       if (state is SendNotificationsSuccess) {
@@ -498,12 +580,12 @@ class _AdminPageState extends State<AdminPage> {
       } else if (state is SendNotificationsFailure) {
         logger.i('unsuccessful');
       }
-      return sendNotifsUI(context, notifs, userId, isGlobal, error);
+      return sendNotifsUI(
+          context, notifs, userId, notifGlobal, error, stateUpdateFunc);
     });
   }
 
   Widget _onCloseMarket() {
-    bool updatePrevDayHighAndLow = true;
     bool error = false;
     return BlocConsumer<Tab2Cubit, Tab2State>(listener: (context, state) {
       if (state is CloseMarketSuccess) {
@@ -520,7 +602,7 @@ class _AdminPageState extends State<AdminPage> {
       } else if (state is CloseMarketFailure) {
         logger.i('unsuccessful');
       }
-      return closeMarketUI(context, updatePrevDayHighAndLow, error);
+      return closeMarketUI(context, updatePrevDayClose, error, stateUpdateFunc);
     });
   }
 
