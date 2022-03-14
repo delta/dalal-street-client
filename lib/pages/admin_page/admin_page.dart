@@ -1,11 +1,14 @@
 import 'package:dalal_street_client/blocs/admin/tab1/tab1_cubit.dart';
 import 'package:dalal_street_client/blocs/admin/tab2/tab2_cubit.dart';
 import 'package:dalal_street_client/blocs/admin/tab3/tab3_cubit.dart';
+import 'package:dalal_street_client/components/loading.dart';
 import 'package:dalal_street_client/config/log.dart';
+import 'package:dalal_street_client/models/snackbar/snackbar_type.dart';
 import 'package:dalal_street_client/pages/admin_page/components/tab_one.dart';
 import 'package:dalal_street_client/pages/admin_page/components/tab_three.dart';
 import 'package:dalal_street_client/pages/admin_page/components/tab_two.dart';
 import 'package:dalal_street_client/proto_build/actions/AddDailyChallenge.pb.dart';
+import 'package:dalal_street_client/theme/colors.dart';
 import 'package:dalal_street_client/utils/responsive.dart';
 import 'package:dalal_street_client/utils/snackbar.dart';
 import 'package:flutter/material.dart';
@@ -157,7 +160,11 @@ class _AdminPageState extends State<AdminPage> {
                       const SizedBox(
                         height: 30,
                       ),
-                      _onCloseDailyChallenge()
+                      _onCloseDailyChallenge(),
+                      const SizedBox(
+                        height: 30,
+                      ),
+                      const _SquareOffShortSells()
                     ],
                   ),
                 )),
@@ -709,5 +716,60 @@ class _AdminPageState extends State<AdminPage> {
       }
       return closeDailyChallengeUI(context, error);
     });
+  }
+}
+
+class _SquareOffShortSells extends StatelessWidget {
+  const _SquareOffShortSells({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocConsumer<Tab2Cubit, Tab2State>(
+      listener: (context, state) {
+        if (state is SquareOffError) {
+          showSnackBar(context, state.msg, type: SnackBarType.error);
+        }
+
+        if (state is SquareOffSuccess) {
+          showSnackBar(context, 'squared off successfully',
+              type: SnackBarType.success);
+        }
+      },
+      builder: (context, state) {
+        if (state is SquareOffLoading) {
+          return const DalalLoadingBar();
+        } else {
+          return Container(
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+              decoration: BoxDecoration(
+                color: backgroundColor,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Square off short sells',
+                      style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.w700,
+                        color: white,
+                      ),
+                      textAlign: TextAlign.start,
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        context.read<Tab2Cubit>().squareOffShortsell();
+                      },
+                      child: const Text('Square off short sells'),
+                    )
+                  ]));
+        }
+      },
+    );
   }
 }

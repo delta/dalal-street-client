@@ -192,3 +192,23 @@ class UnblockUserSuccess extends Tab2State {
   @override
   List<Object> get props => [msg];
 }
+
+class SquareOffLoading extends Tab2State {
+  const SquareOffLoading();
+}
+
+class SquareOffError extends Tab2State {
+  final String msg;
+
+  const SquareOffError(this.msg);
+
+  @override
+  List<Object> get props => [msg];
+}
+
+class SquareOffSuccess extends Tab2State {
+  const SquareOffSuccess();
+
+  @override
+  List<Object> get props => [];
+}

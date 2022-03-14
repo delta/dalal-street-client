@@ -7,6 +7,7 @@ import 'package:dalal_street_client/proto_build/actions/BlockUser.pb.dart';
 import 'package:dalal_street_client/proto_build/actions/CloseMarket.pb.dart';
 import 'package:dalal_street_client/proto_build/actions/InspectUser.pb.dart';
 import 'package:dalal_street_client/proto_build/actions/OpenMarket.pb.dart';
+import 'package:dalal_street_client/proto_build/actions/SquareOffShortSell.pb.dart';
 import 'package:dalal_street_client/proto_build/actions/UnblockAllUsers.pb.dart';
 import 'package:dalal_street_client/proto_build/actions/UnblockUser.pb.dart';
 import 'package:equatable/equatable.dart';
@@ -121,6 +122,24 @@ class Tab2Cubit extends Cubit<Tab2State> {
     } catch (e) {
       logger.e(e);
       emit(const UnblockUserFailure(failedToReachServer));
+    }
+  }
+
+  Future<void> squareOffShortsell() async {
+    emit(const SquareOffLoading());
+
+    try {
+      final resp = await actionClient.squareOffShortSells(
+          SquareOffShortSellRequest(),
+          options: sessionOptions(getIt()));
+
+      if (resp.statusCode == SquareOffShortSellResponse_StatusCode.OK) {
+        emit(const SquareOffSuccess());
+      } else {
+        emit(SquareOffError(resp.statusMessage));
+      }
+    } catch (e) {
+      emit(const SquareOffError(failedToReachServer));
     }
   }
 
