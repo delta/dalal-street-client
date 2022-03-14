@@ -287,7 +287,7 @@ class _AdminPageState extends State<AdminPage> {
     return BlocConsumer<Tab2Cubit, Tab2State>(listener: (context, state) {
       if (state is BlockUserSuccess) {
         logger.i('blocked user successfully');
-        showSnackBar(context, 'blocked user with userId: $userId successfully');
+        showSnackBar(context, 'blocked user successfully');
       } else if (state is BlockUserFailure) {
         logger.i('unsuccessful');
         showSnackBar(context, state.msg);
