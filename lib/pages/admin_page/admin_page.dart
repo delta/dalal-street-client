@@ -212,11 +212,12 @@ class _AdminPageState extends State<AdminPage> {
           });
           break;
         }
-      case 'news':{
-        setState(() {
+      case 'news':
+        {
+          setState(() {
             newsGlobal = value;
-        });
-      }
+          });
+        }
     }
   }
 
@@ -462,8 +463,8 @@ class _AdminPageState extends State<AdminPage> {
       } else if (state is AddMarketEventFailure) {
         logger.i('unsuccessful');
       }
-      return addMarketEventUI(
-          context, headline, text, imageUri, stockId, newsGlobal, error, stateUpdateFunc);
+      return addMarketEventUI(context, headline, text, imageUri, stockId,
+          newsGlobal, error, stateUpdateFunc);
     });
   }
 

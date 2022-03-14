@@ -254,8 +254,15 @@ Widget addStocksToExchangeUI(
           ]));
 }
 
-Widget addMarketEventUI(BuildContext context, String headline, String text,
-    String imageUri, int stockId, bool isGlobal, bool error, Function stateUpdateFunc) {
+Widget addMarketEventUI(
+    BuildContext context,
+    String headline,
+    String text,
+    String imageUri,
+    int stockId,
+    bool isGlobal,
+    bool error,
+    Function stateUpdateFunc) {
   return Container(
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
       decoration: BoxDecoration(
@@ -302,79 +309,75 @@ Widget addMarketEventUI(BuildContext context, String headline, String text,
               height: 20,
             ),
             TextFormField(
-              decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Headline',
-                  labelStyle: TextStyle(fontSize: 14),
-                  contentPadding: EdgeInsets.all(8),
-                  errorStyle: TextStyle(
-                    fontSize: 11.0,
-                    color: bronze,
-                  )),
-              onChanged: (String? value) {
-                if (value != null) {
-                  error = false;
-                  headline= value.toString();
-                } else {
-                  error = true;
-                  headline = ' ';
-                }
-              }
-            ),
+                decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Headline',
+                    labelStyle: TextStyle(fontSize: 14),
+                    contentPadding: EdgeInsets.all(8),
+                    errorStyle: TextStyle(
+                      fontSize: 11.0,
+                      color: bronze,
+                    )),
+                onChanged: (String? value) {
+                  if (value != null) {
+                    error = false;
+                    headline = value.toString();
+                  } else {
+                    error = true;
+                    headline = ' ';
+                  }
+                }),
             const SizedBox(
               height: 20,
             ),
             TextFormField(
-              decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Text',
-                  labelStyle: TextStyle(fontSize: 14),
-                  contentPadding: EdgeInsets.all(8),
-                  errorStyle: TextStyle(
-                    fontSize: 11.0,
-                    color: bronze,
-                  )),
-              onChanged: (String? value) {
-                if (value != null) {
-                  error = false;
-                  text = value.toString();
-                } else {
-                  error = true;
-                  text = ' ';
-                }
-              }
-            ),
+                decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Text',
+                    labelStyle: TextStyle(fontSize: 14),
+                    contentPadding: EdgeInsets.all(8),
+                    errorStyle: TextStyle(
+                      fontSize: 11.0,
+                      color: bronze,
+                    )),
+                onChanged: (String? value) {
+                  if (value != null) {
+                    error = false;
+                    text = value.toString();
+                  } else {
+                    error = true;
+                    text = ' ';
+                  }
+                }),
             const SizedBox(
               height: 20,
             ),
             TextFormField(
-              decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Image URI',
-                  labelStyle: TextStyle(fontSize: 14),
-                  contentPadding: EdgeInsets.all(8),
-                  errorStyle: TextStyle(
-                    fontSize: 11.0,
-                    color: bronze,
-                  )),
-              onChanged: (String? value) {
-                if (value != null) {
-                  error = false;
-                  imageUri = value.toString();
-                } else {
-                  error = true;
-                  imageUri = ' ';
-                }
-              }
-            ),
+                decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Image URI',
+                    labelStyle: TextStyle(fontSize: 14),
+                    contentPadding: EdgeInsets.all(8),
+                    errorStyle: TextStyle(
+                      fontSize: 11.0,
+                      color: bronze,
+                    )),
+                onChanged: (String? value) {
+                  if (value != null) {
+                    error = false;
+                    imageUri = value.toString();
+                  } else {
+                    error = true;
+                    imageUri = ' ';
+                  }
+                }),
             const SizedBox(
               height: 20,
             ),
-            const Text('Is Global news?',
-            style: TextStyle(
-              fontSize: 16
+            const Text(
+              'Is Global news?',
+              style: TextStyle(fontSize: 16),
             ),
-          ),
             ListTile(
               title: const Text('Yes'),
               leading: Radio(
@@ -403,7 +406,7 @@ Widget addMarketEventUI(BuildContext context, String headline, String text,
             ElevatedButton(
               onPressed: () {
                 context.read<Tab3Cubit>().addMarketEvent(
-                        stockId, headline, text, imageUri, isGlobal);
+                    stockId, headline, text, imageUri, isGlobal);
               },
               child: const Text('Add Market Event'),
             )
