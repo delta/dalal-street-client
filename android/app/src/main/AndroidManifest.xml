@@ -2,7 +2,7 @@
     package="com.example.dalal_street_client">
    <uses-permission android:name="android.permission.INTERNET" />
    <application
-        android:label="dalal_street_client"
+        android:label="Dalal Street"
         android:icon="@mipmap/launcher_icon">
         <activity
             android:name=".MainActivity"
