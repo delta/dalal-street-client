@@ -30,7 +30,7 @@ final moreMenuMobile = {
   '/dailyChallenges': MenuItem('Daily Challenges', AppIcons.dailyChallenges),
   '/openOrders': MenuItem('Open Orders', AppIcons.openOrders),
   '/referAndEarn': MenuItem('Refer and Earn', AppIcons.referAndEarn),
-  '/mediaPartners': MenuItem('Media Partners', AppIcons.mobileAd),
+  '/mediaPartners': MenuItem('Media Partners', AppIcons.speaker),
   '/notifications': MenuItem('Notifications', AppIcons.notificationBell),
 };
 
