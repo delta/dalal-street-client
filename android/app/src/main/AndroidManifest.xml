@@ -5,6 +5,7 @@
         android:label="Dalal Street"
         android:icon="@mipmap/launcher_icon">
         <activity
+            android:screenOrientation="portrait"
             android:name=".MainActivity"
             android:launchMode="singleTop"
             android:theme="@style/LaunchTheme"
