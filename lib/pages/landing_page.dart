@@ -55,20 +55,24 @@ class LandingPage extends StatelessWidget {
             ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+              children: const [
                 Center(
                   child: Text(
                     appTitle,
-                    style: Theme.of(context).textTheme.headline4,
+                    style: TextStyle(
+                        color: primaryColor,
+                        fontSize: 40,
+                        fontWeight: FontWeight.bold),
                   ),
                 ),
-                const SizedBox(
+                SizedBox(
                   height: 20,
                 ),
                 Center(
                   child: Text(
                     appDesc,
-                    style: Theme.of(context).textTheme.subtitle1,
+                    style:
+                        TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
                   ),
                 ),
               ],
@@ -270,7 +274,7 @@ class LandingPageWeb extends StatelessWidget {
                           height: 15,
                         ),
                         const Text(
-                          '\'Know what you own, and know why you own it.\'',
+                          '\'I could calculate the motions of the heavenly bodies, but not the madness of the people.\'',
                           style: TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.normal,
@@ -281,7 +285,7 @@ class LandingPageWeb extends StatelessWidget {
                           height: 15,
                         ),
                         const Text(
-                          ' - Peter Lynch',
+                          ' - Sir Isaac Newton',
                           style: TextStyle(
                               fontSize: 24,
                               fontWeight: FontWeight.normal,
