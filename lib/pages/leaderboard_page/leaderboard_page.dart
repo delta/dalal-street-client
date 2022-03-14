@@ -35,15 +35,16 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
   }
 
   Center _tabletBody() {
-    return const Center(
-      child: Text(
-        'Tablet UI will design soon :)',
-        style: TextStyle(
-          fontSize: 14,
-          color: secondaryColor,
-        ),
-      ),
-    );
+    var screenwidth = MediaQuery.of(context).size.width;
+    return Center(
+        child: Container(
+      decoration: BoxDecoration(
+          border: Border.all(color: secondaryColor, width: 2),
+          borderRadius: const BorderRadius.all(Radius.circular(10))),
+      child: leaderboardPageMobileUi(),
+      margin: EdgeInsets.fromLTRB(screenwidth * 0.05, screenwidth * 0.03,
+          screenwidth * 0.05, screenwidth * 0.1),
+    ));
   }
 
   Widget leaderboardPageMobileUi() {
