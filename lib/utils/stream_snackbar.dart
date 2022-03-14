@@ -89,13 +89,6 @@ Future<void> _listenGameStateStream(BuildContext context) async {
           showSnackBar(context, 'Daily Challenge for today is closed');
         }
         break;
-
-      case GameStateUpdateType.UserRewardCreditUpdate:
-        var cash = update.gameState.userRewardCredit.cash;
-        showSnackBar(context,
-            'cash of ₹$cash is credited as your daily challenges reward',
-            type: SnackBarType.success);
-        break;
       default:
     }
   }
