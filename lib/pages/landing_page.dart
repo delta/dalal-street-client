@@ -123,7 +123,7 @@ class LandingPage extends StatelessWidget {
               ),
               const TextSpan(text: ' by '),
               TextSpan(
-                text: 'Delta',
+                text: 'Delta Force',
                 style: Theme.of(context).textTheme.caption?.copyWith(
                       color: Theme.of(context).colorScheme.primary,
                       fontSize: 15,
@@ -342,7 +342,7 @@ class LandingPageWeb extends StatelessWidget {
                   ),
                   const TextSpan(text: ' by '),
                   TextSpan(
-                    text: 'Delta',
+                    text: 'Delta Force',
                     style: Theme.of(context).textTheme.caption?.copyWith(
                           color: Theme.of(context).colorScheme.primary,
                           fontSize: 18,
