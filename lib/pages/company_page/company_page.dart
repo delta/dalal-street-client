@@ -122,60 +122,59 @@ class MobileBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: background2,
         body: Stack(
-          alignment: Alignment.bottomCenter,
-          children: [
-            SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                physics: const BouncingScrollPhysics(
-                    parent: AlwaysScrollableScrollPhysics()),
-                child: Column(children: [
-                  const StockBar(),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  companyPrices(company),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  CompanyTabView(company: company),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  CompanyNewsPage(stockId: stockId, isWeb: false),
-                  const SizedBox(
-                    height: 50,
-                  )
-                ])),
-            // Hide Place Order Button if company went Bankrupt
-            company.isBankrupt
-                ? const SizedBox()
-                : Container(
-                    height: 70,
-                    decoration: const BoxDecoration(
-                        color: baseColor,
-                        borderRadius: BorderRadius.only(
-                          topRight: Radius.circular(15),
-                          topLeft: Radius.circular(15),
-                        )),
-                    alignment: Alignment.bottomCenter,
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 10, horizontal: 30),
-                    child: Align(
-                      alignment: Alignment.bottomCenter,
-                      child: SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            chooseBuyOrSellBottomSheet(context, company, cash);
-                          },
-                          child: const Text('Place Your Order'),
-                        ),
-                      ),
+      alignment: Alignment.bottomCenter,
+      children: [
+        SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            physics: const BouncingScrollPhysics(
+                parent: AlwaysScrollableScrollPhysics()),
+            child: Column(children: [
+              const StockBar(),
+              const SizedBox(
+                height: 10,
+              ),
+              companyPrices(company),
+              const SizedBox(
+                height: 10,
+              ),
+              CompanyTabView(company: company),
+              const SizedBox(
+                height: 10,
+              ),
+              CompanyNewsPage(stockId: stockId, isWeb: false),
+              const SizedBox(
+                height: 100,
+              )
+            ])),
+        // Hide Place Order Button if company went Bankrupt
+        company.isBankrupt
+            ? const SizedBox()
+            : Container(
+                height: 70,
+                decoration: const BoxDecoration(
+                    color: baseColor,
+                    borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(15),
+                      topLeft: Radius.circular(15),
+                    )),
+                alignment: Alignment.bottomCenter,
+                padding:
+                    const EdgeInsets.symmetric(vertical: 10, horizontal: 30),
+                child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        chooseBuyOrSellBottomSheet(context, company, cash);
+                      },
+                      child: const Text('Place Your Order'),
                     ),
                   ),
-          ],
-        ));
+                ),
+              ),
+      ],
+    ));
   }
 }
