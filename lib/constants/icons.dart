@@ -26,4 +26,5 @@ class AppIcons {
   static const String balance = _iconsDir + 'balance.svg';
   static const String stockMarket = _iconsDir + 'stock_market.svg';
   static const String stockExchange = _iconsDir + 'stock_exchange.svg';
+  // static const String ipo = _iconsDir +'ipo.svg';
 }

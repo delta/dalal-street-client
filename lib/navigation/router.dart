@@ -54,7 +54,7 @@ GoRouter generateRouter(BuildContext context) => GoRouter(
           /// only required by gorouter, and will give incorrect regex results
           path:
               // TODO: do this without hardcoding
-              '/:p(home|portfolio|exchange|ranking|news|mortgage|dailyChallenges|openOrders|referAndEarn|mediaPartners|notifications)',
+              '/:p(home|portfolio|exchange|ranking|news|ipo|mortgage|dailyChallenges|openOrders|referAndEarn|mediaPartners|notifications)',
           builder: (_, state) {
             final userState =
                 context.read<DalalBloc>().state as DalalDataLoaded;

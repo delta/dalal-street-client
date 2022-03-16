@@ -9,14 +9,23 @@ abstract class IpoState extends Equatable {
 
 class IpoInitial extends IpoState {}
 
-class GetIpoStockListSucess extends IpoState{
-  Map <int,IpoStock> Ipostocklist  ;
-  GetIpoStockListSucess (this.Ipostocklist);
-
+class GetIpoStockListSucess extends IpoState {
+  Map<int, IpoStock> Ipostocklist;
+  GetIpoStockListSucess(this.Ipostocklist);
 }
-class GetIpoStockListFailure extends IpoState{
+
+class GetIpoStockListFailure extends IpoState {
   String msg;
   GetIpoStockListFailure(this.msg);
 }
 
 
+
+class PlaceIpoSucess extends IpoState {
+  const PlaceIpoSucess();
+}
+
+class PlaceIpoFailure extends IpoState {
+  String msg;
+  PlaceIpoFailure(this.msg);
+}

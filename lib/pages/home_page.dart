@@ -121,7 +121,6 @@ class _HomePageState extends State<HomePage>
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
       child: Column(
         children: [
-          TextButton(child: Text('move to ipo'),onPressed : movettoipo(context),),
           const SizedBox(
             height: 5,
           ),
