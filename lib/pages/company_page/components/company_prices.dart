@@ -82,9 +82,16 @@ Container companyPrices(Stock company) {
                         builder: (context, state) {
                           Int64 stockPrice = state.data!;
                           priceChange = stockPrice - previousDayClose;
+                          bool isZero;
                           bool isLowOrHigh = stockPrice > previousDayClose;
 
                           double percentageHighOrLow;
+
+                          if (priceChange == 0) {
+                            isZero = true;
+                          } else {
+                            isZero = false;
+                          }
 
                           if (previousDayClose == 0) {
                             percentageHighOrLow = stockPrice.toDouble();
@@ -94,42 +101,77 @@ Container companyPrices(Stock company) {
                                     previousDayClose.toDouble()) *
                                 100;
                           }
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                '₹ ' + oCcy.format(state.data).toString(),
-                                style: const TextStyle(
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.w700,
-                                  color: white,
+                          if (isZero) {
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  '₹ ' + oCcy.format(state.data).toString(),
+                                  style: const TextStyle(
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.w700,
+                                    color: white,
+                                  ),
+                                  textAlign: TextAlign.start,
                                 ),
-                                textAlign: TextAlign.start,
-                              ),
-                              !company.isBankrupt
-                                  ? Row(
-                                      children: [
-                                        Text(
-                                            '+${oCcy.format(priceChange.abs()).toString()} ',
-                                            style: TextStyle(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w500,
-                                                color: isLowOrHigh
-                                                    ? secondaryColor
-                                                    : heartRed)),
-                                        Text(
-                                            '( ${oCcy.format(percentageHighOrLow.abs()).toString()}% ) ',
-                                            style: TextStyle(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w500,
-                                                color: isLowOrHigh
-                                                    ? secondaryColor
-                                                    : heartRed)),
-                                      ],
-                                    )
-                                  : const SizedBox()
-                            ],
-                          );
+                                !company.isBankrupt
+                                    ? Row(
+                                        children: [
+                                          Text(
+                                              '+${oCcy.format(priceChange.abs()).toString()} ',
+                                              style: const TextStyle(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w500,
+                                                  color: secondaryColor)),
+                                          Text(
+                                              '( ${oCcy.format(percentageHighOrLow.abs()).toString()}% ) ',
+                                              style: const TextStyle(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w500,
+                                                  color: secondaryColor)),
+                                        ],
+                                      )
+                                    : const SizedBox()
+                              ],
+                            );
+                          } else {
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  '₹ ' + oCcy.format(state.data).toString(),
+                                  style: const TextStyle(
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.w700,
+                                    color: white,
+                                  ),
+                                  textAlign: TextAlign.start,
+                                ),
+                                !company.isBankrupt
+                                    ? Row(
+                                        children: [
+                                          Text(
+                                              '+${oCcy.format(priceChange.abs()).toString()} ',
+                                              style: TextStyle(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w500,
+                                                  color: isLowOrHigh
+                                                      ? secondaryColor
+                                                      : heartRed)),
+                                          Text(
+                                              '( ${oCcy.format(percentageHighOrLow.abs()).toString()}% ) ',
+                                              style: TextStyle(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w500,
+                                                  color: isLowOrHigh
+                                                      ? secondaryColor
+                                                      : heartRed)),
+                                        ],
+                                      )
+                                    : const SizedBox()
+                              ],
+                            );
+                          }
                         }),
                   ],
                 ),

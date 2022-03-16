@@ -172,27 +172,30 @@ class _NotificationsState extends State<NotificationsPage> {
                         ),
                       ),
                       const SizedBox(width: 20),
-                      SizedBox(
-                        width: screenWidth > 1000
-                            ? screenWidth * 0.7
-                            : screenWidth * 0.5,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(text,
-                                style: const TextStyle(
-                                    color: Colors.white, fontSize: 15)),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Container(
-                              alignment: Alignment.bottomRight,
-                              child: Text(ISOtoDateTime(createdAt),
-                                  textAlign: TextAlign.right,
-                                  style: TextStyle(color: iconColor)),
-                            ),
-                          ],
-                        ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(text,
+                              style: const TextStyle(
+                                  color: Colors.white, fontSize: 15)),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Row(
+                            children: [
+                              // const Spacer(),
+                              Text(ISOtoDateTime(createdAt),
+                                  // textAlign: TextAlign.right,
+                                  style: TextStyle(color: iconColor))
+                            ],
+                          )
+                          // Container(
+                          //   alignment: Alignment.bottomRight,
+                          //   child: Text(ISOtoDateTime(createdAt),
+                          //       textAlign: TextAlign.right,
+                          //       style: TextStyle(color: iconColor)),
+                          // ),
+                        ],
                       ),
                     ],
                   ),
