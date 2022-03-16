@@ -140,7 +140,7 @@ class _NotificationsState extends State<NotificationsPage> {
 
   Widget notificationItem(String text, String createdAt, int id) {
     Color iconColor = colors[id % colors.length];
-    var screenWidth = MediaQuery.of(context).size.width;
+    //var screenWidth = MediaQuery.of(context).size.width;
     return Card(
       color: const Color.fromRGBO(19, 22, 20, 1),
       shape: RoundedRectangleBorder(
