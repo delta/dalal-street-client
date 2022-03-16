@@ -82,17 +82,11 @@ Container companyPrices(Stock company) {
                         builder: (context, state) {
                           Int64 stockPrice = state.data!;
                           priceChange = stockPrice - previousDayClose;
-                          bool isZero;
+
                           bool isLowOrHigh = stockPrice > previousDayClose;
 
                           double percentageHighOrLow;
-
-                          if (priceChange == 0) {
-                            isZero = true;
-                          } else {
-                            isZero = false;
-                          }
-
+                          final isZeronum = priceChange == 0;
                           if (previousDayClose == 0) {
                             percentageHighOrLow = stockPrice.toDouble();
                           } else {
@@ -101,7 +95,7 @@ Container companyPrices(Stock company) {
                                     previousDayClose.toDouble()) *
                                 100;
                           }
-                          if (isZero) {
+                          if (isZeronum) {
                             return Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
