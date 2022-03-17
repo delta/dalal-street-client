@@ -35,10 +35,10 @@ class IpoOrdersCubit extends Cubit<IpoOrdersState> {
   }
 }
 
-Future<void> cancelipobids() async
+Future<void> cancelipobids(ipoBidId) async
 {
   try{
-    final resp  =   actionClient.cancelIpoBid(CancelIpoBidRequest(),options: sessionOptions(getIt()));
+    final resp  =   actionClient.cancelIpoBid(CancelIpoBidRequest(ipoBidId: ipoBidId),options: sessionOptions(getIt()));
     emit(const CancelIpoBidSucess());
 
   }

@@ -31,7 +31,7 @@ class IpoCubit extends Cubit<IpoState> {
 Future<void> placeipobid(stockId,slotQuantity,slotPrice) async
 {
   try{
-   final resp = actionClient.placeIpoBid(PlaceIpoBidRequest(stockId: stockId,slotQuantity: slotQuantity,slotPrice: slotPrice),options: sessionOptions(getIt()));
+   final resp = actionClient.placeIpoBid(PlaceIpoBidRequest(stockId: stockId,slotQuantity: 1,slotPrice: slotPrice),options: sessionOptions(getIt()));
     
     emit(const PlaceIpoSucess());
   }
