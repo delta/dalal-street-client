@@ -5,6 +5,7 @@ import 'package:dalal_street_client/blocs/ipo_orders/ipo_orders_cubit.dart';
 import 'package:dalal_street_client/config/log.dart';
 import 'package:dalal_street_client/proto_build/models/IpoStock.pb.dart';
 import 'package:dalal_street_client/theme/colors.dart';
+import 'package:dalal_street_client/utils/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -62,6 +63,7 @@ class _IpoPageState extends State<IpoPage> {
                       child: BlocConsumer<IpoCubit, IpoState>(
                     listener: (context, state) {
                       if (state is PlaceIpoSucess) {
+                         showSnackBar(context, 'IPO Bid Placed successfully');
                         context.read<IpoCubit>().getipostocklist();
                         // ignore: invalid_use_of_visible_for_testing_member
                         context.read<IpoOrdersCubit>().emit(IpoOrdersInitial());
@@ -102,7 +104,12 @@ class _IpoPageState extends State<IpoPage> {
                 const SizedBox(
                   height: 10,
                 ),
+                Card(
+                  margin: givemargin(),
+                  color: Colors.black,
+                  child:
                 Row(
+                  
                   mainAxisAlignment: MainAxisAlignment.center,
                   mainAxisSize: MainAxisSize.max,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -138,7 +145,7 @@ class _IpoPageState extends State<IpoPage> {
                       ),
                     )
                   ],
-                ),
+                )),
                 const SizedBox(height: 20),
                 Center(
                     child: BlocConsumer<IpoOrdersCubit, IpoOrdersState>(
@@ -158,8 +165,8 @@ class _IpoPageState extends State<IpoPage> {
                       )));
                     } else {
                       return SizedBox(
-                          height: MediaQuery.of(context).size.height - 183,
-                          child: ListView.separated(
+                          height: MediaQuery.of(context).size.height - 203,
+                          child: ListView.builder(
                             shrinkWrap: true,
                             itemCount: myipoStockList.length,
                             itemBuilder: (context, index) {
@@ -173,9 +180,7 @@ class _IpoPageState extends State<IpoPage> {
                                             myipoStockList[index].id);
                                   });
                             },
-                            separatorBuilder: (context, index) => const Divider(
-                              color: white,
-                            ),
+                           
                           ));
                     }
                   } else if (state is GetMyIpoOrdersFailure) {
@@ -213,12 +218,13 @@ class _IpoPageState extends State<IpoPage> {
   Widget buildIpoItem(IpoStock? ipoStock) {
     if (ipoStock!.isBiddable) {
       return Card(
-          margin: const EdgeInsets.all(10),
+          margin: givemargin(),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15.0),
           ),
           color: background2,
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
                 padding: const EdgeInsets.all(10),
@@ -263,11 +269,14 @@ class _IpoPageState extends State<IpoPage> {
               Padding(
                   padding: const EdgeInsets.all(10),
                   child: Text(
+                    
                     ipoStock.description,
+                    textAlign: TextAlign.start,
                     style: const TextStyle(
                         fontSize: 13,
                         color: white,
-                        overflow: TextOverflow.ellipsis),
+                        overflow: TextOverflow.ellipsis,
+                        ),
                   )),
               Padding(
                   padding: const EdgeInsets.all(10),
@@ -393,6 +402,9 @@ class _IpoPageState extends State<IpoPage> {
                               await context
                                   .read<IpoOrdersCubit>()
                                   .getmyipoorders();
+                            
+                           
+                            
                             },
                             child: const Text(
                               'Place Bid',
@@ -416,12 +428,13 @@ class _IpoPageState extends State<IpoPage> {
           ));
     } else {
       return Card(
-          margin: const EdgeInsets.all(10),
+          margin: givemargin(),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15.0),
           ),
           color: background2,
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
                   padding: const EdgeInsets.all(10),
@@ -457,6 +470,7 @@ class _IpoPageState extends State<IpoPage> {
                   padding: const EdgeInsets.all(10),
                   child: Text(
                     ipoStock.description,
+                    textAlign: TextAlign.start,
                     style: const TextStyle(
                         fontSize: 13,
                         color: white,
@@ -592,6 +606,7 @@ class _IpoPageState extends State<IpoPage> {
 
   Widget buildIpoOrderItem(IpoBid myipoStock) {
     return Card(
+        margin: givemargin(),
         color: background2,
         child: Padding(
             padding: const EdgeInsets.all(10),
@@ -721,4 +736,14 @@ class _IpoPageState extends State<IpoPage> {
       ),
     );
   }
+EdgeInsetsGeometry givemargin() {
+if(MediaQuery.of(context).size.width > 1000)
+{
+  return EdgeInsets.fromLTRB(MediaQuery.of(context).size.width*0.25,10,MediaQuery.of(context).size.width*0.25,10);
+}  
+else
+{
+  return EdgeInsets.all(10);
+}
+}
 }
