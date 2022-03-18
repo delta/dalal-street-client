@@ -28,6 +28,7 @@ class IpoCubit extends Cubit<IpoState> {
 
   Future<void> placeipobid(stockId, slotQuantity, slotPrice) async {
     try {
+      // ignore: unused_local_variable
       final resp = actionClient.placeIpoBid(
           PlaceIpoBidRequest(
               stockId: stockId, slotQuantity: 1, slotPrice: slotPrice),

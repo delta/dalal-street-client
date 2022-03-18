@@ -30,6 +30,7 @@ class IpoOrdersCubit extends Cubit<IpoOrdersState> {
 
   Future<void> cancelipobids(ipoBidId) async {
     try {
+      // ignore: unused_local_variable
       final resp = actionClient.cancelIpoBid(
           CancelIpoBidRequest(ipoBidId: ipoBidId),
           options: sessionOptions(getIt()));
