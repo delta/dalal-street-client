@@ -213,7 +213,7 @@ class _IpoPageState extends State<IpoPage> {
   Widget buildIpoItem(IpoStock? ipoStock) {
     if (ipoStock!.isBiddable) {
       return Card(
-        margin:const EdgeInsets.all(10),
+          margin: const EdgeInsets.all(10),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15.0),
           ),
@@ -386,12 +386,13 @@ class _IpoPageState extends State<IpoPage> {
                           width: 80,
                           height: 40,
                           child: ElevatedButton(
-                            onPressed: ()async {
+                            onPressed: () async {
                               await context.read<IpoCubit>().placeipobid(
                                   ipoStock.id, 1, ipoStock.stockPrice);
 
-                                   await context.read<IpoOrdersCubit>().getmyipoorders();
-
+                              await context
+                                  .read<IpoOrdersCubit>()
+                                  .getmyipoorders();
                             },
                             child: const Text(
                               'Place Bid',
@@ -415,7 +416,7 @@ class _IpoPageState extends State<IpoPage> {
           ));
     } else {
       return Card(
-        margin:const EdgeInsets.all(10),
+          margin: const EdgeInsets.all(10),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15.0),
           ),
@@ -594,8 +595,7 @@ class _IpoPageState extends State<IpoPage> {
         color: background2,
         child: Padding(
             padding: const EdgeInsets.all(10),
-
-            child:  Row(
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Row(children: [
