@@ -11,6 +11,7 @@ class IpoOrdersInitial extends IpoOrdersState {}
 
 // ignore: must_be_immutable
 class GetMyIpoOrdersSucess extends IpoOrdersState {
+  // ignore: non_constant_identifier_names
   List<IpoBid> Ipostocklist;
   GetMyIpoOrdersSucess(this.Ipostocklist);
 }

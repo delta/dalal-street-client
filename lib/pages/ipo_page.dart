@@ -46,7 +46,7 @@ class _IpoPageState extends State<IpoPage> {
                       const Tab(
                         child: Text('Listings'),
                       ),
-                     const Tab(
+                      const Tab(
                         child: Text('My Orders'),
                       ),
                     ]),
@@ -66,7 +66,6 @@ class _IpoPageState extends State<IpoPage> {
                         context.read<IpoCubit>().getipostocklist();
                         // ignore: invalid_use_of_visible_for_testing_member
                         context.read<IpoOrdersCubit>().emit(IpoOrdersInitial());
-                   
                       }
                     },
                     builder: (context, state) {
@@ -276,8 +275,7 @@ class _IpoPageState extends State<IpoPage> {
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                        Column(crossAxisAlignment: CrossAxisAlignment.start,
                             // ignore: prefer_const_literals_to_create_immutables
                             children: [
                               const Text(
@@ -292,7 +290,7 @@ class _IpoPageState extends State<IpoPage> {
                               ),
                               const Text(
                                 'Short Name',
-                                style:  TextStyle(
+                                style: TextStyle(
                                   fontSize: 13,
                                   color: lightGray,
                                 ),
@@ -392,7 +390,8 @@ class _IpoPageState extends State<IpoPage> {
                             onPressed: () {
                               context.read<IpoCubit>().placeipobid(
                                   ipoStock.id, 1, ipoStock.stockPrice);
-                              Future.delayed(const Duration(milliseconds: 1000), () {
+                              Future.delayed(const Duration(milliseconds: 1000),
+                                  () {
                                 context.read<IpoOrdersCubit>().getmyipoorders();
                               });
                             },
@@ -448,7 +447,6 @@ class _IpoPageState extends State<IpoPage> {
                               dimension: 10,
                             ),
 
-
                             const Text('Bids Closed',
                                 style: TextStyle(color: red, fontSize: 11))
                             // )
@@ -469,13 +467,12 @@ class _IpoPageState extends State<IpoPage> {
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                        Column(crossAxisAlignment: CrossAxisAlignment.start,
                             // ignore: prefer_const_literals_to_create_immutables
                             children: [
                               const Text(
                                 'Full Name',
-                                style:  TextStyle(
+                                style: TextStyle(
                                   fontSize: 13,
                                   color: lightGray,
                                 ),
@@ -495,7 +492,7 @@ class _IpoPageState extends State<IpoPage> {
                               ),
                               const Text(
                                 'Slot Price',
-                                style:  TextStyle(
+                                style: TextStyle(
                                   fontSize: 13,
                                   color: lightGray,
                                 ),
@@ -505,7 +502,7 @@ class _IpoPageState extends State<IpoPage> {
                               ),
                               const Text(
                                 'Slot Quantity',
-                                style:  TextStyle(
+                                style: TextStyle(
                                   fontSize: 13,
                                   color: lightGray,
                                 ),
@@ -654,7 +651,7 @@ class _IpoPageState extends State<IpoPage> {
                       style: TextStyle(color: lightGray, fontSize: 9),
                     ),
                     Text(
-                      '₹'  '${myipoStock.slotPrice}'  ' per slot',
+                      '₹' '${myipoStock.slotPrice}' ' per slot',
                       style: const TextStyle(
                         fontSize: 11,
                         color: white,
