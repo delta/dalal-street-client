@@ -83,7 +83,7 @@ class Tab2Cubit extends Cubit<Tab2State> {
               userId: userID, transactionType: transactionType, day: day),
           options: sessionOptions(getIt()));
       if (resp.statusCode == InspectUserResponse_StatusCode.OK) {
-        emit(InspectUserSuccess(resp.statusMessage, resp.list));
+        emit(InspectUserSuccess(resp.statusMessage, InspectDetails));
       } else {
         emit(InspectUserFailure(resp.statusMessage));
       }
