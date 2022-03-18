@@ -19,8 +19,6 @@ class GetIpoStockListFailure extends IpoState {
   GetIpoStockListFailure(this.msg);
 }
 
-
-
 class PlaceIpoSucess extends IpoState {
   const PlaceIpoSucess();
 }

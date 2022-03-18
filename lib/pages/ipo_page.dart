@@ -62,7 +62,6 @@ class _IpoPageState extends State<IpoPage> {
                       if (state is PlaceIpoSucess) {
                         context.read<IpoCubit>().getipostocklist();
                         context.read<IpoOrdersCubit>().emit(IpoOrdersInitial());
-                        // context.read<IpoOrdersCubit>().getmyipoorders();
                       }
                     },
                     builder: (context, state) {
@@ -209,7 +208,6 @@ class _IpoPageState extends State<IpoPage> {
   }
 
   Widget buildIpoItem(IpoStock? ipoStock) {
-    // return Text('${ipoStock?.fullName}',);
     if (ipoStock!.isBiddable) {
       return Card(
           shape: RoundedRectangleBorder(
@@ -442,11 +440,8 @@ class _IpoPageState extends State<IpoPage> {
                             const SizedBox.square(
                               dimension: 10,
                             ),
-                            // const Align(alignment: Alignment.centerLeft,
-
                             const Text('Bids Closed',
                                 style: TextStyle(color: red, fontSize: 11))
-                            // )
                           ])
                     ],
                   )),
@@ -609,7 +604,6 @@ class _IpoPageState extends State<IpoPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              // myipoStockList[index].ipoStockId,
                               getipo(ipolist, myipoStock.ipoStockId)
                                   .fullName
                                   .toString()
@@ -621,7 +615,6 @@ class _IpoPageState extends State<IpoPage> {
                               dimension: 10,
                             ),
                             Text(
-                              // myipoStockList[index].ipoStockId,
                               getipo(ipolist, myipoStock.ipoStockId)
                                   .shortName
                                   .toString()

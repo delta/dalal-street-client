@@ -14,31 +14,29 @@ class IpoCubit extends Cubit<IpoState> {
     try {
       final resp = await actionClient.getIpoStockList(GetIpoStockListRequest(),
           options: sessionOptions(getIt()));
-          if(resp.statusCode==GetIpoStockListResponse_StatusCode.OK)
-          {
-            logger.i('length ${resp.ipoStockList}');
-            emit(GetIpoStockListSucess(resp.ipoStockList));
-          }
-          else{
-            emit(GetIpoStockListFailure(resp.statusMessage));
-          }
+      if (resp.statusCode == GetIpoStockListResponse_StatusCode.OK) {
+        logger.i('length ${resp.ipoStockList}');
+        emit(GetIpoStockListSucess(resp.ipoStockList));
+      } else {
+        emit(GetIpoStockListFailure(resp.statusMessage));
+      }
     } catch (e) {
       logger.e(e);
       emit(GetIpoStockListFailure(e.toString()));
     }
   }
 
-Future<void> placeipobid(stockId,slotQuantity,slotPrice) async
-{
-  try{
-   final resp = actionClient.placeIpoBid(PlaceIpoBidRequest(stockId: stockId,slotQuantity: 1,slotPrice: slotPrice),options: sessionOptions(getIt()));
-    
-    emit(const PlaceIpoSucess());
+  Future<void> placeipobid(stockId, slotQuantity, slotPrice) async {
+    try {
+      final resp = actionClient.placeIpoBid(
+          PlaceIpoBidRequest(
+              stockId: stockId, slotQuantity: 1, slotPrice: slotPrice),
+          options: sessionOptions(getIt()));
+
+      emit(const PlaceIpoSucess());
+    } catch (e) {
+      logger.e(e);
+      emit(PlaceIpoFailure(e.toString()));
+    }
   }
-  catch(e)
-  {
-    logger.e(e);
-    emit( PlaceIpoFailure(e.toString()));
-  }
-}
 }
