@@ -8,6 +8,7 @@ import 'package:dalal_street_client/pages/admin_page/components/tab_one.dart';
 import 'package:dalal_street_client/pages/admin_page/components/tab_three.dart';
 import 'package:dalal_street_client/pages/admin_page/components/tab_two.dart';
 import 'package:dalal_street_client/proto_build/actions/AddDailyChallenge.pb.dart';
+import 'package:dalal_street_client/proto_build/models/InspectDetails.pb.dart';
 import 'package:dalal_street_client/theme/colors.dart';
 import 'package:dalal_street_client/utils/responsive.dart';
 import 'package:dalal_street_client/utils/snackbar.dart';
@@ -504,10 +505,43 @@ class _AdminPageState extends State<AdminPage> {
     int day = 0;
     bool transactionType = true;
     bool error = false;
+    int id = 0;
+    String email = '';
+    Int64 transactioncount = 0 as Int64;
+    int position = 0;
+    Int64 stocksum = 0 as Int64;
     return BlocConsumer<Tab2Cubit, Tab2State>(listener: (context, state) {
       if (state is InspectUserSuccess) {
         logger.i('Inspected User successfully');
-        showSnackBar(context, 'Inspected User successfully');
+        List<DataColumn> _createColumns() {
+          return [
+            const DataColumn(label: Text('ID')),
+            const DataColumn(label: Text('email')),
+            const DataColumn(label: Text('transaction count')),
+            const DataColumn(label: Text('position')),
+            const DataColumn(label: Text('stock sum '))
+          ];
+        }
+
+        List<DataRow> _createRows() {
+          return [
+            DataRow(cells: [
+              DataCell(Text(InspectDetails(
+                      id: id,
+                      email: email,
+                      transactionCount: transactioncount,
+                      position: position,
+                      stockSum: stocksum)
+                  .toString())),
+            ]),
+          ];
+        }
+
+        DataTable _createDataTable() {
+          return DataTable(columns: _createColumns(), rows: _createRows());
+        }
+
+        showSnackBar(context, _createDataTable.toString());
       } else if (state is InspectUserFailure) {
         logger.i('unsuccessful');
         showSnackBar(context, state.msg);

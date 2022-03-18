@@ -126,7 +126,17 @@ class InspectUserFailure extends Tab2State {
 
 class InspectUserSuccess extends Tab2State {
   final String msg;
-  const InspectUserSuccess(this.msg);
+  inspectuserdetails(
+      {final int? id,
+      final String? email,
+      final Int64? transactioncount,
+      final int? position,
+      final Int64? stocksum}) {
+    // TODO: implement inspectuserdetails
+    throw UnimplementedError();
+  }
+
+  const InspectUserSuccess(this.msg, inspectuserdetails);
   @override
   List<Object> get props => [msg];
 }
