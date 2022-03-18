@@ -30,7 +30,7 @@ final homeMenuMobile = {
 /// Home Menu items in more section for mobile
 final moreMenuMobile = {
   '/news': MenuItem('News', AppIcons.news),
-  '/ipo': MenuItem('IPO', AppIcons.trophy),
+  '/ipo': MenuItem('IPO', AppIcons.ipo),
   '/mortgage': MenuItem('Mortgage', AppIcons.mortgage),
   '/dailyChallenges': MenuItem('Daily Challenges', AppIcons.dailyChallenges),
   '/openOrders': MenuItem('Open Orders', AppIcons.openOrders),
