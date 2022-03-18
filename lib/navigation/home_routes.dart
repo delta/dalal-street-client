@@ -30,7 +30,7 @@ final homeMenuMobile = {
 /// Home Menu items in more section for mobile
 final moreMenuMobile = {
   '/news': MenuItem('News', AppIcons.news),
-  '/ipo' : MenuItem('IPO',AppIcons.trophy),
+  '/ipo': MenuItem('IPO', AppIcons.trophy),
   '/mortgage': MenuItem('Mortgage', AppIcons.mortgage),
   '/dailyChallenges': MenuItem('Daily Challenges', AppIcons.dailyChallenges),
   '/openOrders': MenuItem('Open Orders', AppIcons.openOrders),
@@ -62,13 +62,10 @@ final homeRoutesWeb = homeRoutesMobile + moreRoutesMobile;
 /// Widgets for routes in more section in mobile
 Map<String, Widget> mobileHomePagesMore(User extra) => {
       '/news': const NewsPageWrapper(),
-      '/ipo': MultiBlocProvider(
-        providers:[
-        BlocProvider(create: (context)=> IpoCubit()),
-        BlocProvider(create: (context)=> IpoOrdersCubit())
-        ],
-      child: const IpoPage()
-      ),
+      '/ipo': MultiBlocProvider(providers: [
+        BlocProvider(create: (context) => IpoCubit()),
+        BlocProvider(create: (context) => IpoOrdersCubit())
+      ], child: const IpoPage()),
       '/mortgage': const MortgageHome(),
       '/dailyChallenges': BlocProvider(
         create: (context) => DailyChallengesPageCubit()..getChallengesConfig(),

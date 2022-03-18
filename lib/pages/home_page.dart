@@ -608,7 +608,8 @@ class _HomePageState extends State<HomePage>
 }
 
 movettoipo(BuildContext context) {
-Navigator.push(context, MaterialPageRoute(builder: (context) => const IpoPage()));
+  Navigator.push(
+      context, MaterialPageRoute(builder: (context) => const IpoPage()));
 }
 
 class StockItem extends StatelessWidget {
