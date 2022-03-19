@@ -3,6 +3,7 @@
 import 'package:dalal_street_client/blocs/ipo/ipo_cubit.dart';
 import 'package:dalal_street_client/blocs/ipo_orders/ipo_orders_cubit.dart';
 import 'package:dalal_street_client/config/log.dart';
+import 'package:dalal_street_client/models/snackbar/snackbar_type.dart';
 import 'package:dalal_street_client/proto_build/models/IpoStock.pb.dart';
 import 'package:dalal_street_client/theme/colors.dart';
 import 'package:dalal_street_client/utils/snackbar.dart';
@@ -78,12 +79,16 @@ class _IpoPageState extends State<IpoPage> {
                   ),
                   child: Center(
                       child: BlocConsumer<IpoCubit, IpoState>(
-                    listener: (context, state) {
+                    listener: (context, state) async {
                       if (state is PlaceIpoSucess) {
                         showSnackBar(context, 'IPO Bid Placed successfully');
-                        context.read<IpoCubit>().getipostocklist();
-                        // ignore: invalid_use_of_visible_for_testing_member
+
+                        await context.read<IpoCubit>().getipostocklist();
+
                         context.read<IpoOrdersCubit>().emit(IpoOrdersInitial());
+                      } else if (state is PlaceIpoFailure) {
+                        showSnackBar(context, state.msg,
+                            type: SnackBarType.error);
                       }
                     },
                     builder: (context, state) {

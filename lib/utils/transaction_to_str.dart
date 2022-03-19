@@ -10,9 +10,12 @@ String transactionTypeToStr(TransactionType trType) {
   const PLACE_ORDER_TRANSACTION = TransactionType.PLACE_ORDER_TRANSACTION;
   const CANCEL_ORDER_TRANSACTION = TransactionType.CANCEL_ORDER_TRANSACTION;
   const SHORT_SELL_TRANSACTION = TransactionType.SHORT_SELL_TRANSACTION;
+  const IPO_TRANSACTION = TransactionType.IPO_ALLOTMENT_TRANSACTION;
   switch (trType) {
     case FROM_EXCHANGE_TRANSACTION:
       return 'Exchange';
+    case IPO_TRANSACTION:
+      return 'Ipo Bid';
     case ORDER_FILL_TRANSACTION:
       return 'OrderFill';
     case MORTGAGE_TRANSACTION:

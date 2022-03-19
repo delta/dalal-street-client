@@ -9,25 +9,29 @@ abstract class IpoState extends Equatable {
 
 class IpoInitial extends IpoState {}
 
-// ignore: must_be_immutable
 class GetIpoStockListSucess extends IpoState {
-  // ignore: non_constant_identifier_names
   Map<int, IpoStock> Ipostocklist;
   GetIpoStockListSucess(this.Ipostocklist);
+  @override
+  List<Object> get props => [Ipostocklist];
 }
 
-// ignore: must_be_immutable
 class GetIpoStockListFailure extends IpoState {
   String msg;
   GetIpoStockListFailure(this.msg);
+
+  @override
+  List<Object> get props => [msg];
 }
 
 class PlaceIpoSucess extends IpoState {
   const PlaceIpoSucess();
 }
 
-// ignore: must_be_immutable
 class PlaceIpoFailure extends IpoState {
   String msg;
   PlaceIpoFailure(this.msg);
+
+  @override
+  List<Object> get props => [msg];
 }

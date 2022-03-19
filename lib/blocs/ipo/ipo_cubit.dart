@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:dalal_street_client/config/log.dart';
+import 'package:dalal_street_client/constants/error_messages.dart';
 import 'package:dalal_street_client/proto_build/actions/GetIpoStockList.pb.dart';
 import 'package:dalal_street_client/proto_build/actions/PlaceIpoBid.pb.dart';
 import 'package:dalal_street_client/proto_build/models/IpoStock.pb.dart';
@@ -29,15 +30,20 @@ class IpoCubit extends Cubit<IpoState> {
   Future<void> placeipobid(stockId, slotQuantity, slotPrice) async {
     try {
       // ignore: unused_local_variable
-      final resp = actionClient.placeIpoBid(
+      final resp = await actionClient.placeIpoBid(
           PlaceIpoBidRequest(
               stockId: stockId, slotQuantity: 1, slotPrice: slotPrice),
           options: sessionOptions(getIt()));
 
-      emit(const PlaceIpoSucess());
+      if (resp.statusCode == PlaceIpoBidResponse_StatusCode.OK) {
+        emit(const PlaceIpoSucess());
+        return;
+      }
+
+      emit(PlaceIpoFailure(resp.statusMessage));
     } catch (e) {
       logger.e(e);
-      emit(PlaceIpoFailure(e.toString()));
+      emit(PlaceIpoFailure(failedToReachServer));
     }
   }
 }
