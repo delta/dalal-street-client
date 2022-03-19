@@ -63,7 +63,7 @@ class _IpoPageState extends State<IpoPage> {
                       child: BlocConsumer<IpoCubit, IpoState>(
                     listener: (context, state) {
                       if (state is PlaceIpoSucess) {
-                         showSnackBar(context, 'IPO Bid Placed successfully');
+                        showSnackBar(context, 'IPO Bid Placed successfully');
                         context.read<IpoCubit>().getipostocklist();
                         // ignore: invalid_use_of_visible_for_testing_member
                         context.read<IpoOrdersCubit>().emit(IpoOrdersInitial());
@@ -105,47 +105,45 @@ class _IpoPageState extends State<IpoPage> {
                   height: 10,
                 ),
                 Card(
-                  margin: givemargin(),
-                  color: Colors.black,
-                  child:
-                Row(
-                  
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.max,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: const [
-                    Expanded(
-                      child: Text(
-                        'ACTION',
-                        style: TextStyle(
-                          color: blurredGray,
-                          fontSize: 11,
+                    margin: givemargin(),
+                    color: Colors.black,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.max,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: const [
+                        Expanded(
+                          child: Text(
+                            'ACTION',
+                            style: TextStyle(
+                              color: blurredGray,
+                              fontSize: 11,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
                         ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                    Expanded(
-                      child: Text(
-                        'DETAIL',
-                        style: TextStyle(
-                          color: blurredGray,
-                          fontSize: 11,
+                        Expanded(
+                          child: Text(
+                            'DETAIL',
+                            style: TextStyle(
+                              color: blurredGray,
+                              fontSize: 11,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
                         ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                    Expanded(
-                      child: Text(
-                        'STATUS',
-                        style: TextStyle(
-                          color: blurredGray,
-                          fontSize: 11,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    )
-                  ],
-                )),
+                        Expanded(
+                          child: Text(
+                            'STATUS',
+                            style: TextStyle(
+                              color: blurredGray,
+                              fontSize: 11,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        )
+                      ],
+                    )),
                 const SizedBox(height: 20),
                 Center(
                     child: BlocConsumer<IpoOrdersCubit, IpoOrdersState>(
@@ -180,7 +178,6 @@ class _IpoPageState extends State<IpoPage> {
                                             myipoStockList[index].id);
                                   });
                             },
-                           
                           ));
                     }
                   } else if (state is GetMyIpoOrdersFailure) {
@@ -269,14 +266,13 @@ class _IpoPageState extends State<IpoPage> {
               Padding(
                   padding: const EdgeInsets.all(10),
                   child: Text(
-                    
                     ipoStock.description,
                     textAlign: TextAlign.start,
                     style: const TextStyle(
-                        fontSize: 13,
-                        color: white,
-                        overflow: TextOverflow.ellipsis,
-                        ),
+                      fontSize: 13,
+                      color: white,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   )),
               Padding(
                   padding: const EdgeInsets.all(10),
@@ -402,9 +398,6 @@ class _IpoPageState extends State<IpoPage> {
                               await context
                                   .read<IpoOrdersCubit>()
                                   .getmyipoorders();
-                            
-                           
-                            
                             },
                             child: const Text(
                               'Place Bid',
@@ -736,14 +729,13 @@ class _IpoPageState extends State<IpoPage> {
       ),
     );
   }
-EdgeInsetsGeometry givemargin() {
-if(MediaQuery.of(context).size.width > 1000)
-{
-  return EdgeInsets.fromLTRB(MediaQuery.of(context).size.width*0.25,10,MediaQuery.of(context).size.width*0.25,10);
-}  
-else
-{
-  return EdgeInsets.all(10);
-}
-}
+
+  EdgeInsetsGeometry givemargin() {
+    if (MediaQuery.of(context).size.width > 1000) {
+      return EdgeInsets.fromLTRB(MediaQuery.of(context).size.width * 0.25, 10,
+          MediaQuery.of(context).size.width * 0.25, 10);
+    } else {
+      return const EdgeInsets.all(10);
+    }
+  }
 }
