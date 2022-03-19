@@ -38,17 +38,34 @@ class _IpoPageState extends State<IpoPage> {
             title: const Text('IPO Listings', style: TextStyle(fontSize: 20.0)),
             bottom: PreferredSize(
                 child: TabBar(
-                    indicatorSize: TabBarIndicatorSize.label,
+                    indicatorColor: lightGray,
+                    indicatorPadding:
+                        const EdgeInsets.symmetric(horizontal: 20),
                     isScrollable: true,
                     unselectedLabelColor: Colors.white.withOpacity(0.3),
-                    indicatorColor: Colors.white,
                     // ignore: prefer_const_literals_to_create_immutables
                     tabs: [
                       const Tab(
-                        child: Text('Listings'),
+                        child: Text(
+                          'Listings',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            color: lightGray,
+                          ),
+                          textAlign: TextAlign.start,
+                        ),
                       ),
                       const Tab(
-                        child: Text('My Orders'),
+                        child: Text(
+                          'My Orders',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            color: lightGray,
+                          ),
+                          textAlign: TextAlign.start,
+                        ),
                       ),
                     ]),
                 preferredSize: const Size.fromHeight(30.0)),
