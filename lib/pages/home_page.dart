@@ -5,6 +5,7 @@ import 'package:dalal_street_client/components/buttons/tertiary_button.dart';
 import 'package:dalal_street_client/components/loading.dart';
 import 'package:dalal_street_client/config/config.dart';
 import 'package:dalal_street_client/models/dynamic_user_info.dart';
+import 'package:dalal_street_client/pages/ipo_page.dart';
 import 'package:dalal_street_client/proto_build/models/Notification.pb.dart'
     as notification;
 import 'package:dalal_street_client/config/get_it.dart';
@@ -604,6 +605,11 @@ class _HomePageState extends State<HomePage>
       padding: const EdgeInsets.fromLTRB(10, 10, 0, 10),
     );
   }
+}
+
+movettoipo(BuildContext context) {
+  Navigator.push(
+      context, MaterialPageRoute(builder: (context) => const IpoPage()));
 }
 
 class StockItem extends StatelessWidget {
