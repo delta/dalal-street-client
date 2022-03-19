@@ -507,6 +507,40 @@ class _AdminPageState extends State<AdminPage> {
     return BlocConsumer<Tab2Cubit, Tab2State>(listener: (context, state) {
       if (state is InspectUserSuccess) {
         logger.i('Inspected User successfully');
+        logger.i(state.list);
+        showModalBottomSheet(
+            context: context,
+            builder: (context) {
+              return Center(
+                child: Wrap(
+                  children: [
+                    DataTable(
+                      border: TableBorder.all(
+                          color: Colors.black,
+                          style: BorderStyle.solid,
+                          width: 2),
+                      columns: const [
+                        DataColumn(label: Text('Id')),
+                        DataColumn(label: Text('Email')),
+                        DataColumn(label: Text('Transaction Count')),
+                        DataColumn(label: Text('Position')),
+                        DataColumn(label: Text('Stock Sum')),
+                      ],
+                      rows: <DataRow>[
+                        for (var e in state.list)
+                          DataRow(cells: <DataCell>[
+                            DataCell(Text(e.id.toString())),
+                            DataCell(Text(e.email.toString())),
+                            DataCell(Text(e.transactionCount.toString())),
+                            DataCell(Text(e.position.toString())),
+                            DataCell(Text(e.stockSum.toString()))
+                          ])
+                      ],
+                    ),
+                  ],
+                ),
+              );
+            });
         showSnackBar(context, 'Inspected User successfully');
       } else if (state is InspectUserFailure) {
         logger.i('unsuccessful');

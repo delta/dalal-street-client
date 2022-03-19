@@ -10,6 +10,7 @@ import 'package:dalal_street_client/proto_build/actions/OpenMarket.pb.dart';
 import 'package:dalal_street_client/proto_build/actions/SquareOffShortSell.pb.dart';
 import 'package:dalal_street_client/proto_build/actions/UnblockAllUsers.pb.dart';
 import 'package:dalal_street_client/proto_build/actions/UnblockUser.pb.dart';
+import 'package:dalal_street_client/proto_build/models/InspectDetails.pb.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fixnum/fixnum.dart';
 
@@ -82,7 +83,8 @@ class Tab2Cubit extends Cubit<Tab2State> {
               userId: userID, transactionType: transactionType, day: day),
           options: sessionOptions(getIt()));
       if (resp.statusCode == InspectUserResponse_StatusCode.OK) {
-        emit(InspectUserSuccess(resp.statusMessage));
+        emit(InspectUserSuccess(resp.statusMessage, resp.list));
+        logger.i(resp.list);
       } else {
         emit(InspectUserFailure(resp.statusMessage));
       }

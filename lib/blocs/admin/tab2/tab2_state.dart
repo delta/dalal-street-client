@@ -126,9 +126,10 @@ class InspectUserFailure extends Tab2State {
 
 class InspectUserSuccess extends Tab2State {
   final String msg;
-  const InspectUserSuccess(this.msg);
+  final List<InspectDetails> list;
+  const InspectUserSuccess(this.msg, this.list);
   @override
-  List<Object> get props => [msg];
+  List<Object> get props => [msg, list];
 }
 
 abstract class UnblockAllUsersState extends Equatable {

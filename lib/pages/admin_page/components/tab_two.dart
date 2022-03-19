@@ -357,7 +357,7 @@ Widget inspectUserUI(BuildContext context, int userId, int day,
                         .inspectUser(userId, transactionType, day);
               },
               child: const Text('Inspect User'),
-            )
+            ),
           ]));
 }
 
