@@ -164,6 +164,14 @@ class _AdminPageState extends State<AdminPage> {
                       const SizedBox(
                         height: 30,
                       ),
+                      _onOpenIpoBidding(),
+                      const SizedBox(
+                        height: 30,
+                      ),
+                      _onCloseIpoBidding(),
+                      const SizedBox(
+                        height: 30,
+                      ),
                       const _SquareOffShortSells()
                     ],
                   ),
@@ -749,6 +757,48 @@ class _AdminPageState extends State<AdminPage> {
         logger.i('unsuccessful');
       }
       return closeDailyChallengeUI(context, error);
+    });
+  }
+
+  Widget _onOpenIpoBidding() {
+    bool error = false;
+    return BlocConsumer<Tab3Cubit, Tab3State>(listener: (context, state) {
+      if (state is OpenIpoBiddingSuccess) {
+        logger.i('open ipo successful');
+        showSnackBar(context, 'Opened IPO Bidding successfully');
+      } else if (state is OpenIpoBiddingFailure) {
+        logger.i('unsuccessful');
+        showSnackBar(context, state.msg);
+      }
+    }, builder: (context, state) {
+      if (state is OpenIpoBiddingLoading) {
+        logger.i('loading');
+        return const Center(child: CircularProgressIndicator());
+      } else if (state is OpenIpoBiddingFailure) {
+        logger.i('unsuccessful');
+      }
+      return openIpoBiddingUI(context, error);
+    });
+  }
+
+  Widget _onCloseIpoBidding() {
+    bool error = false;
+    return BlocConsumer<Tab3Cubit, Tab3State>(listener: (context, state) {
+      if (state is CloseIpoBiddingSuccess) {
+        logger.i('close ipo successful');
+        showSnackBar(context, 'Closed IPO Bidding successfully');
+      } else if (state is CloseIpoBiddingFailure) {
+        logger.i('unsuccessful');
+        showSnackBar(context, state.msg);
+      }
+    }, builder: (context, state) {
+      if (state is CloseIpoBiddingLoading) {
+        logger.i('loading');
+        return const Center(child: CircularProgressIndicator());
+      } else if (state is CloseIpoBiddingFailure) {
+        logger.i('unsuccessful');
+      }
+      return closeIpoBiddingUI(context, error);
     });
   }
 }

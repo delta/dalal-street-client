@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:dalal_street_client/config/log.dart';
+import 'package:dalal_street_client/proto_build/actions/GetMyOrders.pbenum.dart';
 import 'package:dalal_street_client/proto_build/models/IpoBid.pb.dart';
 import 'package:equatable/equatable.dart';
 

@@ -692,3 +692,71 @@ Widget closeDailyChallengeUI(BuildContext context, bool error) {
             )
           ]));
 }
+
+Widget openIpoBiddingUI(BuildContext context, bool error) {
+  return Container(
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+      decoration: BoxDecoration(
+        color: backgroundColor,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Open Ipo Bidding',
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.w700,
+                color: white,
+              ),
+              textAlign: TextAlign.start,
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            ElevatedButton(
+              onPressed: () {
+                error == true
+                    ? null
+                    : context.read<Tab3Cubit>().openIpoBidding();
+              },
+              child: const Text('Open IPO Bidding'),
+            )
+          ]));
+}
+
+Widget closeIpoBiddingUI(BuildContext context, bool error) {
+  return Container(
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+      decoration: BoxDecoration(
+        color: backgroundColor,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Close Ipo Bidding',
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.w700,
+                color: white,
+              ),
+              textAlign: TextAlign.start,
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            ElevatedButton(
+              onPressed: () {
+                error == true
+                    ? null
+                    : context.read<Tab3Cubit>().closeIpoBidding();
+              },
+              child: const Text('Close IPO Bidding'),
+            )
+          ]));
+}
