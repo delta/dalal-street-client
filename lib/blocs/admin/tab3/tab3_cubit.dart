@@ -7,7 +7,9 @@ import 'package:dalal_street_client/proto_build/actions/AddDailyChallenge.pb.dar
 import 'package:dalal_street_client/proto_build/actions/AddMarketEvent.pb.dart';
 import 'package:dalal_street_client/proto_build/actions/AddStocksToExchange.pb.dart';
 import 'package:dalal_street_client/proto_build/actions/CloseDailyChallenge.pb.dart';
+import 'package:dalal_street_client/proto_build/actions/CloseIpoBidding.pb.dart';
 import 'package:dalal_street_client/proto_build/actions/OpenDailyChallenge.pb.dart';
+import 'package:dalal_street_client/proto_build/actions/OpenIpoBidding.pb.dart';
 import 'package:dalal_street_client/proto_build/actions/UpdateEndOfDayValues.pb.dart';
 import 'package:dalal_street_client/proto_build/actions/UpdateStockPrice.pb.dart';
 import 'package:equatable/equatable.dart';
@@ -158,6 +160,38 @@ class Tab3Cubit extends Cubit<Tab3State> {
     }
   }
 
+  Future<void> openIpoBidding() async {
+    emit(const OpenIpoBiddingLoading());
+    try {
+      final resp = await actionClient.openIpoBidding(OpenIpoBiddingRequest(),
+          options: sessionOptions(getIt()));
+      if (resp.statusCode == OpenIpoBiddingResponse_StatusCode.OK) {
+        emit(OpenIpoBiddingSuccess(resp.statusMessage));
+      } else {
+        emit(OpenIpoBiddingFailure(resp.statusMessage));
+      }
+    } catch (e) {
+      logger.e(e);
+      emit(const OpenIpoBiddingFailure(failedToReachServer));
+    }
+  }
+
+  Future<void> closeIpoBidding() async {
+    emit(const CloseIpoBiddingLoading());
+    try {
+      final resp = await actionClient.closeIpoBidding(CloseIpoBiddingRequest(),
+          options: sessionOptions(getIt()));
+      if (resp.statusCode == CloseIpoBiddingResponse_StatusCode.OK) {
+        emit(CloseIpoBiddingSuccess(resp.statusMessage));
+      } else {
+        emit(CloseIpoBiddingFailure(resp.statusMessage));
+      }
+    } catch (e) {
+      logger.e(e);
+      emit(const CloseIpoBiddingFailure(failedToReachServer));
+    }
+  }
+
   void add(
       Tab3Cubit updateEndOfDayValuesCubi,
       Tab3Cubit updateStockPriceCubit,
@@ -165,5 +199,7 @@ class Tab3Cubit extends Cubit<Tab3State> {
       Tab3Cubit addMarketEventCubit,
       Tab3Cubit addDailyChallengeCubit,
       Tab3Cubit openDailyChallengeCubit,
-      Tab3Cubit closeDailyChallengeCubit) {}
+      Tab3Cubit closeDailyChallengeCubit,
+      Tab3Cubit openIpoBiddingCubit,
+      Tab3Cubit closeIpoBiddingCubit) {}
 }

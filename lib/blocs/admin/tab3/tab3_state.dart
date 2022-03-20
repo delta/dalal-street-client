@@ -224,3 +224,63 @@ class CloseDailyChallengeSuccess extends Tab3State {
   @override
   List<Object> get props => [msg];
 }
+
+abstract class OpenIpoBiddingState extends Equatable {
+  const OpenIpoBiddingState();
+
+  @override
+  List<Object> get props => [];
+}
+
+class OpenIpoBiddingInitial extends Tab3State {}
+
+class OpenIpoBiddingLoading extends Tab3State {
+  const OpenIpoBiddingLoading();
+}
+
+class OpenIpoBiddingFailure extends Tab3State {
+  final String msg;
+
+  const OpenIpoBiddingFailure(this.msg);
+
+  @override
+  List<Object> get props => [msg];
+}
+
+class OpenIpoBiddingSuccess extends Tab3State {
+  final String msg;
+
+  const OpenIpoBiddingSuccess(this.msg);
+  @override
+  List<Object> get props => [msg];
+}
+
+abstract class CloseIpoBiddingState extends Equatable {
+  const CloseIpoBiddingState();
+
+  @override
+  List<Object> get props => [];
+}
+
+class CloseIpoBiddingInitial extends Tab3State {}
+
+class CloseIpoBiddingLoading extends Tab3State {
+  const CloseIpoBiddingLoading();
+}
+
+class CloseIpoBiddingFailure extends Tab3State {
+  final String msg;
+
+  const CloseIpoBiddingFailure(this.msg);
+
+  @override
+  List<Object> get props => [msg];
+}
+
+class CloseIpoBiddingSuccess extends Tab3State {
+  final String msg;
+
+  const CloseIpoBiddingSuccess(this.msg);
+  @override
+  List<Object> get props => [msg];
+}
