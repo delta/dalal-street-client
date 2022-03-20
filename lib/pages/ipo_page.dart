@@ -85,7 +85,7 @@ class _IpoPageState extends State<IpoPage> {
 
                         await context.read<IpoCubit>().getipostocklist();
 
-                        context.read<IpoOrdersCubit>().emit(IpoOrdersInitial());
+                        context.read<IpoOrdersCubit>().getmyipoorders();
                       } else if (state is PlaceIpoFailure) {
                         showSnackBar(context, state.msg,
                             type: SnackBarType.error);
@@ -93,7 +93,7 @@ class _IpoPageState extends State<IpoPage> {
                     },
                     builder: (context, state) {
                       if (state is GetIpoStockListSucess) {
-                        Map<int, IpoStock> ipoStockList = state.Ipostocklist;
+                        Map<int, IpoStock> ipoStockList = state.ipostocklist;
 
                         ipolist = ipoStockList.values.toList();
 

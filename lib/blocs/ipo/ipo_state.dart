@@ -10,15 +10,15 @@ abstract class IpoState extends Equatable {
 class IpoInitial extends IpoState {}
 
 class GetIpoStockListSucess extends IpoState {
-  Map<int, IpoStock> Ipostocklist;
-  GetIpoStockListSucess(this.Ipostocklist);
+  final Map<int, IpoStock> ipostocklist;
+  const GetIpoStockListSucess(this.ipostocklist);
   @override
-  List<Object> get props => [Ipostocklist];
+  List<Object> get props => [ipostocklist];
 }
 
 class GetIpoStockListFailure extends IpoState {
-  String msg;
-  GetIpoStockListFailure(this.msg);
+  final String msg;
+  const GetIpoStockListFailure(this.msg);
 
   @override
   List<Object> get props => [msg];
@@ -29,8 +29,8 @@ class PlaceIpoSucess extends IpoState {
 }
 
 class PlaceIpoFailure extends IpoState {
-  String msg;
-  PlaceIpoFailure(this.msg);
+  final String msg;
+  const PlaceIpoFailure(this.msg);
 
   @override
   List<Object> get props => [msg];

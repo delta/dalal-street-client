@@ -31,8 +31,7 @@ class IpoCubit extends Cubit<IpoState> {
     try {
       // ignore: unused_local_variable
       final resp = await actionClient.placeIpoBid(
-          PlaceIpoBidRequest(
-              stockId: stockId, slotQuantity: 1, slotPrice: slotPrice),
+          PlaceIpoBidRequest(stockId: stockId, slotQuantity: 1),
           options: sessionOptions(getIt()));
 
       if (resp.statusCode == PlaceIpoBidResponse_StatusCode.OK) {
@@ -43,7 +42,7 @@ class IpoCubit extends Cubit<IpoState> {
       emit(PlaceIpoFailure(resp.statusMessage));
     } catch (e) {
       logger.e(e);
-      emit(PlaceIpoFailure(failedToReachServer));
+      emit(const PlaceIpoFailure(failedToReachServer));
     }
   }
 }
