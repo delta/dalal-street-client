@@ -10,7 +10,6 @@ import 'package:dalal_street_client/theme/colors.dart';
 import 'package:dalal_street_client/utils/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
 
 import '../components/loading.dart';
 import '../proto_build/models/IpoBid.pb.dart';
@@ -177,7 +176,7 @@ class _IpoPageState extends State<IpoPage> {
                   }
                 }, builder: (context, state) {
                   if (state is GetMyIpoOrdersSucess) {
-                    List<IpoBid> myipoStockList = state.Ipostocklist;
+                    List<IpoBid> myipoStockList = state.ipostocklist;
 
                     if (myipoStockList.isEmpty) {
                       return (const Center(

@@ -10,17 +10,16 @@ abstract class IpoOrdersState extends Equatable {
 class IpoOrdersInitial extends IpoOrdersState {}
 
 class GetMyIpoOrdersSucess extends IpoOrdersState {
-  List<IpoBid> Ipostocklist;
-  GetMyIpoOrdersSucess(this.Ipostocklist);
+  final List<IpoBid> ipostocklist;
+  const GetMyIpoOrdersSucess(this.ipostocklist);
 
   @override
-  List<Object> get props => [Ipostocklist];
+  List<Object> get props => [ipostocklist];
 }
 
-// ignore: must_be_immutable
 class GetMyIpoOrdersFailure extends IpoOrdersState {
-  String msg;
-  GetMyIpoOrdersFailure(this.msg);
+  final String msg;
+  const GetMyIpoOrdersFailure(this.msg);
 
   @override
   List<Object> get props => [msg];
@@ -31,8 +30,8 @@ class CancelIpoBidSucess extends IpoOrdersState {
 }
 
 class CancelIpoBidFailure extends IpoOrdersState {
-  String msg;
-  CancelIpoBidFailure(this.msg);
+  final String msg;
+  const CancelIpoBidFailure(this.msg);
 
   @override
   List<Object> get props => [msg];

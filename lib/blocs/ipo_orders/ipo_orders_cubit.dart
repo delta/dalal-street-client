@@ -24,7 +24,7 @@ class IpoOrdersCubit extends Cubit<IpoOrdersState> {
         emit(GetMyIpoOrdersFailure(resp.statusMessage));
       }
     } catch (e) {
-      emit(GetMyIpoOrdersFailure(failedToReachServer));
+      emit(const GetMyIpoOrdersFailure(failedToReachServer));
     }
   }
 
