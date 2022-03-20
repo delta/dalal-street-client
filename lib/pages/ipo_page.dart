@@ -2,6 +2,7 @@
 
 import 'package:dalal_street_client/blocs/ipo/ipo_cubit.dart';
 import 'package:dalal_street_client/blocs/ipo_orders/ipo_orders_cubit.dart';
+import 'package:dalal_street_client/config/config.dart';
 import 'package:dalal_street_client/config/log.dart';
 import 'package:dalal_street_client/models/snackbar/snackbar_type.dart';
 import 'package:dalal_street_client/proto_build/models/IpoStock.pb.dart';
@@ -81,11 +82,12 @@ class _IpoPageState extends State<IpoPage> {
                       child: BlocConsumer<IpoCubit, IpoState>(
                     listener: (context, state) async {
                       if (state is PlaceIpoSucess) {
-                        showSnackBar(context, 'IPO Bid Placed successfully');
+                        showSnackBar(context, 'IPO Bid Placed successfully',
+                            type: SnackBarType.success);
 
                         await context.read<IpoCubit>().getipostocklist();
 
-                        context.read<IpoOrdersCubit>().getmyipoorders();
+                        await context.read<IpoOrdersCubit>().getmyipoorders();
                       } else if (state is PlaceIpoFailure) {
                         showSnackBar(context, state.msg,
                             type: SnackBarType.error);
@@ -236,6 +238,7 @@ class _IpoPageState extends State<IpoPage> {
 
   Widget buildIpoItem(IpoStock? ipoStock) {
     if (ipoStock!.isBiddable) {
+      logger.i(assetUrl + ipoStock.shortName + '.png');
       return Card(
           margin: givemargin(),
           shape: RoundedRectangleBorder(
@@ -248,8 +251,8 @@ class _IpoPageState extends State<IpoPage> {
               Padding(
                 padding: const EdgeInsets.all(10),
                 child: Row(children: [
-                  SvgPicture.network(
-                    'https://upload.wikimedia.org/wikipedia/commons/9/9a/BTC_Logo.svg',
+                  Image.network(
+                    assetUrl + ipoStock.shortName + '.png',
                     height: 50,
                     width: 50,
                   ),
@@ -455,8 +458,8 @@ class _IpoPageState extends State<IpoPage> {
                   padding: const EdgeInsets.all(10),
                   child: Row(
                     children: [
-                      SvgPicture.network(
-                        'https://upload.wikimedia.org/wikipedia/commons/9/9a/BTC_Logo.svg',
+                      Image.network(
+                        assetUrl + ipoStock.shortName + '.png',
                         height: 50,
                         width: 50,
                       ),
@@ -631,8 +634,12 @@ class _IpoPageState extends State<IpoPage> {
                 Row(children: [
                   Padding(
                       padding: const EdgeInsets.all(10),
-                      child: SvgPicture.network(
-                        'https://upload.wikimedia.org/wikipedia/commons/9/9a/BTC_Logo.svg',
+                      child: Image.network(
+                        assetUrl +
+                            getipo(ipolist, myipoStock.ipoStockId)
+                                .shortName
+                                .toString() +
+                            '.png',
                         height: 25,
                         width: 25,
                       )),
